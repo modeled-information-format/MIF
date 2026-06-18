@@ -1,17 +1,25 @@
 ---
-id: decision-react-frontend
+id: 0b191afe-df8d-5858-8e1d-438787ebdeee
 type: semantic
-created: 2026-01-10T09:00:00Z
-modified: 2026-01-12T14:30:00Z
+created: '2026-01-10T09:00:00Z'
+modified: '2026-01-12T14:30:00Z'
 namespace: _semantic/decisions
-title: "Use React for Dashboard Frontend"
+title: Use React for Dashboard Frontend
 tags:
-  - frontend
-  - architecture
-  - technology-choice
+- frontend
+- architecture
+- technology-choice
 aliases:
-  - "React Decision"
-  - "Frontend Framework Choice"
+- React Decision
+- Frontend Framework Choice
+- decision-react-frontend
+relationships:
+- type: supersedes
+  target: /vue-exploration-2025.md
+- type: relates-to
+  target: /frontend-architecture-standards.md
+- type: part-of
+  target: /project-x-technical-decisions.md
 ---
 
 # Use React for Dashboard Frontend
@@ -40,9 +48,9 @@ We will use **React** with TypeScript for the dashboard frontend.
 
 ## Relationships
 
-- supersedes [[vue-exploration-2025]]
-- relates-to [[frontend-architecture-standards]]
-- part-of [[project-x-technical-decisions]]
+- supersedes [Vue Exploration 2025](/vue-exploration-2025.md)
+- relates-to [Frontend Architecture Standards](/frontend-architecture-standards.md)
+- part-of [Project X Technical Decisions](/project-x-technical-decisions.md)
 
 ## Entities
 

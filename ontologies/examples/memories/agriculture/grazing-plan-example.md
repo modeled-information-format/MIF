@@ -1,30 +1,33 @@
 ---
 id: b2c3d4e5-6789-01bc-def0-2345678901bc
 type: procedural
+created: '2026-03-01T08:00:00Z'
+modified: '2026-03-01T08:00:00Z'
 namespace: _procedural/animal-welfare
-created: 2026-03-01T08:00:00Z
-modified: 2026-03-01T08:00:00Z
-title: "2026 Spring Rotational Grazing Plan - Beef Herd"
+title: 2026 Spring Rotational Grazing Plan - Beef Herd
 tags:
-  - grazing
-  - livestock
-  - adaptive-multi-paddock
-  - regenerative
+- grazing
+- livestock
+- adaptive-multi-paddock
+- regenerative
+relationships:
+- type: documents
+  target: /herd-beef-main.md
 temporal:
-  valid_from: 2026-04-01T00:00:00Z
-  valid_until: 2026-10-31T00:00:00Z
-  recorded_at: 2026-03-01T08:00:00Z
+  valid_from: '2026-04-01T00:00:00Z'
+  valid_until: '2026-10-31T00:00:00Z'
+  recorded_at: '2026-03-01T08:00:00Z'
 provenance:
   source_type: user_explicit
   agent: claude-opus-4
   confidence: 0.95
 ontology:
   id: regenerative-agriculture
-  version: "0.1.0"
+  version: 0.1.0
 entity:
   entity_type: grazing-plan
   entity_id: grazing-plan-beef-2026-spring
-  name: "2026 Spring-Fall Beef Grazing Rotation"
+  name: 2026 Spring-Fall Beef Grazing Rotation
   herd_id: herd-beef-main
   stock_density: 250000
   rest_period_days: 45
@@ -96,7 +99,7 @@ Check weekly:
 
 ## Relationships
 
-- documents [[herd-beef-main]]
+- documents [Herd Beef Main](/herd-beef-main.md)
 - located_on [[field-pasture-north]]
 - located_on [[field-pasture-south]]
 - contributes_to [[carbon-credit-2026]]

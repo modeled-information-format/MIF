@@ -1,29 +1,29 @@
 ---
 id: d4e5f6a7-8901-23de-f012-4567890123de
 type: procedural
+created: '2026-01-10T09:00:00Z'
+modified: '2026-01-10T09:00:00Z'
 namespace: _procedural/editorial-workflow
-created: 2026-01-10T09:00:00Z
-modified: 2026-01-10T09:00:00Z
-title: "K-8 Mathematics Title Development Workflow"
+title: K-8 Mathematics Title Development Workflow
 tags:
-  - editorial
-  - workflow
-  - mathematics
-  - production
+- editorial
+- workflow
+- mathematics
+- production
 temporal:
-  valid_from: 2026-01-01T00:00:00Z
-  recorded_at: 2026-01-10T09:00:00Z
+  valid_from: '2026-01-01T00:00:00Z'
+  recorded_at: '2026-01-10T09:00:00Z'
 provenance:
   source_type: user_explicit
   agent: claude-opus-4
   confidence: 0.95
 ontology:
   id: k12-educational-publishing
-  version: "0.1.0"
+  version: 0.1.0
 entity:
   entity_type: editorial-milestone
   entity_id: workflow-k8-math-development
-  name: "K-8 Mathematics Title Development Workflow"
+  name: K-8 Mathematics Title Development Workflow
 ---
 
 # K-8 Mathematics Title Development Workflow

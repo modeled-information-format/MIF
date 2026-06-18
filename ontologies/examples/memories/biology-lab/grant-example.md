@@ -1,50 +1,59 @@
 ---
 id: e5f6a7b8-9012-34ef-0123-5678901234ef
 type: semantic
+created: '2026-01-05T11:00:00Z'
+modified: '2026-01-05T11:00:00Z'
 namespace: _semantic/grants
-created: 2026-01-05T11:00:00Z
-modified: 2026-01-05T11:00:00Z
-title: "NIH R01 CA-999999 - Metabolic Reprogramming in Cancer"
+title: NIH R01 CA-999999 - Metabolic Reprogramming in Cancer
 tags:
-  - grant
-  - nih
-  - r01
-  - cancer
-  - metabolism
+- grant
+- nih
+- r01
+- cancer
+- metabolism
+relationships:
+- type: leads
+  target: /project-aim1-metabolomics.md
+- type: leads
+  target: /project-aim2-targets.md
+- type: leads
+  target: /project-aim3-preclinical.md
+- type: produces
+  target: /dataset-metabolomics-2025.md
 temporal:
-  valid_from: 2025-07-01T00:00:00Z
-  valid_until: 2030-06-30T00:00:00Z
-  recorded_at: 2026-01-05T11:00:00Z
+  valid_from: '2025-07-01T00:00:00Z'
+  valid_until: '2030-06-30T00:00:00Z'
+  recorded_at: '2026-01-05T11:00:00Z'
 provenance:
   source_type: external_import
   agent: claude-opus-4
   confidence: 0.98
 citations:
-  - type: documentation
-    role: source
-    title: "NIH Reporter Grant Details"
-    url: https://reporter.nih.gov/project-details/CA999999
-    accessed: 2026-01-05T11:00:00Z
-    relevance: 1.0
+- type: documentation
+  role: source
+  title: NIH Reporter Grant Details
+  url: https://reporter.nih.gov/project-details/CA999999
+  accessed: '2026-01-05T11:00:00Z'
+  relevance: 1.0
 ontology:
   id: biology-research-lab
-  version: "0.1.0"
+  version: 0.1.0
 entity:
   entity_type: grant
   entity_id: grant-nih-r01-ca999999
-  name: "NIH R01 CA-999999 - Metabolic Reprogramming in Cancer"
-  title: "Metabolic Reprogramming in Pancreatic Cancer"
+  name: NIH R01 CA-999999 - Metabolic Reprogramming in Cancer
+  title: Metabolic Reprogramming in Pancreatic Cancer
   agency: nih
-  grant_number: "R01 CA999999"
-  mechanism: "R01"
+  grant_number: R01 CA999999
+  mechanism: R01
   pi_id: pi-smith-jane
   status: active
   total_budget: 2500000
   direct_costs: 1785714
   indirect_rate: 0.56
   project_period:
-    start: "2025-07-01"
-    end: "2030-06-30"
+    start: '2025-07-01'
+    end: '2030-06-30'
 ---
 
 # NIH R01 CA-999999 - Metabolic Reprogramming in Cancer
@@ -137,8 +146,8 @@ Test lead compounds in PDX mouse models of PDAC.
 
 ## Relationships
 
-- leads [[project-aim1-metabolomics]]
-- leads [[project-aim2-targets]]
-- leads [[project-aim3-preclinical]]
+- leads [Project Aim1 Metabolomics](/project-aim1-metabolomics.md)
+- leads [Project Aim2 Targets](/project-aim2-targets.md)
+- leads [Project Aim3 Preclinical](/project-aim3-preclinical.md)
 - funded_by [[nih-nci]]
-- produces [[dataset-metabolomics-2025]]
+- produces [Dataset Metabolomics 2025](/dataset-metabolomics-2025.md)

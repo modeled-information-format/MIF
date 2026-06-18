@@ -1,45 +1,45 @@
 ---
 id: c3d4e5f6-7890-12cd-ef01-3456789012cd
 type: semantic
+created: '2026-01-20T14:00:00Z'
+modified: '2026-01-20T14:00:00Z'
 namespace: _semantic/adoptions
-created: 2026-01-20T14:00:00Z
-modified: 2026-01-20T14:00:00Z
-title: "Texas 2027 Mathematics Adoption - Into Math Submission"
+title: Texas 2027 Mathematics Adoption - Into Math Submission
 tags:
-  - adoption
-  - texas
-  - mathematics
-  - k-8
+- adoption
+- texas
+- mathematics
+- k-8
 temporal:
-  valid_from: 2026-01-01T00:00:00Z
-  valid_until: 2027-06-30T00:00:00Z
-  recorded_at: 2026-01-20T14:00:00Z
+  valid_from: '2026-01-01T00:00:00Z'
+  valid_until: '2027-06-30T00:00:00Z'
+  recorded_at: '2026-01-20T14:00:00Z'
 provenance:
   source_type: user_explicit
   agent: claude-opus-4
   confidence: 0.95
 citations:
-  - type: documentation
-    role: source
-    title: "Texas Proclamation 2027 - Mathematics"
-    url: https://tea.texas.gov/proclamation-2027
-    accessed: 2026-01-20T14:00:00Z
-    relevance: 1.0
+- type: documentation
+  role: source
+  title: Texas Proclamation 2027 - Mathematics
+  url: https://tea.texas.gov/proclamation-2027
+  accessed: '2026-01-20T14:00:00Z'
+  relevance: 1.0
 ontology:
   id: k12-educational-publishing
-  version: "0.1.0"
+  version: 0.1.0
 entity:
   entity_type: state-adoption
   entity_id: adoption-tx-math-2027
-  name: "Texas 2027 Mathematics Adoption - Into Math Submission"
-  state: "TX"
+  name: Texas 2027 Mathematics Adoption - Into Math Submission
+  state: TX
   subject: mathematics
   adoption_year: 2027
   adoption_type: state_adopted
-  submission_deadline: "2026-04-15"
-  review_period_start: "2026-05-01"
-  review_period_end: "2026-10-31"
-  decision_date: "2026-11-15"
+  submission_deadline: '2026-04-15'
+  review_period_start: '2026-05-01'
+  review_period_end: '2026-10-31'
+  decision_date: '2026-11-15'
   contract_years: 8
 ---
 
