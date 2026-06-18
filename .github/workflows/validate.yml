@@ -15,7 +15,7 @@ name: Validate MIF Bundles and Schemas
       - 'package.json'
       - 'astro.config.mjs'
   pull_request:
-    branches: [main, "release/**"]
+    branches: [main, "release/**", "develop/**"]
     paths:
       - 'schema/**'
       - 'examples/**'
