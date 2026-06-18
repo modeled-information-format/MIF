@@ -60,17 +60,19 @@ extensions:
 
 ## Appendix B: Relationship Types Quick Reference
 
-| Markdown Syntax | JSON-LD relationshipType | Description |
-|-----------------|-------------------------|-------------|
-| `[[X]]` | `RelatesTo` | General relationship |
-| `[[X\|derived-from]]` | `DerivedFrom` | Created from source |
-| `[[X\|supersedes]]` | `Supersedes` | Replaces older |
-| `[[X\|conflicts-with]]` | `ConflictsWith` | Contradicts |
-| `[[X\|part-of]]` | `PartOf` | Component of |
-| `[[X\|implements]]` | `Implements` | Realizes |
-| `[[X\|uses]]` | `Uses` | Utilizes |
-| `[[X\|created-by]]` | `Created` | Authored by |
-| `[[X\|mentioned-in]]` | `MentionedIn` | Referenced in |
+Relationships appear in a `## Relationships` body section as `- <type> [Text](/path/target.md)`, mirroring the authoritative frontmatter `relationships[]`.
+
+| Body Markdown Syntax | JSON-LD relationshipType | Description |
+|----------------------|-------------------------|-------------|
+| `- relates-to [X](/path/x.md)` | `RelatesTo` | General relationship |
+| `- derived-from [X](/path/x.md)` | `DerivedFrom` | Created from source |
+| `- supersedes [X](/path/x.md)` | `Supersedes` | Replaces older |
+| `- conflicts-with [X](/path/x.md)` | `ConflictsWith` | Contradicts |
+| `- part-of [X](/path/x.md)` | `PartOf` | Component of |
+| `- implements [X](/path/x.md)` | `Implements` | Realizes |
+| `- uses [X](/path/x.md)` | `Uses` | Utilizes |
+| `- created-by [X](/path/x.md)` | `Created` | Authored by |
+| `- mentioned-in [X](/path/x.md)` | `MentionedIn` | Referenced in |
 
 ---
 

@@ -1,20 +1,22 @@
 ---
 title: Overview
-description: Abstract, terminology, and design principles of the Memory Interchange Format.
+description: Abstract, terminology, and design principles of the Modeled Information Format.
 ---
 
 ## Abstract
 
-The Memory Interchange Format (MIF) is a proposed open standard for portable AI memory representation. The AI memory ecosystem is currently fragmented—Mem0, Zep, Letta, LangMem, Subcog, and others each use proprietary schemas with no interoperability. MIF aims to address this by defining a common data model with dual representations: human-readable Markdown files and machine-processable JSON-LD documents.
+MIF (Modeled Information Format) is an opinionated, OKF-compliant content model for agent-readable knowledge. The Open Knowledge Format (OKF) defines a minimal interoperability surface — a directory of `.md` concept files with YAML frontmatter, one required `type` field, and a concept graph of standard markdown links — and deliberately refuses to define a content model. MIF fills that envelope: it supplies a concrete type system, typed relationships, provenance/trust tiers, and validity/freshness semantics.
 
-**Current Status**: This is a draft specification. No providers currently implement MIF. The goal is to establish a vendor-neutral interchange format that providers may choose to adopt.
+Markdown is the canonical representation; JSON-LD is a derived, regenerable projection. AI memory is the first domain profile of MIF, not its identity (see [`profiles/ai-memory/`](https://github.com/zircote/MIF/tree/main/profiles/ai-memory)).
+
+OKF compliance is achieved as a **superset, not by subordination**: every MIF bundle validates as a conformant OKF bundle, but MIF remains an independent specification with its own identity model and governance, pinned to OKF v0.1.
 
 MIF is designed to be:
-- **Portable**: Move memories between providers without vendor lock-in
-- **Human-Readable**: Valid Obsidian notes that work in any Markdown editor
+- **OKF-compliant**: every bundle is a valid OKF bundle (a tested invariant)
+- **Markdown-canonical**: the `.md` file is the source of truth; JSON-LD is a derived projection
+- **Human-Readable**: valid Obsidian-compatible notes that work in any Markdown editor
 - **Machine-Processable**: JSON-LD with semantic web compatibility
-- **Extensible**: Support custom properties without breaking compatibility
-- **Privacy-Respecting**: Local-first with no required cloud dependencies
+- **Extensible**: domain profiles extend the base without breaking compatibility
 
 ---
 
@@ -24,13 +26,13 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 ### Definitions
 
-- **Memory**: A discrete unit of information captured from or about an AI interaction, including its content, metadata, relationships, and provenance.
-- **Memory Unit**: The atomic element of MIF; a single memory with its associated data.
+- **Concept**: A discrete unit of knowledge — a single `.md` file in a bundle, including its content, metadata, relationships, and provenance. The atomic element of MIF.
+- **Bundle**: A directory tree of `.md` concept files; a valid OKF bundle.
 - **Entity**: A named thing (person, organization, technology, concept, or file) that can participate in relationships.
-- **Relationship**: A typed, directed connection between two entities or between a memory and an entity.
-- **Namespace**: A hierarchical scope for organizing memories (e.g., `org/user/project/session`).
+- **Relationship**: A typed, directed connection between two concepts, or between a concept and an entity.
+- **Namespace**: A hierarchical scope for organizing concepts (e.g., `org/user/project/session`).
 - **Vault**: A collection of MIF files, analogous to an Obsidian vault.
-- **Provider**: An AI memory system that can import or export MIF format.
+- **Provider**: An implementation that can import or export MIF format.
 
 ---
 
@@ -38,24 +40,24 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 ### Dual Representation
 
-MIF defines two equivalent representations:
+MIF defines two representations, with markdown as the canonical source:
 
-1. **Markdown Format** (`.memory.md`): Human-readable, Obsidian-compatible
-2. **JSON-LD Format** (`.memory.json`): Machine-processable, semantically linked
+1. **Markdown Format** (`.md`): Canonical, human-readable, Obsidian-compatible
+2. **JSON-LD Format** (`.jsonld`): Derived, machine-processable, semantically linked
 
-Both representations MUST be losslessly convertible to each other. A conforming implementation MAY support either or both formats.
+The `.md` file is the source of truth; the JSON-LD form is a derived projection, regenerable from markdown with `scripts/mif_convert.py`. The round trip MUST be lossless. A conforming implementation MAY support either or both formats; if the two disagree, markdown wins.
 
 ### Obsidian Compatibility
 
-The Markdown format MUST be valid Obsidian notes, ensuring files work seamlessly in Obsidian vaults while remaining readable in any text editor or Markdown processor.
+The Markdown format is valid Obsidian-compatible notes, ensuring files work seamlessly in Obsidian vaults while remaining readable in any text editor or Markdown processor. Concept relationships are expressed as standard bundle-relative markdown links (so a generic OKF consumer sees every edge); Obsidian's bidirectional features remain available for authoring.
 
-**Required Obsidian Features:**
+**Required Markdown Features:**
 
 - **YAML Frontmatter**: Structured metadata at the top of files, enclosed in `---` delimiters. Obsidian's Properties panel reads and writes this data, supporting typed fields (text, number, date, checkbox, list).
 
-- **Wiki-Links**: Internal links using double-bracket syntax `[[Target Note]]` enable bidirectional linking. Obsidian automatically tracks backlinks, enabling graph visualization and relationship discovery. Links can include display text `[[Target|Display Text]]` and heading anchors `[[Target#Heading]]`.
+- **Standard Markdown Links**: Concept-graph edges use bundle-relative markdown links, `[text](/path/to/target.md)`, in a `## Relationships` section — the OKF-legible representation of relationships.
 
-- **Block References**: Unique identifiers (`^block-id`) attached to paragraphs, list items, or other blocks enable granular linking and transclusion. References like `[[Note#^block-id]]` link to specific content within a file.
+- **Block References**: Unique identifiers (`^block-id`) attached to paragraphs, list items, or other blocks enable granular linking and transclusion within a file.
 
 - **Aliases**: The `aliases` frontmatter property allows notes to be found and linked using alternative names, improving discoverability.
 

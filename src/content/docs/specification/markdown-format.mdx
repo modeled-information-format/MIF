@@ -1,26 +1,33 @@
 ---
 title: Markdown Format
-description: The .memory.md format specification for human-readable memory files.
+description: The canonical .md format specification for human-readable concept files.
 ---
+
+The `.md` file is the canonical representation of a MIF concept. Relationships are authoritative in frontmatter `relationships[]` and mirrored as OKF-legible markdown links in a `## Relationships` body section.
 
 ### Structure
 
 ```markdown
 ---
 # YAML Frontmatter (required)
-id: uuid-here
+id: 550e8400-e29b-41d4-a716-446655440000   # UUID
 type: semantic
 created: 2026-01-15T10:30:00Z
+relationships:
+  - type: relates-to
+    target: /semantic/other-concept.md
+  - type: derived-from
+    target: /episodic/source-incident.md
 ---
 
 # Title (optional, first H1)
 
-Memory content in Markdown format.
+Concept content in Markdown format.
 
-## Relationships (optional section)
+## Relationships (optional section, mirrors frontmatter)
 
-- relates-to [[Other Memory]]
-- derived-from [[Source Memory]]
+- relates-to [Other Concept](/semantic/other-concept.md)
+- derived-from [Source Incident](/episodic/source-incident.md)
 
 ## Entities (optional section)
 
@@ -93,40 +100,41 @@ extensions:
 ---
 ```
 
-### Wiki-Link Syntax
+### Relationship Syntax
 
-MIF extends Obsidian wiki-link syntax for typed relationships:
+Typed relationships are authoritative in frontmatter and mirrored in the body as standard bundle-relative markdown links, so a generic OKF consumer sees every edge. The body form is `- <type> [Text](/path/target.md)`:
 
 ```markdown
-# Basic link (RelatesTo relationship)
-[[Other Memory]]
+## Relationships
 
-# Typed relationship
-[[Other Memory|derives-from]]
-[[Other Memory|supersedes]]
-
-# Entity reference (prefixed with @)
-@[[Person Name]]
-@[[Technology Name|uses]]
-
-# Block reference
-[[Memory Name#^block-id]]
-
-# With display text
-[[Other Memory|derives-from|"See also"]]
+- relates-to [Other Concept](/semantic/other-concept.md)
+- derived-from [Source Incident](/episodic/source-incident.md)
+- supersedes [Old Policy](/semantic/old-policy.md)
 ```
+
+The corresponding frontmatter:
+
+```yaml
+relationships:
+  - type: relates-to
+    target: /semantic/other-concept.md
+  - type: derived-from
+    target: /episodic/source-incident.md
+  - type: supersedes
+    target: /semantic/old-policy.md
+```
+
+Every frontmatter `relationships` entry MUST have a corresponding body markdown link in the `## Relationships` section, and every such body link maps back to a frontmatter entry. Entity references use `@[[Name|Type]]` syntax (see Entity Types).
 
 ### Block References
 
-Blocks can be referenced for granular linking:
+Blocks can be referenced for granular linking within a file:
 
 ```markdown
 This is an important statement. ^important-point
 
 - Key insight about the system ^insight-1
 ```
-
-Referenced as: `[[Memory Name#^important-point]]`
 
 ### Citations (Level 3)
 

@@ -1,6 +1,6 @@
 ---
 title: Relationship Types
-description: The nine core relationship types for connecting memories.
+description: The nine core relationship types for connecting concepts.
 ---
 
 MIF provides an **extensible relationship type system**. Implementations SHOULD support the core types for interoperability, but MAY define custom relationship types for domain-specific needs.
@@ -122,19 +122,33 @@ relationship_types:
 
 **Markdown syntax:**
 
-Relationships use a simple `type [[target]]` format in a dedicated section:
+Relationships are authoritative in frontmatter `relationships[]` and mirrored as OKF-legible markdown links in a dedicated body section, using the form `- <type> [Text](/path/target.md)`:
 
 ```markdown
 ## Relationships
 
-- relates-to [[Other Memory]]
-- derived-from [[Source Memory]]
-- supersedes [[Old Memory]]
-- conflicts-with [[Contradicting Memory]]
-- part-of [[Parent Memory]]
+- relates-to [Other Concept](/semantic/other-concept.md)
+- derived-from [Source Concept](/episodic/source-concept.md)
+- supersedes [Old Concept](/semantic/old-concept.md)
+- conflicts-with [Contradicting Concept](/semantic/contradicting-concept.md)
+- part-of [Parent Concept](/semantic/parent-concept.md)
 ```
 
-The relationship type name is converted to kebab-case in Markdown. The target uses wiki-link syntax `[[]]` which resolves to the memory's `@id` or title.
+The relationship type name is converted to kebab-case in Markdown. The link target is a bundle-relative path to the target concept's `.md` file, so a generic OKF consumer sees every edge. The matching frontmatter (one entry per body link):
+
+```yaml
+relationships:
+  - type: relates-to
+    target: /semantic/other-concept.md
+  - type: derived-from
+    target: /episodic/source-concept.md
+  - type: supersedes
+    target: /semantic/old-concept.md
+  - type: conflicts-with
+    target: /semantic/contradicting-concept.md
+  - type: part-of
+    target: /semantic/parent-concept.md
+```
 
 **JSON-LD schema:**
 

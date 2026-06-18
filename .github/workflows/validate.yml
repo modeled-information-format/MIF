@@ -76,7 +76,8 @@ jobs:
       - name: Emit derived JSON-LD projections
         run: |
           python scripts/mif_convert.py emit-jsonld \
-            examples profiles/ai-memory/examples --out-dir dist/jsonld
+            examples profiles/ai-memory/examples ontologies/examples/memories \
+            --out-dir dist/jsonld
 
       - name: Validate every projection against schema/mif.schema.json
         run: |

@@ -11,12 +11,13 @@ tags:
 - mathematics
 - production
 temporal:
-  valid_from: '2026-01-01T00:00:00Z'
-  recorded_at: '2026-01-10T09:00:00Z'
+  '@type': TemporalMetadata
+  validFrom: '2026-01-01T00:00:00Z'
+  recordedAt: '2026-01-10T09:00:00Z'
 provenance:
-  source_type: user_explicit
   agent: claude-opus-4
   confidence: 0.95
+  sourceType: user_explicit
 ontology:
   id: k12-educational-publishing
   version: 0.1.0

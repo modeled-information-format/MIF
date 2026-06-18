@@ -21,19 +21,21 @@ relationships:
 - type: produces
   target: /dataset-metabolomics-2025.md
 temporal:
-  valid_from: '2025-07-01T00:00:00Z'
-  valid_until: '2030-06-30T00:00:00Z'
-  recorded_at: '2026-01-05T11:00:00Z'
+  '@type': TemporalMetadata
+  validFrom: '2025-07-01T00:00:00Z'
+  validUntil: '2030-06-30T00:00:00Z'
+  recordedAt: '2026-01-05T11:00:00Z'
 provenance:
-  source_type: external_import
   agent: claude-opus-4
   confidence: 0.98
+  sourceType: external_import
 citations:
-- type: documentation
-  role: source
+- '@type': Citation
+  citationType: documentation
+  citationRole: source
   title: NIH Reporter Grant Details
   url: https://reporter.nih.gov/project-details/CA999999
-  accessed: '2026-01-05T11:00:00Z'
+  accessed: '2026-01-05'
   relevance: 1.0
 ontology:
   id: biology-research-lab

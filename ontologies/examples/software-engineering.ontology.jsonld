@@ -121,7 +121,7 @@
   "@id": "mif:ontology/software-engineering",
   "@type": "mif:Ontology",
   "identifier": "software-engineering",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Software engineering domain ontology",
   "namespaces": {
     "semantic": {

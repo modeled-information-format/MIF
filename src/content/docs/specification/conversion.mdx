@@ -3,24 +3,26 @@ title: Conversion Rules
 description: Rules for converting between Markdown and JSON-LD formats.
 ---
 
+Markdown is canonical; the JSON-LD projection is regenerated from it. The round trip MUST be lossless.
+
 ### Markdown to JSON-LD
 
-1. Parse YAML frontmatter as structured data
+1. Parse YAML frontmatter as structured data, including authoritative `relationships[]`
 2. Map frontmatter properties to JSON-LD using context
 3. Parse Markdown content for:
-   - Wiki-links → `relationships` array
+   - `## Relationships` body links → reconciled against frontmatter `relationships` array
    - Entity references (@[[...]]) → `entities` array
    - Block references (^id) → fragment identifiers
 4. Convert body content to `content` field
 
 ### JSON-LD to Markdown
 
-1. Generate YAML frontmatter from JSON-LD properties
+1. Generate YAML frontmatter from JSON-LD properties, including `relationships[]`
 2. Set first `title` or H1 from `dc:title`
 3. Convert `content` to Markdown body
-4. Append "## Relationships" section from `relationships`
+4. Append "## Relationships" section as bundle-relative markdown links mirroring frontmatter
 5. Append "## Entities" section from `entities`
-6. Convert `@id` URIs to wiki-links
+6. Convert relationship `@id` targets to bundle-relative `.md` links
 
 ### Example Conversion
 
@@ -41,9 +43,12 @@ description: Rules for converting between Markdown and JSON-LD formats.
 **Output (Markdown):**
 ```markdown
 ---
-id: 550e8400
+id: 550e8400-e29b-41d4-a716-446655440000
 type: semantic
 title: Dark Mode
+relationships:
+  - type: relates-to
+    target: /semantic/ui-prefs.md
 ---
 
 # Dark Mode
@@ -52,7 +57,7 @@ User prefers dark mode
 
 ## Relationships
 
-- relates-to [[ui-prefs]]
+- relates-to [UI Preferences](/semantic/ui-prefs.md)
 ```
 
 ### Citations Conversion

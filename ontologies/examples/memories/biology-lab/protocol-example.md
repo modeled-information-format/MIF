@@ -11,12 +11,13 @@ tags:
 - protein
 - molecular-biology
 temporal:
-  valid_from: '2026-01-01T00:00:00Z'
-  recorded_at: '2026-01-08T15:30:00Z'
+  '@type': TemporalMetadata
+  validFrom: '2026-01-01T00:00:00Z'
+  recordedAt: '2026-01-08T15:30:00Z'
 provenance:
-  source_type: external_import
   agent: claude-opus-4
   confidence: 0.95
+  sourceType: external_import
 ontology:
   id: biology-research-lab
   version: 0.1.0

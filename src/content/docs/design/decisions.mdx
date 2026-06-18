@@ -1,6 +1,6 @@
 ---
 title: "Architecture Decisions"
-description: "Index of architectural decision records for the Memory Interchange Format."
+description: "Index of architectural decision records for the Modeled Information Format."
 ---
 
 This page catalogs the architectural decision records (ADRs) that document key design choices in MIF. Each ADR captures the context, decision, and consequences of a significant architectural choice.
@@ -16,7 +16,7 @@ This page catalogs the architectural decision records (ADRs) that document key d
 | ADR-005 | Underscore Namespace Prefix | Accepted | Uses underscore prefix (`_semantic/`, `_episodic/`, `_procedural/`) for base type namespaces to visually distinguish system namespaces and ensure predictable sort order. |
 | ADR-006 | EntityData vs EntityReference | Accepted | Defines two distinct entity patterns: EntityReference for lightweight mentions of entities in content, and EntityData for full structured ontology-typed data embedded in memories. |
 | ADR-007 | GitHub Raw URLs for Schema IDs | Accepted | Uses GitHub raw content URLs for all JSON Schema `$id` values, providing immediately resolvable, zero-cost hosted schema identifiers with natural git-based versioning. |
-| ADR-008 | Decay Model Rationale | Accepted | Implements a configurable memory decay model (none, linear, exponential, step) with type-specific half-life defaults, inspired by Ebbinghaus's forgetting curve research. |
+| ADR-008 | Decay Model Rationale | Accepted | Implements a configurable freshness/validity decay model (none, linear, exponential, step) with type-specific half-life defaults. The cognitive-memory rationale now lives in the AI Memory profile. |
 
 ## Details
 
@@ -66,4 +66,10 @@ JSON Schema `$id` values use GitHub raw content URLs (e.g., `https://mif-spec.de
 
 **Status:** Accepted | **Date:** 2026-01-27
 
-AI memory systems need mechanisms to prioritize recent/relevant memories and manage storage growth. MIF implements a configurable decay model with four types (none, linear, exponential, step) and type-specific default half-lives: P30D for semantic memories, P7D for episodic, and P14D for procedural. The model is inspired by Ebbinghaus's forgetting curve and the ACT-R memory decay model, with reinforcement through access and explicit commands.
+MIF answers OKF's open "live vs stale" question with a configurable
+freshness/validity decay model with four types (none, linear, exponential, step)
+and type-specific default half-lives: P30D for semantic concepts, P7D for
+episodic, and P14D for procedural. Strength is refreshed through access and
+explicit reinforcement. This ADR is retained as a historical record; the
+cognitive-memory rationale that originally motivated the half-life math now
+lives in the AI Memory profile.

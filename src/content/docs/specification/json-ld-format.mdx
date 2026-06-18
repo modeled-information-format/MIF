@@ -1,7 +1,9 @@
 ---
 title: JSON-LD Format
-description: The .memory.json format specification for machine-processable memory documents.
+description: The derived .jsonld projection for machine-processable concept documents.
 ---
+
+Markdown is canonical. The JSON-LD form below is a **derived projection**: regenerate it from the `.md` source with `scripts/mif_convert.py`. It uses the `.jsonld` extension (never `.md`, so OKF's `*.md` glob never ingests it) and MUST round-trip losslessly back to markdown. If the two disagree, markdown wins.
 
 ### Structure
 
