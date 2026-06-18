@@ -1,37 +1,44 @@
 ---
 id: a1b2c3d4-5678-90ab-cdef-1234567890ab
 type: semantic
+created: '2026-01-15T10:30:00Z'
+modified: '2026-01-15T10:30:00Z'
 namespace: _semantic/land
-created: 2026-01-15T10:30:00Z
-modified: 2026-01-15T10:30:00Z
-title: "North Field Soil Profile - January 2026"
+title: North Field Soil Profile - January 2026
 tags:
-  - soil-health
-  - carbon
-  - baseline
+- soil-health
+- carbon
+- baseline
+relationships:
+- type: relates-to
+  target: /field-north-40.md
+- type: relates-to
+  target: /carbon-baseline-2023.md
+- type: relates-to
+  target: /cover-crop-rotation-2025.md
 temporal:
-  valid_from: 2026-01-15T00:00:00Z
-  recorded_at: 2026-01-15T10:30:00Z
+  valid_from: '2026-01-15T00:00:00Z'
+  recorded_at: '2026-01-15T10:30:00Z'
 provenance:
   source_type: external_import
   agent: claude-opus-4
   confidence: 0.98
 citations:
-  - type: documentation
-    role: source
-    title: "Ward Laboratories Soil Analysis Report"
-    url: https://wardlab.com/reports/2026-01-15-NF001
-    accessed: 2026-01-15T10:30:00Z
-    relevance: 1.0
+- type: documentation
+  role: source
+  title: Ward Laboratories Soil Analysis Report
+  url: https://wardlab.com/reports/2026-01-15-NF001
+  accessed: '2026-01-15T10:30:00Z'
+  relevance: 1.0
 ontology:
   id: regenerative-agriculture
-  version: "0.1.0"
+  version: 0.1.0
 entity:
   entity_type: soil-profile
   entity_id: soil-profile-north-field-2026-01
-  name: "North Field Soil Profile - January 2026"
+  name: North Field Soil Profile - January 2026
   field_id: field-north-40
-  sample_date: "2026-01-15"
+  sample_date: '2026-01-15'
   sample_depth_inches: 6
   organic_matter_percent: 4.2
   soil_carbon_tons_per_acre: 38.5
@@ -41,7 +48,7 @@ entity:
   infiltration_rate: 2.1
   microbial_biomass: 425
   fungal_to_bacterial_ratio: 1.8
-  lab: "Ward Laboratories"
+  lab: Ward Laboratories
 ---
 
 # North Field Soil Profile - January 2026
@@ -80,6 +87,6 @@ Tier 1 to Tier 2 status.
 
 ## Relationships
 
-- relates-to [[field-north-40]]
-- relates-to [[carbon-baseline-2023]]
-- relates-to [[cover-crop-rotation-2025]]
+- relates-to [Field North 40](/field-north-40.md)
+- relates-to [Carbon Baseline 2023](/carbon-baseline-2023.md)
+- relates-to [Cover Crop Rotation 2025](/cover-crop-rotation-2025.md)

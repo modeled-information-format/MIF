@@ -1,0 +1,264 @@
+---
+# AI Memory Domain Ontology
+#
+# The AI Memory domain profile of MIF. This ontology adds the entity types,
+# traits, and relationships needed to model an autonomous agent's memory store
+# on top of the general MIF knowledge taxonomy.
+#
+# AI Memory is the first domain profile of MIF, not its identity. The base
+# triad (semantic / episodic / procedural) is a general knowledge taxonomy;
+# this profile reinterprets it through the lens of cognitive memory:
+# semantic memory (facts the agent knows), episodic memory (sessions the agent
+# lived through), and procedural memory (skills the agent can execute).
+#
+# Extends: mif-base (general triad), shared-traits (cross-domain mixins)
+# Compatible with: mif-base v1.0.0
+#
+# Version: 1.0.0
+# Last Updated: 2026-06-18
+
+ontology:
+  id: ai-memory
+  version: "1.0.0"
+  description: "AI memory domain ontology - sessions, decay, confidence, and recall over the MIF triad"
+  extends:
+    - mif-base
+    - shared-traits
+
+# Domain Namespaces
+#
+# These extend the base triad with memory-specific sub-namespaces. Session
+# memories live under the episodic branch; recall-tuned knowledge lives under
+# the semantic branch.
+namespaces:
+  _semantic:
+    description: "Semantic memory - facts and concepts the agent knows"
+    type_hint: semantic
+    children:
+      observations:
+        description: "Discrete facts the agent has observed or been told"
+        type_hint: semantic
+
+  _episodic:
+    description: "Episodic memory - sessions the agent participated in"
+    type_hint: episodic
+    children:
+      sessions:
+        description: "Debug, work, and meeting sessions with start/end framing"
+        type_hint: episodic
+
+  _procedural:
+    description: "Procedural memory - skills the agent can replay"
+    type_hint: procedural
+    children:
+      skills:
+        description: "Learned procedures the agent can execute on demand"
+        type_hint: procedural
+
+# Entity Types
+entity_types:
+  - name: session
+    description: "An episodic memory of a bounded work, debug, or meeting session"
+    base: episodic
+    traits:
+      - decaying
+      - recallable
+      - timestamped
+    schema:
+      required:
+        - session_type
+        - summary
+      properties:
+        session_type:
+          type: string
+          description: "Kind of session this memory records"
+          enum:
+            - debug
+            - work
+            - meeting
+            - exploration
+            - review
+        summary:
+          type: string
+          description: "What happened during the session"
+        started_at:
+          type: string
+          format: date-time
+          description: "When the session began"
+        ended_at:
+          type: string
+          format: date-time
+          description: "When the session ended"
+        participants:
+          type: array
+          description: "Agents or people present in the session"
+          items:
+            type: string
+        outcomes:
+          type: array
+          description: "Decisions, fixes, or artifacts produced"
+          items:
+            type: string
+
+  - name: observation
+    description: "A semantic memory of a discrete fact the agent learned"
+    base: semantic
+    traits:
+      - decaying
+      - confidence-scored
+      - recallable
+    schema:
+      required:
+        - statement
+      properties:
+        statement:
+          type: string
+          description: "The fact, in natural language"
+        subject:
+          type: string
+          description: "Entity the observation is about"
+        derived_from_session:
+          type: string
+          description: "Session reference this fact was learned in"
+
+  - name: skill
+    description: "A procedural memory of a replayable how-to sequence"
+    base: procedural
+    traits:
+      - decaying
+      - recallable
+      - timestamped
+    schema:
+      required:
+        - name
+        - steps
+      properties:
+        name:
+          type: string
+          description: "Name of the skill"
+        steps:
+          type: array
+          description: "Ordered steps the agent replays"
+          items:
+            type: object
+            properties:
+              order:
+                type: integer
+              action:
+                type: string
+        last_practiced:
+          type: string
+          format: date-time
+          description: "When the skill was last successfully replayed"
+
+# Traits (Mixins)
+#
+# Memory-specific reinforcement of the base triad. These carry the
+# forgetting-curve and recall semantics that define the AI Memory domain.
+traits:
+  decaying:
+    description: "Adds forgetting-curve decay tuning for a memory"
+    fields:
+      decay_model:
+        type: string
+        description: "Decay model applied to retrievability over time"
+        enum:
+          - none
+          - linear
+          - exponential
+          - step
+      half_life:
+        type: string
+        description: "ISO-8601 duration half-life for exponential decay (e.g. P7D)"
+      strength:
+        type: number
+        description: "Current retrievability strength (0.0-1.0)"
+      last_reinforced:
+        type: string
+        format: date-time
+        description: "When an access last reset or slowed decay"
+
+  confidence-scored:
+    description: "Adds a confidence score for an uncertain memory"
+    fields:
+      confidence:
+        type: number
+        description: "Confidence that the memory is accurate (0.0-1.0)"
+      trust_level:
+        type: string
+        description: "Qualitative reliability of the memory"
+        enum:
+          - verified
+          - user_stated
+          - high_confidence
+          - moderate_confidence
+          - low_confidence
+          - uncertain
+
+  recallable:
+    description: "Adds recall-oriented access tracking and embedding metadata"
+    fields:
+      access_count:
+        type: integer
+        description: "Number of times the memory has been recalled"
+      last_accessed:
+        type: string
+        format: date-time
+        description: "When the memory was last recalled"
+      embedding_model:
+        type: string
+        description: "Model used to embed the memory for similarity recall"
+      embedding_source_text:
+        type: string
+        description: "Text that was embedded for recall"
+
+# Relationships
+relationships:
+  recalled_in:
+    description: "A memory was recalled during a session"
+    from:
+      - observation
+      - skill
+    to:
+      - session
+    symmetric: false
+
+  learned_in:
+    description: "A semantic or procedural memory was formed during a session"
+    from:
+      - observation
+      - skill
+    to:
+      - session
+    symmetric: false
+
+  reinforces:
+    description: "A newer memory reinforces and slows decay of an older one"
+    from:
+      - observation
+      - skill
+      - session
+    to:
+      - observation
+      - skill
+      - session
+    symmetric: false
+
+# Discovery Configuration
+discovery:
+  enabled: true
+  confidence_threshold: 0.8
+
+  patterns:
+    - content_pattern: "\\b(debug session|debugging session|repro)\\b"
+      suggest_entity: session
+      suggest_namespace: _episodic/sessions
+    - content_pattern: "\\b(meeting notes|standup|sync)\\b"
+      suggest_entity: session
+      suggest_namespace: _episodic/sessions
+    - content_pattern: "\\b(I learned|turns out|noticed that)\\b"
+      suggest_entity: observation
+      suggest_namespace: _semantic/observations
+    - content_pattern: "\\b(how to|procedure for|steps to)\\b"
+      suggest_entity: skill
+      suggest_namespace: _procedural/skills

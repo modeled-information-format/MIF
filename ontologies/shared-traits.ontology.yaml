@@ -17,17 +17,15 @@
 
 ontology:
   id: shared-traits
-  version: "0.1.0"
+  version: "1.0.0"
   description: "Cross-domain reusable traits for industry ontologies"
   extends:
     - mif-base
-
 # ==============================================================================
 # SHARED TRAITS (MIXINS)
 # ==============================================================================
 # These traits can be composed into entity types across any domain.
 # Each trait adds specific fields and behaviors to entities.
-
 traits:
   # ---------------------------------------------------------------------------
   # LIFECYCLE TRAITS
@@ -55,7 +53,6 @@ traits:
               type: string
             reason:
               type: string
-
   renewable:
     description: "Adds renewal/expiration tracking for time-limited entities"
     fields:
@@ -74,7 +71,6 @@ traits:
       auto_renew:
         type: boolean
         description: "Whether this auto-renews"
-
   # ---------------------------------------------------------------------------
   # COMPLIANCE TRAITS
   # ---------------------------------------------------------------------------
@@ -110,7 +106,6 @@ traits:
           - passed
           - failed
           - requires_remediation
-
   certified:
     description: "Adds certification and accreditation tracking"
     fields:
@@ -134,7 +129,6 @@ traits:
               type: string
             scope:
               type: string
-
   regulated:
     description: "Adds regulatory compliance tracking"
     fields:
@@ -160,7 +154,6 @@ traits:
             last_verified:
               type: string
               format: date
-
   # ---------------------------------------------------------------------------
   # GEOGRAPHIC TRAITS
   # ---------------------------------------------------------------------------
@@ -187,7 +180,6 @@ traits:
                 type: number
               longitude:
                 type: number
-
   bounded:
     description: "Adds geographic boundary/area data"
     fields:
@@ -212,7 +204,6 @@ traits:
               - square_feet
           area_value:
             type: number
-
   # ---------------------------------------------------------------------------
   # STAKEHOLDER TRAITS
   # ---------------------------------------------------------------------------
@@ -238,7 +229,6 @@ traits:
             type: string
           role:
             type: string
-
   contactable:
     description: "Adds contact information"
     fields:
@@ -258,7 +248,6 @@ traits:
               type: string
             primary:
               type: boolean
-
   # ---------------------------------------------------------------------------
   # FINANCIAL TRAITS
   # ---------------------------------------------------------------------------
@@ -280,7 +269,6 @@ traits:
             type: string
       cost_center:
         type: string
-
   transactional:
     description: "Adds transaction/payment tracking"
     fields:
@@ -305,7 +293,6 @@ traits:
                 - debit
             reference:
               type: string
-
   # ---------------------------------------------------------------------------
   # TEMPORAL TRAITS
   # ---------------------------------------------------------------------------
@@ -326,7 +313,6 @@ traits:
             description: "RRULE format recurrence pattern"
           timezone:
             type: string
-
   seasonal:
     description: "Adds seasonal/cyclical timing"
     fields:
@@ -346,7 +332,6 @@ traits:
           - quarterly
           - monthly
           - weekly
-
   # ---------------------------------------------------------------------------
   # MEASUREMENT TRAITS
   # ---------------------------------------------------------------------------
@@ -371,7 +356,6 @@ traits:
               type: string
             method:
               type: string
-
   scored:
     description: "Adds scoring/rating data"
     fields:
@@ -391,7 +375,6 @@ traits:
               format: date
             scorer:
               type: string
-
   # ---------------------------------------------------------------------------
   # CLASSIFICATION TRAITS
   # ---------------------------------------------------------------------------
@@ -409,7 +392,6 @@ traits:
         description: "Full taxonomy path"
         items:
           type: string
-
   tagged:
     description: "Adds flexible tagging"
     fields:
@@ -420,7 +402,6 @@ traits:
       labels:
         type: object
         description: "Key-value labels"
-
   # ---------------------------------------------------------------------------
   # ASSET TRAITS
   # ---------------------------------------------------------------------------
@@ -440,7 +421,6 @@ traits:
       last_inventory_date:
         type: string
         format: date
-
   maintainable:
     description: "Adds maintenance scheduling"
     fields:
@@ -469,7 +449,6 @@ traits:
               type: string
             cost:
               type: number
-
   # ---------------------------------------------------------------------------
   # QUALITY TRAITS
   # ---------------------------------------------------------------------------
@@ -506,7 +485,6 @@ traits:
             date:
               type: string
               format: date-time
-
   quality_controlled:
     description: "Adds quality control checkpoints"
     fields:

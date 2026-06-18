@@ -1,5 +1,5 @@
 ---
-name: Validate MIF Schemas and Examples
+name: Validate MIF Bundles and Schemas
 
 "on":
   push:
@@ -7,59 +7,85 @@ name: Validate MIF Schemas and Examples
     paths:
       - 'schema/**'
       - 'examples/**'
+      - 'profiles/**'
       - 'ontologies/**'
       - 'scripts/*.py'
+      - 'docs/okf-conformance.md'
   pull_request:
     branches: [main]
     paths:
       - 'schema/**'
       - 'examples/**'
+      - 'profiles/**'
       - 'ontologies/**'
       - 'scripts/*.py'
+      - 'docs/okf-conformance.md'
   workflow_dispatch:
 
 jobs:
-  validate-json-schemas:
-    name: Validate JSON Examples
+  okf-conformance:
+    name: OKF Conformance + Lossless Round-Trip
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
 
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: OKF conformance test (relationship sync + round-trip)
+        run: |
+          python scripts/okf_validate.py \
+            examples \
+            profiles/ai-memory/examples \
+            ontologies/examples/memories
+
+      - name: Lossless markdown -> json-ld -> markdown round-trip
+        run: |
+          python scripts/mif_convert.py roundtrip \
+            examples \
+            profiles/ai-memory/examples \
+            ontologies/examples/memories
+
+  schema-validation:
+    name: Validate JSON-LD Projection Against Schema
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version: 'lts/*'
 
       - name: Install ajv-cli
         run: npm install -g ajv-cli ajv-formats
 
-      - name: Validate Level 1 Example
+      - name: Emit derived JSON-LD projections
         run: |
-          ajv validate -s schema/mif.schema.json \
-            -r "schema/definitions/*.schema.json" \
-            -d examples/level-1-minimal.memory.json \
-            --spec=draft2020 -c ajv-formats
+          python scripts/mif_convert.py emit-jsonld \
+            examples profiles/ai-memory/examples --out-dir dist/jsonld
 
-      - name: Validate Level 2 Example
+      - name: Validate every projection against schema/mif.schema.json
         run: |
-          ajv validate -s schema/mif.schema.json \
-            -r "schema/definitions/*.schema.json" \
-            -d examples/level-2-standard.memory.json \
-            --spec=draft2020 -c ajv-formats
-
-      - name: Validate Level 3 Citations Example
-        run: |
-          ajv validate -s schema/mif.schema.json \
-            -r "schema/definitions/*.schema.json" \
-            -d examples/level-3-citations.memory.json \
-            --spec=draft2020 -c ajv-formats
-
-      - name: Validate Level 3 Full Example
-        run: |
-          ajv validate -s schema/mif.schema.json \
-            -r "schema/definitions/*.schema.json" \
-            -d examples/level-3-full.memory.json \
-            --spec=draft2020 -c ajv-formats
+          find dist/jsonld -name '*.jsonld' -print0 | while IFS= read -r -d '' f; do
+            echo "Validating $f"
+            ajv validate -s schema/mif.schema.json \
+              -r "schema/definitions/*.schema.json" \
+              -d "$f" --spec=draft2020 -c ajv-formats
+          done
 
   validate-ontologies:
     name: Validate Ontology Files
@@ -73,62 +99,10 @@ jobs:
           python-version: '3.12'
 
       - name: Install dependencies
-        run: |
-          pip install jsonschema pyyaml
+        run: pip install jsonschema pyyaml
 
       - name: Validate ontology files
         run: python scripts/validate-ontologies.py
 
-  validate-memory-frontmatter:
-    name: Validate Memory Frontmatter
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Setup Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.12'
-
-      - name: Install dependencies
-        run: |
-          pip install jsonschema pyyaml
-
-      - name: Validate memory frontmatter
-        run: python scripts/validate-memories.py
-
-  validate-namespaces:
-    name: Validate Namespace Consistency
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Setup Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.12'
-
-      - name: Install dependencies
-        run: |
-          pip install pyyaml
-
       - name: Validate namespace consistency
         run: python scripts/validate-namespaces.py
-
-  test-conversion:
-    name: Test Format Conversion
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Setup Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.12'
-
-      - name: Install dependencies
-        run: |
-          pip install pyyaml
-
-      - name: Test Markdown to JSON-LD conversion
-        run: python scripts/test-conversion.py

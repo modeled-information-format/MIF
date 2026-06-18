@@ -1,9 +1,0 @@
-{
-  "@context": "https://mif-spec.dev/schema/context.jsonld",
-  "@type": "Memory",
-  "@id": "urn:mif:550e8400-e29b-41d4-a716-446655440000",
-  "memoryType": "semantic",
-  "namespace": "_semantic/preferences",
-  "content": "User prefers dark mode for all applications.",
-  "created": "2026-01-15T10:30:00Z"
-}

@@ -5,6 +5,72 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0] - 2026-06-18
+
+Major, breaking release. Repositions MIF as **MIF — Modeled Information Format**,
+the opinionated, OKF-compliant content model that fills OKF's deliberately empty
+envelope. AI memory becomes the first domain *profile* of MIF, not its identity.
+
+### Breaking Changes
+
+- **[Format]**: Concept files use the `.md` extension only — the `.memory.md`
+  infix is **removed** (an OKF concept ID is the path minus `.md`). The
+  `.memory.json` sidecar is replaced by a derived `*.jsonld` projection.
+- **[Format]**: Markdown is now the **canonical** representation; JSON-LD is a
+  derived, regenerable projection (`scripts/mif_convert.py`). Lossless
+  `markdown → json-ld → markdown` round-trip is a tested invariant.
+- **[Relationships]**: Typed relationships are authoritative in the frontmatter
+  `relationships` array **and** mirrored as OKF-legible body markdown links in a
+  `## Relationships` section (`- <type> [Text](/path/target.md)`). Obsidian
+  wiki-links are no longer the canonical edge representation.
+- **[Identity]**: `id` MUST be a UUID (OKF concept ID is the path; the UUID is
+  MIF's stable, location-independent identity). Legacy slug ids migrate to a
+  deterministic UUIDv5 with the slug preserved as an `alias`.
+- **[Schema]**: `schema/mif.schema.json` v1.0 — `@type: Concept`, `conceptType`
+  replaces required `memoryType` (kept as a deprecated alias), and the
+  `Relationship` shape is `{ type, target }`.
+- **[Temporal]**: The bi-temporal/decay model is reframed as **validity windows
+  & freshness** (answering OKF's open live-vs-stale question). The math is
+  unchanged; the forgetting-curve/Ebbinghaus rationale moves to the AI Memory
+  profile.
+- **[Profile]**: All memory-specific normative material (decay tuning, episodic
+  *session* framing, retrieval embeddings, and the Mem0/Zep/Letta/Subcog/
+  Basic-Memory migration guides) moves out of the core into
+  `profiles/ai-memory/`.
+
+### Added
+
+- **[OKF]**: `docs/okf-conformance.md` — pinned OKF v0.1 conformance criteria
+  (version-stamped) and the MIF → OKF mapping. MIF takes no normative dependency
+  on OKF's live draft (Invariant 5).
+- **[OKF]**: Reserved filenames `index.md` / `log.md` adopted verbatim.
+- **[Positioning]**: "MIF answers OKF's open questions" table in both
+  `README.md` and `SPECIFICATION.md`.
+- **[Tooling]**: `scripts/okf_validate.py` (conformance + relationship sync +
+  round-trip), `scripts/mif_convert.py` (markdown↔json-ld), and
+  `scripts/migrate_0_1_to_1_0.py` (0.1→1.0 transform).
+- **[Profile]**: `profiles/ai-memory/` — profile spec, ontology, and examples.
+- **[Docs]**: `MIGRATION.md` upgrade guide (`0.1.0-draft → 1.0.0`).
+- **[CI]**: `validate.yml` runs the OKF conformance + lossless round-trip tests
+  and validates the JSON-LD projection against the schema.
+
+### Changed
+
+- **[Ontology]**: Base ontology re-motivated as a general knowledge taxonomy
+  (declarative / time-bound / how-to); memory-only framing removed.
+- **[Examples]**: Core `examples/` regenerated as a generalized (non-memory)
+  bundle; memory examples relocated to `profiles/ai-memory/examples/`.
+
+### Removed
+
+- **[Tooling]**: `scripts/validate-memories.py` and `scripts/test-conversion.py`
+  superseded by `okf_validate.py` + `mif_convert.py`.
+
+### Migration
+
+See [MIGRATION.md](MIGRATION.md) and run
+`python scripts/migrate_0_1_to_1_0.py <old> <new>`.
+
 ## [Unreleased]
 
 ### Added

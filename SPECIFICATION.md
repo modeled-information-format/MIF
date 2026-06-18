@@ -1,8 +1,10 @@
-# Memory Interchange Format (MIF)
+<!-- diataxis_type: reference -->
 
-**Version**: 0.1.0-draft
-**Status**: Draft
-**Last Updated**: 2026-01-26
+# MIF — Modeled Information Format
+
+**Version**: 1.0.0
+**Status**: Release
+**Last Updated**: 2026-06-18
 **Authors**: Robert Allen (zircote)
 **Repository**: https://github.com/zircote/MIF
 
@@ -10,16 +12,49 @@
 
 ## Abstract
 
-The Memory Interchange Format (MIF) is a proposed open standard for portable AI memory representation. The AI memory ecosystem is currently fragmented—Mem0, Zep, Letta, LangMem, Subcog, and others each use proprietary schemas with no interoperability. MIF aims to address this by defining a common data model with dual representations: human-readable Markdown files and machine-processable JSON-LD documents.
+MIF (Modeled Information Format) is an opinionated, OKF-compliant content model
+for agent-readable knowledge. The Open Knowledge Format (OKF) defines a minimal
+interoperability surface — a directory of markdown files with YAML frontmatter,
+one required `type` field, a concept graph of standard markdown links, and the
+reserved filenames `index.md` and `log.md` — and **deliberately refuses to
+define a content model**. MIF fills that envelope: it supplies a concrete type
+system, typed relationships, provenance/trust tiers, and validity/freshness
+semantics.
 
-**Current Status**: This is a draft specification. No providers currently implement MIF. The goal is to establish a vendor-neutral interchange format that providers may choose to adopt.
+> **MIF is the opinionated, OKF-compliant content model that fills OKF's
+> deliberately empty envelope.** OKF is the transport surface; MIF supplies the
+> concrete type system. AI memory is the first domain profile of MIF, not its
+> identity (see `profiles/ai-memory/`).
+
+OKF compliance is achieved as a **superset, not by subordination**: every MIF
+bundle MUST validate as a conformant OKF bundle, but MIF remains an independent
+specification with its own identity model and governance. MIF takes **no
+normative dependency** on OKF's evolving draft — it pins OKF v0.1's conformance
+criteria in [`docs/okf-conformance.md`](docs/okf-conformance.md), which is
+normative within MIF (Invariant 5).
 
 MIF is designed to be:
-- **Portable**: Move memories between providers without vendor lock-in
-- **Human-Readable**: Valid Obsidian notes that work in any Markdown editor
-- **Machine-Processable**: JSON-LD with semantic web compatibility
-- **Extensible**: Support custom properties without breaking compatibility
-- **Privacy-Respecting**: Local-first with no required cloud dependencies
+- **OKF-compliant**: every bundle is a valid OKF bundle (a tested invariant).
+- **Markdown-canonical**: the `.md` file is the source of truth; JSON-LD is a
+  derived projection (Invariant 2).
+- **Human-Readable**: valid Obsidian-compatible notes in any Markdown editor.
+- **Machine-Processable**: JSON-LD with semantic web compatibility.
+- **Extensible**: domain profiles extend the base without breaking compatibility.
+
+### MIF answers OKF's open questions
+
+This table is the positioning thesis: it states what MIF supplies for each
+question OKF leaves open.
+
+| OKF open design space | MIF's opinionated answer |
+| --- | --- |
+| No concept-type taxonomy | `semantic` / `episodic` / `procedural` base types |
+| Untyped markdown-link edges | Typed relationships (overlay on OKF links) |
+| No merge / contradiction semantics | `Supersedes`, `ConflictsWith` |
+| No trust tiers | Provenance `source_type` + `trust_level` |
+| Stale-vs-live left to process | Validity windows + TTL/freshness |
+| No provenance | W3C PROV |
+| Markdown only | First-class JSON-LD projection |
 
 ---
 
@@ -29,8 +64,8 @@ MIF is designed to be:
 2. [Design Principles](#2-design-principles)
 3. [File Format](#3-file-format)
 4. [Data Model](#4-data-model)
-5. [Markdown Format (.memory.md)](#5-markdown-format-memorymd)
-6. [JSON-LD Format (.memory.json)](#6-json-ld-format-memoryjson)
+5. [Markdown Format (.md)](#5-markdown-format-md)
+6. [JSON-LD Projection (derived)](#6-json-ld-projection-derived)
 7. [Entity Types](#7-entity-types)
 8. [Relationship Types](#8-relationship-types)
 9. [Temporal Model](#9-temporal-model)
@@ -69,8 +104,8 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 MIF defines two equivalent representations:
 
-1. **Markdown Format** (`.memory.md`): Human-readable, Obsidian-compatible
-2. **JSON-LD Format** (`.memory.json`): Machine-processable, semantically linked
+1. **Markdown Format** (`.md`): Human-readable, Obsidian-compatible
+2. **JSON-LD Format** (`.jsonld`): Machine-processable, semantically linked
 
 Both representations MUST be losslessly convertible to each other. A conforming implementation MAY support either or both formats.
 
@@ -122,27 +157,27 @@ MIF is designed for local-first storage:
 
 | Extension | Format | MIME Type |
 |-----------|--------|-----------|
-| `.memory.md` | Markdown | `text/markdown; variant=mif` |
-| `.memory.json` | JSON-LD | `application/ld+json; profile="https://raw.githubusercontent.com/zircote/MIF/main"` |
+| `.md` | Markdown | `text/markdown; variant=mif` |
+| `.jsonld` | JSON-LD | `application/ld+json; profile="https://raw.githubusercontent.com/zircote/MIF/main"` |
 
 ### 3.2 File Naming
 
 Files SHOULD be named using the memory's identifier:
 
 ```
-{id}.memory.md
-{id}.memory.json
+{id}.md
+{id}.jsonld
 ```
 
 Example:
 ```
-550e8400-e29b-41d4-a716-446655440000.memory.md
-550e8400-e29b-41d4-a716-446655440000.memory.json
+550e8400-e29b-41d4-a716-446655440000.md
+550e8400-e29b-41d4-a716-446655440000.jsonld
 ```
 
 Human-readable names MAY be used when the `id` is specified in frontmatter:
 ```
-dark-mode-preference.memory.md
+dark-mode-preference.md
 ```
 
 ### 3.3 Directory Structure
@@ -162,8 +197,8 @@ vault/
 │       └── file/
 ├── memories/                       # Memory files
 │   ├── {namespace}/               # Namespace directories
-│   │   ├── {id}.memory.md
-│   │   └── {id}.memory.json
+│   │   ├── {id}.md
+│   │   └── {id}.jsonld
 │   └── ...
 └── README.md                       # Vault documentation
 ```
@@ -271,7 +306,7 @@ The `ontology.id` MUST match the `ontology.id` field in the referenced ontology 
 
 ---
 
-## 5. Markdown Format (.memory.md)
+## 5. Markdown Format (.md)
 
 ### 5.1 Structure
 
@@ -586,7 +621,12 @@ Implementations MAY apply compression when memories meet these criteria:
 
 ---
 
-## 6. JSON-LD Format (.memory.json)
+## 6. JSON-LD Projection (derived)
+
+> **Markdown is canonical (Invariant 2).** The JSON-LD form below is a *derived*
+> projection: regenerate it from the `.md` source with `scripts/mif_convert.py`.
+> It MUST NOT use the `.md` extension (so OKF's `*.md` glob never ingests it) and
+> MUST round-trip losslessly back to markdown. If the two disagree, markdown wins.
 
 ### 6.1 Structure
 
@@ -1099,49 +1139,44 @@ MIF uses a bi-temporal model distinguishing between:
 |-------|---------|----------|
 | `none` | No decay | Permanent memories |
 | `linear` | strength = 1 - (t / ttl) | Simple linear decay |
-| `exponential` | strength = e^(-t/halfLife) | Natural forgetting curve |
+| `exponential` | strength = e^(-t/halfLife) | Gradual freshness decay |
 | `step` | strength = 1 if t < ttl else 0 | Hard expiration |
 
-### 9.3 Decay Rationale
+### 9.3 Freshness Rationale
 
-MIF's decay model values (P7D, P14D, P30D half-lives) are **pragmatic defaults** for AI memory systems, inspired by but not directly derived from cognitive psychology research. They represent reasonable approximations for memory management in agentic contexts.
+In the core model, the temporal decay function expresses **freshness** — how
+current a piece of knowledge is — and answers OKF's open "live vs. stale"
+question. The decay half-life defaults (P7D, P14D, P30D) are **pragmatic
+defaults** for how quickly knowledge of a given kind loses currency; they are
+not prescriptive.
 
-#### Scientific Background
-
-The exponential decay model `strength = e^(-t/halfLife)` is inspired by Hermann Ebbinghaus's forgetting curve (1885), which demonstrates that memory retention follows an exponential decline:
-
-| Time Elapsed | Approximate Retention |
-|--------------|----------------------|
-| 1 hour       | ~50% |
-| 24 hours     | ~30-35% |
-| 7 days       | ~25% |
-| 30 days      | ~10% |
-
-The mathematical form `R = e^(-t/S)` where R is retrievability, t is time elapsed, and S is memory strength, has been validated by modern replication studies.
+The `strength = e^(-t/halfLife)` curve models a value that is fully current when
+recorded and decays gradually toward stale, with `validFrom`/`validUntil`
+windows bounding the interval in which a fact is asserted to hold.
 
 #### Why These Specific Values?
 
 | Half-Life | Use Case | Rationale |
 |-----------|----------|-----------|
-| **P7D** | Short-term context | Aligns with weekly work cycles and episodic memory consolidation windows |
+| **P7D** | Short-term context | Aligns with weekly work cycles |
 | **P14D** | Medium-term projects | Spans typical sprint/iteration boundaries |
-| **P30D** | Long-term knowledge | Corresponds to monthly review cycles and hippocampal consolidation periods (~30 days in animal studies) |
+| **P30D** | Long-term knowledge | Corresponds to monthly review cycles |
 | **P90D** | Default TTL | Quarterly relevance for most organizational knowledge |
 
-These values are **not** prescriptive—implementations SHOULD tune them based on:
-- Memory type (episodic decays faster than semantic)
+Implementations SHOULD tune these based on:
+- Knowledge kind (`episodic` records go stale faster than `semantic` facts)
 - Organizational context (high-velocity vs. stable environments)
-- Access patterns (frequently accessed memories reinforce slower decay)
+- Access patterns (frequently accessed knowledge can reinforce slower decay)
 
-#### Memory Consolidation Considerations
+The `lastAccessed` and `accessCount` fields let implementations model
+reinforcement — each access can reset or slow the freshness decay.
 
-Research on memory consolidation suggests memories transition from hippocampus-dependent (recent) to cortex-dependent (remote) storage over time. MIF's `lastAccessed` and `accessCount` fields enable implementations to model reinforcement—each access can reset or slow decay, analogous to spaced repetition strengthening memory traces.
-
-**References:**
-- Ebbinghaus, H. (1885). *Memory: A Contribution to Experimental Psychology*
-- Murre & Dros (2015). [Replication and Analysis of Ebbinghaus' Forgetting Curve](https://pmc.ncbi.nlm.nih.gov/articles/PMC4492928/)
-- Squire & Bayley (2007). [The neuroscience of remote memory](https://pmc.ncbi.nlm.nih.gov/articles/PMC2791502/)
-- Wickelgren (1972). [Trace resistance and the decay of long-term memory](https://psycnet.apa.org/record/1973-08477-007)
+> **Cognitive-memory origin.** This exponential curve originates in the
+> cognitive-science account of human memory decay. That rationale — including
+> the underlying experimental references and decay tuning for retrieval-oriented
+> systems — now lives in the **AI Memory profile**
+> (`profiles/ai-memory/SPECIFICATION.md`), keeping the core framed purely as
+> freshness.
 
 ### 9.4 Example
 
@@ -1934,117 +1969,17 @@ See Section 6.2 for a complete Level 3 example.
 
 ---
 
-## 17. Migration Guides
+## 17. Migration
 
-### 17.1 From Mem0
+MIF v1.0.0 ships a complete upgrade path from `0.1.0-draft`. The mechanical
+transform (drops the legacy `.memory` infix to plain `.md`, adds UUID identity, wiki-links → OKF-legible body
+markdown links + frontmatter `relationships`, ISO 8601 timestamps) is automated
+by `scripts/migrate_0_1_to_1_0.py` and documented in
+[`MIGRATION.md`](MIGRATION.md).
 
-```python
-# Mem0 export structure
-{
-    "id": "mem0_123",
-    "memory": "User prefers dark mode",
-    "user_id": "user_456",
-    "metadata": {"category": "preference"},
-    "created_at": "2026-01-15T10:30:00Z"
-}
-
-# MIF mapping
-{
-    "@context": "https://mif-spec.dev/schema/context.jsonld",
-    "@id": "urn:mif:mem0_123",                    # id → @id
-    "content": "User prefers dark mode",          # memory → content
-    "memoryType": "semantic",                     # preferences are semantic knowledge
-    "namespace": "_semantic/preferences",          # categorize by base type + category
-    "created": "2026-01-15T10:30:00Z",           # created_at → created
-    "extensions": {
-        "mem0": {"original_id": "mem0_123", "category": "preference"}
-    }
-}
-```
-
-### 17.2 From Zep
-
-```python
-# Zep temporal knowledge graph structure
-{
-    "uuid": "zep_789",
-    "content": "User prefers dark mode",
-    "created_at": "2026-01-15T10:30:00Z",
-    "t_valid": "2026-01-15T00:00:00Z",
-    "t_invalid": null,
-    "entity_edges": [...],
-    "embedding": [0.1, 0.2, ...]
-}
-
-# MIF mapping
-{
-    "@id": "urn:mif:zep_789",
-    "content": "User prefers dark mode",
-    "created": "2026-01-15T10:30:00Z",
-    "temporal": {
-        "validFrom": "2026-01-15T00:00:00Z",     # t_valid
-        "validUntil": null,                       # t_invalid
-        "recordedAt": "2026-01-15T10:30:00Z"     # created_at
-    },
-    "relationships": [...],                       # entity_edges
-    "embedding": {
-        "model": "zep-default",
-        "sourceText": "User prefers dark mode"
-        # vectors stored externally
-    }
-}
-```
-
-### 17.3 From Letta (Agent File)
-
-```python
-# Letta Agent File memory block
-{
-    "label": "human",
-    "value": "Name: Alice. Prefers dark mode.",
-    "limit": 5000
-}
-
-# MIF mapping (multiple memories)
-{
-    "@id": "urn:mif:letta-human-name",
-    "memoryType": "semantic",
-    "content": "Name: Alice",
-    "namespace": "_semantic/entities"
-},
-{
-    "@id": "urn:mif:letta-human-pref",
-    "memoryType": "semantic",
-    "content": "Prefers dark mode",
-    "namespace": "_semantic/preferences"
-}
-```
-
-### 17.4 From Subcog
-
-```python
-# Subcog memory
-{
-    "id": "subcog_abc",
-    "content": "Decision: Use React",
-    "namespace": "decisions",
-    "domain": "project",
-    "tags": ["frontend"],
-    "created_at": "2026-01-15T10:30:00Z"
-}
-
-# MIF mapping (mostly 1:1)
-{
-    "@id": "urn:mif:subcog_abc",
-    "content": "Decision: Use React",
-    "memoryType": "semantic",                     # decisions are semantic knowledge
-    "namespace": "_semantic/decisions",            # base type prefix + category
-    "tags": ["frontend"],
-    "created": "2026-01-15T10:30:00Z"
-}
-```
-
----
+System-specific migration guides for individual AI-memory providers are part
+of the AI Memory profile, not the core model:
+see [`profiles/ai-memory/SPECIFICATION.md`](profiles/ai-memory/SPECIFICATION.md).
 
 ## 18. Security Considerations
 

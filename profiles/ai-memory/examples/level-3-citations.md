@@ -1,95 +1,103 @@
 ---
 id: a1b2c3d4-5e6f-7a8b-9c0d-1e2f3a4b5c6d
 type: semantic
-created: 2026-01-20T10:00:00Z
-modified: 2026-01-22T15:30:00Z
+created: '2026-01-20T10:00:00Z'
+modified: '2026-01-22T15:30:00Z'
 namespace: _semantic/decisions
-title: "Adopt MIF for AI Memory Interchange"
+title: Adopt MIF for AI Memory Interchange
 tags:
-  - architecture
-  - memory-systems
-  - integration
-  - ai
+- architecture
+- memory-systems
+- integration
+- ai
 aliases:
-  - "MIF Adoption Decision"
-  - "Memory Format Choice"
-
+- MIF Adoption Decision
+- Memory Format Choice
+relationships:
+- type: supersedes
+  target: /proprietary-memory-format-2024.md
+- type: relates-to
+  target: /ai-infrastructure-standards.md
+- type: part-of
+  target: /platform-architecture-decisions.md
+- type: implements
+  target: /memory-portability-requirement.md
 temporal:
-  valid_from: 2026-01-20T00:00:00Z
-  valid_until: null
-  recorded_at: 2026-01-20T10:00:00Z
   ttl: P730D
   decay:
     model: none
     strength: 1.0
-  access_count: 12
-  last_accessed: 2026-01-22T15:30:00Z
-
+  '@type': TemporalMetadata
+  validFrom: '2026-01-20T00:00:00Z'
+  validUntil: null
+  recordedAt: '2026-01-20T10:00:00Z'
+  accessCount: 12
+  lastAccessed: '2026-01-22T15:30:00Z'
 provenance:
-  source_type: user_explicit
   source_ref: meeting:arch-review-2026-01-20
   agent: claude-3-opus
-  agent_version: "20240229"
+  agent_version: '20240229'
   confidence: 0.98
-  trust_level: verified
-
+  sourceType: user_explicit
+  trustLevel: verified
 embedding:
   model: text-embedding-3-small
-  model_version: "2024-01"
   dimensions: 1536
-  source_text: "Decision to adopt MIF Memory Interchange Format for portable AI memory representation"
   normalized: true
-
+  '@type': EmbeddingReference
+  modelVersion: 2024-01
+  sourceText: Decision to adopt MIF Memory Interchange Format for portable AI memory
+    representation
 citations:
-  - type: specification
-    title: "Memory Interchange Format (MIF) Specification"
-    url: https://github.com/zircote/subcog/blob/main/SPECIFICATION.md
-    role: source
-    author: "@[[Robert Allen|Person]]"
-    date: 2026-01-23
-    accessed: 2026-01-20
-    relevance: 1.0
-    note: "Primary specification document defining the format we are adopting"
-
-  - type: article
-    title: "The Case for Portable AI Memory"
-    url: https://example.com/ai-memory-portability
-    role: supports
-    author: "@[[Jane Smith|Person]], @[[John Doe|Person]]"
-    date: 2025-11-15
-    accessed: 2026-01-18
-    relevance: 0.92
-    note: "Research article supporting vendor-neutral memory formats"
-
-  - type: documentation
-    title: "Obsidian Help Documentation"
-    url: https://help.obsidian.md/
-    role: background
-    author: "@[[Obsidian Team|Organization]]"
-    accessed: 2026-01-19
-    relevance: 0.85
-
-  - type: paper
-    title: "Bi-temporal Data Models in Knowledge Systems"
-    url: https://arxiv.org/abs/2024.54321
-    role: methodology
-    author: "@[[Research Group|Organization]]"
-    date: 2024-08-20
-    relevance: 0.78
-    note: "Theoretical foundation for MIF's temporal model"
-
-  - type: repository
-    title: "Subcog Memory System"
-    url: https://github.com/zircote/subcog
-    role: extends
-    author: "@[[Robert Allen|Person]]"
-    accessed: 2026-01-20
-    relevance: 0.88
-
+- '@type': Citation
+  citationType: specification
+  title: Memory Interchange Format (MIF) Specification
+  url: https://github.com/zircote/subcog/blob/main/SPECIFICATION.md
+  citationRole: source
+  author: '@[[Robert Allen|Person]]'
+  date: '2026-01-23'
+  accessed: '2026-01-20'
+  relevance: 1.0
+  note: Primary specification document defining the format we are adopting
+- '@type': Citation
+  citationType: article
+  title: The Case for Portable AI Memory
+  url: https://example.com/ai-memory-portability
+  citationRole: supports
+  author: '@[[Jane Smith|Person]], @[[John Doe|Person]]'
+  date: '2025-11-15'
+  accessed: '2026-01-18'
+  relevance: 0.92
+  note: Research article supporting vendor-neutral memory formats
+- '@type': Citation
+  citationType: documentation
+  title: Obsidian Help Documentation
+  url: https://help.obsidian.md/
+  citationRole: background
+  author: '@[[Obsidian Team|Organization]]'
+  accessed: '2026-01-19'
+  relevance: 0.85
+- '@type': Citation
+  citationType: paper
+  title: Bi-temporal Data Models in Knowledge Systems
+  url: https://arxiv.org/abs/2024.54321
+  citationRole: methodology
+  author: '@[[Research Group|Organization]]'
+  date: '2024-08-20'
+  relevance: 0.78
+  note: Theoretical foundation for MIF's temporal model
+- '@type': Citation
+  citationType: repository
+  title: Subcog Memory System
+  url: https://github.com/zircote/subcog
+  citationRole: extends
+  author: '@[[Robert Allen|Person]]'
+  accessed: '2026-01-20'
+  relevance: 0.88
 extensions:
   subcog:
     domain: architecture
-    hash: "sha256:7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a"
+    hash: sha256:7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a
 ---
 
 # Adopt MIF for AI Memory Interchange
@@ -134,10 +142,10 @@ We will adopt the **Memory Interchange Format (MIF)** as our standard for AI mem
 
 ## Relationships
 
-- supersedes [[proprietary-memory-format-2024]]
-- relates-to [[ai-infrastructure-standards]]
-- part-of [[platform-architecture-decisions]]
-- implements [[memory-portability-requirement]]
+- supersedes [Proprietary Memory Format 2024](/proprietary-memory-format-2024.md)
+- relates-to [Ai Infrastructure Standards](/ai-infrastructure-standards.md)
+- part-of [Platform Architecture Decisions](/platform-architecture-decisions.md)
+- implements [Memory Portability Requirement](/memory-portability-requirement.md)
 
 ## Entities
 

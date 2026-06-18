@@ -1,32 +1,32 @@
 ---
 id: f6a7b8c9-0123-45f0-1234-6789012345f0
 type: procedural
+created: '2026-01-08T15:30:00Z'
+modified: '2026-01-08T15:30:00Z'
 namespace: _procedural/lab-protocols
-created: 2026-01-08T15:30:00Z
-modified: 2026-01-08T15:30:00Z
-title: "Western Blot Protocol - Standard"
+title: Western Blot Protocol - Standard
 tags:
-  - protocol
-  - western-blot
-  - protein
-  - molecular-biology
+- protocol
+- western-blot
+- protein
+- molecular-biology
 temporal:
-  valid_from: 2026-01-01T00:00:00Z
-  recorded_at: 2026-01-08T15:30:00Z
+  valid_from: '2026-01-01T00:00:00Z'
+  recorded_at: '2026-01-08T15:30:00Z'
 provenance:
   source_type: external_import
   agent: claude-opus-4
   confidence: 0.95
 ontology:
   id: biology-research-lab
-  version: "0.1.0"
+  version: 0.1.0
 entity:
   entity_type: protocol
   entity_id: protocol-western-blot-v2.1
-  name: "Standard Western Blot Protocol"
+  name: Standard Western Blot Protocol
   protocol_type: molecular_biology
-  version: "2.1"
-  author: "Raj Patel"
+  version: '2.1'
+  author: Raj Patel
 ---
 
 # Western Blot Protocol - Standard

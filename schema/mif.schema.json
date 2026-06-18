@@ -1,10 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://mif-spec.dev/schema/mif.schema.json",
-  "title": "Memory Interchange Format (MIF)",
-  "description": "JSON Schema for validating MIF memory documents",
+  "title": "MIF — Modeled Information Format (v1.0)",
+  "description": "JSON Schema for validating the derived JSON-LD projection of a MIF v1.0 concept",
   "type": "object",
-  "required": ["@context", "@type", "@id", "memoryType", "content", "created"],
+  "required": ["@context", "@type", "@id", "conceptType", "content", "created"],
   "properties": {
     "@context": {
       "description": "JSON-LD context",
@@ -15,10 +15,11 @@
       ]
     },
     "@type": {
-      "description": "Type of the memory document",
+      "description": "Type of the concept document",
       "oneOf": [
+        { "const": "Concept" },
         { "const": "Memory" },
-        { "type": "array", "contains": { "const": "Memory" } }
+        { "type": "array", "contains": { "const": "Concept" } }
       ]
     },
     "@id": {
@@ -26,10 +27,24 @@
       "pattern": "^urn:mif:",
       "description": "Unique identifier in URN format"
     },
+    "conceptType": {
+      "type": "string",
+      "enum": ["semantic", "episodic", "procedural"],
+      "description": "Knowledge taxonomy: semantic (declarative knowledge), episodic (time-bound records), procedural (how-to knowledge)"
+    },
     "memoryType": {
       "type": "string",
       "enum": ["semantic", "episodic", "procedural"],
-      "description": "Memory classification using cognitive triad: semantic (facts/knowledge), episodic (events/experiences), procedural (processes/how-to)"
+      "description": "Deprecated v0.1 alias for conceptType; retained for backward compatibility"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "OKF-recommended mirror of modified (or created)"
+    },
+    "description": {
+      "type": "string",
+      "description": "OKF-recommended description, mapped from MIF summary"
     },
     "content": {
       "type": "string",
@@ -231,44 +246,17 @@
     },
     "Relationship": {
       "type": "object",
-      "required": ["@type", "relationshipType", "target"],
+      "description": "v1.0 typed relationship: authoritative in frontmatter, mirrored as an OKF-legible body markdown link (SPECIFICATION.md 4.4)",
+      "required": ["type", "target"],
       "properties": {
-        "@type": {
-          "const": "Relationship"
-        },
-        "relationshipType": {
+        "type": {
           "type": "string",
-          "description": "Relationship type",
-          "oneOf": [
-            {
-              "enum": [
-                "RelatesTo",
-                "DerivedFrom",
-                "Supersedes",
-                "ConflictsWith",
-                "PartOf",
-                "Implements",
-                "Uses",
-                "Created",
-                "MentionedIn"
-              ]
-            },
-            {
-              "type": "string",
-              "pattern": "^[a-zA-Z][a-zA-Z0-9]*:[a-zA-Z][a-zA-Z0-9-]*$",
-              "description": "Custom namespaced relationship type (e.g., farm:BreedsWith)"
-            }
-          ]
+          "description": "Relationship type as a kebab-case token (e.g. derived-from, supersedes, relates-to) or a custom namespaced type",
+          "pattern": "^[a-z0-9][a-z0-9-]*(:[a-z0-9][a-z0-9-]*)?$"
         },
         "target": {
-          "type": "object",
-          "required": ["@id"],
-          "properties": {
-            "@id": {
-              "type": "string",
-              "pattern": "^urn:mif:"
-            }
-          }
+          "type": "string",
+          "description": "Bundle-relative path to the target concept (e.g. /semantic/policy.md) or a urn:mif: identifier"
         },
         "strength": {
           "type": "number",
