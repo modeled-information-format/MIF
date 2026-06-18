@@ -80,11 +80,15 @@ jobs:
 
       - name: Validate every projection against schema/mif.schema.json
         run: |
+          # ajv-cli detects the parser by file extension and does not recognize
+          # .jsonld, so validate .json copies of the derived projections.
           find dist/jsonld -name '*.jsonld' -print0 | while IFS= read -r -d '' f; do
-            echo "Validating $f"
+            json="${f%.jsonld}.json"
+            cp "$f" "$json"
+            echo "Validating $json"
             ajv validate -s schema/mif.schema.json \
               -r "schema/definitions/*.schema.json" \
-              -d "$f" --spec=draft2020 -c ajv-formats
+              -d "$json" --spec=draft2020 -c ajv-formats
           done
 
   validate-ontologies:
