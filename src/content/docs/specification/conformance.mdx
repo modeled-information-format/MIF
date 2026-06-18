@@ -5,9 +5,9 @@ description: Level 1, 2, and 3 conformance requirements for MIF implementations.
 
 ### Level 1: Core (REQUIRED for conformance)
 
-- `id`, `type`, `content`, `created` fields
-- Valid Markdown or JSON-LD structure
-- Basic wiki-link syntax
+- `id` (UUID), `type`, `content`, `created` fields
+- Valid OKF bundle shape (a directory of `.md` concept files)
+- Markdown-link relationship edges in a `## Relationships` section
 
 ### Level 2: Standard (RECOMMENDED)
 
@@ -34,7 +34,7 @@ Implementations SHOULD declare their conformance level:
 
 ```yaml
 # .mif/config.yaml
-mif_version: "0.1.0"
+mif_version: "1.0.0"
 conformance_level: 2
 extensions:
   - subcog

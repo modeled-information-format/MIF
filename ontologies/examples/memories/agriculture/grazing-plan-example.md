@@ -14,13 +14,14 @@ relationships:
 - type: documents
   target: /herd-beef-main.md
 temporal:
-  valid_from: '2026-04-01T00:00:00Z'
-  valid_until: '2026-10-31T00:00:00Z'
-  recorded_at: '2026-03-01T08:00:00Z'
+  '@type': TemporalMetadata
+  validFrom: '2026-04-01T00:00:00Z'
+  validUntil: '2026-10-31T00:00:00Z'
+  recordedAt: '2026-03-01T08:00:00Z'
 provenance:
-  source_type: user_explicit
   agent: claude-opus-4
   confidence: 0.95
+  sourceType: user_explicit
 ontology:
   id: regenerative-agriculture
   version: 0.1.0

@@ -11,19 +11,21 @@ tags:
 - mathematics
 - k-8
 temporal:
-  valid_from: '2026-01-01T00:00:00Z'
-  valid_until: '2027-06-30T00:00:00Z'
-  recorded_at: '2026-01-20T14:00:00Z'
+  '@type': TemporalMetadata
+  validFrom: '2026-01-01T00:00:00Z'
+  validUntil: '2027-06-30T00:00:00Z'
+  recordedAt: '2026-01-20T14:00:00Z'
 provenance:
-  source_type: user_explicit
   agent: claude-opus-4
   confidence: 0.95
+  sourceType: user_explicit
 citations:
-- type: documentation
-  role: source
+- '@type': Citation
+  citationType: documentation
+  citationRole: source
   title: Texas Proclamation 2027 - Mathematics
   url: https://tea.texas.gov/proclamation-2027
-  accessed: '2026-01-20T14:00:00Z'
+  accessed: '2026-01-20'
   relevance: 1.0
 ontology:
   id: k12-educational-publishing

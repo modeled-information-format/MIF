@@ -121,9 +121,9 @@
   "@id": "mif:ontology/backstage",
   "@type": "mif:Ontology",
   "identifier": "backstage",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Backstage.io software catalog ontology",
-  "schema_url": "https://mif-spec.dev/schema/ontology/v2",
+  "schema_url": "https://mif-spec.dev/schema/ontology/ontology.schema.json",
   "namespaces": {
     "semantic": {
       "@id": "mif:namespace/semantic",
@@ -215,7 +215,7 @@
           "type_hint": "episodic"
         },
         "incidents": {
-          "@id": "mif:namespace/_episodic/incidents",
+          "@id": "mif:namespace/episodic/incidents",
           "@type": "mif:Namespace",
           "name": "incidents",
           "description": "Service incidents and outages",

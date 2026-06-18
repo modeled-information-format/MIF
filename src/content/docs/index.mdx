@@ -1,102 +1,124 @@
 ---
 title: "Introduction"
-description: "An open standard for portable AI memory representation."
+description: "An OKF-compliant, opinionated knowledge content model. AI memory is one profile."
 ---
 
-# Memory Interchange Format
+# MIF — Modeled Information Format
 
-> An open standard for portable AI memory representation.
+> The opinionated, OKF-compliant content model that fills OKF's deliberately
+> empty envelope.
 
-MIF defines a vendor-neutral data model for AI memories with dual
-representations: human-readable Markdown files and machine-processable
-JSON-LD documents. One format, every provider.
+[OKF](https://github.com/google/open-knowledge-format) defines the transport
+surface — a directory of markdown files with YAML frontmatter and one required
+`type` field — and explicitly leaves the *content model* open. MIF supplies the
+concrete type system, typed relationships, provenance/trust, and
+validity/freshness semantics. **AI memory is the first domain profile of MIF,
+not its identity.**
 
-## Why MIF?
+## Overview
 
-AI memory is fragmented. Mem0, Zep, Letta, LangMem, and others each use
-proprietary schemas with no interoperability. Switching providers means
-losing memories or writing custom migration code.
+A MIF bundle is a directory tree of `.md` concept files — **a valid OKF
+bundle**. Markdown is the canonical representation; JSON-LD is a derived,
+regenerable projection.
 
-MIF fixes this.
+- **Markdown** (`.md`) — canonical, human-readable, Obsidian-compatible.
+- **JSON-LD** (`*.jsonld`, derived) — machine-processable, semantically linked,
+  regenerated from markdown with `scripts/mif_convert.py`.
 
-**For memory providers**: Adopt a common interchange format. Users gain
-confidence knowing their data is portable, which lowers switching costs
-and raises adoption.
+Every concept declares one of three **base knowledge types**:
 
-**For developers**: Build on a stable schema with semantic web
-compatibility. MIF memories are valid JSON-LD documents that work with
-existing linked data tooling.
+- `semantic` — declarative knowledge: facts, concepts, decisions, schemas.
+- `episodic` — time-bound records: events, incidents, changelog/deprecation.
+- `procedural` — how-to knowledge: runbooks, processes, patterns, migrations.
 
-**For users**: Own your memories. MIF files are valid Obsidian notes
-that work in any Markdown editor. No cloud dependency required.
+## MIF answers OKF's open questions
+
+OKF deliberately refuses to define a content model. MIF supplies opinionated
+answers to exactly the questions OKF leaves open:
+
+| OKF open design space | MIF's opinionated answer |
+| --- | --- |
+| No concept-type taxonomy | `semantic` / `episodic` / `procedural` base types |
+| Untyped markdown-link edges | Typed relationships (overlay on OKF links) |
+| No merge / contradiction semantics | `Supersedes`, `ConflictsWith` |
+| No trust tiers | Provenance `source_type` + `trust_level` |
+| Stale-vs-live left to process | Validity windows + TTL/freshness |
+| No provenance | W3C PROV |
+| Markdown only | First-class JSON-LD projection |
+
+OKF compliance is achieved as a **superset, not by subordination**: every MIF
+bundle validates as a conformant OKF bundle, but MIF remains an independent
+specification with its own identity model and governance, pinned to OKF v0.1.
 
 ## Quick Start
 
-A minimal MIF memory in Markdown:
+A minimal concept (canonical markdown):
 
 ```markdown
 ---
-id: "urn:mif:memory:a1b2c3"
-type: "semantic"
-title: "User prefers dark mode"
-confidence: 0.92
-created: "2026-01-15T10:30:00Z"
+id: 550e8400-e29b-41d4-a716-446655440000
+type: semantic
+created: 2026-01-15T10:30:00Z
+namespace: _semantic/preferences
 ---
 
-The user consistently selects dark mode across all applications.
-They mentioned it reduces eye strain during late-night coding sessions.
+A declarative fact stated in plain markdown.
+```
+
+A concept with typed relationships — authoritative in frontmatter, mirrored as
+OKF-legible body links:
+
+```markdown
+---
+id: 7b3c1e90-5a2f-4c8d-9e10-2f6a4b8c1d3e
+type: semantic
+created: 2026-01-15T10:30:00Z
+title: API Rate Limit Policy
+relationships:
+  - type: derived-from
+    target: /episodic/incident-2026-01-rate-spike.md
+---
+
+# API Rate Limit Policy
+
+The gateway enforces 600 req/min per key.
 
 ## Relationships
 
-- relates_to: [[urn:mif:memory:ui-prefs]] "UI Preferences"
+- derived-from [Rate Spike Incident](/episodic/incident-2026-01-rate-spike.md)
 ```
 
-The same memory as JSON-LD:
+The derived JSON-LD projection is regenerated, never hand-edited:
 
-```json
-{
-  "@context": "https://mif-spec.dev/schema/context.jsonld",
-  "@type": "mif:Memory",
-  "mif:id": "urn:mif:memory:a1b2c3",
-  "mif:memoryType": "semantic",
-  "mif:title": "User prefers dark mode",
-  "mif:confidence": 0.92,
-  "mif:created": "2026-01-15T10:30:00Z",
-  "mif:content": "The user consistently selects dark mode across all applications. They mentioned it reduces eye strain during late-night coding sessions.",
-  "mif:relationships": [
-    {
-      "@type": "mif:Relationship",
-      "mif:type": "relates_to",
-      "mif:target": "urn:mif:memory:ui-prefs",
-      "mif:label": "UI Preferences"
-    }
-  ]
-}
+```bash
+python scripts/mif_convert.py emit-jsonld examples --out-dir jsonld
 ```
 
 ## Key Features
 
 | Feature | Description |
 |---------|-------------|
-| **Dual Format** | Human-readable `.memory.md` and machine-processable `.memory.json` |
-| **Semantic Web** | JSON-LD with full linked data compatibility |
-| **Obsidian Native** | Markdown files work as valid Obsidian vault notes |
-| **Bi-Temporal** | Track both event time and recording time |
-| **Memory Decay** | Built-in confidence decay models (exponential, step, linear) |
-| **Entity System** | Typed entities: Person, Organization, Technology, Concept, File |
-| **9 Relationship Types** | `relates_to`, `derived_from`, `supersedes`, `contradicts`, and more |
-| **Provenance** | W3C PROV-based origin tracking |
-| **Namespaces** | Hierarchical organization with reserved cognitive prefixes |
-| **3 Conformance Levels** | Progressive adoption from basic to full compliance |
+| **OKF compliant** | Every bundle is a valid OKF bundle (tested invariant) |
+| **Markdown canonical** | `.md` is the source of truth; JSON-LD is derived |
+| **Typed Relationships** | Typed overlay on standard OKF markdown-link edges |
+| **Base types** | `semantic` / `episodic` / `procedural` knowledge taxonomy |
+| **Bi-Temporal** | Validity windows & freshness (when recorded AND when valid) |
+| **Provenance & Trust** | W3C PROV + `source_type` / `trust_level` |
+| **Model-Agnostic Embeddings** | Store model + source text for re-embedding |
+| **Stable identity** | UUID `id` survives concept relocation |
+| **JSON Schema** | Automated validation for the JSON-LD projection |
+| **Ontology System** | Base knowledge taxonomy with domain profiles |
+
+## AI Memory profile
+
+Memory-specific material — decay tuning, episodic *session* framing,
+retrieval-oriented embeddings, and provider migration guides — lives in the
+AI Memory profile, the first domain profile of MIF.
 
 ## Current Status
 
-**Version**: 0.1.0-draft
+**Version**: 1.0.0
 
-This is a draft specification. No providers currently implement MIF. The
-goal is to establish a vendor-neutral interchange format that providers
-may choose to adopt. Feedback and contributions are welcome.
-
-- [Specification](/specification/overview/) - Full format specification
-- [Getting Started](/guides/getting-started/) - Implementation guide
-- [GitHub Repository](https://github.com/zircote/MIF) - Source and issues
+- [Specification](/specification/overview/) — Full format specification
+- [Getting Started](/guides/getting-started/) — Implementation guide
+- [GitHub Repository](https://github.com/zircote/MIF) — Source and issues

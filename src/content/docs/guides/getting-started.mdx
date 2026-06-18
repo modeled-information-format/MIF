@@ -1,9 +1,9 @@
 ---
 title: "Getting Started"
-description: "Quick start guide for implementing and using the Memory Interchange Format."
+description: "Quick start guide for implementing and using the Modeled Information Format."
 ---
 
-This guide walks you through implementing the Memory Interchange Format (MIF) in your project.
+This guide walks you through implementing the Modeled Information Format (MIF) in your project.
 
 ## Prerequisites
 
@@ -13,13 +13,14 @@ This guide walks you through implementing the Memory Interchange Format (MIF) in
 
 ## Quick Start
 
-### Step 1: Create Your First Memory
+### Step 1: Create Your First Concept
 
-MIF memories can be written in Markdown or JSON-LD. Start with Markdown:
+A MIF concept is a canonical Markdown file; JSON-LD is a derived projection.
+Start with Markdown:
 
 ```markdown
 ---
-id: my-first-memory
+id: 550e8400-e29b-41d4-a716-446655440000
 type: semantic
 created: 2026-01-26T10:00:00Z
 ---
@@ -27,7 +28,7 @@ created: 2026-01-26T10:00:00Z
 User prefers dark mode for all applications.
 ```
 
-Save this as `my-first-memory.memory.md`.
+Save this as `my-first-concept.md`.
 
 ### Step 2: Add Metadata
 
@@ -74,15 +75,15 @@ namespace: _semantic/livestock
 Herd of 85 Angus-cross beef cattle managed with adaptive multi-paddock grazing.
 ```
 
-## Memory Types
+## Base Knowledge Types
 
-MIF uses three base memory types reflecting how human cognition organizes information:
+Every MIF concept declares one of three base knowledge types:
 
 | Type | Description | Use For |
 |------|-------------|---------|
-| `semantic` | Facts, concepts, and knowledge | Decisions, preferences, facts, domain knowledge |
-| `episodic` | Events and experiences | Incidents, sessions, conversations, timelines |
-| `procedural` | How-to processes | Runbooks, patterns, migration guides, workflows |
+| `semantic` | Declarative knowledge: facts, concepts, schemas | Decisions, preferences, facts, domain knowledge |
+| `episodic` | Time-bound records: events, incidents | Incidents, changelog/deprecation, timelines |
+| `procedural` | How-to knowledge: processes, patterns | Runbooks, patterns, migration guides, workflows |
 
 Specific categorization is expressed through namespaces (e.g., `_semantic/decisions`, `_episodic/incidents`).
 
@@ -108,9 +109,9 @@ Memory content here.
 
 Add namespaces, entities, and relationships:
 
-```yaml
+```markdown
 ---
-id: uuid-here
+id: 7b3c1e90-5a2f-4c8d-9e10-2f6a4b8c1d3e
 type: semantic
 created: 2026-01-26T10:00:00Z
 modified: 2026-01-26T10:00:00Z
@@ -119,6 +120,11 @@ title: "Use PostgreSQL for Data Storage"
 tags:
   - database
   - architecture
+relationships:
+  - type: relates-to
+    target: /semantic/database-requirements.md
+  - type: supersedes
+    target: /semantic/sqlite-investigation.md
 ---
 
 # Use PostgreSQL for Data Storage
@@ -136,14 +142,12 @@ PostgreSQL for:
 
 ## Relationships
 
-- relates-to [[database-requirements]]
-- supersedes [[sqlite-investigation]]
-
-## Entities
-
-- @[[PostgreSQL|Technology]]
-- @[[MySQL|Technology]]
+- relates-to [Database Requirements](/semantic/database-requirements.md)
+- supersedes [SQLite Investigation](/semantic/sqlite-investigation.md)
 ```
+
+Relationships are authoritative in frontmatter and mirrored as OKF-legible
+body markdown links so a generic OKF consumer sees every edge.
 
 ### Level 3: Full
 
@@ -176,7 +180,7 @@ citations:
 ---
 ```
 
-> **Decay Values:** The `halfLife: P30D` means memory strength halves every 30 days. Common values: P7D (short-term), P14D (medium-term), P30D (long-term). These are pragmatic defaults inspired by Ebbinghaus's forgetting curve research. See the [Specification](/specification/overview/) for details.
+> **Freshness Values:** The `halfLife: P30D` means freshness strength halves every 30 days. Common values: P7D (short-term), P14D (medium-term), P30D (long-term). These are pragmatic validity/freshness defaults; the cognitive-memory rationale lives in the AI Memory profile. See the [Specification](/specification/overview/) for details.
 
 ## Directory Structure
 

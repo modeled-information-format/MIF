@@ -17,18 +17,20 @@ relationships:
 - type: relates-to
   target: /cover-crop-rotation-2025.md
 temporal:
-  valid_from: '2026-01-15T00:00:00Z'
-  recorded_at: '2026-01-15T10:30:00Z'
+  '@type': TemporalMetadata
+  validFrom: '2026-01-15T00:00:00Z'
+  recordedAt: '2026-01-15T10:30:00Z'
 provenance:
-  source_type: external_import
   agent: claude-opus-4
   confidence: 0.98
+  sourceType: external_import
 citations:
-- type: documentation
-  role: source
+- '@type': Citation
+  citationType: documentation
+  citationRole: source
   title: Ward Laboratories Soil Analysis Report
   url: https://wardlab.com/reports/2026-01-15-NF001
-  accessed: '2026-01-15T10:30:00Z'
+  accessed: '2026-01-15'
   relevance: 1.0
 ontology:
   id: regenerative-agriculture

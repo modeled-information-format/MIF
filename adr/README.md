@@ -4,36 +4,44 @@ diataxis_type: reference
 
 # Architecture Decision Records
 
-This directory contains Architecture Decision Records (ADRs) for the Memory Interchange Format (MIF) project.
+This directory contains Architecture Decision Records (ADRs) for the Modeled Information Format (MIF) project.
 
 ## Format
 
-ADRs follow the [MADR](https://adr.github.io/madr/) (Markdown Any Decision Records) format.
+ADRs follow the **Structured MADR** format — an extension of [MADR](https://adr.github.io/madr/) (Markdown Architectural Decision Records) that adds YAML frontmatter, full risk-assessed option analysis, split Positive/Negative/Neutral consequences, and a required code-grounded Audit section.
 
 ## Index
 
 | ADR | Title | Status | Description |
 |-----|-------|--------|-------------|
-| [ADR-001](ADR-001-cognitive-triad-taxonomy.md) | Three Base Memory Types | Accepted | Adopts the cognitive triad (semantic, episodic, procedural) as the foundational memory taxonomy |
-| [ADR-002](ADR-002-dual-format-design.md) | Dual Format Design (Markdown + JSON-LD) | Accepted | Supports both Markdown and JSON-LD as first-class, bidirectionally convertible formats |
+| [ADR-001](ADR-001-cognitive-triad-taxonomy.md) | Cognitive Triad Taxonomy | Accepted | Adopts the cognitive triad (semantic, episodic, procedural) as the foundational concept taxonomy — MIF's answer to OKF's absent concept-type system |
+| [ADR-002](ADR-002-dual-format-design.md) | Dual-Format Design (Markdown + JSON-LD) | Accepted | Supports both Markdown and JSON-LD as first-class formats (refined by ADR-011: Markdown is canonical) |
 | [ADR-003](ADR-003-obsidian-compatibility.md) | Obsidian Compatibility | Accepted | Ensures Markdown memories are fully compatible with Obsidian vaults and conventions |
 | [ADR-004](ADR-004-three-tier-trait-inheritance.md) | Three-Tier Trait Inheritance | Accepted | Defines a three-level trait inheritance model: mif-base, shared-traits, domain ontologies |
 | [ADR-005](ADR-005-underscore-namespace-prefix.md) | Underscore Namespace Prefix Convention | Accepted | Uses underscore prefix for base-type namespace directories to distinguish from domain content |
 | [ADR-006](ADR-006-entitydata-vs-entityreference.md) | EntityData vs EntityReference | Accepted | Distinguishes inline structured entity data from lightweight entity references |
-| [ADR-007](ADR-007-github-raw-urls-for-schema-ids.md) | GitHub Raw URLs for Schema IDs | Amended | Originally used GitHub raw URLs for schema $id values; amended to use mif-spec.dev |
+| [ADR-007](ADR-007-github-raw-urls-for-schema-ids.md) | GitHub Raw URLs for Schema IDs | Accepted (amended → mif-spec.dev) | Originally used GitHub raw URLs for schema $id values; amended to use mif-spec.dev |
 | [ADR-008](ADR-008-decay-model-rationale.md) | Decay Model Rationale | Accepted | Implements configurable exponential decay with half-life for memory relevance ranking |
+| [ADR-009](ADR-009-okf-compliance-superset.md) | OKF Compliance as a Superset (Pinned OKF v0.1) | Accepted | MIF is a superset of a conformant OKF v0.1 bundle and pins the criteria — no floating dependency (Invariant 5) |
+| [ADR-010](ADR-010-modeled-information-format-repositioning.md) | Repositioning to Modeled Information Format | Accepted | Renames/repositions MIF as a general OKF-compliant content model; AI memory becomes the first domain profile |
+| [ADR-011](ADR-011-markdown-canonical-derived-jsonld.md) | Markdown-Canonical with Derived JSON-LD Projection | Accepted | Markdown `.md` is the source of truth; JSON-LD is a derived projection (Invariant 2) — refines ADR-002 |
+| [ADR-012](ADR-012-okf-conformance-tested-invariant.md) | OKF Conformance Enforced as a Tested CI Invariant | Accepted | Enforces OKF conformance, lossless round-trip, schema, and ontology/namespace validity as gating CI checks |
 
 ## Creating New ADRs
 
-1. Copy the template from any existing ADR
+1. Copy the structure from a recent ADR (e.g. [ADR-009](ADR-009-okf-compliance-superset.md)) as the Structured MADR exemplar
 2. Use sequential numbering: `ADR-NNN-short-title.md`
-3. Fill in all sections
-4. Update this index
+3. Fill in all sections: frontmatter, Status, Context, Decision Drivers, Considered Options (with risk assessments), Decision, Consequences (Positive/Negative/Neutral), Decision Outcome, Related Decisions, Links, More Information, and Audit
+4. In the **Audit** section, cite only `file:line` anchors you have opened and confirmed; if a finding cannot be confirmed, set the audit `Status: Pending` rather than inventing a citation
+5. Update this index and link related ADRs bidirectionally via the `related` frontmatter
 
 ## Status Values
 
-- **Proposed** - Under discussion
-- **Accepted** - Decision made, implementation pending or complete
-- **Amended** - Original decision modified; see amendment section for details
-- **Deprecated** - Superseded by another decision
-- **Rejected** - Considered but not adopted
+Structured MADR frontmatter uses the standard MADR status enum:
+
+- **proposed** - Under discussion
+- **accepted** - Decision approved and in effect
+- **deprecated** - No longer recommended
+- **superseded** - Replaced by another ADR
+
+An amended decision keeps `status: accepted` and documents the change in its `## Status` line plus an `## Amendment` section (see [ADR-007](ADR-007-github-raw-urls-for-schema-ids.md)).

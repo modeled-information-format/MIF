@@ -10,16 +10,22 @@ name: Validate MIF Bundles and Schemas
       - 'profiles/**'
       - 'ontologies/**'
       - 'scripts/*.py'
-      - 'docs/okf-conformance.md'
+      - 'docs/**'
+      - 'src/content/docs/**'
+      - 'package.json'
+      - 'astro.config.mjs'
   pull_request:
-    branches: [main]
+    branches: [main, "release/**", "develop/**"]
     paths:
       - 'schema/**'
       - 'examples/**'
       - 'profiles/**'
       - 'ontologies/**'
       - 'scripts/*.py'
-      - 'docs/okf-conformance.md'
+      - 'docs/**'
+      - 'src/content/docs/**'
+      - 'package.json'
+      - 'astro.config.mjs'
   workflow_dispatch:
 
 jobs:
@@ -76,7 +82,8 @@ jobs:
       - name: Emit derived JSON-LD projections
         run: |
           python scripts/mif_convert.py emit-jsonld \
-            examples profiles/ai-memory/examples --out-dir dist/jsonld
+            examples profiles/ai-memory/examples ontologies/examples/memories \
+            --out-dir dist/jsonld
 
       - name: Validate every projection against schema/mif.schema.json
         run: |
@@ -90,6 +97,23 @@ jobs:
               -r "schema/definitions/*.schema.json" \
               -d "$json" --spec=draft2020 -c ajv-formats
           done
+
+  docs-build:
+    name: Build Docs Site (Astro)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 'lts/*'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Astro site
+        run: npm run build
 
   validate-ontologies:
     name: Validate Ontology Files
