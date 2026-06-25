@@ -39,6 +39,8 @@ def test_temporal_violation_promotes_to_error_in_strict_mode():
     )
     temporal = [e for e in errors if "temporal inconsistency" in e]
     assert len(temporal) == 1
+    # No unrelated errors should appear in the bad bundle (scope the assertion).
+    assert [e for e in errors if "temporal inconsistency" not in e] == []
     assert [w for w in warnings if "temporal inconsistency" in w] == []
 
 
@@ -67,6 +69,97 @@ def test_missing_created_skips_check_no_false_positive():
         fm, TEMPORAL / "bad" / "observation.md", TEMPORAL / "bad", "x"
     )
     assert findings == []
+
+
+def _bundle_with_target(tmp_path, target_created):
+    """A bundle whose /target.md carries ``target_created`` (or no created if None)."""
+    fm = "" if target_created is None else f"created: {target_created}\n"
+    (tmp_path / "target.md").write_text(
+        f"---\nid: t\ntype: semantic\n{fm}---\nbody\n"
+    )
+    return tmp_path
+
+
+def _findings_for(tmp_path, rel_type, source_created, target_created):
+    bundle = _bundle_with_target(tmp_path, target_created)
+    fm = {
+        "created": source_created,
+        "relationships": [{"type": rel_type, "target": "/target.md"}],
+    }
+    return okf_validate._temporal_findings(fm, bundle / "src.md", bundle, "src")
+
+
+@pytest.mark.parametrize("rel_type", ["derived-from", "supersedes", "cites"])
+def test_all_derivation_types_flag_future_target(tmp_path, rel_type):
+    # Every member of DERIVATION_TYPES must be temporally checked, not just derived-from.
+    findings = _findings_for(
+        tmp_path, rel_type, "2025-01-01T00:00:00Z", "2026-01-01T00:00:00Z"
+    )
+    assert len(findings) == 1
+    assert rel_type in findings[0]
+
+
+def test_equal_timestamps_is_not_a_violation(tmp_path):
+    # Boundary: target created exactly at source time is "not after" -> no finding.
+    ts = "2026-01-01T00:00:00Z"
+    assert _findings_for(tmp_path, "derived-from", ts, ts) == []
+
+
+def test_date_only_same_day_is_not_a_false_positive(tmp_path):
+    # Date-only source vs same-day finer-grained target must not flag (no midnight bias).
+    findings = _findings_for(
+        tmp_path, "derived-from", "2024-06-01", "2024-06-01T09:00:00Z"
+    )
+    assert findings == []
+
+
+def test_date_only_next_day_target_is_flagged(tmp_path):
+    findings = _findings_for(
+        tmp_path, "derived-from", "2024-06-01", "2024-06-02T00:00:00Z"
+    )
+    assert len(findings) == 1
+
+
+def test_naive_source_datetime_does_not_raise(tmp_path):
+    # Naive (no tz) source is normalized to UTC; aware-vs-naive comparison must not raise.
+    findings = _findings_for(
+        tmp_path, "derived-from", "2025-01-15T10:30:00", "2026-01-01T00:00:00Z"
+    )
+    assert len(findings) == 1
+
+
+def test_target_missing_created_skips_no_false_positive(tmp_path):
+    assert _findings_for(tmp_path, "derived-from", "2025-01-01T00:00:00Z", None) == []
+
+
+def test_malformed_yaml_target_is_skipped_not_crash(tmp_path):
+    # A derivation target with malformed YAML frontmatter must be skipped, never crash
+    # the run (the function's documented "unparseable -> skip" contract).
+    (tmp_path / "target.md").write_text("---\n bad: : : yaml\n :::\n---\nbody\n")
+    fm = {
+        "created": "2025-01-01T00:00:00Z",
+        "relationships": [{"type": "derived-from", "target": "/target.md"}],
+    }
+    assert okf_validate._temporal_findings(fm, tmp_path / "src.md", tmp_path, "x") == []
+
+
+def test_multiple_future_targets_all_reported(tmp_path):
+    # Two future-target derivation edges -> two findings (guards an early-break regression).
+    (tmp_path / "a.md").write_text(
+        "---\nid: a\ntype: semantic\ncreated: 2026-01-01T00:00:00Z\n---\nbody\n"
+    )
+    (tmp_path / "b.md").write_text(
+        "---\nid: b\ntype: semantic\ncreated: 2026-06-01T00:00:00Z\n---\nbody\n"
+    )
+    fm = {
+        "created": "2025-01-01T00:00:00Z",
+        "relationships": [
+            {"type": "derived-from", "target": "/a.md"},
+            {"type": "supersedes", "target": "/b.md"},
+        ],
+    }
+    findings = okf_validate._temporal_findings(fm, tmp_path / "src.md", tmp_path, "x")
+    assert len(findings) == 2
 
 
 # --------------------------------------------------------------------------- #
@@ -112,12 +205,25 @@ def test_schema_rejects_non_scalar_properties(bad):
 FULL_FRONTMATTER = {
     "id": "550e8400-e29b-41d4-a716-446655440000",
     "type": "semantic",
+    "memoryType": "semantic",
     "created": "2026-01-15T10:30:00Z",
     "modified": "2026-02-01T08:00:00Z",
     "namespace": "_semantic/observations",
     "title": "Every-field concept",
     "summary": "A concept exercising every top-level frontmatter field.",
-    "properties": {"status": "active", "priority": 1, "archived": False, "retired_on": None},
+    # Scalar property values that YAML would re-type on reparse if left unquoted
+    # ("true"/"null"/date-/number-like strings) — pins the quoting guarantee.
+    "properties": {
+        "status": "active",
+        "priority": 1,
+        "archived": False,
+        "retired_on": None,
+        "flag_str": "true",
+        "void_str": "null",
+        "when_str": "2026-01-01",
+        "ratio_str": "1.5",
+    },
+    "compressedAt": "2026-02-01T08:00:00Z",
     "tags": ["a", "b"],
     "aliases": ["alt-name"],
     "temporal": {"validFrom": "2026-01-01T00:00:00Z", "validUntil": None},
@@ -130,6 +236,18 @@ FULL_FRONTMATTER = {
     "entity": {"name": "Alice Chen", "entity_type": "person"},
     "blocks": {"b1": "block text"},
     "extensions": {"vendor": {"k": "v"}},
+}
+
+# JSON-LD keys produced by the projection itself (not 1:1 source frontmatter
+# fields); excluded when asserting that every schema-defined source field survives.
+_PROJECTION_ONLY_KEYS = {
+    "@context",
+    "@type",
+    "@id",
+    "conceptType",
+    "timestamp",
+    "description",
+    "content",
 }
 
 
@@ -145,9 +263,11 @@ def test_no_field_clobbered_across_full_conversion_chain():
             assert jsonld["conceptType"] == value
         else:
             assert jsonld[key] == value, f"OKF projection clobbered {key!r}"
+    # MIF -> JSON* : actually serialize through JSON, as an on-disk projection would.
+    jsonld = json.loads(json.dumps(jsonld))
     # OKF -> MIF
     fm1, body1 = mif_convert.jsonld_to_md(jsonld)
-    # MIF -> JSON* (serialize) -> MIF (the on-disk markdown round)
+    # MIF -> serialized markdown -> MIF (the on-disk markdown round)
     md = mif_convert.serialize_markdown(fm1, body1)
     fm2, body2 = mif_convert.parse_markdown(md)
     # Final MIF frontmatter must equal the original, field for field.
@@ -155,3 +275,23 @@ def test_no_field_clobbered_across_full_conversion_chain():
     for key in FULL_FRONTMATTER:
         assert fm2[key] == FULL_FRONTMATTER[key], f"chain clobbered {key!r}"
     assert body2.strip() == body.strip()
+
+
+def test_every_schema_source_field_survives_round_trip():
+    """Regression guard: every top-level schema property that is a source field
+    (not a projection-only key) must be present in FULL_FRONTMATTER and survive
+    the full chain. A new schema field that is forgotten in the converter's
+    passthrough lists fails here instead of silently dropping."""
+    schema = json.loads((ROOT / "schema" / "mif.schema.json").read_text())
+    source_fields = set(schema["properties"]) - _PROJECTION_ONLY_KEYS
+    # memoryType maps to the same `type`/conceptType slot; one stands in for both.
+    covered = set(FULL_FRONTMATTER)
+    missing = source_fields - covered
+    assert not missing, f"schema source field(s) not exercised by the chain: {missing}"
+    jsonld = json.loads(json.dumps(mif_convert.md_to_jsonld(FULL_FRONTMATTER, "b")))
+    fm2, _ = mif_convert.jsonld_to_md(jsonld)
+    for field in source_fields:
+        if field == "type":  # surfaced as conceptType, recovered as type
+            assert fm2["type"] == FULL_FRONTMATTER["type"]
+        else:
+            assert fm2.get(field) == FULL_FRONTMATTER[field], f"dropped {field!r}"

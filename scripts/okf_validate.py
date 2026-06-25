@@ -34,6 +34,8 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
+import yaml  # PyYAML; parse_markdown's safe_load can raise yaml.YAMLError
+
 import mif_convert  # local module (same scripts/ directory)
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -107,6 +109,11 @@ def _parse_created(value: object) -> datetime | None:
     return dt if dt.tzinfo is not None else dt.replace(tzinfo=timezone.utc)
 
 
+def _is_date_only(value: object) -> bool:
+    """True when a ``created`` value carries no time-of-day (e.g. ``2024-06-01``)."""
+    return isinstance(value, str) and "T" not in value and " " not in value.strip()
+
+
 def _temporal_findings(
     frontmatter: dict, md_path: Path, bundle: Path, rel_name: object
 ) -> list[str]:
@@ -119,7 +126,8 @@ def _temporal_findings(
     skipped (no false positives).
     """
     findings: list[str] = []
-    source_created = _parse_created(frontmatter.get("created"))
+    source_raw = frontmatter.get("created")
+    source_created = _parse_created(source_raw)
     if source_created is None:
         return findings
     for rel_type, target in _frontmatter_relationships(frontmatter):
@@ -132,16 +140,28 @@ def _temporal_findings(
             continue
         try:
             tgt_fm, _ = mif_convert.parse_markdown(resolved.read_text())
-        except (ValueError, OSError):
+        except (ValueError, OSError, yaml.YAMLError):
             continue
-        target_created = _parse_created(tgt_fm.get("created"))
+        target_raw = tgt_fm.get("created")
+        target_created = _parse_created(target_raw)
         if target_created is None:
+            continue
+        # If either side is date-only, a finer-grained other side would otherwise
+        # be compared against a manufactured midnight; downgrade both to date
+        # granularity so a same-day derivation is not a false positive.
+        if _is_date_only(source_raw) or _is_date_only(target_raw):
+            if target_created.date() > source_created.date():
+                findings.append(
+                    f"{rel_name}: temporal inconsistency -> '{rel_type}' target "
+                    f"{target} is created {target_raw}, after concept "
+                    f"created {source_raw}"
+                )
             continue
         if target_created > source_created:
             findings.append(
                 f"{rel_name}: temporal inconsistency -> '{rel_type}' target "
-                f"{target} is created {tgt_fm.get('created')}, after concept "
-                f"created {frontmatter.get('created')}"
+                f"{target} is created {target_raw}, after concept "
+                f"created {source_raw}"
             )
     return findings
 

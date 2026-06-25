@@ -46,12 +46,14 @@ RESERVED_FILENAMES = {"index.md", "log.md"}
 FRONTMATTER_ORDER = [
     "id",
     "type",
+    "memoryType",
     "created",
     "modified",
     "namespace",
     "title",
     "summary",
     "properties",
+    "compressedAt",
     "tags",
     "aliases",
     "temporal",
@@ -127,12 +129,14 @@ def md_to_jsonld(frontmatter: dict, body: str) -> dict:
         jsonld["conceptType"] = fm["type"]
 
     passthrough = [
+        "memoryType",
         "created",
         "modified",
         "namespace",
         "title",
         "summary",
         "properties",
+        "compressedAt",
         "tags",
         "aliases",
         "temporal",
@@ -168,12 +172,14 @@ def jsonld_to_md(jsonld: dict) -> tuple[dict, str]:
         fm["type"] = jsonld["conceptType"]
 
     passthrough = [
+        "memoryType",
         "created",
         "modified",
         "namespace",
         "title",
         "summary",
         "properties",
+        "compressedAt",
         "tags",
         "aliases",
         "temporal",
