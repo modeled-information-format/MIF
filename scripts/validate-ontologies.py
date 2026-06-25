@@ -64,7 +64,7 @@ def _type_info(ontology: dict) -> dict[str, dict]:
     info: dict[str, dict] = {}
     for et in _entity_types(ontology):
         name = et.get("name")
-        if not name:
+        if not isinstance(name, str) or not name:
             continue
         sch = et.get("schema")
         req = (sch.get("required") if isinstance(sch, dict) else None) or []
@@ -98,11 +98,12 @@ def load_ontology_corpus(repo_root: Path) -> dict[str, dict]:
             if not isinstance(ob, dict):
                 continue
             oid = ob.get("id")
-            if not oid:
+            if not isinstance(oid, str) or not oid:
                 continue
             ext = ob.get("extends") or []
+            ext = ext if isinstance(ext, list) else [ext]
             corpus[oid] = {
-                "extends": ext if isinstance(ext, list) else [ext],
+                "extends": [e for e in ext if isinstance(e, str)],
                 "types": _type_info(data),
             }
     return corpus
@@ -181,7 +182,7 @@ def validate_ontology(ontology_path: Path, schema_path: Path, corpus: dict[str, 
         errors.extend(_ajv_validate(ontology, schema_path))
         ob = ontology.get("ontology") if isinstance(ontology, dict) else None
         oid = ob.get("id") if isinstance(ob, dict) else None
-        visible = visible_types(oid, corpus) if oid else _type_info(ontology)
+        visible = visible_types(oid, corpus) if isinstance(oid, str) and oid else _type_info(ontology)
         errors.extend(check_subtype_of(ontology, visible))
     except yaml.YAMLError as e:
         errors.append(f"  - YAML parse error: {e}")
