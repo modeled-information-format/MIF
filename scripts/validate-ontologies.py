@@ -52,7 +52,8 @@ def _entity_types(ontology: dict) -> list[dict]:
         return []
     ets = ontology.get("entity_types")
     if isinstance(ets, dict):
-        return [{"name": k, **(v if isinstance(v, dict) else {})} for k, v in ets.items()]
+        # The key is the authoritative name — spread first so a stray `name` in the value can't override it.
+        return [{**(v if isinstance(v, dict) else {}), "name": k} for k, v in ets.items()]
     if isinstance(ets, list):
         return [et for et in ets if isinstance(et, dict)]
     return []
@@ -67,10 +68,12 @@ def _type_info(ontology: dict) -> dict[str, dict]:
             continue
         req = (et.get("schema") or {}).get("required") or []
         sub = et.get("subtype_of") or []
+        sub = sub if isinstance(sub, list) else [sub]
         info[name] = {
             "required": set(req) if isinstance(req, list) else set(),
-            # tolerate a malformed scalar (the schema flags it separately) — never iterate a string.
-            "subtype_of": sub if isinstance(sub, list) else [sub],
+            # Only string parents: keeps `visible.get(p)` / `p in graph` hashable and
+            # fail-closed when the YAML is malformed (the schema flags the bad type separately).
+            "subtype_of": [s for s in sub if isinstance(s, str)],
         }
     return info
 
