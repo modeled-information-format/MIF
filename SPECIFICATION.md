@@ -2173,6 +2173,63 @@ citations:
 
 ---
 
+## Container Profile (Corpus Envelope) — PROPOSED
+
+> **Status:** Proposed addition (see issue #77, "Adopt the MPF Corpus Envelope
+> as a MIF Container Profile"). Placement is editorial — slotted here for the
+> v1.0.0 review; promote/renumber into the body as fits the cut.
+
+The preceding sections define a single **memory unit**. Many tools need to move a
+*corpus* — many memories plus the source documents they derive from — as one
+artifact, with corpus-level metadata the unit does not carry. The **Container
+Profile** is a transport envelope *around* MIF memory units. It does not change
+the unit.
+
+### Envelope
+
+A container is a JSON object (file extension `.corpus.json`):
+
+```json
+{
+  "@context": "https://mif-spec.dev/schema/context.jsonld",
+  "@type": "MemoryCorpus",
+  "mif_version": "0.1.0",
+  "records": [ ],
+  "provenance": { },
+  "edit_chain": [ ]
+}
+```
+
+### Records
+
+Each `records[]` entry carries a `kind` discriminator:
+
+| `kind` | payload |
+|---|---|
+| `memory` | a MIF **memory unit**, validated against the MIF schema; conformance levels apply per record |
+| `document` | a source document (e.g. an unmodified DoclingDocument) the memories derive from, so provenance resolves within the corpus |
+
+`fact` and `event` are **not** separate kinds — they are MIF memories whose
+proposed `memoryCategory` term is `Fact` or `Event`. This avoids a parallel
+schema.
+
+### Corpus-level fields
+
+| field | meaning |
+|---|---|
+| `provenance` | W3C-PROV provenance for the corpus as a whole |
+| `edit_chain` / record `supersedes` | supersession / version history across records |
+| `compression_manifest` | (Level 3) which records are compressed summaries of which sources |
+| `federation_cursor` | cursor for incremental / federated corpus transfer |
+
+### Conformance
+
+The Container Profile is **orthogonal to conformance levels**: a container may
+hold Level-1 and Level-3 memories together. A container is valid when every
+`memory` record is a valid MIF memory and every `document` record is a recognized
+document type. Reference converters (Mem0, Letta, Cognee, Graphiti, MemPalace) and
+a validator are provided separately — see issue #77.
+
 ## Changelog
 
 ### 0.1.0-draft (2026-01-26)

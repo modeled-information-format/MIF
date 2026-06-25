@@ -12,6 +12,14 @@ Modeled Information Format**, the opinionated, OKF-compliant content model that
 fills OKF's deliberately empty envelope. AI memory becomes the first domain
 *profile* of MIF, not its identity.
 
+### Added (proposed)
+
+- **[Container Profile]**: corpus envelope (`*.corpus.json`) wrapping many MIF
+  memory units + source `document` records for transport (issue #77). Editorial
+  spec section + `examples/container-profile.corpus.json`. Reference converters
+  (Mem0, Letta, Cognee, Graphiti, MemPalace) ship separately. PROPOSED — pending
+  v1.0.0 incorporation.
+
 ### Breaking Changes
 
 - **[Format]**: Concept files use the `.md` extension only — the `.memory.md`
