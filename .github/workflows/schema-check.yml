@@ -1,0 +1,97 @@
+---
+name: Schema Check
+
+# Verifies the JSON Schemas themselves (not just example bundles): every schema
+# document compiles as valid JSON Schema 2020-12, every JSON-LD context parses,
+# and the served version mirrors stay consistent with their aliases. Runs on
+# every PR so it can serve as a required status check.
+
+"on":
+  pull_request:
+    branches: [main, "release/**", "develop/**"]
+  push:
+    branches: [main, "develop/**"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-schema-files:
+    name: validate-schema-files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: 'lts/*'
+
+      - name: Install ajv
+        run: npm install -g ajv-cli ajv-formats
+
+      - name: Compile every schema set (valid JSON Schema 2020-12)
+        run: |
+          set -uo pipefail
+          fail=0
+          # Each set is compiled in its own ajv process so the canonical $ids
+          # (identical across mirrors) do not collide.
+          validate_set() {
+            local d="$1"
+            [ -f "$d/mif.schema.json" ] || return 0
+            echo "::group::compile schema set $d"
+            local refs=()
+            for r in "$d"/definitions/*.schema.json "$d"/citation.schema.json \
+                     "$d"/ontology/*.schema.json; do
+              [ -f "$r" ] && refs+=( -r "$r" )
+            done
+            if ajv compile -s "$d/mif.schema.json" "${refs[@]}" \
+                 --spec=draft2020 -c ajv-formats --strict=false; then
+              echo "ok: $d"
+            else
+              echo "::error::schema set $d failed to compile"; fail=1
+            fi
+            echo "::endgroup::"
+          }
+          for d in schema public/schema \
+                   public/schema/0.1.0 public/schema/1.0.0 \
+                   public/schema/latest public/schema/v0 public/schema/v1; do
+            [ -d "$d" ] && validate_set "$d"
+          done
+          exit $fail
+
+      - name: Every JSON-LD context parses
+        run: |
+          set -uo pipefail
+          fail=0
+          while IFS= read -r -d '' f; do
+            if node -e "JSON.parse(require('fs').readFileSync(process.argv[1],'utf8'))" "$f"; then
+              echo "ok: $f"
+            else
+              echo "::error file=$f::invalid JSON-LD"; fail=1
+            fi
+          done < <(find schema public/schema -name '*.jsonld' -print0)
+          exit $fail
+
+      - name: Mirror alias consistency (latest==canonical, vN==N.x)
+        run: |
+          set -uo pipefail
+          fail=0
+          files="mif.schema.json citation.schema.json context.jsonld \
+                 definitions/entity-reference.schema.json \
+                 ontology/ontology.schema.json ontology/ontology.context.jsonld"
+          check() { # alias_dir  source_dir
+            local a="public/schema/$1" s="$2"
+            [ -d "$a" ] || { echo "skip $a (absent)"; return; }
+            for f in $files; do
+              if [ -f "$s/$f" ] || [ -f "$a/$f" ]; then
+                if ! diff -q "$s/$f" "$a/$f" >/dev/null 2>&1; then
+                  echo "::error::$a/$f does not match $s/$f"; fail=1
+                fi
+              fi
+            done
+          }
+          check latest public/schema
+          [ -d public/schema/1.0.0 ] && check v1 public/schema/1.0.0
+          [ -d public/schema/0.1.0 ] && check v0 public/schema/0.1.0
+          exit $fail
