@@ -8,6 +8,7 @@ export default defineConfig({
     astroMermaid(),
     starlight({
       title: "MIF",
+      customCss: ["./src/styles/mif-brand.css"],
       logo: {
         light: "./src/assets/logo-light.svg",
         dark: "./src/assets/logo-dark.svg",
@@ -54,7 +55,7 @@ export default defineConfig({
         {
           icon: "github",
           label: "GitHub",
-          href: "https://github.com/zircote/MIF",
+          href: "https://github.com/modeled-information-format/MIF",
         },
       ],
       sidebar: [
@@ -127,21 +128,6 @@ export default defineConfig({
                 { label: "Appendices", slug: "specification/appendices" },
               ],
             },
-          ],
-        },
-        {
-          label: "Guides",
-          items: [
-            { label: "Getting Started", slug: "guides/getting-started" },
-            { label: "Schema Reference", slug: "guides/schema-reference" },
-            { label: "API Reference", slug: "guides/api-reference" },
-            { label: "Migration", slug: "guides/migration" },
-          ],
-        },
-        {
-          label: "Design",
-          items: [
-            { label: "Architecture Decisions", slug: "design/decisions" },
           ],
         },
       ],

@@ -1,124 +1,41 @@
 ---
 title: "Introduction"
-description: "An OKF-compliant, opinionated knowledge content model. AI memory is one profile."
+description: "MIF — the Modeled Information Format specification: a vendor-neutral data model for portable AI memory."
 ---
 
-# MIF — Modeled Information Format
+# Modeled Information Format
 
-> The opinionated, OKF-compliant content model that fills OKF's deliberately
-> empty envelope.
+> A vendor-neutral data model for portable AI memory, with dual human-readable
+> Markdown and machine-processable JSON-LD representations.
 
-[OKF](https://github.com/google/open-knowledge-format) defines the transport
-surface — a directory of markdown files with YAML frontmatter and one required
-`type` field — and explicitly leaves the *content model* open. MIF supplies the
-concrete type system, typed relationships, provenance/trust, and
-validity/freshness semantics. **AI memory is the first domain profile of MIF,
-not its identity.**
+This site is the **normative specification** for MIF (Modeled Information
+Format). It defines the data model, the two on-disk formats, the type system,
+and the conformance rules, and it serves the canonical JSON Schemas.
 
-## Overview
+## Read the specification
 
-A MIF bundle is a directory tree of `.md` concept files — **a valid OKF
-bundle**. Markdown is the canonical representation; JSON-LD is a derived,
-regenerable projection.
+Start with the [Specification Overview](/specification/overview/), then work
+through the core model, the Markdown and JSON-LD formats, the data types, and
+the reference sections (conformance, conversion, security, appendices) from the
+sidebar.
 
-- **Markdown** (`.md`) — canonical, human-readable, Obsidian-compatible.
-- **JSON-LD** (`*.jsonld`, derived) — machine-processable, semantically linked,
-  regenerated from markdown with `scripts/mif_convert.py`.
+## Schemas
 
-Every concept declares one of three **base knowledge types**:
+The canonical JSON Schemas are served under
+[`/schema/`](https://mif-spec.dev/schema/index.json):
 
-- `semantic` — declarative knowledge: facts, concepts, decisions, schemas.
-- `episodic` — time-bound records: events, incidents, changelog/deprecation.
-- `procedural` — how-to knowledge: runbooks, processes, patterns, migrations.
+- `https://mif-spec.dev/schema/mif.schema.json`
+- `https://mif-spec.dev/schema/citation.schema.json`
+- `https://mif-spec.dev/schema/ontology/ontology.schema.json`
+- `https://mif-spec.dev/schema/definitions/entity-reference.schema.json`
 
-## MIF answers OKF's open questions
+`$id` values are stable and unversioned; immutable per-release mirrors are
+available at `/schema/<version>/…`. See the
+[schema catalog](https://mif-spec.dev/schema/index.json) and
+[versioning notes](https://mif-spec.dev/schema/VERSIONING.md).
 
-OKF deliberately refuses to define a content model. MIF supplies opinionated
-answers to exactly the questions OKF leaves open:
+## Guides, tutorials, and design records
 
-| OKF open design space | MIF's opinionated answer |
-| --- | --- |
-| No concept-type taxonomy | `semantic` / `episodic` / `procedural` base types |
-| Untyped markdown-link edges | Typed relationships (overlay on OKF links) |
-| No merge / contradiction semantics | `Supersedes`, `ConflictsWith` |
-| No trust tiers | Provenance `source_type` + `trust_level` |
-| Stale-vs-live left to process | Validity windows + TTL/freshness |
-| No provenance | W3C PROV |
-| Markdown only | First-class JSON-LD projection |
-
-OKF compliance is achieved as a **superset, not by subordination**: every MIF
-bundle validates as a conformant OKF bundle, but MIF remains an independent
-specification with its own identity model and governance, pinned to OKF v0.1.
-
-## Quick Start
-
-A minimal concept (canonical markdown):
-
-```markdown
----
-id: 550e8400-e29b-41d4-a716-446655440000
-type: semantic
-created: 2026-01-15T10:30:00Z
-namespace: _semantic/preferences
----
-
-A declarative fact stated in plain markdown.
-```
-
-A concept with typed relationships — authoritative in frontmatter, mirrored as
-OKF-legible body links:
-
-```markdown
----
-id: 7b3c1e90-5a2f-4c8d-9e10-2f6a4b8c1d3e
-type: semantic
-created: 2026-01-15T10:30:00Z
-title: API Rate Limit Policy
-relationships:
-  - type: derived-from
-    target: /episodic/incident-2026-01-rate-spike.md
----
-
-# API Rate Limit Policy
-
-The gateway enforces 600 req/min per key.
-
-## Relationships
-
-- derived-from [Rate Spike Incident](/episodic/incident-2026-01-rate-spike.md)
-```
-
-The derived JSON-LD projection is regenerated, never hand-edited:
-
-```bash
-python scripts/mif_convert.py emit-jsonld examples --out-dir jsonld
-```
-
-## Key Features
-
-| Feature | Description |
-|---------|-------------|
-| **OKF compliant** | Every bundle is a valid OKF bundle (tested invariant) |
-| **Markdown canonical** | `.md` is the source of truth; JSON-LD is derived |
-| **Typed Relationships** | Typed overlay on standard OKF markdown-link edges |
-| **Base types** | `semantic` / `episodic` / `procedural` knowledge taxonomy |
-| **Bi-Temporal** | Validity windows & freshness (when recorded AND when valid) |
-| **Provenance & Trust** | W3C PROV + `source_type` / `trust_level` |
-| **Model-Agnostic Embeddings** | Store model + source text for re-embedding |
-| **Stable identity** | UUID `id` survives concept relocation |
-| **JSON Schema** | Automated validation for the JSON-LD projection |
-| **Ontology System** | Base knowledge taxonomy with domain profiles |
-
-## AI Memory profile
-
-Memory-specific material — decay tuning, episodic *session* framing,
-retrieval-oriented embeddings, and provider migration guides — lives in the
-AI Memory profile, the first domain profile of MIF.
-
-## Current Status
-
-**Version**: 1.0.0
-
-- [Specification](/specification/overview/) — Full format specification
-- [Getting Started](/guides/getting-started/) — Implementation guide
-- [GitHub Repository](https://github.com/zircote/MIF) — Source and issues
+Task-oriented guides, tutorials, API references, and the Architecture Decision
+Records live in the ecosystem documentation at
+[modeled-information-format.github.io](https://modeled-information-format.github.io/).
