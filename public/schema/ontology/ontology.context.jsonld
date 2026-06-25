@@ -66,6 +66,11 @@
       "@id": "mif:definesTrait",
       "@container": "@id"
     },
+    "subtype_of": {
+      "@id": "mif:subtypeOf",
+      "@type": "@id",
+      "@container": "@set"
+    },
     "fields": {
       "@id": "mif:hasField",
       "@container": "@id"

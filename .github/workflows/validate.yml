@@ -10,6 +10,7 @@ name: Validate MIF Bundles and Schemas
       - 'profiles/**'
       - 'ontologies/**'
       - 'scripts/*.py'
+      - 'test/**'
       - 'docs/**'
       - 'src/content/docs/**'
       - 'package.json'
@@ -22,6 +23,7 @@ name: Validate MIF Bundles and Schemas
       - 'profiles/**'
       - 'ontologies/**'
       - 'scripts/*.py'
+      - 'test/**'
       - 'docs/**'
       - 'src/content/docs/**'
       - 'package.json'
@@ -126,11 +128,21 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 'lts/*'
+
       - name: Install dependencies
-        run: pip install jsonschema pyyaml
+        run: |
+          pip install pyyaml
+          npm install -g ajv-cli ajv-formats
 
       - name: Validate ontology files
         run: python scripts/validate-ontologies.py
 
       - name: Validate namespace consistency
         run: python scripts/validate-namespaces.py
+
+      - name: Test subtype_of integrity
+        run: python scripts/test_subtype_of.py

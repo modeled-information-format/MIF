@@ -54,7 +54,7 @@ entity_types:
 For maximum interoperability, implementations SHOULD recognize these five core types:
 
 | Type | Description | Example | URI |
-|------|-------------|---------|-----|
+| --- | --- | --- | --- |
 | `Person` | Human individual | User, team member | `mif:Person` |
 | `Organization` | Company, team, or group | Acme Corp | `mif:Organization` |
 | `Technology` | Tool, language, or framework | Python, React | `mif:Technology` |
@@ -96,6 +96,34 @@ entity_types:
 }
 ```
 
+### Entity Subtyping (`subtype_of`)
+
+An entity type MAY declare `subtype_of`, naming one or more parent entity types it
+specializes. A subtype is **substitutable** for any of its supertypes wherever the
+supertype is admissible — most notably a relationship endpoint domain: an edge whose
+`from`/`to` names a parent type also admits any of its subtypes.
+
+```yaml
+entity_types:
+  - name: incident-report
+    base: episodic
+  - name: security-incident
+    base: episodic
+    subtype_of: [incident-report]   # substitutable wherever incident-report is admissible
+```
+
+Rules (enforced by `scripts/validate-ontologies.py`):
+
+- Every parent MUST resolve to a declared entity type — in this ontology, or in
+  one it `extends` (resolved across the full extends chain).
+- A subtype's `required` set MUST include every `required` field of each parent
+  (substitutability). A subtype SHOULD add, not retype, parent fields (retyping is
+  not machine-checked).
+- The `subtype_of` graph MUST be acyclic, and a type cannot be its own subtype.
+
+`subtype_of` is optional and additive; ontologies that omit it are unaffected. It
+projects to JSON-LD as `mif:subtypeOf` (a set of entity-type `@id`s).
+
 ### Entity Schema
 
 **Markdown (in `.mif/entities/` directory):**
@@ -132,6 +160,7 @@ properties:
 ### Entity References in Memories
 
 **Markdown:**
+
 ```markdown
 ## Entities
 
@@ -141,6 +170,7 @@ properties:
 ```
 
 **JSON-LD:**
+
 ```json
 "entities": [
   {

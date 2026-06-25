@@ -1,3 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 28" fill="none">
-  <text x="0" y="22" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="22" font-weight="700" fill="#FAFAFA">MIF</text>
+<svg width="96" height="32" viewBox="0 0 96 32" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="MIF">
+  <title>MIF</title>
+  <g transform="translate(2 2.5) scale(0.6)" fill="none" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M6 42 L6 6 L24 29" stroke="#34D3E8"/>
+    <path d="M24 29 L42 6 L42 42" stroke="#F5B642"/>
+    <path d="M24 25 L28 29 L24 33 L20 29 Z" fill="#E8EEF6" stroke="none"/>
+  </g>
+  <text x="34" y="23" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace" font-size="19" font-weight="700" letter-spacing="0.04em" fill="#E8EEF6">MIF</text>
 </svg>
