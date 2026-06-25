@@ -22,9 +22,13 @@ Here `<file>` is a schema's actual filename — e.g. `mif.schema.json`,
 | Access | Path | Mutability |
 | --- | --- | --- |
 | Canonical (latest) | `/schema/<file>` | moves with releases |
-| Exact version | `/schema/1.0.0/<file>` | immutable |
+| Exact version | `/schema/0.1.0/<file>`, `/schema/1.0.0/<file>` | immutable |
 | Moving alias | `/schema/latest/<file>` | tracks newest release |
-| Major alias | `/schema/v1/<file>` | newest 1.x (`v2` reserved for 2.0.0) |
+| Major alias | `/schema/v0/<file>` (newest 0.x), `/schema/v1/<file>` (newest 1.x) | `v2` reserved for 2.0.0 |
+
+Every published version mirror is an exact, immutable snapshot of that release's
+git tag (e.g. `/schema/0.1.0/` ← tag `v0.1.0`, `/schema/1.0.0/` ← tag `v1.0.0`).
+Released versions: `0.1.0`, `1.0.0`.
 
 The internal `$id` of every mirrored copy remains the canonical unversioned URL;
 the version path is an additional access location, not a new schema identity.
@@ -46,8 +50,8 @@ hosts that can set it should serve `application/schema+json`.
 
 ## Cutting a new release
 
-1. Bump `VERSION.json`.
-2. Copy the current top-level schema set into `/schema/<new-version>/`.
+1. Bump the repo-root `VERSION.json` and tag the release (`vMAJOR.MINOR.PATCH`).
+2. Snapshot that tag's schema set into `/schema/<version>/` (immutable; bytes
+   taken from the tag, `$id` unchanged).
 3. Refresh `/schema/latest/` and the matching major alias (`/schema/vN/`); update
    `aliases` + `versions` in `index.json`.
-4. Tag the release.
