@@ -1,6 +1,7 @@
 # Invalid: a -> b -> a is a subtype_of cycle.
 ontology:
   id: cyclic-subtype
+  version: "0.1.0"
 entity_types:
   - name: a
     base: semantic

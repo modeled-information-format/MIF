@@ -2,6 +2,7 @@
 # parent may resolve in an ancestor — not an error.
 ontology:
   id: extended-subtype
+  version: "0.1.0"
   extends: [engineering-base]
 entity_types:
   - name: security-control

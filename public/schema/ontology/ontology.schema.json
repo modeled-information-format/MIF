@@ -163,6 +163,7 @@
         "subtype_of": {
           "type": "array",
           "description": "Names of parent entity types this type specializes (subsumption). A subtype is substitutable for any of its supertypes wherever the supertype is admissible (e.g. a relationship endpoint domain); its schema must remain compatible with each parent's (additive). Parents may be declared in this ontology or in an ontology it extends, and the subtype_of graph must be acyclic.",
+          "minItems": 1,
           "items": {
             "type": "string"
           }

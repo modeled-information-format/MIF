@@ -2,6 +2,7 @@
 # breaking substitutability (a sub-thing used as a base-thing would be missing `b`).
 ontology:
   id: incompatible-subtype
+  version: "0.1.0"
 entity_types:
   - name: base-thing
     base: semantic

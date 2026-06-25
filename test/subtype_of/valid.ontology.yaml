@@ -2,6 +2,7 @@
 # required set includes the parent's (control_name) plus more — schema-compatible.
 ontology:
   id: valid-subtype
+  version: "0.1.0"
 entity_types:
   - name: control
     base: semantic
