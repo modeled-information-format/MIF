@@ -8,7 +8,7 @@ Each schema's `$id` is an **unversioned, stable** URL, e.g.
 `https://mif-spec.dev/schema/mif.schema.json`. These canonical URLs always
 resolve to the current release and are the values referenced by `$id`/`$ref`.
 Release-to-release versioning of the canonical identity is by git tag
-(`v1.0.0`, ...), per [ADR-007](https://github.com/modeled-information-format/MIF/blob/develop/v1.0.0/adr/ADR-007-github-raw-urls-for-schema-ids.md).
+(`v1.0.0`, ...), per ADR-007 (adr/ADR-007-github-raw-urls-for-schema-ids.md).
 
 ## Versioned mirrors (additive)
 
