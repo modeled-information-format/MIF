@@ -1,0 +1,8 @@
+# Invalid: a type cannot be its own subtype.
+ontology:
+  id: self-subtype
+  version: "0.1.0"
+entity_types:
+  - name: a
+    base: semantic
+    subtype_of: [a]
