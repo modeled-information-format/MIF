@@ -15,19 +15,11 @@ name: Validate MIF Bundles and Schemas
       - 'src/content/docs/**'
       - 'package.json'
       - 'astro.config.mjs'
+    # No path filter on PRs: this is a required branch-protection gate, so it
+    # must run on every PR (a path-filtered required check that doesn't run
+    # would block merges indefinitely).
   pull_request:
     branches: [main, "release/**", "develop/**"]
-    paths:
-      - 'schema/**'
-      - 'examples/**'
-      - 'profiles/**'
-      - 'ontologies/**'
-      - 'scripts/*.py'
-      - 'test/**'
-      - 'docs/**'
-      - 'src/content/docs/**'
-      - 'package.json'
-      - 'astro.config.mjs'
   workflow_dispatch:
 
 jobs:
