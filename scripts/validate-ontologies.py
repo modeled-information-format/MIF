@@ -66,7 +66,8 @@ def _type_info(ontology: dict) -> dict[str, dict]:
         name = et.get("name")
         if not name:
             continue
-        req = (et.get("schema") or {}).get("required") or []
+        sch = et.get("schema")
+        req = (sch.get("required") if isinstance(sch, dict) else None) or []
         sub = et.get("subtype_of") or []
         sub = sub if isinstance(sub, list) else [sub]
         info[name] = {
