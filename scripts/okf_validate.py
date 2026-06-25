@@ -13,13 +13,17 @@ concept the validator enforces:
 4. broken bundle-relative links are tolerated -- reported as warnings, never
    failures (OKF tolerates broken links);
 5. the ``markdown -> json-ld -> markdown`` projection round-trips losslessly
-   (delegated to ``mif_convert.roundtrip_file``).
+   (delegated to ``mif_convert.roundtrip_file``);
+6. derivation edges are temporally consistent -- a ``derived-from`` / ``supersedes``
+   / ``cites`` target must not be ``created`` after the concept that derives from
+   it. Reported as a warning by default (non-blocking); ``--strict-temporal``
+   promotes it to a hard error so a known-clean corpus can enforce it in CI.
 
 Exit code 0 means every concept in every bundle conforms.
 
 Usage::
 
-    python okf_validate.py <bundle-dir> [bundle-dir ...]
+    python okf_validate.py <bundle-dir> [bundle-dir ...] [--strict-temporal]
     python okf_validate.py            # defaults to examples/ + profiles/*/examples/
 """
 
@@ -27,11 +31,19 @@ from __future__ import annotations
 
 import re
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
+
+import yaml  # PyYAML; parse_markdown's safe_load can raise yaml.YAMLError
 
 import mif_convert  # local module (same scripts/ directory)
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+
+# Relationship types whose target is a *prior* concept the source is built on:
+# the target must not be created AFTER the source. (Q-a: derived-from + supersedes
+# + cites.) Stored kebab-normalized to match _kebab() output.
+DERIVATION_TYPES = {"derived-from", "supersedes", "cites"}
 
 # A body relationship line: "- <kebab-type> [Text](/path/to/target.md)".
 REL_LINE_RE = re.compile(r"^-\s+([a-z0-9][a-z0-9-]*)\s+\[[^\]]+\]\(([^)]+)\)\s*$")
@@ -86,8 +98,87 @@ def _resolve(target: str, md_path: Path, bundle: Path) -> Path | None:
     return (md_path.parent / target).resolve()
 
 
-def validate_bundle(bundle: Path) -> tuple[list[str], list[str], int]:
-    """Validate one bundle. Returns (errors, warnings, concept_count)."""
+def _parse_created(value: object) -> datetime | None:
+    """Parse an ISO-8601 ``created`` value to an aware datetime (UTC if naive)."""
+    if not isinstance(value, str) or not value:
+        return None
+    try:
+        dt = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    return dt if dt.tzinfo is not None else dt.replace(tzinfo=timezone.utc)
+
+
+def _is_date_only(value: object) -> bool:
+    """True when a ``created`` value carries no time-of-day (e.g. ``2024-06-01``)."""
+    return isinstance(value, str) and "T" not in value and " " not in value.strip()
+
+
+def _temporal_findings(
+    frontmatter: dict, md_path: Path, bundle: Path, rel_name: object
+) -> list[str]:
+    """Findings where a derivation target is created AFTER the deriving concept.
+
+    A ``derived-from`` / ``supersedes`` / ``cites`` edge asserts the target predates
+    the source; a target with a later ``created`` is a logical impossibility the
+    schema/round-trip checks cannot see. Targets that don't resolve to an existing
+    in-bundle concept, or where either ``created`` is missing/unparseable, are
+    skipped (no false positives).
+    """
+    findings: list[str] = []
+    source_raw = frontmatter.get("created")
+    source_created = _parse_created(source_raw)
+    if source_created is None:
+        return findings
+    for rel_type, target in _frontmatter_relationships(frontmatter):
+        if rel_type not in DERIVATION_TYPES:
+            continue
+        resolved = _resolve(target, md_path, bundle)
+        if resolved is None or resolved.suffix != ".md" or not resolved.exists():
+            continue
+        # Stay inside the bundle: a target that escapes (e.g. ``../other.md``)
+        # must not cause us to read an arbitrary file outside the bundle tree.
+        if not resolved.resolve().is_relative_to(bundle.resolve()):
+            continue
+        if resolved.resolve() == md_path.resolve():
+            continue
+        try:
+            tgt_fm, _ = mif_convert.parse_markdown(resolved.read_text())
+        except (ValueError, OSError, yaml.YAMLError):
+            continue
+        target_raw = tgt_fm.get("created")
+        target_created = _parse_created(target_raw)
+        if target_created is None:
+            continue
+        # If either side is date-only, a finer-grained other side would otherwise
+        # be compared against a manufactured midnight; downgrade both to date
+        # granularity so a same-day derivation is not a false positive.
+        if _is_date_only(source_raw) or _is_date_only(target_raw):
+            if target_created.date() > source_created.date():
+                findings.append(
+                    f"{rel_name}: temporal inconsistency -> '{rel_type}' target "
+                    f"{target} is created {target_raw}, after concept "
+                    f"created {source_raw}"
+                )
+            continue
+        if target_created > source_created:
+            findings.append(
+                f"{rel_name}: temporal inconsistency -> '{rel_type}' target "
+                f"{target} is created {target_raw}, after concept "
+                f"created {source_raw}"
+            )
+    return findings
+
+
+def validate_bundle(
+    bundle: Path, strict_temporal: bool = False
+) -> tuple[list[str], list[str], int]:
+    """Validate one bundle. Returns (errors, warnings, concept_count).
+
+    ``strict_temporal`` promotes temporal-inconsistency findings from warnings to
+    hard errors (exit 1). Default is WARN so the check never blocks real-world use
+    until a corpus is known clean.
+    """
     errors: list[str] = []
     warnings: list[str] = []
     count = 0
@@ -132,6 +223,10 @@ def validate_bundle(bundle: Path) -> tuple[list[str], list[str], int]:
         if rt_err:
             errors.append(f"{rel_name}: {rt_err}")
 
+        # (6) temporal consistency of derivation edges (WARN unless --strict-temporal).
+        temporal = _temporal_findings(frontmatter, md_path, bundle, rel_name)
+        (errors if strict_temporal else warnings).extend(temporal)
+
     # (2) reserved-filename misuse is structural; rglob to catch any.
     for reserved in mif_convert.RESERVED_FILENAMES:
         for hit in bundle.rglob(reserved):
@@ -154,7 +249,14 @@ def default_bundles() -> list[Path]:
 
 def main() -> None:
     args = sys.argv[1:]
-    bundles = [Path(a) for a in args] if args else default_bundles()
+    strict_temporal = False
+    positional: list[str] = []
+    for arg in args:
+        if arg in ("--strict-temporal", "--temporal-strict"):
+            strict_temporal = True
+        else:
+            positional.append(arg)
+    bundles = [Path(a) for a in positional] if positional else default_bundles()
     if not bundles:
         print("No bundles found to validate.", file=sys.stderr)
         sys.exit(1)
@@ -167,7 +269,7 @@ def main() -> None:
         if not bundle.exists():
             all_errors.append(f"{bundle}: bundle directory not found")
             continue
-        errors, warnings, count = validate_bundle(bundle)
+        errors, warnings, count = validate_bundle(bundle, strict_temporal=strict_temporal)
         total += count
         all_errors.extend(errors)
         all_warnings.extend(warnings)

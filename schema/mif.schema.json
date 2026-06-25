@@ -120,6 +120,13 @@
       "maxLength": 500,
       "description": "Compressed content summary (Level 3, max 500 chars)"
     },
+    "properties": {
+      "type": "object",
+      "additionalProperties": {
+        "type": ["string", "number", "boolean", "null"]
+      },
+      "description": "First-class scalar properties: literal key/value pairs (e.g. from a knowledge-graph literal-object triple) that have no concept target and therefore cannot be a relationship. Values MUST be scalar (string, number, boolean, or null); nested objects/arrays are out of scope at Level 1."
+    },
     "compressedAt": {
       "type": "string",
       "format": "date-time",
