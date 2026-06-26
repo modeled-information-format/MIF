@@ -207,6 +207,7 @@
           "properties": {
             "algorithm": {
               "type": "string",
+              "minLength": 1,
               "description": "Hash algorithm (e.g. sha256, sha512, blake3)"
             },
             "value": {
