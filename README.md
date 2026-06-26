@@ -118,6 +118,64 @@ python scripts/mif_convert.py emit-jsonld examples --out-dir jsonld
 | **JSON Schema** | Automated validation for the JSON-LD projection |
 | **Ontology System** | Base knowledge taxonomy with domain profiles |
 
+## What a MIF memory can carry
+
+A single MIF unit already models **27 top-level properties** — far more than the
+six required for a minimal record. They are grouped below by
+[conformance level](./SPECIFICATION.md#13-conformance-levels): **Level 1 (Core,
+required to conform)**, **Level 2 (Standard, recommended)**, and **Level 3
+(Full, optional)**. Level 1 is the schema's required set plus the structural
+fields validated at that tier; everything in the Standard tier is Level 2; the
+fields the spec marks `(Level 3)` are Level 3.
+
+For full per-field detail, types, patterns, and examples, see the complete
+[Schema Reference](./docs/SCHEMA-REFERENCE.md).
+
+### Level 1 — Core (required to conform)
+
+| Property | Purpose |
+|----------|---------|
+| `@context` | JSON-LD context binding terms to the MIF vocabulary |
+| `@type` | Document type (`"Memory"`, or an array containing it) |
+| `@id` | Unique identifier in `urn:mif:` URN form |
+| `conceptType` | Knowledge taxonomy: `semantic` / `episodic` / `procedural` |
+| `memoryType` | **Deprecated** v0.1 alias for `conceptType`, kept for back-compat |
+| `content` | The memory content, in Markdown |
+| `created` | Creation timestamp (ISO 8601) |
+| `properties` | First-class scalar key/value pairs with no concept target |
+| `blocks` | Named block references (`^block-id`) with their text, for granular linking |
+
+### Level 2 — Standard (recommended)
+
+| Property | Purpose | Reference |
+|----------|---------|-----------|
+| `title` | Human-readable title | [Basic metadata](./docs/SCHEMA-REFERENCE.md#basic-metadata) |
+| `description` | OKF-recommended description (mapped from MIF `summary`) | [Basic metadata](./docs/SCHEMA-REFERENCE.md#basic-metadata) |
+| `modified` | Last-modification timestamp (ISO 8601) | [Basic metadata](./docs/SCHEMA-REFERENCE.md#basic-metadata) |
+| `timestamp` | OKF-recommended mirror of `modified` (or `created`) | [Basic metadata](./docs/SCHEMA-REFERENCE.md#basic-metadata) |
+| `namespace` | Hierarchical scope for the memory | [Basic metadata](./docs/SCHEMA-REFERENCE.md#basic-metadata) |
+| `tags` | Classification tags | [Basic metadata](./docs/SCHEMA-REFERENCE.md#basic-metadata) |
+| `aliases` | Alternative names for the memory | [Basic metadata](./docs/SCHEMA-REFERENCE.md#basic-metadata) |
+| `ontology` | Reference to the ontology this memory conforms to | [Ontology reference](./docs/SCHEMA-REFERENCE.md#ontology-reference) |
+| `entity` | Structured entity data for ontology-typed memories | [Entities](./docs/SCHEMA-REFERENCE.md#entities) |
+| `entities` | Referenced entities (people, orgs, technologies, …) | [Entities](./docs/SCHEMA-REFERENCE.md#entities) |
+| `relationships` | Typed relationships to other memories | [Relationships](./docs/SCHEMA-REFERENCE.md#relationships) |
+| `temporal` | Temporal validity data (timestamps) | [Temporal metadata](./docs/SCHEMA-REFERENCE.md#temporal-metadata) |
+
+> The `temporal` field enters at Level 2 for basic timestamps; its bi-temporal
+> model and decay-function sub-features are Level 3.
+
+### Level 3 — Full (optional)
+
+| Property | Purpose | Reference |
+|----------|---------|-----------|
+| `provenance` | Source and trust data (W3C PROV + `sourceType` / `trustLevel`) | [Provenance](./docs/SCHEMA-REFERENCE.md#provenance) |
+| `embedding` | Embedding-model reference (model + source text for re-embedding) | [Embedding reference](./docs/SCHEMA-REFERENCE.md#embedding-reference) |
+| `citations` | Citation references with rich metadata | [Citations](./docs/SCHEMA-REFERENCE.md#citations) |
+| `summary` | Compressed content summary (max 500 chars) | [Compression](./docs/SCHEMA-REFERENCE.md#compression-level-3) |
+| `compressedAt` | When compression was applied | [Compression](./docs/SCHEMA-REFERENCE.md#compression-level-3) |
+| `extensions` | Provider-specific extension data | [Extensions](./docs/SCHEMA-REFERENCE.md#extensions) |
+
 ## OKF conformance & validation
 
 ```bash
@@ -157,7 +215,9 @@ python scripts/migrate_0_1_to_1_0.py <old-bundle> <new-bundle>
 
 ## Specification
 
-See [SPECIFICATION.md](./SPECIFICATION.md) for the complete v1.0.0 specification.
+See [SPECIFICATION.md](./SPECIFICATION.md) for the complete v1.0.0 specification,
+and the [Schema Reference](./docs/SCHEMA-REFERENCE.md) for the full per-field
+reference to all 27 top-level properties and the JSON Schemas.
 
 ## Contributing
 
