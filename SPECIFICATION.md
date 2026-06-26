@@ -308,16 +308,24 @@ The `ontology.id` MUST match the `ontology.id` field in the referenced ontology 
 
 Common categories such as **Fact** and **Event** are already expressible with the
 fields defined above; MIF therefore does **not** define a separate flat
-`category` field. Domain categories are composed from three orthogonal axes:
+`category` field. Domain categories are composed from two orthogonal axes that a
+memory unit can declare directly:
 
 1. **`type`** (REQUIRED, see 4.2) — the cognitive memory type: `semantic`,
    `episodic`, or `procedural`.
 2. **`namespace`** (RECOMMENDED, see 10) — hierarchical scope that carries the
    finer-grained label (e.g. `semantic/knowledge`, `episodic/sessions`).
-3. **Ontology-extended type** (OPTIONAL, see 4.2.1 and 10.8.3) — a named
-   `entity_types` entry with a `base` type, for richer domain taxonomies.
 
-A **Fact** is a `semantic` memory — declarative knowledge that holds independent
+A memory unit has no field to name an ontology-extended type directly. Instead,
+**ontologies DEFINE extended types and their namespace mappings** (OPTIONAL, see
+4.2.1 and 10.8): an ontology declares each extended type as an `entity_types`
+entry with a `base` type, and implementations express that extended type by
+following the referenced ontology's namespace hierarchy on the `namespace` axis
+above (e.g. an `incident` extended type whose `base` is `episodic`, reached via
+`episodic/incidents`). The extended type is therefore a richer label *on* the
+namespace axis, not a separate third axis the unit declares.
+
+A **Fact** is a `semantic` memory — declarative knowledge that holds independently
 of any single moment:
 
 ```yaml
@@ -355,6 +363,13 @@ the interoperability the base types provide.
 > **Note.** The entity types in 7 (Person, Organization, …) classify the
 > entities a memory *references* via its `entities` array; they are a distinct
 > axis and do not categorize the memory itself.
+>
+> **Note on namespace form.** The namespace examples in this section use the
+> unprefixed form (e.g. `semantic/knowledge`). Some other sections (e.g. 4.2.1
+> and 10.8.4) still show the underscore-prefixed `_semantic/…` form; this is a
+> pre-existing inconsistency in the spec, not a second namespace convention.
+> Implementers should follow the namespace hierarchy declared by the referenced
+> ontology.
 
 ---
 
