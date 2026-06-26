@@ -44,7 +44,7 @@ All schemas use JSON Schema Draft 2020-12.
 MIF uses three base memory types:
 
 ```json
-"memoryType": {
+"conceptType": {
   "enum": [
     "semantic",    // Facts, concepts, decisions, preferences, knowledge
     "episodic",    // Events, experiences, sessions, incidents
@@ -52,6 +52,8 @@ MIF uses three base memory types:
   ]
 }
 ```
+
+(The deprecated v0.1 alias `memoryType` accepts the same enum.)
 
 | Type | Description | Use For |
 |------|-------------|---------|
