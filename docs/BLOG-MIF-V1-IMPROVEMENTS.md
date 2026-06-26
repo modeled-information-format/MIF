@@ -216,7 +216,7 @@ All schema `$id` and `schema_url` references now use a consistent URI pattern: `
 
 **Before:**
 ```
-https://raw.githubusercontent.com/zircote/MIF/main/schema/ontology.schema.json
+https://mif-spec.dev/schema/ontology.schema.json
 ```
 
 **After:**

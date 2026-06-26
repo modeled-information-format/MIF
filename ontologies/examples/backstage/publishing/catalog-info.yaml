@@ -20,13 +20,13 @@ metadata:
     digital, and assessment components. Standards-aligned to CCSS
     and major state frameworks.
   annotations:
-    mif.zircote.com/ontology: k12-educational-publishing
-    mif.zircote.com/entity-type: program
-    mif.zircote.com/entity-id: program-into-math
-    mif.zircote.com/subject: mathematics
-    mif.zircote.com/grade-span: K-8
-    mif.zircote.com/launch-year: "2020"
-    mif.zircote.com/revision-cycle: "6"
+    modeled-information-format.github.io/ontology: k12-educational-publishing
+    modeled-information-format.github.io/entity-type: program
+    modeled-information-format.github.io/entity-id: program-into-math
+    modeled-information-format.github.io/subject: mathematics
+    modeled-information-format.github.io/grade-span: K-8
+    modeled-information-format.github.io/launch-year: "2020"
+    modeled-information-format.github.io/revision-cycle: "6"
   tags:
     - mathematics
     - k-8
@@ -53,14 +53,14 @@ metadata:
     Grade 5 student edition textbook. 720 pages, hardcover.
     ISBN: 978-0-358-11234-5
   annotations:
-    mif.zircote.com/entity-type: title
-    mif.zircote.com/entity-id: title-im5-se
-    mif.zircote.com/isbn: "9780358112345"
-    mif.zircote.com/edition: "2"
-    mif.zircote.com/copyright-year: "2024"
-    mif.zircote.com/format: hardcover
-    mif.zircote.com/page-count: "720"
-    mif.zircote.com/status: active
+    modeled-information-format.github.io/entity-type: title
+    modeled-information-format.github.io/entity-id: title-im5-se
+    modeled-information-format.github.io/isbn: "9780358112345"
+    modeled-information-format.github.io/edition: "2"
+    modeled-information-format.github.io/copyright-year: "2024"
+    modeled-information-format.github.io/format: hardcover
+    modeled-information-format.github.io/page-count: "720"
+    modeled-information-format.github.io/status: active
   tags:
     - student-edition
     - grade-5
@@ -79,11 +79,11 @@ metadata:
     Grade 5 teacher edition with lesson plans, differentiation
     strategies, and assessment guidance.
   annotations:
-    mif.zircote.com/entity-type: title
-    mif.zircote.com/entity-id: title-im5-te
-    mif.zircote.com/isbn: "9780358112352"
-    mif.zircote.com/format: hardcover
-    mif.zircote.com/status: active
+    modeled-information-format.github.io/entity-type: title
+    modeled-information-format.github.io/entity-id: title-im5-te
+    modeled-information-format.github.io/isbn: "9780358112352"
+    modeled-information-format.github.io/format: hardcover
+    modeled-information-format.github.io/status: active
   tags:
     - teacher-edition
     - grade-5
@@ -106,11 +106,11 @@ metadata:
     Interactive digital learning platform with adaptive practice,
     video lessons, and real-time progress monitoring.
   annotations:
-    mif.zircote.com/entity-type: digital-resource
-    mif.zircote.com/entity-id: digital-im-platform
-    mif.zircote.com/resource-type: lms_platform
-    mif.zircote.com/lti-compatible: "true"
-    mif.zircote.com/accessibility: "WCAG 2.1 AA"
+    modeled-information-format.github.io/entity-type: digital-resource
+    modeled-information-format.github.io/entity-id: digital-im-platform
+    modeled-information-format.github.io/resource-type: lms_platform
+    modeled-information-format.github.io/lti-compatible: "true"
+    modeled-information-format.github.io/accessibility: "WCAG 2.1 AA"
   tags:
     - digital
     - lms
@@ -138,11 +138,11 @@ metadata:
     Manuscript in development for 2026 edition revision.
     Currently in developmental editing phase.
   annotations:
-    mif.zircote.com/entity-type: manuscript
-    mif.zircote.com/entity-id: ms-im6-2026
-    mif.zircote.com/status: in_review
-    mif.zircote.com/target-grade: "6"
-    mif.zircote.com/due-date: "2025-06-30"
+    modeled-information-format.github.io/entity-type: manuscript
+    modeled-information-format.github.io/entity-id: ms-im6-2026
+    modeled-information-format.github.io/status: in_review
+    modeled-information-format.github.io/target-grade: "6"
+    modeled-information-format.github.io/due-date: "2025-06-30"
   tags:
     - manuscript
     - in-development
@@ -164,13 +164,13 @@ metadata:
     Submission to Texas Proclamation 2027 for K-8 Mathematics.
     Deadline: April 15, 2026.
   annotations:
-    mif.zircote.com/entity-type: state-adoption
-    mif.zircote.com/entity-id: adoption-tx-math-2027
-    mif.zircote.com/state: TX
-    mif.zircote.com/subject: mathematics
-    mif.zircote.com/adoption-year: "2027"
-    mif.zircote.com/deadline: "2026-04-15"
-    mif.zircote.com/contract-years: "8"
+    modeled-information-format.github.io/entity-type: state-adoption
+    modeled-information-format.github.io/entity-id: adoption-tx-math-2027
+    modeled-information-format.github.io/state: TX
+    modeled-information-format.github.io/subject: mathematics
+    modeled-information-format.github.io/adoption-year: "2027"
+    modeled-information-format.github.io/deadline: "2026-04-15"
+    modeled-information-format.github.io/contract-years: "8"
   tags:
     - adoption
     - texas
@@ -192,11 +192,11 @@ metadata:
     Accessibility requirements and VPAT documentation for
     Into Math digital components.
   annotations:
-    mif.zircote.com/entity-type: accessibility-spec
-    mif.zircote.com/entity-id: a11y-into-math
-    mif.zircote.com/wcag-level: AA
-    mif.zircote.com/section-508: "true"
-    mif.zircote.com/screen-reader-tested: "true"
+    modeled-information-format.github.io/entity-type: accessibility-spec
+    modeled-information-format.github.io/entity-id: a11y-into-math
+    modeled-information-format.github.io/wcag-level: AA
+    modeled-information-format.github.io/section-508: "true"
+    modeled-information-format.github.io/screen-reader-tested: "true"
   tags:
     - accessibility
     - wcag
@@ -224,11 +224,11 @@ metadata:
     Common Core State Standard cluster for Grade 5 Number and
     Operations in Base Ten.
   annotations:
-    mif.zircote.com/entity-type: standard
-    mif.zircote.com/entity-id: std-ccss-5-nbt
-    mif.zircote.com/framework: ccss_math
-    mif.zircote.com/grade: "5"
-    mif.zircote.com/domain: NBT
+    modeled-information-format.github.io/entity-type: standard
+    modeled-information-format.github.io/entity-id: std-ccss-5-nbt
+    modeled-information-format.github.io/framework: ccss_math
+    modeled-information-format.github.io/grade: "5"
+    modeled-information-format.github.io/domain: NBT
   tags:
     - ccss
     - grade-5
@@ -248,11 +248,11 @@ metadata:
     Animated video lesson explaining fraction division concepts
     for Lesson 5.3. 8 minutes, closed captioned.
   annotations:
-    mif.zircote.com/entity-type: content-asset
-    mif.zircote.com/entity-id: asset-video-5-3
-    mif.zircote.com/asset-type: video
-    mif.zircote.com/duration: "8:00"
-    mif.zircote.com/captioned: "true"
+    modeled-information-format.github.io/entity-type: content-asset
+    modeled-information-format.github.io/entity-id: asset-video-5-3
+    modeled-information-format.github.io/asset-type: video
+    modeled-information-format.github.io/duration: "8:00"
+    modeled-information-format.github.io/captioned: "true"
   tags:
     - video
     - fractions
@@ -276,8 +276,8 @@ metadata:
     LTI 1.3 compliant API for LMS integration. Supports
     deep linking, grade passback, and roster sync.
   annotations:
-    mif.zircote.com/entity-type: digital-resource
-    mif.zircote.com/lti-version: "1.3"
+    modeled-information-format.github.io/entity-type: digital-resource
+    modeled-information-format.github.io/lti-version: "1.3"
   tags:
     - lti
     - integration
@@ -302,7 +302,7 @@ metadata:
     OneRoster-compliant API for student and teacher rostering.
     Supports Clever and ClassLink integrations.
   annotations:
-    mif.zircote.com/oneroster-version: "1.2"
+    modeled-information-format.github.io/oneroster-version: "1.2"
   tags:
     - roster
     - oneroster
@@ -390,8 +390,8 @@ metadata:
   title: Sarah Johnson
   description: Executive Editor, Mathematics
   annotations:
-    mif.zircote.com/entity-type: editorial-team
-    mif.zircote.com/role: executive_editor
+    modeled-information-format.github.io/entity-type: editorial-team
+    modeled-information-format.github.io/role: executive_editor
 spec:
   memberOf:
     - math-editorial-team
@@ -404,8 +404,8 @@ metadata:
   title: Michael Chen
   description: Developmental Editor, Grade 5
   annotations:
-    mif.zircote.com/entity-type: editorial-team
-    mif.zircote.com/role: developmental_editor
+    modeled-information-format.github.io/entity-type: editorial-team
+    modeled-information-format.github.io/role: developmental_editor
 spec:
   memberOf:
     - math-editorial-team

@@ -3,10 +3,10 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Spec Version](https://img.shields.io/badge/spec-v0.1.0--draft-blue.svg)](./SPECIFICATION.md)
 [![Docs](https://img.shields.io/badge/docs-mif--spec.dev-5c4a32.svg)](https://mif-spec.dev)
-[![CI](https://github.com/zircote/MIF/actions/workflows/validate.yml/badge.svg)](https://github.com/zircote/MIF/actions/workflows/validate.yml)
+[![CI](https://github.com/modeled-information-format/MIF/actions/workflows/validate.yml/badge.svg)](https://github.com/modeled-information-format/MIF/actions/workflows/validate.yml)
 [![JSON-LD](https://img.shields.io/badge/format-JSON--LD-orange.svg)](https://json-ld.org/)
 [![W3C PROV](https://img.shields.io/badge/provenance-W3C%20PROV-green.svg)](https://www.w3.org/TR/prov-dm/)
-[![GitHub topics](https://img.shields.io/github/topics/zircote/MIF)](https://github.com/zircote/MIF)
+[![GitHub topics](https://img.shields.io/github/topics/modeled-information-format/MIF)](https://github.com/modeled-information-format/MIF)
 
 An open standard for portable AI memory representation.
 
@@ -172,9 +172,9 @@ This specification is open source. Contributions welcome:
 
 ## Related
 
-- [Subcog](https://github.com/zircote/subcog) - AI memory system implementing MIF
-- [Mnemonic](https://github.com/zircote/mnemonic) - Claude Code plugin using MIF ontologies
-- [Issue #82](https://github.com/zircote/subcog/issues/82) - Original proposal
+- [Subcog](https://github.com/modeled-information-format/subcog) - AI memory system implementing MIF
+- [Mnemonic](https://github.com/modeled-information-format/mnemonic) - Claude Code plugin using MIF ontologies
+- [Issue #82](https://github.com/modeled-information-format/subcog/issues/82) - Original proposal
 
 ## Citing This Project
 

@@ -79,6 +79,19 @@ All replaced with GitHub raw URLs in v0.1.0.
 
 ## Amendment (2026-02)
 
-The original decision to use GitHub raw URLs was superseded by migration to a custom domain `mif-spec.dev`. Schema `$id` values now use `https://mif-spec.dev/schema/...`. The JSON-LD namespace prefix (`ns/`) continues to use `https://raw.githubusercontent.com/zircote/MIF/main/ns/` as the canonical IRI.
+The original decision to use GitHub raw URLs was superseded by migration to a custom domain `mif-spec.dev`. Schema `$id` values now use `https://mif-spec.dev/schema/...`. At the time of this amendment the JSON-LD namespace prefix (`ns/`) was left on `https://raw.githubusercontent.com/zircote/MIF/main/ns/` (subsequently migrated to `https://mif-spec.dev/ns/`; see the 2026-06 amendment below).
 
 **Rationale for amendment:** A custom domain provides URL stability independent of repository location, enables proper HTTP content negotiation, and presents a more professional identity. The zero-infrastructure benefit is preserved via GitHub Pages hosting.
+
+## Amendment (2026-06)
+
+The repository was transferred from the personal account to the
+`modeled-information-format` GitHub organization. The JSON-LD namespace prefix
+(`ns/`), previously served from `https://raw.githubusercontent.com/zircote/MIF/main/ns/`,
+is migrated to `https://mif-spec.dev/ns/`, completing the move of all canonical
+spec and schema identifiers onto the `mif-spec.dev` custom domain.
+
+**Rationale for amendment:** Removes the dependency on a personal-account raw
+path, aligns the namespace IRI with the schema `$id` scheme already on
+`mif-spec.dev`, and keeps every normative identifier on a single
+location-independent domain.

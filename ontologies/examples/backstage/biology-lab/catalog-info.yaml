@@ -20,16 +20,16 @@ metadata:
     in pancreatic ductal adenocarcinoma for therapeutic targeting.
     PI: Dr. Jane Smith. Budget: $2.5M.
   annotations:
-    mif.zircote.com/ontology: biology-research-lab
-    mif.zircote.com/entity-type: grant
-    mif.zircote.com/entity-id: grant-r01-ca999999
-    mif.zircote.com/agency: nih
-    mif.zircote.com/mechanism: R01
-    mif.zircote.com/grant-number: R01 CA999999
-    mif.zircote.com/total-budget: "2500000"
-    mif.zircote.com/project-start: "2025-07-01"
-    mif.zircote.com/project-end: "2030-06-30"
-    mif.zircote.com/status: active
+    modeled-information-format.github.io/ontology: biology-research-lab
+    modeled-information-format.github.io/entity-type: grant
+    modeled-information-format.github.io/entity-id: grant-r01-ca999999
+    modeled-information-format.github.io/agency: nih
+    modeled-information-format.github.io/mechanism: R01
+    modeled-information-format.github.io/grant-number: R01 CA999999
+    modeled-information-format.github.io/total-budget: "2500000"
+    modeled-information-format.github.io/project-start: "2025-07-01"
+    modeled-information-format.github.io/project-end: "2030-06-30"
+    modeled-information-format.github.io/status: active
   tags:
     - nih
     - r01
@@ -55,10 +55,10 @@ metadata:
     Characterize metabolic dependencies in KRAS-mutant PDAC cells
     using metabolomics and genome-wide CRISPR screening.
   annotations:
-    mif.zircote.com/entity-type: project
-    mif.zircote.com/entity-id: project-aim1
-    mif.zircote.com/status: active
-    mif.zircote.com/hypothesis: |
+    modeled-information-format.github.io/entity-type: project
+    modeled-information-format.github.io/entity-id: project-aim1
+    modeled-information-format.github.io/status: active
+    modeled-information-format.github.io/hypothesis: |
       KRAS-mutant PDAC cells exhibit unique metabolic dependencies
       that can be therapeutically exploited.
   tags:
@@ -79,9 +79,9 @@ metadata:
     Validate top metabolic vulnerabilities as druggable targets
     using genetic and pharmacological approaches.
   annotations:
-    mif.zircote.com/entity-type: project
-    mif.zircote.com/entity-id: project-aim2
-    mif.zircote.com/status: active
+    modeled-information-format.github.io/entity-type: project
+    modeled-information-format.github.io/entity-id: project-aim2
+    modeled-information-format.github.io/status: active
   tags:
     - specific-aim
     - drug-targets
@@ -100,9 +100,9 @@ metadata:
     Test lead compounds in patient-derived xenograft (PDX)
     mouse models of pancreatic cancer.
   annotations:
-    mif.zircote.com/entity-type: project
-    mif.zircote.com/entity-id: project-aim3
-    mif.zircote.com/status: planning
+    modeled-information-format.github.io/entity-type: project
+    modeled-information-format.github.io/entity-id: project-aim3
+    modeled-information-format.github.io/status: planning
   tags:
     - specific-aim
     - pdx-models
@@ -125,11 +125,11 @@ metadata:
     Standard operating procedure for Western blot analysis.
     Optimized for phospho-protein detection.
   annotations:
-    mif.zircote.com/entity-type: protocol
-    mif.zircote.com/entity-id: protocol-wb-v2
-    mif.zircote.com/protocol-type: molecular_biology
-    mif.zircote.com/version: "2.1"
-    mif.zircote.com/author: Raj Patel
+    modeled-information-format.github.io/entity-type: protocol
+    modeled-information-format.github.io/entity-id: protocol-wb-v2
+    modeled-information-format.github.io/protocol-type: molecular_biology
+    modeled-information-format.github.io/version: "2.1"
+    modeled-information-format.github.io/author: Raj Patel
   tags:
     - protocol
     - western-blot
@@ -150,10 +150,10 @@ metadata:
     Protocol for pooled CRISPR knockout screening
     using Brunello library and MAGeCK analysis.
   annotations:
-    mif.zircote.com/entity-type: protocol
-    mif.zircote.com/entity-id: protocol-crispr-screen
-    mif.zircote.com/protocol-type: molecular_biology
-    mif.zircote.com/version: "1.0"
+    modeled-information-format.github.io/entity-type: protocol
+    modeled-information-format.github.io/entity-id: protocol-crispr-screen
+    modeled-information-format.github.io/protocol-type: molecular_biology
+    modeled-information-format.github.io/version: "1.0"
   tags:
     - protocol
     - crispr
@@ -175,14 +175,14 @@ metadata:
     Metabolic vulnerabilities in KRAS-driven pancreatic cancer.
     PMID: 12345678. DOI: 10.1038/s43018-025-00001-x
   annotations:
-    mif.zircote.com/entity-type: publication
-    mif.zircote.com/entity-id: pub-smith-2025-nc
-    mif.zircote.com/publication-type: journal_article
-    mif.zircote.com/journal: Nature Cancer
-    mif.zircote.com/pmid: "12345678"
-    mif.zircote.com/doi: "10.1038/s43018-025-00001-x"
-    mif.zircote.com/status: published
-    mif.zircote.com/open-access: "true"
+    modeled-information-format.github.io/entity-type: publication
+    modeled-information-format.github.io/entity-id: pub-smith-2025-nc
+    modeled-information-format.github.io/publication-type: journal_article
+    modeled-information-format.github.io/journal: Nature Cancer
+    modeled-information-format.github.io/pmid: "12345678"
+    modeled-information-format.github.io/doi: "10.1038/s43018-025-00001-x"
+    modeled-information-format.github.io/status: published
+    modeled-information-format.github.io/open-access: "true"
   tags:
     - publication
     - nature-cancer
@@ -209,14 +209,14 @@ metadata:
     Approved protocol for collecting de-identified pancreatic
     tumor tissue from surgical resections.
   annotations:
-    mif.zircote.com/entity-type: irb-protocol
-    mif.zircote.com/entity-id: irb-2024-0123
-    mif.zircote.com/protocol-number: "2024-0123"
-    mif.zircote.com/review-type: expedited
-    mif.zircote.com/status: approved
-    mif.zircote.com/approval-date: "2024-03-15"
-    mif.zircote.com/expiration-date: "2025-03-14"
-    mif.zircote.com/risk-level: minimal
+    modeled-information-format.github.io/entity-type: irb-protocol
+    modeled-information-format.github.io/entity-id: irb-2024-0123
+    modeled-information-format.github.io/protocol-number: "2024-0123"
+    modeled-information-format.github.io/review-type: expedited
+    modeled-information-format.github.io/status: approved
+    modeled-information-format.github.io/approval-date: "2024-03-15"
+    modeled-information-format.github.io/expiration-date: "2025-03-14"
+    modeled-information-format.github.io/risk-level: minimal
   tags:
     - compliance
     - irb
@@ -238,13 +238,13 @@ metadata:
     Approved protocol for patient-derived xenograft studies
     in immunocompromised mice.
   annotations:
-    mif.zircote.com/entity-type: iacuc-protocol
-    mif.zircote.com/entity-id: iacuc-2024-0456
-    mif.zircote.com/protocol-number: "2024-0456"
-    mif.zircote.com/species: "mouse"
-    mif.zircote.com/animal-count: "200"
-    mif.zircote.com/status: approved
-    mif.zircote.com/pain-category: D
+    modeled-information-format.github.io/entity-type: iacuc-protocol
+    modeled-information-format.github.io/entity-id: iacuc-2024-0456
+    modeled-information-format.github.io/protocol-number: "2024-0456"
+    modeled-information-format.github.io/species: "mouse"
+    modeled-information-format.github.io/animal-count: "200"
+    modeled-information-format.github.io/status: approved
+    modeled-information-format.github.io/pain-category: D
   tags:
     - compliance
     - iacuc
@@ -269,13 +269,13 @@ metadata:
     Human pancreatic carcinoma cell line. KRAS G12D mutant.
     Passage 15-25 recommended.
   annotations:
-    mif.zircote.com/entity-type: sample
-    mif.zircote.com/entity-id: sample-panc1
-    mif.zircote.com/sample-type: cell_line
-    mif.zircote.com/organism: "Homo sapiens"
-    mif.zircote.com/source: ATCC
-    mif.zircote.com/storage-temp: liquid_nitrogen
-    mif.zircote.com/status: available
+    modeled-information-format.github.io/entity-type: sample
+    modeled-information-format.github.io/entity-id: sample-panc1
+    modeled-information-format.github.io/sample-type: cell_line
+    modeled-information-format.github.io/organism: "Homo sapiens"
+    modeled-information-format.github.io/source: ATCC
+    modeled-information-format.github.io/storage-temp: liquid_nitrogen
+    modeled-information-format.github.io/status: available
   tags:
     - cell-line
     - pdac
@@ -296,14 +296,14 @@ metadata:
     High-resolution mass spectrometer for metabolomics and
     proteomics analysis. Core facility instrument.
   annotations:
-    mif.zircote.com/entity-type: equipment
-    mif.zircote.com/entity-id: equip-qexactive
-    mif.zircote.com/equipment-type: mass_spec
-    mif.zircote.com/manufacturer: Thermo Fisher
-    mif.zircote.com/model: Q Exactive HF
-    mif.zircote.com/core-facility: "true"
-    mif.zircote.com/hourly-rate: "75"
-    mif.zircote.com/training-required: "true"
+    modeled-information-format.github.io/entity-type: equipment
+    modeled-information-format.github.io/entity-id: equip-qexactive
+    modeled-information-format.github.io/equipment-type: mass_spec
+    modeled-information-format.github.io/manufacturer: Thermo Fisher
+    modeled-information-format.github.io/model: Q Exactive HF
+    modeled-information-format.github.io/core-facility: "true"
+    modeled-information-format.github.io/hourly-rate: "75"
+    modeled-information-format.github.io/training-required: "true"
   tags:
     - equipment
     - mass-spec
@@ -324,14 +324,14 @@ metadata:
     Untargeted metabolomics data from 50 PDAC cell lines.
     LC-MS/MS analysis. Deposited in Metabolomics Workbench.
   annotations:
-    mif.zircote.com/entity-type: dataset
-    mif.zircote.com/entity-id: data-metab-2025
-    mif.zircote.com/data-type: metabolomics
-    mif.zircote.com/format: mzML
-    mif.zircote.com/size-gb: "125"
-    mif.zircote.com/repository: metabolomics_workbench
-    mif.zircote.com/accession: ST002500
-    mif.zircote.com/fair-compliant: "true"
+    modeled-information-format.github.io/entity-type: dataset
+    modeled-information-format.github.io/entity-id: data-metab-2025
+    modeled-information-format.github.io/data-type: metabolomics
+    modeled-information-format.github.io/format: mzML
+    modeled-information-format.github.io/size-gb: "125"
+    modeled-information-format.github.io/repository: metabolomics_workbench
+    modeled-information-format.github.io/accession: ST002500
+    modeled-information-format.github.io/fair-compliant: "true"
   tags:
     - dataset
     - metabolomics
@@ -354,12 +354,12 @@ metadata:
     Genome-wide CRISPR knockout screen data from metabolic
     stress conditions. MAGeCK analysis results.
   annotations:
-    mif.zircote.com/entity-type: dataset
-    mif.zircote.com/entity-id: data-crispr-2025
-    mif.zircote.com/data-type: computational
-    mif.zircote.com/repository: geo
-    mif.zircote.com/accession: GSE999999
-    mif.zircote.com/fair-compliant: "true"
+    modeled-information-format.github.io/entity-type: dataset
+    modeled-information-format.github.io/entity-id: data-crispr-2025
+    modeled-information-format.github.io/data-type: computational
+    modeled-information-format.github.io/repository: geo
+    modeled-information-format.github.io/accession: GSE999999
+    modeled-information-format.github.io/fair-compliant: "true"
   tags:
     - dataset
     - crispr-screen
@@ -419,11 +419,11 @@ metadata:
     Associate Professor, Department of Cancer Biology.
     Principal Investigator, Smith Laboratory.
   annotations:
-    mif.zircote.com/entity-type: principal-investigator
-    mif.zircote.com/entity-id: pi-jane-smith
-    mif.zircote.com/title: associate_professor
-    mif.zircote.com/orcid: 0000-0001-2345-6789
-    mif.zircote.com/era-commons-id: JSMITH01
+    modeled-information-format.github.io/entity-type: principal-investigator
+    modeled-information-format.github.io/entity-id: pi-jane-smith
+    modeled-information-format.github.io/title: associate_professor
+    modeled-information-format.github.io/orcid: 0000-0001-2345-6789
+    modeled-information-format.github.io/era-commons-id: JSMITH01
   links:
     - url: https://orcid.org/0000-0001-2345-6789
       title: ORCID
@@ -442,11 +442,11 @@ metadata:
     Postdoctoral Fellow studying metabolic dependencies
     in pancreatic cancer.
   annotations:
-    mif.zircote.com/entity-type: lab-member
-    mif.zircote.com/entity-id: member-raj-patel
-    mif.zircote.com/role: postdoc
-    mif.zircote.com/orcid: 0000-0002-3456-7890
-    mif.zircote.com/funding-source: R01 CA999999
+    modeled-information-format.github.io/entity-type: lab-member
+    modeled-information-format.github.io/entity-id: member-raj-patel
+    modeled-information-format.github.io/role: postdoc
+    modeled-information-format.github.io/orcid: 0000-0002-3456-7890
+    modeled-information-format.github.io/funding-source: R01 CA999999
 spec:
   memberOf:
     - smith-lab
@@ -461,10 +461,10 @@ metadata:
     PhD Candidate, 4th year. Thesis focus on CRISPR screening
     for metabolic vulnerabilities.
   annotations:
-    mif.zircote.com/entity-type: lab-member
-    mif.zircote.com/entity-id: member-maria-garcia
-    mif.zircote.com/role: graduate_student
-    mif.zircote.com/funding-source: T32 Training Grant
+    modeled-information-format.github.io/entity-type: lab-member
+    modeled-information-format.github.io/entity-id: member-maria-garcia
+    modeled-information-format.github.io/role: graduate_student
+    modeled-information-format.github.io/funding-source: T32 Training Grant
 spec:
   memberOf:
     - smith-lab

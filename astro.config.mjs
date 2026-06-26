@@ -54,7 +54,7 @@ export default defineConfig({
         {
           icon: "github",
           label: "GitHub",
-          href: "https://github.com/zircote/MIF",
+          href: "https://github.com/modeled-information-format/MIF",
         },
       ],
       sidebar: [

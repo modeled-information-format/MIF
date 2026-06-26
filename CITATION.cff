@@ -11,7 +11,7 @@ version: "0.1.0"
 date-released: "2026-01-23"
 license: MIT
 url: "https://mif-spec.dev"
-repository-code: "https://github.com/zircote/MIF"
+repository-code: "https://github.com/modeled-information-format/MIF"
 authors:
   - family-names: Allen
     given-names: Robert
@@ -19,7 +19,7 @@ authors:
     orcid: "https://orcid.org/0009-0007-9691-004X"
 identifiers:
   - type: url
-    value: "https://github.com/zircote/MIF"
+    value: "https://github.com/modeled-information-format/MIF"
     description: "GitHub repository"
 keywords:
   - ai-memory
@@ -44,7 +44,7 @@ preferred-citation:
   date-released: "2026-01-23"
   license: MIT
   url: "https://mif-spec.dev"
-  repository-code: "https://github.com/zircote/MIF"
+  repository-code: "https://github.com/modeled-information-format/MIF"
   authors:
     - family-names: Allen
       given-names: Robert
