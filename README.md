@@ -147,13 +147,13 @@ definition of every property is [`schema/mif.schema.json`](./schema/mif.schema.j
 | `blocks` | Named block references (`^block-id`) with their text, for granular linking |
 
 > Property names above are the JSON-LD projection. In Markdown frontmatter,
-> `conceptType`/`memoryType` are the single field `type`.
+> `type` maps to `conceptType` in JSON-LD; `memoryType` is a separate deprecated
+> frontmatter key passed through as `memoryType`, not an alias for `type`.
 >
 > The Level 1 rows omit the per-field reference links used for Level 2/3 because
-> these are the core OKF metadata fields, defined authoritatively in
-> [`schema/mif.schema.json`](./schema/mif.schema.json) and documented in the
-> [MIF Document Schema](./docs/SCHEMA-REFERENCE.md#mif-document-schema) section of
-> the Schema Reference.
+> these are the core/required fields defined authoritatively in
+> [`schema/mif.schema.json`](./schema/mif.schema.json) — treat that schema as the
+> source of truth for required field names, types, and constraints.
 
 ### Level 2 — Standard (recommended)
 

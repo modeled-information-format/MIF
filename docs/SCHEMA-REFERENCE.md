@@ -65,7 +65,9 @@ Ontologies can define extended types that map to these base types via namespace 
 | Field | Type | Description |
 |-------|------|-------------|
 | `title` | string | Human-readable title |
+| `description` | string | OKF-recommended description (mapped from MIF `summary`) |
 | `modified` | date-time | Last modification timestamp |
+| `timestamp` | date-time | OKF-recommended mirror of `modified` (or `created`) |
 | `namespace` | string (pattern) | Hierarchical scope |
 | `tags` | array of strings | Classification tags |
 | `aliases` | array of strings | Alternative names |
