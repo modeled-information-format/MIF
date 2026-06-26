@@ -69,6 +69,7 @@ Ontologies can define extended types that map to these base types via namespace 
 | `namespace` | string (pattern) | Hierarchical scope |
 | `tags` | array of strings | Classification tags |
 | `aliases` | array of strings | Alternative names |
+| `blocks` | object (string → string) | Named block references (`^block-id`) mapped to their text content, for granular linking |
 
 #### Ontology Reference
 

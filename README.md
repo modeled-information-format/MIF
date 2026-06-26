@@ -128,15 +128,16 @@ required to conform)**, **Level 2 (Standard, recommended)**, and **Level 3
 fields validated at that tier; everything in the Standard tier is Level 2; the
 fields the spec marks `(Level 3)` are Level 3.
 
-For full per-field detail, types, patterns, and examples, see the complete
-[Schema Reference](./docs/SCHEMA-REFERENCE.md).
+For per-field detail, types, patterns, and examples, see the
+[Schema Reference](./docs/SCHEMA-REFERENCE.md). The authoritative, machine-checkable
+definition of every property is [`schema/mif.schema.json`](./schema/mif.schema.json).
 
 ### Level 1 — Core (required to conform)
 
 | Property | Purpose |
 |----------|---------|
 | `@context` | JSON-LD context binding terms to the MIF vocabulary |
-| `@type` | Document type (`"Memory"`, or an array containing it) |
+| `@type` | Document type (`"Concept"` or `"Memory"`, or an array containing `"Concept"`); the projection emits `"Concept"` |
 | `@id` | Unique identifier in `urn:mif:` URN form |
 | `conceptType` | Knowledge taxonomy: `semantic` / `episodic` / `procedural` |
 | `memoryType` | **Deprecated** v0.1 alias for `conceptType`, kept for back-compat |
@@ -147,6 +148,12 @@ For full per-field detail, types, patterns, and examples, see the complete
 
 > Property names above are the JSON-LD projection. In Markdown frontmatter,
 > `conceptType`/`memoryType` are the single field `type`.
+>
+> The Level 1 rows omit the per-field reference links used for Level 2/3 because
+> these are the core OKF metadata fields, defined authoritatively in
+> [`schema/mif.schema.json`](./schema/mif.schema.json) and documented in the
+> [MIF Document Schema](./docs/SCHEMA-REFERENCE.md#mif-document-schema) section of
+> the Schema Reference.
 
 ### Level 2 — Standard (recommended)
 
@@ -219,8 +226,9 @@ python scripts/migrate_0_1_to_1_0.py <old-bundle> <new-bundle>
 ## Specification
 
 See [SPECIFICATION.md](./SPECIFICATION.md) for the complete v1.0.0 specification,
-and the [Schema Reference](./docs/SCHEMA-REFERENCE.md) for the full per-field
-reference to all 27 top-level properties and the JSON Schemas.
+and the [Schema Reference](./docs/SCHEMA-REFERENCE.md) for a per-field reference to
+the top-level properties. The authoritative, machine-checkable definition of every
+property is [`schema/mif.schema.json`](./schema/mif.schema.json).
 
 ## Contributing
 
