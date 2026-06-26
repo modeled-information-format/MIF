@@ -332,8 +332,6 @@ of any single moment:
 ---
 type: semantic
 namespace: semantic/knowledge
-ontology:
-  id: mif-base
 ---
 ```
 
@@ -347,8 +345,6 @@ namespace: episodic/sessions
 temporal:
   valid_from: 2026-01-15T00:00:00Z
   valid_until: 2026-01-15T11:00:00Z
-ontology:
-  id: mif-base
 ---
 ```
 
