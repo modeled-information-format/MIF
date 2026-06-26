@@ -36,9 +36,9 @@ JSON Schema requires `$id` values to be URIs. Options considered:
 Use **GitHub raw content URLs** for all schema `$id` values:
 
 ```
-https://mif-spec.dev/schema/mif.schema.json
-https://mif-spec.dev/schema/ontology/ontology.schema.json
-https://mif-spec.dev/schema/context.jsonld
+https://raw.githubusercontent.com/zircote/MIF/main/schema/mif.schema.json
+https://raw.githubusercontent.com/zircote/MIF/main/schema/ontology/ontology.schema.json
+https://raw.githubusercontent.com/zircote/MIF/main/schema/context.jsonld
 ```
 
 ## Consequences
