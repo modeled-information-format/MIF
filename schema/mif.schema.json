@@ -397,9 +397,46 @@
             "low_confidence",
             "uncertain"
           ]
+        },
+        "sourceRef": {
+          "type": "string",
+          "description": "OPTIONAL reference to the originating source (e.g. conversation:conv-456)"
+        },
+        "agent": {
+          "type": "string",
+          "description": "OPTIONAL identifier of the agent that created the unit (e.g. claude-3-opus)"
+        },
+        "agentVersion": {
+          "type": "string",
+          "description": "OPTIONAL version of the creating agent"
+        },
+        "wasGeneratedBy": {
+          "$ref": "#/$defs/ProvNode",
+          "description": "OPTIONAL prov:wasGeneratedBy — the activity that produced this unit"
+        },
+        "wasAttributedTo": {
+          "$ref": "#/$defs/ProvNode",
+          "description": "OPTIONAL prov:wasAttributedTo — the agent the unit is attributed to"
+        },
+        "wasDerivedFrom": {
+          "description": "OPTIONAL prov:wasDerivedFrom — the entity or entities this unit was derived from",
+          "oneOf": [
+            { "$ref": "#/$defs/ProvNode" },
+            { "type": "array", "items": { "$ref": "#/$defs/ProvNode" } }
+          ]
         }
       },
       "additionalProperties": true
+    },
+    "ProvNode": {
+      "description": "A W3C-PROV node: either a plain IRI/identifier string or an open node object (e.g. {\"@id\": \"...\", \"@type\": \"prov:Activity\"}). Kept permissive because PROV graphs are open-ended.",
+      "oneOf": [
+        { "type": "string" },
+        {
+          "type": "object",
+          "additionalProperties": true
+        }
+      ]
     },
     "EmbeddingReference": {
       "type": "object",
