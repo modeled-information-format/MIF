@@ -733,6 +733,6 @@ Store embeddings externally and reference via `vectorUri`:
 
 ## Need Help?
 
-- [GitHub Issues](https://github.com/zircote/MIF/issues)
+- [GitHub Issues](https://github.com/modeled-information-format/MIF/issues)
 - [Specification](../SPECIFICATION.md)
 - [Schema Reference](./SCHEMA-REFERENCE.md)
