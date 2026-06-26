@@ -145,6 +145,9 @@ For full per-field detail, types, patterns, and examples, see the complete
 | `properties` | First-class scalar key/value pairs with no concept target |
 | `blocks` | Named block references (`^block-id`) with their text, for granular linking |
 
+> Property names above are the JSON-LD projection. In Markdown frontmatter,
+> `conceptType`/`memoryType` are the single field `type`.
+
 ### Level 2 — Standard (recommended)
 
 | Property | Purpose | Reference |
