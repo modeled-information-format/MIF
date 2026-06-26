@@ -163,6 +163,7 @@
         },
         "id": {
           "type": "string",
+          "minLength": 1,
           "description": "Stable identifier for the document (e.g. a URN or opaque key) when no resolvable URL is available"
         },
         "documentType": {
@@ -196,6 +197,7 @@
         "url": {
           "type": "string",
           "format": "uri",
+          "minLength": 1,
           "description": "Resolvable location of the document"
         },
         "hash": {
