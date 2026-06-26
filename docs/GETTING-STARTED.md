@@ -314,6 +314,6 @@ python scripts/yaml2jsonld.py --all
 
 ## Getting Help
 
-- [GitHub Issues](https://github.com/zircote/MIF/issues)
+- [GitHub Issues](https://github.com/modeled-information-format/MIF/issues)
 - [Specification](../SPECIFICATION.md)
 - [Contributing Guide](../CONTRIBUTING.md)

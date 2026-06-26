@@ -19,7 +19,7 @@
 - [API Reference](https://mif-spec.dev/guides/api-reference/)
 - [Migration Guide](https://mif-spec.dev/guides/migration/)
 - [Architecture Decisions](https://mif-spec.dev/design/decisions/)
-- [GitHub Repository](https://github.com/zircote/MIF)
+- [GitHub Repository](https://github.com/modeled-information-format/MIF)
 
 ## Overview
 

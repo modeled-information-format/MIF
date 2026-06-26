@@ -8,7 +8,7 @@ description: File extensions, encoding requirements, and YAML frontmatter struct
 | Extension | Format | MIME Type |
 |-----------|--------|-----------|
 | `.md` | Markdown (canonical) | `text/markdown; variant=mif` |
-| `.jsonld` | JSON-LD (derived projection) | `application/ld+json; profile="https://raw.githubusercontent.com/zircote/MIF/main"` |
+| `.jsonld` | JSON-LD (derived projection) | `application/ld+json; profile="https://mif-spec.dev"` |
 
 Concept files use the `.md` extension only. The derived JSON-LD projection uses `.jsonld` (never `.md`), so OKF's `*.md` glob never ingests it.
 
