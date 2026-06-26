@@ -4,7 +4,7 @@ diataxis_type: tutorial
 
 # Getting Started with MIF
 
-This guide walks you through implementing the Memory Interchange Format (MIF) in your project.
+This guide walks you through implementing the Modeled Information Format (MIF) in your project.
 
 ## Prerequisites
 

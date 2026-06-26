@@ -1,4 +1,4 @@
-# Memory Interchange Format (MIF) - Open Standard for Portable AI Memory
+# Modeled Information Format (MIF) - Open Standard for Portable AI Memory
 
 ## Documentation Index
 
@@ -23,7 +23,7 @@
 
 ## Overview
 
-MIF (Memory Interchange Format) is an open standard for portable AI
+MIF (Modeled Information Format) is an open standard for portable AI
 memory representation. It defines a vendor-neutral data model with dual
 representations: human-readable Markdown files (.memory.md) and
 machine-processable JSON-LD documents (.memory.json).
