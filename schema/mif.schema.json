@@ -115,6 +115,11 @@
       "items": { "$ref": "#/$defs/Citation" },
       "description": "Citation references (Level 3)"
     },
+    "documents": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/DocumentReference" },
+      "description": "Source documents that travel alongside this memory by reference (not embedded). Vendor-neutral pointers to the underlying artifacts a memory was derived from."
+    },
     "summary": {
       "type": "string",
       "maxLength": 500,
@@ -144,6 +149,98 @@
     }
   },
   "$defs": {
+    "DocumentReference": {
+      "type": "object",
+      "description": "Vendor-neutral reference to a source document that travels alongside a memory by reference rather than by embedding a vendor-specific document schema. Locate the document by either `url` or `id`.",
+      "required": ["@type"],
+      "anyOf": [
+        { "required": ["url"] },
+        { "required": ["id"] }
+      ],
+      "properties": {
+        "@type": {
+          "const": "DocumentReference"
+        },
+        "id": {
+          "type": "string",
+          "description": "Stable identifier for the document (e.g. a URN or opaque key) when no resolvable URL is available"
+        },
+        "documentType": {
+          "type": "string",
+          "description": "Document category",
+          "oneOf": [
+            {
+              "enum": [
+                "pdf",
+                "html",
+                "markdown",
+                "text",
+                "transcript",
+                "dataset",
+                "spreadsheet",
+                "presentation",
+                "image",
+                "audio",
+                "video",
+                "email",
+                "other"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^[a-zA-Z][a-zA-Z0-9]*:[a-zA-Z][a-zA-Z0-9-]*$",
+              "description": "Custom namespaced type"
+            }
+          ]
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Resolvable location of the document"
+        },
+        "hash": {
+          "type": "object",
+          "description": "Content hash for integrity verification",
+          "required": ["algorithm", "value"],
+          "properties": {
+            "algorithm": {
+              "type": "string",
+              "description": "Hash algorithm (e.g. sha256, sha512, blake3)"
+            },
+            "value": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Hash digest value"
+            }
+          },
+          "additionalProperties": false
+        },
+        "contentType": {
+          "type": "string",
+          "description": "Media type of the document (e.g. application/pdf, text/html)"
+        },
+        "byteLength": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Size of the document in bytes"
+        },
+        "version": {
+          "type": "string",
+          "description": "Version token for the document (e.g. a commit SHA, ETag, or revision label)"
+        },
+        "retrievedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the document was retrieved (ISO 8601)"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Human-readable document title"
+        }
+      },
+      "additionalProperties": false
+    },
     "Citation": {
       "type": "object",
       "required": ["@type", "citationType", "citationRole", "title", "url"],

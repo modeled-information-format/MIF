@@ -94,6 +94,18 @@ citations:
   author: '@[[Robert Allen|Person]]'
   accessed: '2026-01-20'
   relevance: 0.88
+documents:
+- '@type': DocumentReference
+  documentType: markdown
+  title: Memory Interchange Format (MIF) Specification
+  url: https://github.com/zircote/subcog/blob/main/SPECIFICATION.md
+  contentType: text/markdown
+  byteLength: 48213
+  version: 9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+  hash:
+    algorithm: sha256
+    value: 7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e
+  retrievedAt: '2026-01-20T10:00:00Z'
 extensions:
   subcog:
     domain: architecture

@@ -26,6 +26,7 @@ ADRs follow the **Structured MADR** format — an extension of [MADR](https://ad
 | [ADR-010](ADR-010-modeled-information-format-repositioning.md) | Repositioning to Modeled Information Format | Accepted | Renames/repositions MIF as a general OKF-compliant content model; AI memory becomes the first domain profile |
 | [ADR-011](ADR-011-markdown-canonical-derived-jsonld.md) | Markdown-Canonical with Derived JSON-LD Projection | Accepted | Markdown `.md` is the source of truth; JSON-LD is a derived projection (Invariant 2) — refines ADR-002 |
 | [ADR-012](ADR-012-okf-conformance-tested-invariant.md) | OKF Conformance Enforced as a Tested CI Invariant | Accepted | Enforces OKF conformance, lossless round-trip, schema, and ontology/namespace validity as gating CI checks |
+| [ADR-014](ADR-014-document-reference-not-embed.md) | Document References, Not Embedded Vendor Schema | Accepted | Source documents travel by vendor-neutral `DocumentReference` (pointer + integrity metadata), not by embedding a vendor model like DoclingDocument (reframes issue #77) |
 
 ## Creating New ADRs
 
