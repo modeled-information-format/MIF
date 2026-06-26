@@ -304,6 +304,58 @@ The `ontology.id` MUST match the `ontology.id` field in the referenced ontology 
 - Discovery pattern matching for entity type suggestions
 - Schema validation for entity-specific fields
 
+### 4.4 Categorizing Memories (Fact, Event, and Beyond)
+
+Common categories such as **Fact** and **Event** are already expressible with the
+fields defined above; MIF therefore does **not** define a separate flat
+`category` field. Domain categories are composed from three orthogonal axes:
+
+1. **`type`** (REQUIRED, see 4.2) — the cognitive memory type: `semantic`,
+   `episodic`, or `procedural`.
+2. **`namespace`** (RECOMMENDED, see 10) — hierarchical scope that carries the
+   finer-grained label (e.g. `semantic/knowledge`, `episodic/sessions`).
+3. **Ontology-extended type** (OPTIONAL, see 4.2.1 and 10.8.3) — a named
+   `entity_types` entry with a `base` type, for richer domain taxonomies.
+
+A **Fact** is a `semantic` memory — declarative knowledge that holds independent
+of any single moment:
+
+```yaml
+---
+type: semantic
+namespace: semantic/knowledge
+ontology:
+  id: mif-base
+---
+```
+
+An **Event** is an `episodic` memory — something that happened, bounded by
+`temporal` validity (see 9):
+
+```yaml
+---
+type: episodic
+namespace: episodic/sessions
+temporal:
+  valid_from: 2026-01-15T00:00:00Z
+  valid_until: 2026-01-15T11:00:00Z
+ontology:
+  id: mif-base
+---
+```
+
+Finer distinctions are added through the namespace (e.g. `episodic/incidents`)
+or a named ontology-extended type (e.g. an `incident` whose `base` is
+`episodic`), not through a new field. Implementations SHOULD express domain
+categories through `type` + `namespace` + ontology-extended types rather than
+introducing a separate flat `category` (or `memoryCategory`) field: such a field
+would duplicate the `type` taxonomy, fork it across implementations, and break
+the interoperability the base types provide.
+
+> **Note.** The entity types in 7 (Person, Organization, …) classify the
+> entities a memory *references* via its `entities` array; they are a distinct
+> axis and do not categorize the memory itself.
+
 ---
 
 ## 5. Markdown Format (.md)
