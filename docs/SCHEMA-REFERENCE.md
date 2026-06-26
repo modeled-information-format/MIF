@@ -30,11 +30,14 @@ All schemas use JSON Schema Draft 2020-12.
 | Field | Type | Description |
 |-------|------|-------------|
 | `@context` | string/array/object | JSON-LD context |
-| `@type` | `"Memory"` or array containing `"Memory"` | Document type |
+| `@type` | `"Concept"` or `"Memory"` (or array containing `"Concept"`) | Document type; the projection emits `"Concept"` |
 | `@id` | string (pattern: `^urn:mif:`) | Unique identifier |
-| `memoryType` | enum | Memory classification |
+| `conceptType` | enum | Knowledge taxonomy classification |
 | `content` | string (minLength: 1) | Memory content |
 | `created` | string (date-time) | Creation timestamp |
+
+> `memoryType` is a **deprecated** v0.1 alias for `conceptType`, retained for
+> backward compatibility. New documents MUST use `conceptType`.
 
 ### Memory Types
 
@@ -72,6 +75,7 @@ Ontologies can define extended types that map to these base types via namespace 
 | `tags` | array of strings | Classification tags |
 | `aliases` | array of strings | Alternative names |
 | `blocks` | object (string → string) | Named block references (`^block-id`) mapped to their text content, for granular linking |
+| `properties` | object (string → string/number/boolean/null) | First-class scalar key/value pairs (e.g. from a knowledge-graph literal-object triple) with no concept target, so they cannot be a relationship. Values MUST be scalar; nested objects/arrays are out of scope at Level 1 |
 
 #### Ontology Reference
 
