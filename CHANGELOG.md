@@ -48,6 +48,17 @@ fills OKF's deliberately empty envelope. AI memory becomes the first domain
 
 ### Added
 
+- **[Release]**: Attested release orchestration (ADR-015). `release.yml` builds
+  and attests the source tarball and the schema bundle with SLSA build
+  provenance (the source tarball additionally carries a CycloneDX SBOM),
+  fail-closed verified before publish. The full security-gate suite (CodeQL,
+  Semgrep, OSV, Trivy, Checkov, secrets, ShellCheck, Scorecard, and on-demand
+  ZAP DAST) is wired by SHA pin to the org's central reusable workflows.
+  Artifact verification is documented in `SECURITY.md`.
+- **[Schema]**: Per-version schema mirror publication (ADR-016) with
+  `scripts/snapshot-schema-version.py`, producing immutable `/schema/X.Y.Z/`,
+  `latest/`, and `vMAJOR/` mirrors for each release while canonical `$id` values
+  stay unversioned (ADR-007).
 - **[OKF]**: `docs/okf-conformance.md` — pinned OKF v0.1 conformance criteria
   (version-stamped) and the MIF → OKF mapping. MIF takes no normative dependency
   on OKF's live draft (Invariant 5).

@@ -1,0 +1,39 @@
+name: sast
+
+# Static analysis for MIF: CodeQL (python + the Astro/TypeScript site) and
+# Semgrep, via the org's central reusable workflows (SHA-pinned). Findings are
+# uploaded to GitHub code scanning.
+
+"on":
+  push:
+    branches: [main, "develop/v*"]
+  pull_request:
+    branches: [main, "develop/v*"]
+  schedule:
+    - cron: "37 4 * * 1"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  codeql:
+    name: codeql
+    permissions:
+      security-events: write
+      contents: read
+      actions: read
+      packages: read
+    uses: modeled-information-format/.github/.github/workflows/reusable-sast-codeql.yml@ff8adc6b1267c272beef916af851d9506160354f
+    with:
+      languages: "python,javascript-typescript"
+
+  semgrep:
+    name: semgrep
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    uses: modeled-information-format/.github/.github/workflows/reusable-semgrep.yml@ff8adc6b1267c272beef916af851d9506160354f
+    with:
+      directory: .
