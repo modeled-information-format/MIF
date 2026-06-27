@@ -2,16 +2,12 @@ name: dast
 
 # Dynamic analysis (OWASP ZAP full scan) against the live MIF spec site. The
 # target must be a running URL, so this is opt-in via workflow_dispatch (and a
-# scattered weekly schedule), not a PR gate. Mirrors the org's dast.yml.
+# scattered weekly schedule), not a PR gate. The target is fixed to the
+# published site: workflow_dispatch takes no inputs, so a dispatch input cannot
+# influence what is scanned (Checkov CKV_GHA_7).
 
 "on":
   workflow_dispatch:
-    inputs:
-      target-url:
-        description: "Running target URL to scan"
-        required: false
-        default: "https://mif-spec.dev"
-        type: string
   schedule:
     - cron: "23 6 * * 2"
 
@@ -25,5 +21,5 @@ jobs:
       contents: read
     uses: modeled-information-format/.github/.github/workflows/reusable-zap.yml@ff8adc6b1267c272beef916af851d9506160354f
     with:
-      target: ${{ inputs['target-url'] || 'https://mif-spec.dev' }}
+      target: https://mif-spec.dev
       fail-action: false

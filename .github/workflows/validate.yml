@@ -22,6 +22,9 @@ name: Validate MIF Bundles and Schemas
     branches: [main, "release/**", "develop/**"]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   okf-conformance:
     name: OKF Conformance + Lossless Round-Trip
