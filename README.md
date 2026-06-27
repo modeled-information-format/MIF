@@ -6,7 +6,7 @@
 [![Spec Version](https://img.shields.io/badge/spec-v1.0.0-blue.svg)](./SPECIFICATION.md)
 [![OKF Compliant](https://img.shields.io/badge/OKF-v0.1%20compliant-5c4a32.svg)](./docs/okf-conformance.md)
 [![Docs](https://img.shields.io/badge/docs-mif--spec.dev-5c4a32.svg)](https://mif-spec.dev)
-[![CI](https://github.com/zircote/MIF/actions/workflows/validate.yml/badge.svg)](https://github.com/zircote/MIF/actions/workflows/validate.yml)
+[![CI](https://github.com/modeled-information-format/MIF/actions/workflows/validate.yml/badge.svg)](https://github.com/modeled-information-format/MIF/actions/workflows/validate.yml)
 [![JSON-LD](https://img.shields.io/badge/format-JSON--LD-orange.svg)](https://json-ld.org/)
 [![PROV-aligned](https://img.shields.io/badge/provenance-PROV--aligned-green.svg)](https://www.w3.org/TR/prov-dm/)
 
@@ -169,8 +169,8 @@ This specification is open source. Contributions welcome:
 
 ## Related
 
-- [Subcog](https://github.com/zircote/subcog) - AI memory system implementing MIF
-- [Mnemonic](https://github.com/zircote/mnemonic) - Claude Code plugin using MIF ontologies
+- [Subcog](https://github.com/modeled-information-format/subcog) - AI memory system implementing MIF
+- [Mnemonic](https://github.com/modeled-information-format/mnemonic) - Claude Code plugin using MIF ontologies
 
 ## Citing This Project
 

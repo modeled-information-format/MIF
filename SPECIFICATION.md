@@ -6,7 +6,7 @@
 **Status**: Release
 **Last Updated**: 2026-06-18
 **Authors**: Robert Allen (zircote)
-**Repository**: https://github.com/zircote/MIF
+**Repository**: https://github.com/modeled-information-format/MIF
 
 ---
 
@@ -158,7 +158,7 @@ MIF is designed for local-first storage:
 | Extension | Format | MIME Type |
 |-----------|--------|-----------|
 | `.md` | Markdown | `text/markdown; variant=mif` |
-| `.jsonld` | JSON-LD | `application/ld+json; profile="https://raw.githubusercontent.com/zircote/MIF/main"` |
+| `.jsonld` | JSON-LD | `application/ld+json; profile="https://mif-spec.dev"` |
 
 ### 3.2 File Naming
 
@@ -296,7 +296,7 @@ A Memory Unit MAY declare which ontology it conforms to using the `ontology` fie
 ontology:
   id: regenerative-agriculture
   version: "1.0.0"
-  uri: https://github.com/zircote/MIF/ontologies/examples/regenerative-agriculture.ontology.yaml
+  uri: https://github.com/modeled-information-format/MIF/ontologies/examples/regenerative-agriculture.ontology.yaml
 ```
 
 The `ontology.id` MUST match the `ontology.id` field in the referenced ontology definition file. This enables:
@@ -347,7 +347,7 @@ modified: 2026-01-20T14:22:00Z             # Last modification
 ontology:                                   # Applied ontology reference
   id: mif-base                             # Ontology identifier
   version: "1.0.0"                         # Ontology version
-  uri: https://raw.githubusercontent.com/zircote/MIF/main/ontologies/mif-base  # Ontology identifier (not a resolvable URL)
+  uri: https://mif-spec.dev/ontologies/mif-base  # Ontology identifier (not a resolvable URL)
 namespace: org/user/project                 # Hierarchical scope
 title: "Human-readable title"               # Display title
 tags:                                       # Classification
@@ -664,7 +664,7 @@ Implementations MAY apply compression when memories meet these criteria:
     {
       "prov": "http://www.w3.org/ns/prov#",
       "dc": "http://purl.org/dc/terms/",
-      "subcog": "https://github.com/zircote/subcog/ns/"
+      "subcog": "https://github.com/modeled-information-format/subcog/ns/"
     }
   ],
   "@type": ["Memory", "prov:Entity"],
@@ -1326,7 +1326,7 @@ mif://{domain}/{namespace}/{memory-id}
 ```
 
 Examples:
-- `mif://github.com/zircote/acme-corp/project-x/550e8400...`
+- `mif://github.com/modeled-information-format/acme-corp/project-x/550e8400...`
 - `mif://registry/_public/python/async-patterns/abc123...`
 - `mif://local/_local/scratch/memory-123`
 
@@ -1689,7 +1689,7 @@ https://mif-spec.dev/schema/context.jsonld
 {
   "@context": {
     "@version": 1.1,
-    "mif": "https://raw.githubusercontent.com/zircote/MIF/main/ns/",
+    "mif": "https://mif-spec.dev/ns/",
     "dc": "http://purl.org/dc/terms/",
     "prov": "http://www.w3.org/ns/prov#",
     "xsd": "http://www.w3.org/2001/XMLSchema#",
@@ -2051,7 +2051,7 @@ see [`profiles/ai-memory/SPECIFICATION.md`](profiles/ai-memory/SPECIFICATION.md)
 **JSON-LD Format:**
 - Type name: application
 - Subtype name: ld+json
-- Required parameters: profile="https://raw.githubusercontent.com/zircote/MIF/main"
+- Required parameters: profile="https://mif-spec.dev"
 
 ### 19.2 URI Scheme
 

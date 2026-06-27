@@ -1,6 +1,6 @@
 # Contributing to MIF
 
-Thank you for your interest in contributing to the Memory Interchange Format specification.
+Thank you for your interest in contributing to the Modeled Information Format specification.
 
 ## Ways to Contribute
 
