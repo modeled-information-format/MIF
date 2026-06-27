@@ -253,6 +253,20 @@ FULL_FRONTMATTER = {
     "embedding": {"model": "text-embed", "dimensions": 8},
     "relationships": [{"type": "derived-from", "target": "/other.md", "strength": 0.8}],
     "citations": [{"title": "Ref", "url": "https://example.com/x"}],
+    "documents": [
+        {
+            "@type": "DocumentReference",
+            "id": "urn:doc:report-2026",
+            "documentType": "pdf",
+            "url": "https://example.com/report.pdf",
+            "hash": {"algorithm": "sha256", "value": "abc123"},
+            "contentType": "application/pdf",
+            "byteLength": 4096,
+            "version": "v1",
+            "retrievedAt": "2026-02-01T08:00:00Z",
+            "title": "Quarterly Report",
+        }
+    ],
     "entities": [{"name": "Alice"}],
     "ontology": {"id": "mif-base", "version": "1.0.0"},
     "entity": {"name": "Alice Chen", "entity_type": "person"},

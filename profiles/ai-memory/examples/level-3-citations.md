@@ -4,7 +4,7 @@ type: semantic
 created: '2026-01-20T10:00:00Z'
 modified: '2026-01-22T15:30:00Z'
 namespace: _semantic/decisions
-title: Adopt MIF for AI Memory Interchange
+title: Adopt MIF for AI Memory Portability
 tags:
 - architecture
 - memory-systems
@@ -46,8 +46,8 @@ embedding:
   normalized: true
   '@type': EmbeddingReference
   modelVersion: 2024-01
-  sourceText: Decision to adopt MIF Modeled Information Format for portable AI memory
-    representation
+  sourceText: Decision to adopt the Modeled Information Format (MIF) for portable AI
+    memory representation
 citations:
 - '@type': Citation
   citationType: specification
@@ -94,13 +94,25 @@ citations:
   author: '@[[Robert Allen|Person]]'
   accessed: '2026-01-20'
   relevance: 0.88
+documents:
+- '@type': DocumentReference
+  documentType: markdown
+  title: Modeled Information Format (MIF) Specification
+  url: https://github.com/zircote/subcog/blob/9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0/SPECIFICATION.md
+  contentType: text/markdown
+  byteLength: 48213
+  version: 9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+  hash:
+    algorithm: sha256
+    value: 7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e
+  retrievedAt: '2026-01-20T10:00:00Z'
 extensions:
   subcog:
     domain: architecture
     hash: sha256:7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a
 ---
 
-# Adopt MIF for AI Memory Interchange
+# Adopt MIF for AI Memory Portability
 
 ## Context
 

@@ -111,6 +111,34 @@
     },
     "note": "mif:note",
 
+    "documents": {
+      "@id": "mif:documents",
+      "@container": "@set",
+      "@context": {
+        "hash": {
+          "@id": "mif:hash",
+          "@context": {
+            "algorithm": "mif:algorithm",
+            "value": "mif:value"
+          }
+        }
+      }
+    },
+    "DocumentReference": "mif:DocumentReference",
+    "documentType": {
+      "@id": "mif:documentType",
+      "@type": "@vocab"
+    },
+    "contentType": "mif:contentType",
+    "byteLength": {
+      "@id": "mif:byteLength",
+      "@type": "xsd:integer"
+    },
+    "retrievedAt": {
+      "@id": "mif:retrievedAt",
+      "@type": "xsd:dateTime"
+    },
+
     "relationships": {
       "@id": "mif:relationships",
       "@container": "@set"

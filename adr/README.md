@@ -27,6 +27,7 @@ ADRs follow the **Structured MADR** format — an extension of [MADR](https://ad
 | [ADR-011](ADR-011-markdown-canonical-derived-jsonld.md) | Markdown-Canonical with Derived JSON-LD Projection | Accepted | Markdown `.md` is the source of truth; JSON-LD is a derived projection (Invariant 2) — refines ADR-002 |
 | [ADR-012](ADR-012-okf-conformance-tested-invariant.md) | OKF Conformance Enforced as a Tested CI Invariant | Accepted | Enforces OKF conformance, lossless round-trip, schema, and ontology/namespace validity as gating CI checks |
 | [ADR-013](ADR-013-provenance-lightweight-core-optional-prov-layer.md) | Provenance: Lightweight Core + Optional W3C-PROV Layer | Accepted | Lightweight provenance core (`sourceType`/`trustLevel`) plus an OPTIONAL, additive W3C-PROV-aligned layer (`wasGeneratedBy`/`wasAttributedTo`/`wasDerivedFrom`); full PROV graphs stay optional |
+| [ADR-014](ADR-014-document-reference-not-embed.md) | Document References, Not Embedded Vendor Schema | Accepted | Source documents travel by vendor-neutral `DocumentReference` (pointer + integrity metadata), not by embedding a vendor model like DoclingDocument (reframes issue #77) |
 
 ## Creating New ADRs
 
