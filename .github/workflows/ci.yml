@@ -46,6 +46,7 @@ jobs:
       contents: read
       security-events: write
       actions: read
+      packages: read
     uses: modeled-information-format/.github/.github/workflows/reusable-trivy.yml@ff8adc6b1267c272beef916af851d9506160354f
     with:
       scan-iac: true
