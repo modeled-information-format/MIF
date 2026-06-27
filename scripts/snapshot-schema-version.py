@@ -96,11 +96,15 @@ def _update_index(version: str, check: bool, problems: list[str]) -> None:
         canonical = schema["canonical"]
         rel = canonical[len(base) + 1 :]  # path under /schema/
         ver = schema.setdefault("versioned", {})
-        for v in versions:
-            ver[v] = f"{base}/{v}/{rel}"
-        ver["latest"] = f"{base}/latest/{rel}"
-        for m in majors:
-            ver[f"v{m}"] = f"{base}/v{m}/{rel}"
+        # Only map a versioned/alias URL when the file actually exists in that
+        # mirror. A schema added in a later release is absent from earlier
+        # immutable mirrors (mirrors are not backfilled), so emitting
+        # /schema/<old>/<newfile> would point at a 404; drop any such stale key.
+        for alias in (*versions, "latest", *(f"v{m}" for m in majors)):
+            if (SCHEMA_ROOT / alias / rel).is_file():
+                ver[alias] = f"{base}/{alias}/{rel}"
+            else:
+                ver.pop(alias, None)
     index_path.write_text(json.dumps(index, indent=2) + "\n")
 
 
