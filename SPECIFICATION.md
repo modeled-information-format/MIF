@@ -317,13 +317,20 @@ memory unit can declare directly:
    finer-grained label (e.g. `semantic/knowledge`, `episodic/sessions`).
 
 A memory unit has no field to name an ontology-extended type directly. Instead,
-**ontologies DEFINE extended types and their namespace mappings** (OPTIONAL, see
+**ontologies define extended types and their namespace mappings** (OPTIONAL, see
 4.2.1 and 10.8): an ontology declares each extended type as an `entity_types`
 entry with a `base` type, and implementations express that extended type by
 following the referenced ontology's namespace hierarchy on the `namespace` axis
 above (e.g. an `incident` extended type whose `base` is `episodic`, reached via
 `episodic/incidents`). The extended type is therefore a richer label *on* the
 namespace axis, not a separate third axis the unit declares.
+
+> **Note on namespace form.** The namespace examples in this section use the
+> unprefixed form (e.g. `semantic/knowledge`). Other sections (e.g. 4.2.1 and
+> 10.8.4) use the underscore-prefixed `_semantic/…` form. Section 10 is
+> authoritative for namespace structure; follow the form it defines for your
+> deployment. Where an ontology is referenced, follow the namespace hierarchy it
+> declares; the examples below omit ontology binding for clarity.
 
 A **Fact** is a `semantic` memory — declarative knowledge that holds independently
 of any single moment:
@@ -361,13 +368,6 @@ the interoperability the base types provide.
 > **Note.** The entity types in 7 (Person, Organization, …) classify the
 > entities a memory *references* via its `entities` array; they are a distinct
 > axis and do not categorize the memory itself.
->
-> **Note on namespace form.** The namespace examples in this section use the
-> unprefixed form (e.g. `semantic/knowledge`). Some other sections (e.g. 4.2.1
-> and 10.8.4) still show the underscore-prefixed `_semantic/…` form; this is a
-> pre-existing inconsistency in the spec, not a second namespace convention.
-> Implementers should follow the namespace hierarchy declared by the referenced
-> ontology.
 
 ---
 
