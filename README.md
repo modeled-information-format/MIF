@@ -186,6 +186,17 @@ definition of every property is [`schema/mif.schema.json`](./schema/mif.schema.j
 | `compressedAt` | When compression was applied | [Compression](./docs/SCHEMA-REFERENCE.md#compression-level-3) |
 | `extensions` | Provider-specific extension data | [Extensions](./docs/SCHEMA-REFERENCE.md#extensions) |
 
+## LLM-friendly documentation
+
+The spec site publishes [`llms.txt`](https://mif-spec.dev/llms.txt) for large
+language models, following the [llms.txt convention](https://llmstxt.org/). It is
+generated at build time by the `starlight-llms-txt` plugin (never hand-edited),
+alongside `llms-full.txt` (full corpus) and `llms-small.txt` (condensed):
+
+- <https://mif-spec.dev/llms.txt>
+- <https://mif-spec.dev/llms-full.txt>
+- <https://mif-spec.dev/llms-small.txt>
+
 ## OKF conformance & validation
 
 ```bash

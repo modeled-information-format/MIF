@@ -1,0 +1,20 @@
+# Trivy configuration.
+#
+# Allowed licenses. The Astro 7 image-optimization dependency (sharp / libvips,
+# the @img/sharp-* platform binaries) is LGPL-3.0-or-later, which Trivy's default
+# policy maps to a "restricted" (HIGH) finding. LGPL for a build-time,
+# dynamically-linked image library imposes no copyleft on MIF's own output (the
+# spec, schemas, and generated docs), so these classifications are accepted.
+# This is a license-policy decision only: there are no CVEs in the dependency
+# tree (npm audit reports 0; the OSV-Scanner gate is clean).
+#
+# Trivy matches license.ignored against the full SPDX expression, not its
+# components, so the compound expressions the @img/sharp-* packages declare are
+# listed explicitly alongside the standalone LGPL identifiers.
+license:
+  ignored:
+    - LGPL-3.0-or-later
+    - LGPL-3.0-only
+    - LGPL-3.0
+    - Apache-2.0 AND LGPL-3.0-or-later
+    - Apache-2.0 AND LGPL-3.0-or-later AND MIT
