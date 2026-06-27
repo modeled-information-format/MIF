@@ -109,6 +109,11 @@ jobs:
       - name: Build Astro site
         run: npm run build
 
+      - name: Verify generated llms.txt preserves the product name
+        run: |
+          grep -q "Modeled Information Format" dist/llms-full.txt
+          grep -q "Modeled Information Format" dist/llms-small.txt
+
   validate-ontologies:
     name: Validate Ontology Files
     runs-on: ubuntu-latest

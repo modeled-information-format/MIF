@@ -8,7 +8,13 @@ export default defineConfig({
   integrations: [
     astroMermaid(),
     starlight({
-      plugins: [starlightLlmsTxt()],
+      plugins: [
+        starlightLlmsTxt({
+          projectName: "Modeled Information Format (MIF)",
+          description:
+            "Modeled Information Format (MIF): an open standard for portable AI memory",
+        }),
+      ],
       title: "MIF",
       customCss: ["./src/styles/mif-brand.css"],
       logo: {
