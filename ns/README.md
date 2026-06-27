@@ -4,12 +4,12 @@ diataxis_type: reference
 
 # MIF Namespace
 
-Base IRI: `https://raw.githubusercontent.com/zircote/MIF/main/ns/`
+Base IRI: `https://mif-spec.dev/ns/`
 
 The MIF vocabulary defines terms for portable AI memory representation.
 
 > **Note:** Schema `$id` values use `https://mif-spec.dev/schema/...` while the
-> JSON-LD namespace IRI uses `https://raw.githubusercontent.com/zircote/MIF/main/ns/`.
+> JSON-LD namespace IRI uses `https://mif-spec.dev/ns/`.
 > This is intentional: the namespace IRI is a stable identifier, while schema URLs
 > may change with hosting.
 
@@ -196,7 +196,7 @@ MIF reuses terms from established vocabularies:
 ```json
 {
   "@context": {
-    "mif": "https://raw.githubusercontent.com/zircote/MIF/main/ns/",
+    "mif": "https://mif-spec.dev/ns/",
     "Memory": "mif:Memory",
     "memoryType": "mif:memoryType"
   }
@@ -204,8 +204,8 @@ MIF reuses terms from established vocabularies:
 ```
 
 This creates IRIs like:
-- `https://raw.githubusercontent.com/zircote/MIF/main/ns/Memory`
-- `https://raw.githubusercontent.com/zircote/MIF/main/ns/memoryType`
+- `https://mif-spec.dev/ns/Memory`
+- `https://mif-spec.dev/ns/memoryType`
 
 For full context including all term definitions, reference the MIF context file:
 

@@ -4,7 +4,7 @@ diataxis_type: reference
 
 # MIF Ontologies
 
-This directory contains ontology definitions for the Memory Interchange Format.
+This directory contains ontology definitions for the Modeled Information Format.
 
 ## Base Ontology
 
@@ -167,7 +167,7 @@ created: 2026-01-26T10:00:00Z
 ontology:
   id: regenerative-agriculture
   version: "0.1.0"
-  uri: https://github.com/zircote/MIF/ontologies/examples/regenerative-agriculture.ontology.yaml
+  uri: https://github.com/modeled-information-format/MIF/ontologies/examples/regenerative-agriculture.ontology.yaml
 namespace: _semantic/livestock
 ---
 ```
@@ -183,7 +183,7 @@ namespace: _semantic/livestock
     "@type": "OntologyReference",
     "id": "regenerative-agriculture",
     "version": "0.1.0",
-    "uri": "https://github.com/zircote/MIF/ontologies/examples/regenerative-agriculture.ontology.yaml"
+    "uri": "https://github.com/modeled-information-format/MIF/ontologies/examples/regenerative-agriculture.ontology.yaml"
   },
   "namespace": "_semantic/livestock",
   "content": "..."

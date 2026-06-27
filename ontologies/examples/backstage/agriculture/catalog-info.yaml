@@ -20,15 +20,15 @@ metadata:
     carbon sequestration, and sustainable livestock management.
   annotations:
     # MIF ontology mapping
-    mif.zircote.com/ontology: regenerative-agriculture
-    mif.zircote.com/entity-type: farm
-    mif.zircote.com/entity-id: farm-sunrise
+    modeled-information-format.github.io/ontology: regenerative-agriculture
+    modeled-information-format.github.io/entity-type: farm
+    modeled-information-format.github.io/entity-id: farm-sunrise
     # Certifications
-    mif.zircote.com/certification: roc_silver
-    mif.zircote.com/certification-status: active
+    modeled-information-format.github.io/certification: roc_silver
+    modeled-information-format.github.io/certification-status: active
     # Metrics
-    mif.zircote.com/total-acres: "120"
-    mif.zircote.com/regenerative-since: "2021"
+    modeled-information-format.github.io/total-acres: "120"
+    modeled-information-format.github.io/regenerative-since: "2021"
   tags:
     - regenerative
     - certified-organic
@@ -55,11 +55,11 @@ metadata:
     40-acre rotational grazing system with improved pasture mix.
     Primary grazing area for beef cattle herd.
   annotations:
-    mif.zircote.com/entity-type: field
-    mif.zircote.com/entity-id: field-north-pasture
-    mif.zircote.com/acres: "40"
-    mif.zircote.com/field-type: pasture
-    mif.zircote.com/soil-carbon-tons: "38.5"
+    modeled-information-format.github.io/entity-type: field
+    modeled-information-format.github.io/entity-id: field-north-pasture
+    modeled-information-format.github.io/acres: "40"
+    modeled-information-format.github.io/field-type: pasture
+    modeled-information-format.github.io/soil-carbon-tons: "38.5"
   tags:
     - pasture
     - grazing
@@ -78,11 +78,11 @@ metadata:
     60-acre no-till cropland with diverse cover crop rotation.
     Cash crops: corn, soybeans, small grains.
   annotations:
-    mif.zircote.com/entity-type: field
-    mif.zircote.com/entity-id: field-south-cropland
-    mif.zircote.com/acres: "60"
-    mif.zircote.com/field-type: cropland
-    mif.zircote.com/irrigation: dryland
+    modeled-information-format.github.io/entity-type: field
+    modeled-information-format.github.io/entity-id: field-south-cropland
+    modeled-information-format.github.io/acres: "60"
+    modeled-information-format.github.io/field-type: cropland
+    modeled-information-format.github.io/irrigation: dryland
   tags:
     - cropland
     - no-till
@@ -101,12 +101,12 @@ metadata:
     85-head grass-fed beef cattle herd managed with adaptive
     multi-paddock (AMP) rotational grazing.
   annotations:
-    mif.zircote.com/entity-type: herd
-    mif.zircote.com/entity-id: herd-beef-main
-    mif.zircote.com/species: cattle
-    mif.zircote.com/breed: angus-cross
-    mif.zircote.com/head-count: "85"
-    mif.zircote.com/purpose: beef
+    modeled-information-format.github.io/entity-type: herd
+    modeled-information-format.github.io/entity-id: herd-beef-main
+    modeled-information-format.github.io/species: cattle
+    modeled-information-format.github.io/breed: angus-cross
+    modeled-information-format.github.io/head-count: "85"
+    modeled-information-format.github.io/purpose: beef
   tags:
     - livestock
     - grass-fed
@@ -129,10 +129,10 @@ metadata:
     Annual adaptive multi-paddock grazing plan for beef herd.
     45-day recovery periods, high stock density moves.
   annotations:
-    mif.zircote.com/entity-type: grazing-plan
-    mif.zircote.com/entity-id: grazing-plan-2026
-    mif.zircote.com/stock-density: "250000"
-    mif.zircote.com/rest-period-days: "45"
+    modeled-information-format.github.io/entity-type: grazing-plan
+    modeled-information-format.github.io/entity-id: grazing-plan-2026
+    modeled-information-format.github.io/stock-density: "250000"
+    modeled-information-format.github.io/rest-period-days: "45"
   tags:
     - procedure
     - grazing
@@ -154,9 +154,9 @@ metadata:
     Five-year rotation: Corn -> Soybeans -> Small Grain + Cover ->
     Cover Crop Mix -> Corn. Designed for soil health and nitrogen cycling.
   annotations:
-    mif.zircote.com/entity-type: crop-rotation
-    mif.zircote.com/entity-id: rotation-south-5yr
-    mif.zircote.com/rotation-years: "5"
+    modeled-information-format.github.io/entity-type: crop-rotation
+    modeled-information-format.github.io/entity-id: rotation-south-5yr
+    modeled-information-format.github.io/rotation-years: "5"
   tags:
     - procedure
     - rotation
@@ -181,12 +181,12 @@ metadata:
     Annual soil health assessment showing 4.2% organic matter,
     38.5 tons CO2e/acre soil carbon.
   annotations:
-    mif.zircote.com/entity-type: soil-profile
-    mif.zircote.com/entity-id: soil-north-2026-01
-    mif.zircote.com/organic-matter: "4.2"
-    mif.zircote.com/soil-carbon: "38.5"
-    mif.zircote.com/ph: "6.8"
-    mif.zircote.com/lab: "Ward Laboratories"
+    modeled-information-format.github.io/entity-type: soil-profile
+    modeled-information-format.github.io/entity-id: soil-north-2026-01
+    modeled-information-format.github.io/organic-matter: "4.2"
+    modeled-information-format.github.io/soil-carbon: "38.5"
+    modeled-information-format.github.io/ph: "6.8"
+    modeled-information-format.github.io/lab: "Ward Laboratories"
   tags:
     - soil-health
     - carbon
@@ -207,11 +207,11 @@ metadata:
     Baseline carbon measurement for carbon credit program enrollment.
     Verified by SCI under Tier 1 protocol.
   annotations:
-    mif.zircote.com/entity-type: carbon-baseline
-    mif.zircote.com/entity-id: carbon-baseline-2023
-    mif.zircote.com/baseline-tons: "28.2"
-    mif.zircote.com/protocol: "SCI Tier 1"
-    mif.zircote.com/verifier: "Soil & Climate Initiative"
+    modeled-information-format.github.io/entity-type: carbon-baseline
+    modeled-information-format.github.io/entity-id: carbon-baseline-2023
+    modeled-information-format.github.io/baseline-tons: "28.2"
+    modeled-information-format.github.io/protocol: "SCI Tier 1"
+    modeled-information-format.github.io/verifier: "Soil & Climate Initiative"
   tags:
     - carbon
     - baseline
@@ -232,13 +232,13 @@ metadata:
     Primary field tractor for planting, cultivation, and hay operations.
     130 HP, purchased 2022.
   annotations:
-    mif.zircote.com/entity-type: equipment
-    mif.zircote.com/entity-id: equip-tractor-6130r
-    mif.zircote.com/equipment-type: tractor
-    mif.zircote.com/make: "John Deere"
-    mif.zircote.com/model: "6130R"
-    mif.zircote.com/year: "2022"
-    mif.zircote.com/hours: "1250"
+    modeled-information-format.github.io/entity-type: equipment
+    modeled-information-format.github.io/entity-id: equip-tractor-6130r
+    modeled-information-format.github.io/equipment-type: tractor
+    modeled-information-format.github.io/make: "John Deere"
+    modeled-information-format.github.io/model: "6130R"
+    modeled-information-format.github.io/year: "2022"
+    modeled-information-format.github.io/hours: "1250"
   tags:
     - equipment
     - tractor
@@ -258,12 +258,12 @@ metadata:
     150 verified carbon credits from soil carbon sequestration.
     Registered with Nori marketplace.
   annotations:
-    mif.zircote.com/entity-type: carbon-credit
-    mif.zircote.com/entity-id: credits-2025-nori
-    mif.zircote.com/vintage-year: "2025"
-    mif.zircote.com/quantity-tons: "150"
-    mif.zircote.com/registry: "nori"
-    mif.zircote.com/status: "verified"
+    modeled-information-format.github.io/entity-type: carbon-credit
+    modeled-information-format.github.io/entity-id: credits-2025-nori
+    modeled-information-format.github.io/vintage-year: "2025"
+    modeled-information-format.github.io/quantity-tons: "150"
+    modeled-information-format.github.io/registry: "nori"
+    modeled-information-format.github.io/status: "verified"
   tags:
     - carbon-credits
     - verified
@@ -298,7 +298,7 @@ metadata:
   title: John Smith
   description: Farm owner and primary operator
   annotations:
-    mif.zircote.com/role: owner
+    modeled-information-format.github.io/role: owner
 spec:
   memberOf:
     - farm-operations-team
@@ -311,7 +311,7 @@ metadata:
   title: Jane Doe
   description: Agronomist and soil health specialist
   annotations:
-    mif.zircote.com/role: agronomist
+    modeled-information-format.github.io/role: agronomist
 spec:
   memberOf:
     - farm-operations-team
@@ -330,10 +330,10 @@ metadata:
     Contract terms and delivery schedules with primary buyer
     (Local Foods Cooperative).
   annotations:
-    mif.zircote.com/entity-type: contract
-    mif.zircote.com/entity-id: contract-lfc-2026
-    mif.zircote.com/buyer: "Local Foods Cooperative"
-    mif.zircote.com/product: "grass-fed beef"
+    modeled-information-format.github.io/entity-type: contract
+    modeled-information-format.github.io/entity-id: contract-lfc-2026
+    modeled-information-format.github.io/buyer: "Local Foods Cooperative"
+    modeled-information-format.github.io/product: "grass-fed beef"
 spec:
   type: contract
   lifecycle: production

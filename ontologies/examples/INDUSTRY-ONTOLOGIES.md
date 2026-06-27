@@ -5,7 +5,7 @@ diataxis_type: reference
 # Industry Ontologies for MIF
 
 This document provides comprehensive documentation for the four industry
-ontologies created for the Memory Interchange Format (MIF) system.
+ontologies created for the Modeled Information Format (MIF) system.
 
 ## Overview
 
