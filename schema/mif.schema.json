@@ -220,6 +220,7 @@
         },
         "contentType": {
           "type": "string",
+          "minLength": 1,
           "description": "Media type of the document (e.g. application/pdf, text/html)"
         },
         "byteLength": {
@@ -229,6 +230,7 @@
         },
         "version": {
           "type": "string",
+          "minLength": 1,
           "description": "Version token for the document (e.g. a commit SHA, ETag, or revision label)"
         },
         "retrievedAt": {

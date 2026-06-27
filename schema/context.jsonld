@@ -113,16 +113,22 @@
 
     "documents": {
       "@id": "mif:documents",
-      "@container": "@set"
+      "@container": "@set",
+      "@context": {
+        "hash": {
+          "@id": "mif:hash",
+          "@context": {
+            "algorithm": "mif:algorithm",
+            "value": "mif:value"
+          }
+        }
+      }
     },
     "DocumentReference": "mif:DocumentReference",
     "documentType": {
       "@id": "mif:documentType",
       "@type": "@vocab"
     },
-    "hash": "mif:hash",
-    "algorithm": "mif:algorithm",
-    "value": "mif:value",
     "contentType": "mif:contentType",
     "byteLength": {
       "@id": "mif:byteLength",

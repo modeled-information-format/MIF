@@ -98,7 +98,7 @@ documents:
 - '@type': DocumentReference
   documentType: markdown
   title: Modeled Information Format (MIF) Specification
-  url: https://github.com/zircote/subcog/blob/main/SPECIFICATION.md
+  url: https://github.com/zircote/subcog/blob/9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0/SPECIFICATION.md
   contentType: text/markdown
   byteLength: 48213
   version: 9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
