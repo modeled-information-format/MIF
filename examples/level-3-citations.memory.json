@@ -126,7 +126,7 @@
       "citationType": "specification",
       "citationRole": "source",
       "title": "Memory Interchange Format (MIF) Specification",
-      "url": "https://github.com/modeled-information-format/subcog/blob/main/SPECIFICATION.md",
+      "url": "https://github.com/zircote/subcog/blob/main/SPECIFICATION.md",
       "author": {
         "@type": "EntityReference",
         "entity": { "@id": "urn:mif:entity:person:robert-allen" },
@@ -199,7 +199,7 @@
       "citationType": "repository",
       "citationRole": "extends",
       "title": "Subcog Memory System",
-      "url": "https://github.com/modeled-information-format/subcog",
+      "url": "https://github.com/zircote/subcog",
       "author": {
         "@type": "EntityReference",
         "entity": { "@id": "urn:mif:entity:person:robert-allen" },
