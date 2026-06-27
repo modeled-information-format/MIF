@@ -12,6 +12,19 @@ Modeled Information Format**, the opinionated, OKF-compliant content model that
 fills OKF's deliberately empty envelope. AI memory becomes the first domain
 *profile* of MIF, not its identity.
 
+### Added
+
+- **[Release]**: Attested release orchestration (ADR-015). `release.yml` builds
+  and SLSA-attests the source tarball and the schema bundle (build provenance +
+  CycloneDX SBOM), fail-closed verified before publish. The full security-gate
+  suite (CodeQL, Semgrep, OSV, Trivy, Checkov, secrets, ShellCheck, Scorecard,
+  and on-demand ZAP DAST) is wired by SHA pin to the org's central reusable
+  workflows. Artifact verification is documented in `SECURITY.md`.
+- **[Schema]**: Per-version schema mirror publication (ADR-016) with
+  `scripts/snapshot-schema-version.py`, producing immutable `/schema/X.Y.Z/`,
+  `latest/`, and `vMAJOR/` mirrors for each release while canonical `$id` values
+  stay unversioned (ADR-007).
+
 ### Breaking Changes
 
 - **[Format]**: Concept files use the `.md` extension only — the `.memory.md`

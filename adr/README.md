@@ -28,6 +28,8 @@ ADRs follow the **Structured MADR** format — an extension of [MADR](https://ad
 | [ADR-012](ADR-012-okf-conformance-tested-invariant.md) | OKF Conformance Enforced as a Tested CI Invariant | Accepted | Enforces OKF conformance, lossless round-trip, schema, and ontology/namespace validity as gating CI checks |
 | [ADR-013](ADR-013-provenance-lightweight-core-optional-prov-layer.md) | Provenance: Lightweight Core + Optional W3C-PROV Layer | Accepted | Lightweight provenance core (`sourceType`/`trustLevel`) plus an OPTIONAL, additive W3C-PROV-aligned layer (`wasGeneratedBy`/`wasAttributedTo`/`wasDerivedFrom`); full PROV graphs stay optional |
 | [ADR-014](ADR-014-document-reference-not-embed.md) | Document References, Not Embedded Vendor Schema | Accepted | Source documents travel by vendor-neutral `DocumentReference` (pointer + integrity metadata), not by embedding a vendor model like DoclingDocument (reframes issue #77) |
+| [ADR-015](ADR-015-attested-release-orchestration.md) | Attested Release Orchestration | Accepted | Every release is SLSA-attested (provenance + CycloneDX SBOM, fail-closed verify), with the full SAST/DAST/SCA/posture gate suite wired by SHA pin to the org's central reusable workflows |
+| [ADR-016](ADR-016-versioned-schema-mirror-publication.md) | Per-Version Schema Mirror Publication | Accepted | Each release publishes an immutable versioned schema mirror (`/schema/X.Y.Z/`, `latest/`, `vMAJOR/`) served by the doc site, keeping canonical `$id` values unversioned per ADR-007 |
 
 ## Creating New ADRs
 

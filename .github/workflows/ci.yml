@@ -1,0 +1,81 @@
+name: ci
+
+# Supply-chain, IaC, secrets and workflow-lint gates for MIF, wired to the org's
+# central reusable workflows (modeled-information-format/.github), SHA-pinned.
+# SAST (CodeQL/Semgrep) lives in sast.yml; DAST in dast.yml; OpenSSF Scorecard in
+# scorecard.yml; spec validation in validate.yml + schema-check.yml.
+
+"on":
+  push:
+    branches: [main, "develop/v*"]
+  pull_request:
+    branches: [main, "develop/v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  actionlint:
+    name: actionlint
+    permissions:
+      contents: read
+    uses: modeled-information-format/.github/.github/workflows/reusable-actionlint.yml@ff8adc6b1267c272beef916af851d9506160354f
+
+  pin-check:
+    name: pin-check
+    permissions:
+      contents: read
+    uses: modeled-information-format/.github/.github/workflows/pin-check.yml@ff8adc6b1267c272beef916af851d9506160354f
+    with:
+      scan-dir: .github
+
+  sca:
+    name: sca
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+      pull-requests: write
+    uses: modeled-information-format/.github/.github/workflows/reusable-sca-osv.yml@ff8adc6b1267c272beef916af851d9506160354f
+    with:
+      fail-on-severity: high
+
+  trivy:
+    name: trivy
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    uses: modeled-information-format/.github/.github/workflows/reusable-trivy.yml@ff8adc6b1267c272beef916af851d9506160354f
+    with:
+      scan-iac: true
+
+  checkov:
+    name: checkov
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    uses: modeled-information-format/.github/.github/workflows/reusable-checkov.yml@ff8adc6b1267c272beef916af851d9506160354f
+    with:
+      directory: .
+      framework: github_actions
+
+  secrets:
+    name: secrets
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    uses: modeled-information-format/.github/.github/workflows/reusable-secrets.yml@ff8adc6b1267c272beef916af851d9506160354f
+    with:
+      fail-on-verified: true
+
+  shellcheck:
+    name: shellcheck
+    permissions:
+      contents: read
+      security-events: write
+    uses: modeled-information-format/.github/.github/workflows/reusable-shellcheck.yml@ff8adc6b1267c272beef916af851d9506160354f
+    with:
+      strict-on-push: false

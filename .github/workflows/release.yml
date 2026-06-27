@@ -1,0 +1,165 @@
+name: release
+
+# Attested release for MIF (the spec, JSON Schemas, and tooling).
+#
+# Every published release attests TWO artifacts, both bound to their sha256
+# digest with SLSA build provenance + a CycloneDX SBOM, keyless via the run's
+# OIDC id-token:
+#
+#   1. mif-<version>.tar.gz       - reproducible source tarball (git archive of
+#                                   the tag tree; gzip -n drops the timestamp).
+#   2. mif-schemas-<version>.tar.gz - the consumer-facing JSON Schema bundle:
+#                                   the immutable versioned mirror published at
+#                                   https://mif-spec.dev/schema/<version>/ (see
+#                                   ADR-016 and public/schema/VERSIONING.md).
+#
+# The signer identity (SAN) of each attestation is THIS workflow. A consumer
+# re-verifies (pinning the signer for the strict check):
+#
+#   gh attestation verify mif-1.0.0.tar.gz \
+#     --repo modeled-information-format/MIF \
+#     --signer-workflow modeled-information-format/MIF/.github/workflows/release.yml
+#
+# Publication is fail-closed: the upload step runs only after every attestation
+# re-verifies in-run. `workflow_dispatch` exercises build -> attest -> verify as
+# a dry-run without cutting a version (no upload). The workflow never creates a
+# release itself.
+
+"on":
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing release tag to (re)attest as a dry-run (e.g. v1.0.0)"
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  attest-release:
+    name: attest-release
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write       # OIDC token for keyless Sigstore signing
+      attestations: write   # persist the provenance + SBOM attestations
+      contents: write       # upload assets to the release (tag runs only)
+    steps:
+      - name: Resolve version
+        id: ver
+        env:
+          EVENT_TAG: ${{ github.event.release.tag_name }}
+          INPUT_TAG: ${{ inputs.tag }}
+        run: |
+          set -euo pipefail
+          if [ "${GITHUB_EVENT_NAME}" = "release" ]; then
+            TAG="${EVENT_TAG}"
+          else
+            TAG="${INPUT_TAG:-dryrun-${GITHUB_SHA::7}}"
+          fi
+          TAG="${TAG#refs/tags/}"
+          case "${TAG}" in
+            */*) echo "::error::invalid tag '${TAG}' (must be a bare tag name)"; exit 1 ;;
+          esac
+          echo "tag=${TAG}" >>"${GITHUB_OUTPUT}"
+          echo "version=${TAG#v}" >>"${GITHUB_OUTPUT}"
+          echo "Resolved tag=${TAG} version=${TAG#v}"
+
+      - name: Checkout at the ref
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: ${{ github.event_name == 'release' && steps.ver.outputs.tag || github.sha }}
+
+      - name: Build reproducible source tarball
+        id: src
+        env:
+          VERSION: ${{ steps.ver.outputs.version }}
+        run: |
+          set -euo pipefail
+          ARTIFACT="mif-${VERSION}.tar.gz"
+          # git archive is deterministic from the commit tree; gzip -n drops the
+          # timestamp so the bytes are reproducible for a given git/gzip + OS.
+          git archive --format=tar --prefix="mif-${VERSION}/" HEAD \
+            | gzip -n > "${ARTIFACT}"
+          echo "artifact=${ARTIFACT}" >>"${GITHUB_OUTPUT}"
+          sha256sum "${ARTIFACT}"
+
+      - name: Build schema bundle (the consumer-facing versioned mirror)
+        id: schemas
+        env:
+          VERSION: ${{ steps.ver.outputs.version }}
+        run: |
+          set -euo pipefail
+          # Bundle the immutable per-version schema mirror published at
+          # mif-spec.dev/schema/<version>/ (ADR-016). The mirror is committed
+          # source under public/schema/<version>/; fail closed if it is missing
+          # for this release version, so a tag can never ship without its mirror.
+          SRC="public/schema/${VERSION}"
+          if [ ! -d "${SRC}" ]; then
+            echo "::error::no schema mirror at ${SRC} for version ${VERSION}." \
+                 "Run scripts/snapshot-schema-version.py ${VERSION} and commit it before tagging (ADR-016)." >&2
+            exit 1
+          fi
+          ARTIFACT="mif-schemas-${VERSION}.tar.gz"
+          tar --sort=name --owner=0 --group=0 --numeric-owner --mtime='UTC 2020-01-01' \
+            -cf - -C public/schema "${VERSION}" | gzip -n > "${ARTIFACT}"
+          echo "artifact=${ARTIFACT}" >>"${GITHUB_OUTPUT}"
+          sha256sum "${ARTIFACT}"
+
+      - name: Generate CycloneDX SBOM (source tree)
+        uses: anchore/sbom-action@e22c389904149dbc22b58101806040fa8d37a610 # v0.24.0
+        with:
+          path: .
+          format: cyclonedx-json
+          output-file: mif-${{ steps.ver.outputs.version }}.sbom.cdx.json
+          artifact-name: mif-${{ steps.ver.outputs.version }}.sbom.cdx.json
+
+      - name: Attest build provenance (SLSA) for both artifacts
+        uses: actions/attest-build-provenance@a2bbfa25375fe432b6a289bc6b6cd05ecd0c4c32 # v4.1.0
+        with:
+          subject-path: |
+            ${{ steps.src.outputs.artifact }}
+            ${{ steps.schemas.outputs.artifact }}
+
+      - name: Attest SBOM against the source tarball
+        uses: actions/attest-sbom@c604332985a26aa8cf1bdc465b92731239ec6b9e # v4.1.0
+        with:
+          subject-path: ${{ steps.src.outputs.artifact }}
+          sbom-path: mif-${{ steps.ver.outputs.version }}.sbom.cdx.json
+
+      - name: Verify attestations (fail-closed, before publish)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          # Re-verify each artifact's provenance in-run. --signer-workflow pins
+          # the certificate identity to THIS release workflow, so an attestation
+          # from any other workflow would not pass. A failure here fails the job,
+          # so the upload step below never runs unverified.
+          SIGNER="modeled-information-format/MIF/.github/workflows/release.yml"
+          for art in "${{ steps.src.outputs.artifact }}" "${{ steps.schemas.outputs.artifact }}"; do
+            echo "Verifying provenance for ${art}"
+            gh attestation verify "${art}" \
+              --repo "${GITHUB_REPOSITORY}" \
+              --signer-workflow "${SIGNER}" \
+              --predicate-type https://slsa.dev/provenance/v1
+          done
+          echo "Verifying SBOM for ${{ steps.src.outputs.artifact }}"
+          gh attestation verify "${{ steps.src.outputs.artifact }}" \
+            --repo "${GITHUB_REPOSITORY}" \
+            --signer-workflow "${SIGNER}" \
+            --predicate-type https://cyclonedx.org/bom
+
+      - name: Upload attested artifacts to the release
+        if: github.event_name == 'release'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh release upload "${{ steps.ver.outputs.tag }}" \
+            "${{ steps.src.outputs.artifact }}" \
+            "${{ steps.schemas.outputs.artifact }}" \
+            "mif-${{ steps.ver.outputs.version }}.sbom.cdx.json" \
+            --clobber
