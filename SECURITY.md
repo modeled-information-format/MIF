@@ -20,9 +20,9 @@ and [ADR-016](adr/ADR-016-versioned-schema-mirror-publication.md)).
 
 ## Verifying Release Artifacts
 
-Every published release is attested (ADR-015): the source tarball and the schema
-bundle each carry SLSA build provenance and a CycloneDX SBOM, signed keyless via
-Sigstore. The signer identity is this repository's release workflow, so verify
+Every published release is attested (ADR-015): both artifacts carry SLSA build
+provenance, signed keyless via Sigstore. The source tarball additionally carries
+a CycloneDX SBOM attestation. The signer identity is this repository's release workflow, so verify
 with `--signer-workflow` pinned to it.
 
 Download and verify a release:

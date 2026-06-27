@@ -21,8 +21,8 @@ Every published release produces two attested artifacts:
 - `mif-schemas-<version>.tar.gz` -- consumer-facing JSON Schema bundle; the
   immutable versioned mirror published at `https://mif-spec.dev/schema/<version>/`
 
-Both artifacts carry SLSA build provenance and a CycloneDX SBOM, signed keyless
-via the run's OIDC identity token. The signer identity bound to every attestation
+Both artifacts carry SLSA build provenance, signed keyless via the run's OIDC
+identity token. The source tarball additionally carries a CycloneDX SBOM. The signer identity bound to every attestation
 is the release workflow:
 
 ```

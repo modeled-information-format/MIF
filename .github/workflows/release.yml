@@ -2,9 +2,9 @@ name: release
 
 # Attested release for MIF (the spec, JSON Schemas, and tooling).
 #
-# Every published release attests TWO artifacts, both bound to their sha256
-# digest with SLSA build provenance + a CycloneDX SBOM, keyless via the run's
-# OIDC id-token:
+# Every published release attests TWO artifacts with SLSA build provenance,
+# both bound to their sha256 digest, keyless via the run's OIDC id-token.
+# The source tarball additionally receives a CycloneDX SBOM attestation:
 #
 #   1. mif-<version>.tar.gz       - reproducible source tarball (git archive of
 #                                   the tag tree; gzip -n drops the timestamp).
@@ -47,33 +47,59 @@ jobs:
       attestations: write   # persist the provenance + SBOM attestations
       contents: write       # upload assets to the release (tag runs only)
     steps:
-      - name: Resolve version
-        id: ver
+      - name: Resolve checkout ref
+        id: ref
         env:
           EVENT_TAG: ${{ github.event.release.tag_name }}
           INPUT_TAG: ${{ inputs.tag }}
         run: |
           set -euo pipefail
+          # What to check out, and (when tag-based) the release tag:
+          #   - release event: the published tag.
+          #   - workflow_dispatch with a tag: that existing tag (re-attest).
+          #   - workflow_dispatch without a tag: current HEAD (dry-run); the
+          #     version is read from VERSION.json after checkout.
           if [ "${GITHUB_EVENT_NAME}" = "release" ]; then
-            TAG="${EVENT_TAG}"
+            TAG="${EVENT_TAG#refs/tags/}"; REF="${TAG}"
+          elif [ -n "${INPUT_TAG}" ]; then
+            TAG="${INPUT_TAG#refs/tags/}"; REF="${TAG}"
           else
-            TAG="${INPUT_TAG:-dryrun-${GITHUB_SHA::7}}"
+            TAG=""; REF="${GITHUB_SHA}"
           fi
-          TAG="${TAG#refs/tags/}"
-          # Constrain to a safe charset: the tag/version flows into later run:
-          # blocks (verify, upload), so reject anything outside [0-9A-Za-z._-]
-          # to close command-substitution injection (git tags may contain $()).
+          # The tag flows into later run: blocks; reject anything outside the
+          # safe charset to close command-substitution injection (empty is ok
+          # for the dry-run path).
           case "${TAG}" in
-            ""|*[!0-9A-Za-z._-]*) echo "::error::invalid tag '${TAG}' (allowed: letters, digits, '.', '_', '-')"; exit 1 ;;
+            *[!0-9A-Za-z._-]*) echo "::error::invalid tag '${TAG}'"; exit 1 ;;
           esac
           echo "tag=${TAG}" >>"${GITHUB_OUTPUT}"
-          echo "version=${TAG#v}" >>"${GITHUB_OUTPUT}"
-          echo "Resolved tag=${TAG} version=${TAG#v}"
+          echo "ref=${REF}" >>"${GITHUB_OUTPUT}"
 
       - name: Checkout at the ref
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
-          ref: ${{ github.event_name == 'release' && steps.ver.outputs.tag || github.sha }}
+          ref: ${{ steps.ref.outputs.ref }}
+
+      - name: Resolve version
+        id: ver
+        env:
+          TAG: ${{ steps.ref.outputs.tag }}
+        run: |
+          set -euo pipefail
+          # Tag-based runs derive the version from the tag; a no-tag dry-run
+          # reads the in-development version from VERSION.json (which has a
+          # committed schema mirror, so the bundle build and --check succeed).
+          if [ -n "${TAG}" ]; then
+            VERSION="${TAG#v}"
+          else
+            VERSION="$(python3 -c 'import json; print(json.load(open("VERSION.json"))["specification"])')"
+          fi
+          case "${VERSION}" in
+            ""|*[!0-9A-Za-z._-]*) echo "::error::invalid version '${VERSION}'"; exit 1 ;;
+          esac
+          echo "version=${VERSION}" >>"${GITHUB_OUTPUT}"
+          echo "tag=${TAG}" >>"${GITHUB_OUTPUT}"
+          echo "Resolved tag='${TAG}' version='${VERSION}'"
 
       - name: Verify schema mirror is present and byte-identical (fail-closed)
         env:
