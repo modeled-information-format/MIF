@@ -247,7 +247,8 @@ Verify the source tarball:
 ```bash
 gh attestation verify mif-X.Y.Z.tar.gz \
   --repo modeled-information-format/MIF \
-  --signer-workflow modeled-information-format/MIF/.github/workflows/release.yml
+  --signer-workflow modeled-information-format/MIF/.github/workflows/release.yml \
+  --predicate-type https://slsa.dev/provenance/v1
 ```
 
 Verify the schema bundle:
@@ -255,7 +256,8 @@ Verify the schema bundle:
 ```bash
 gh attestation verify mif-schemas-X.Y.Z.tar.gz \
   --repo modeled-information-format/MIF \
-  --signer-workflow modeled-information-format/MIF/.github/workflows/release.yml
+  --signer-workflow modeled-information-format/MIF/.github/workflows/release.yml \
+  --predicate-type https://slsa.dev/provenance/v1
 ```
 
 Both commands exit 0 on success and print the verified predicate. A non-zero exit
@@ -292,7 +294,7 @@ For the reusable-workflow gates in `ci.yml`, for example:
 
 - `actionlint / actionlint`
 - `pin-check / pin-check`
-- `sca / sca`
+- `sca / osv-scanner`
 
 The caller job id is the key under `jobs:` in the calling workflow file; the
 called job name is the `name:` field in the reusable workflow. A mismatch between

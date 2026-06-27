@@ -60,8 +60,11 @@ jobs:
             TAG="${INPUT_TAG:-dryrun-${GITHUB_SHA::7}}"
           fi
           TAG="${TAG#refs/tags/}"
+          # Constrain to a safe charset: the tag/version flows into later run:
+          # blocks (verify, upload), so reject anything outside [0-9A-Za-z._-]
+          # to close command-substitution injection (git tags may contain $()).
           case "${TAG}" in
-            */*) echo "::error::invalid tag '${TAG}' (must be a bare tag name)"; exit 1 ;;
+            ""|*[!0-9A-Za-z._-]*) echo "::error::invalid tag '${TAG}' (allowed: letters, digits, '.', '_', '-')"; exit 1 ;;
           esac
           echo "tag=${TAG}" >>"${GITHUB_OUTPUT}"
           echo "version=${TAG#v}" >>"${GITHUB_OUTPUT}"
@@ -71,6 +74,17 @@ jobs:
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           ref: ${{ github.event_name == 'release' && steps.ver.outputs.tag || github.sha }}
+
+      - name: Verify schema mirror is present and byte-identical (fail-closed)
+        env:
+          VERSION: ${{ steps.ver.outputs.version }}
+        run: |
+          set -euo pipefail
+          # ADR-016: the versioned mirror at public/schema/<version>/ must be
+          # snapshotted and committed before tagging. --check fails closed if the
+          # mirror (or index.json) is absent or drifts from the canonical bytes,
+          # so a tag can never publish a stale or partial schema bundle.
+          python3 scripts/snapshot-schema-version.py "${VERSION}" --check
 
       - name: Build reproducible source tarball
         id: src
@@ -132,6 +146,8 @@ jobs:
       - name: Verify attestations (fail-closed, before publish)
         env:
           GH_TOKEN: ${{ github.token }}
+          SRC_ARTIFACT: ${{ steps.src.outputs.artifact }}
+          SCHEMAS_ARTIFACT: ${{ steps.schemas.outputs.artifact }}
         run: |
           set -euo pipefail
           # Re-verify each artifact's provenance in-run. --signer-workflow pins
@@ -139,15 +155,15 @@ jobs:
           # from any other workflow would not pass. A failure here fails the job,
           # so the upload step below never runs unverified.
           SIGNER="modeled-information-format/MIF/.github/workflows/release.yml"
-          for art in "${{ steps.src.outputs.artifact }}" "${{ steps.schemas.outputs.artifact }}"; do
+          for art in "${SRC_ARTIFACT}" "${SCHEMAS_ARTIFACT}"; do
             echo "Verifying provenance for ${art}"
             gh attestation verify "${art}" \
               --repo "${GITHUB_REPOSITORY}" \
               --signer-workflow "${SIGNER}" \
               --predicate-type https://slsa.dev/provenance/v1
           done
-          echo "Verifying SBOM for ${{ steps.src.outputs.artifact }}"
-          gh attestation verify "${{ steps.src.outputs.artifact }}" \
+          echo "Verifying SBOM for ${SRC_ARTIFACT}"
+          gh attestation verify "${SRC_ARTIFACT}" \
             --repo "${GITHUB_REPOSITORY}" \
             --signer-workflow "${SIGNER}" \
             --predicate-type https://cyclonedx.org/bom
@@ -156,10 +172,14 @@ jobs:
         if: github.event_name == 'release'
         env:
           GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.ver.outputs.tag }}
+          SRC_ARTIFACT: ${{ steps.src.outputs.artifact }}
+          SCHEMAS_ARTIFACT: ${{ steps.schemas.outputs.artifact }}
+          VERSION: ${{ steps.ver.outputs.version }}
         run: |
           set -euo pipefail
-          gh release upload "${{ steps.ver.outputs.tag }}" \
-            "${{ steps.src.outputs.artifact }}" \
-            "${{ steps.schemas.outputs.artifact }}" \
-            "mif-${{ steps.ver.outputs.version }}.sbom.cdx.json" \
+          gh release upload "${TAG}" \
+            "${SRC_ARTIFACT}" \
+            "${SCHEMAS_ARTIFACT}" \
+            "mif-${VERSION}.sbom.cdx.json" \
             --clobber
