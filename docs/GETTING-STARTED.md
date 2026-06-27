@@ -28,7 +28,7 @@ created: 2026-01-26T10:00:00Z
 User prefers dark mode for all applications.
 ```
 
-Save this as `my-first-memory.memory.md`.
+Save this as `my-first-memory.md`.
 
 ### Step 2: Add Metadata
 

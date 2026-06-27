@@ -169,7 +169,7 @@ def migrate_mem0_export(input_file: str, output_dir: str):
 
         # Write to file
         memory_id = mif["@id"].split(":")[-1]
-        output_file = output_path / f"{memory_id}.memory.json"
+        output_file = output_path / f"{memory_id}.jsonld"
 
         with open(output_file, "w") as f:
             json.dump(mif, f, indent=2)

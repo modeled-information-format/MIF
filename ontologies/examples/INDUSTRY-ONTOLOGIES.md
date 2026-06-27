@@ -293,14 +293,14 @@ ontologies/
 │   ├── BACKSTAGE-MAPPING.md        # Backstage integration
 │   └── memories/
 │       ├── agriculture/
-│       │   ├── soil-profile-example.memory.md
-│       │   └── grazing-plan-example.memory.md
+│       │   ├── soil-profile-example.md
+│       │   └── grazing-plan-example.md
 │       ├── publishing/
-│       │   ├── state-adoption-example.memory.md
-│       │   └── editorial-workflow-example.memory.md
+│       │   ├── state-adoption-example.md
+│       │   └── editorial-workflow-example.md
 │       └── biology-lab/
-│           ├── grant-example.memory.md
-│           └── protocol-example.memory.md
+│           ├── grant-example.md
+│           └── protocol-example.md
 ```
 
 ---
