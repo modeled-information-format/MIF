@@ -43,7 +43,7 @@ embedding:
 citations:
   - type: specification
     title: "Memory Interchange Format (MIF) Specification"
-    url: https://github.com/modeled-information-format/subcog/blob/main/SPECIFICATION.md
+    url: https://github.com/zircote/subcog/blob/main/SPECIFICATION.md
     role: source
     author: "@[[Robert Allen|Person]]"
     date: 2026-01-23
@@ -80,7 +80,7 @@ citations:
 
   - type: repository
     title: "Subcog Memory System"
-    url: https://github.com/modeled-information-format/subcog
+    url: https://github.com/zircote/subcog
     role: extends
     author: "@[[Robert Allen|Person]]"
     accessed: 2026-01-20
@@ -149,7 +149,7 @@ We will adopt the **Memory Interchange Format (MIF)** as our standard for AI mem
 
 ## Citations
 
-- [Memory Interchange Format (MIF) Specification](https://github.com/modeled-information-format/subcog/blob/main/SPECIFICATION.md) by @[[Robert Allen|Person]] (2026)
+- [Memory Interchange Format (MIF) Specification](https://github.com/zircote/subcog/blob/main/SPECIFICATION.md) by @[[Robert Allen|Person]] (2026)
   - **Type**: specification
   - **Role**: source
   - **Relevance**: 1.0

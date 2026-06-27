@@ -624,7 +624,7 @@ Implementations MAY apply compression when memories meet these criteria:
     {
       "prov": "http://www.w3.org/ns/prov#",
       "dc": "http://purl.org/dc/terms/",
-      "subcog": "https://github.com/modeled-information-format/subcog/ns/"
+      "subcog": "https://github.com/zircote/subcog/ns/"
     }
   ],
   "@type": ["Memory", "prov:Entity"],

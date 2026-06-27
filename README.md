@@ -172,9 +172,9 @@ This specification is open source. Contributions welcome:
 
 ## Related
 
-- [Subcog](https://github.com/modeled-information-format/subcog) - AI memory system implementing MIF
+- [Subcog](https://github.com/zircote/subcog) - AI memory system implementing MIF
 - [Mnemonic](https://github.com/modeled-information-format/mnemonic) - Claude Code plugin using MIF ontologies
-- [Issue #82](https://github.com/modeled-information-format/subcog/issues/82) - Original proposal
+- [Issue #82](https://github.com/zircote/subcog/issues/82) - Original proposal
 
 ## Citing This Project
 
