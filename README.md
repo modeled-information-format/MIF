@@ -143,8 +143,6 @@ definition of every property is [`schema/mif.schema.json`](./schema/mif.schema.j
 | `memoryType` | **Deprecated** v0.1 alias for `conceptType`, kept for back-compat |
 | `content` | The memory content, in Markdown |
 | `created` | Creation timestamp (ISO 8601) |
-| `properties` | First-class scalar key/value pairs with no concept target |
-| `blocks` | Named block references (`^block-id`) with their text, for granular linking |
 
 > Property names above are the JSON-LD projection. In Markdown frontmatter,
 > `type` maps to `conceptType` in JSON-LD; `memoryType` is a separate deprecated
@@ -166,6 +164,8 @@ definition of every property is [`schema/mif.schema.json`](./schema/mif.schema.j
 | `namespace` | Hierarchical scope for the memory | [Basic metadata](./docs/SCHEMA-REFERENCE.md#basic-metadata) |
 | `tags` | Classification tags | [Basic metadata](./docs/SCHEMA-REFERENCE.md#basic-metadata) |
 | `aliases` | Alternative names for the memory | [Basic metadata](./docs/SCHEMA-REFERENCE.md#basic-metadata) |
+| `properties` | First-class scalar key/value pairs with no concept target | [Basic metadata](./docs/SCHEMA-REFERENCE.md#basic-metadata) |
+| `blocks` | Named block references (`^block-id`) with their text, for granular linking | [Basic metadata](./docs/SCHEMA-REFERENCE.md#basic-metadata) |
 | `ontology` | Reference to the ontology this memory conforms to | [Ontology reference](./docs/SCHEMA-REFERENCE.md#ontology-reference) |
 | `entity` | Structured entity data for ontology-typed memories | [Entities](./docs/SCHEMA-REFERENCE.md#entities) |
 | `entities` | Referenced entities (people, orgs, technologies, …) | [Entities](./docs/SCHEMA-REFERENCE.md#entities) |
