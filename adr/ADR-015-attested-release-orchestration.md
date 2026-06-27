@@ -166,7 +166,8 @@ repo unchanged.
 **Description**: Write a `release.yml` scoped to MIF's two artifact types
 (source tarball via `git archive`, schema bundle from the committed versioned
 mirror at `public/schema/<version>/`), attesting each with SLSA build
-provenance and a CycloneDX SBOM, keyless via the run's OIDC id-token. Wire
+provenance (and the source tarball additionally with a CycloneDX SBOM),
+keyless via the run's OIDC id-token. Wire
 the quality-gate suite to the org's central reusable workflows by SHA pin.
 DAST runs on schedule and `workflow_dispatch` only.
 

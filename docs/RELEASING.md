@@ -143,9 +143,11 @@ gh workflow run release.yml --ref main \
   --field tag=v0.1.0
 ```
 
-The `workflow_dispatch` path derives the artifact names from the supplied tag (or
-a `dryrun-<sha>` placeholder when no tag is given), runs the full attest-verify
-sequence, and then skips the upload step (`if: github.event_name == 'release'`
+The `workflow_dispatch` path derives the version from the supplied `tag` input
+when given (re-attesting that existing tag), or from `VERSION.json`'s
+`specification` when no tag is given (a dry-run against the current in-development
+version, whose schema mirror is already committed). It runs the full attest-verify
+sequence and then skips the upload step (`if: github.event_name == 'release'`
 guards it). A successful dry-run confirms the pipeline is intact before you cut
 the real release.
 
