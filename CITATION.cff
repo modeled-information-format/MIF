@@ -12,7 +12,7 @@ version: "1.0.0"
 date-released: "2026-06-18"
 license: MIT
 url: "https://mif-spec.dev"
-repository-code: "https://github.com/zircote/MIF"
+repository-code: "https://github.com/modeled-information-format/MIF"
 authors:
   - family-names: Allen
     given-names: Robert
@@ -20,7 +20,7 @@ authors:
     orcid: "https://orcid.org/0009-0007-9691-004X"
 identifiers:
   - type: url
-    value: "https://github.com/zircote/MIF"
+    value: "https://github.com/modeled-information-format/MIF"
     description: "GitHub repository"
 keywords:
   - ai-memory
@@ -37,7 +37,7 @@ preferred-citation:
   type: software
   title: "MIF: Modeled Information Format"
   abstract: >-
-    The Memory Interchange Format (MIF) is a proposed open standard for portable
+    The Modeled Information Format (MIF) is a proposed open standard for portable
     AI memory representation. MIF defines a common data model with dual
     representations: human-readable Markdown files and machine-processable JSON-LD
     documents, enabling interoperability between AI memory providers.
@@ -45,7 +45,7 @@ preferred-citation:
   date-released: "2026-06-18"
   license: MIT
   url: "https://mif-spec.dev"
-  repository-code: "https://github.com/zircote/MIF"
+  repository-code: "https://github.com/modeled-information-format/MIF"
   authors:
     - family-names: Allen
       given-names: Robert

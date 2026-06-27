@@ -7,7 +7,7 @@ description: Abstract, terminology, and design principles of the Modeled Informa
 
 MIF (Modeled Information Format) is an opinionated, OKF-compliant content model for agent-readable knowledge. The Open Knowledge Format (OKF) defines a minimal interoperability surface — a directory of `.md` concept files with YAML frontmatter, one required `type` field, and a concept graph of standard markdown links — and deliberately refuses to define a content model. MIF fills that envelope: it supplies a concrete type system, typed relationships, provenance/trust tiers, and validity/freshness semantics.
 
-Markdown is the canonical representation; JSON-LD is a derived, regenerable projection. AI memory is the first domain profile of MIF, not its identity (see [`profiles/ai-memory/`](https://github.com/zircote/MIF/tree/main/profiles/ai-memory)).
+Markdown is the canonical representation; JSON-LD is a derived, regenerable projection. AI memory is the first domain profile of MIF, not its identity (see [`profiles/ai-memory/`](https://github.com/modeled-information-format/MIF/tree/main/profiles/ai-memory)).
 
 OKF compliance is achieved as a **superset, not by subordination**: every MIF bundle validates as a conformant OKF bundle, but MIF remains an independent specification with its own identity model and governance, pinned to OKF v0.1.
 
