@@ -112,6 +112,17 @@ See [ontologies/](./ontologies/) for base ontology and examples.
 
 See [SPECIFICATION.md](./SPECIFICATION.md) for the complete technical specification.
 
+## LLM-friendly documentation
+
+The spec site publishes [`llms.txt`](https://mif-spec.dev/llms.txt) for large
+language models, following the [llms.txt convention](https://llmstxt.org/). It is
+generated at build time by the `starlight-llms-txt` plugin (never hand-edited),
+alongside `llms-full.txt` (full corpus) and `llms-small.txt` (condensed):
+
+- <https://mif-spec.dev/llms.txt>
+- <https://mif-spec.dev/llms-full.txt>
+- <https://mif-spec.dev/llms-small.txt>
+
 ## Validation
 
 JSON Schema files are available for automated validation:
