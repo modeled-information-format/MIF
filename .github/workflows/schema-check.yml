@@ -84,10 +84,14 @@ jobs:
             local a="public/schema/$1" s="$2"
             [ -d "$a" ] || { echo "skip $a (absent)"; return; }
             for f in $files; do
-              if [ -f "$s/$f" ] || [ -f "$a/$f" ]; then
-                if ! diff -q "$s/$f" "$a/$f" >/dev/null 2>&1; then
-                  echo "::error::$a/$f does not match $s/$f"; fail=1
-                fi
+              if [ ! -f "$s/$f" ] && [ ! -f "$a/$f" ]; then
+                continue  # neither side ships this file — nothing to mirror
+              elif [ ! -f "$s/$f" ]; then
+                echo "::error::missing mirror source $s/$f (present in $a/$f)"; fail=1
+              elif [ ! -f "$a/$f" ]; then
+                echo "::error::missing mirror file $a/$f (present in $s/$f)"; fail=1
+              elif ! diff -q "$s/$f" "$a/$f" >/dev/null 2>&1; then
+                echo "::error::$a/$f does not match $s/$f"; fail=1
               fi
             done
           }

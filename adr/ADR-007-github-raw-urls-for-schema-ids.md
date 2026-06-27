@@ -322,14 +322,15 @@ deferred; it is taken now alongside the org transfer.
 |---------|-------|-------|------------|
 | Primary schema `$id` uses the amended `mif-spec.dev` domain | `schema/mif.schema.json` | L3 | compliant |
 | Sibling schema `$id` values also use `mif-spec.dev` (citation, ontology, entity-reference) | `schema/citation.schema.json`, `schema/ontology/ontology.schema.json`, `schema/definitions/entity-reference.schema.json` | L3 (each) | compliant |
-| JSON-LD `@context` namespace prefix `mif` stays on GitHub raw `ns/` IRI | `schema/context.jsonld` | L4 | compliant |
-| The schema-`$id`-vs-namespace-IRI split is documented as intentional | `ns/README.md` | L7, L11-L14 | compliant |
+| JSON-LD `@context` namespace prefix `mif` resolves on `https://mif-spec.dev/ns/` (2026-06 amendment) | `schema/context.jsonld`, `schema/ontology/ontology.context.jsonld` | L4-L5 | compliant |
+| Every canonical identifier (schema `$id` and namespace IRI) is on `mif-spec.dev`; no split remains | `ns/README.md` | L7, L11-L14 | compliant |
 
 **Summary:** The current (amended) state is verified: all four schema `$id`
-values resolve to `https://mif-spec.dev/schema/...`, while the JSON-LD namespace
-IRI deliberately remains `https://raw.githubusercontent.com/zircote/MIF/main/ns/`
-in `schema/context.jsonld`, and `ns/README.md` documents this split as
-intentional. The placeholder domains (`mif.io`, `subcog.io`, `subcog.dev`) do
-not appear in any audited artifact.
+values resolve to `https://mif-spec.dev/schema/...`, and the JSON-LD namespace
+IRI resolves to `https://mif-spec.dev/ns/` following the 2026-06 amendment, so
+every canonical identifier is on `mif-spec.dev` and the earlier schema-`$id`-vs-
+namespace-IRI split is closed. `ns/README.md` documents the namespace IRI. The
+placeholder domains (`mif.io`, `subcog.io`, `subcog.dev`) do not appear in any
+audited artifact.
 
 **Action Required:** None.
