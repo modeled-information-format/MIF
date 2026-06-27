@@ -46,13 +46,13 @@ embedding:
   normalized: true
   '@type': EmbeddingReference
   modelVersion: 2024-01
-  sourceText: Decision to adopt MIF Memory Interchange Format for portable AI memory
+  sourceText: Decision to adopt MIF Modeled Information Format for portable AI memory
     representation
 citations:
 - '@type': Citation
   citationType: specification
-  title: Memory Interchange Format (MIF) Specification
-  url: https://github.com/modeled-information-format/subcog/blob/main/SPECIFICATION.md
+  title: Modeled Information Format (MIF) Specification
+  url: https://github.com/zircote/subcog/blob/main/SPECIFICATION.md
   citationRole: source
   author: '@[[Robert Allen|Person]]'
   date: '2026-01-23'
@@ -89,7 +89,7 @@ citations:
 - '@type': Citation
   citationType: repository
   title: Subcog Memory System
-  url: https://github.com/modeled-information-format/subcog
+  url: https://github.com/zircote/subcog
   citationRole: extends
   author: '@[[Robert Allen|Person]]'
   accessed: '2026-01-20'
@@ -108,7 +108,7 @@ Our AI systems currently use proprietary memory formats that are incompatible ac
 
 ## Decision
 
-We will adopt the **Memory Interchange Format (MIF)** as our standard for AI memory representation and interchange. ^decision
+We will adopt the **Modeled Information Format (MIF)** as our standard for AI memory representation and interchange. ^decision
 
 ### Key Factors
 
@@ -157,7 +157,7 @@ We will adopt the **Memory Interchange Format (MIF)** as our standard for AI mem
 
 ## Citations
 
-- [Memory Interchange Format (MIF) Specification](https://github.com/modeled-information-format/subcog/blob/main/SPECIFICATION.md) by @[[Robert Allen|Person]] (2026)
+- [Modeled Information Format (MIF) Specification](https://github.com/zircote/subcog/blob/main/SPECIFICATION.md) by @[[Robert Allen|Person]] (2026)
   - **Type**: specification
   - **Role**: source
   - **Relevance**: 1.0
