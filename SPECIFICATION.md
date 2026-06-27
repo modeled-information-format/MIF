@@ -304,6 +304,71 @@ The `ontology.id` MUST match the `ontology.id` field in the referenced ontology 
 - Discovery pattern matching for entity type suggestions
 - Schema validation for entity-specific fields
 
+### 4.4 Categorizing Memories (Fact, Event, and Beyond)
+
+Common categories such as **Fact** and **Event** are already expressible with the
+fields defined above; MIF therefore does **not** define a separate flat
+`category` field. Domain categories are composed from two orthogonal axes that a
+memory unit can declare directly:
+
+1. **`type`** (REQUIRED, see 4.2) — the cognitive memory type: `semantic`,
+   `episodic`, or `procedural`.
+2. **`namespace`** (RECOMMENDED, see 10) — hierarchical scope that carries the
+   finer-grained label (e.g. `semantic/knowledge`, `episodic/sessions`).
+
+A memory unit has no field to name an ontology-extended type directly. Instead,
+**ontologies define extended types and their namespace mappings** (OPTIONAL, see
+4.2.1 and 10.8): an ontology declares each extended type as an `entity_types`
+entry with a `base` type, and implementations express that extended type by
+following the referenced ontology's namespace hierarchy on the `namespace` axis
+above (e.g. an `incident` extended type whose `base` is `episodic`, reached via
+`episodic/incidents`). The extended type is therefore a richer label *on* the
+namespace axis, not a separate third axis the unit declares.
+
+> **Note on namespace form.** The namespace examples in this section use the
+> unprefixed form (e.g. `semantic/knowledge`). Other sections (e.g. 4.2.1 and
+> 10.8.4) use the underscore-prefixed `_semantic/…` form. Section 10 is
+> authoritative for namespace structure; follow the form it defines for your
+> deployment. Where an ontology is referenced, follow the namespace hierarchy it
+> declares; the examples below omit ontology binding for clarity.
+
+A **Fact** is a `semantic` memory — declarative knowledge that holds independently
+of any single moment:
+
+```yaml
+---
+type: semantic
+namespace: semantic/knowledge
+---
+```
+
+An **Event** is an `episodic` memory — something that happened. Events MAY
+carry `temporal` validity to bound when they hold (see 9):
+
+```yaml
+---
+type: episodic
+namespace: episodic/sessions
+temporal:
+  valid_from: 2026-01-15T00:00:00Z
+  valid_until: 2026-01-15T11:00:00Z
+---
+```
+
+Finer distinctions are added through the namespace (e.g. `episodic/incidents`),
+whose path MAY map to an ontology-extended type defined by a referenced ontology
+(e.g. an `incident` whose `base` is `episodic`) — not through a new unit-level
+field. Implementations SHOULD express domain categories through `type` +
+`namespace` (the namespace path mapping to an ontology-extended type where the
+referenced ontology defines one) rather than
+introducing a separate flat `category` (or `memoryCategory`) field: such a field
+would duplicate the `type` taxonomy, fork it across implementations, and break
+the interoperability the base types provide.
+
+> **Note.** The entity types in 7 (Person, Organization, …) classify the
+> entities a memory *references* via its `entities` array; they are a distinct
+> axis and do not categorize the memory itself.
+
 ---
 
 ## 5. Markdown Format (.md)
