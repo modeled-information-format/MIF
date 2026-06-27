@@ -11,5 +11,13 @@
     "astro": "^7.0.2",
     "@astrojs/starlight": "^0.41.0",
     "astro-mermaid": "^2.1.0"
+  },
+  "devDependencies": {
+    "starlight-llms-txt": "^0.10.0"
+  },
+  "overrides": {
+    "starlight-llms-txt": {
+      "astro": "$astro"
+    }
   }
 }
