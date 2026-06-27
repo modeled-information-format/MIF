@@ -33,12 +33,23 @@ temporal:
   accessCount: 8
   lastAccessed: '2026-01-20T14:22:00Z'
 provenance:
+  '@type': prov:Entity
   sourceType: user_explicit
-  source_ref: conversation:conv-2026-01-15-001
+  sourceRef: conversation:conv-2026-01-15-001
   agent: claude-3-opus
-  agent_version: '20240229'
+  agentVersion: '20240229'
   confidence: 0.98
   trustLevel: user_stated
+  wasGeneratedBy:
+    '@id': urn:mif:activity:extraction:conv-2026-01-15-001
+    '@type': prov:Activity
+    wasAssociatedWith:
+      '@id': urn:mif:agent:claude-3-opus
+      '@type': prov:SoftwareAgent
+  wasAttributedTo:
+    '@id': urn:mif:entity:person:jane-doe
+  wasDerivedFrom:
+    '@id': urn:mif:conversation:conv-2026-01-15-001
 embedding:
   '@type': EmbeddingReference
   model: text-embedding-3-small

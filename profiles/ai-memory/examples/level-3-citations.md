@@ -120,7 +120,7 @@ Our AI systems currently use proprietary memory formats that are incompatible ac
 
 ## Decision
 
-We will adopt the **Modeled Information Format (MIF)** as our standard for AI memory representation and portability. ^decision
+We will adopt the **Modeled Information Format (MIF)** as our standard for AI memory representation and interchange. ^decision
 
 ### Key Factors
 

@@ -8,7 +8,7 @@
 [![Docs](https://img.shields.io/badge/docs-mif--spec.dev-5c4a32.svg)](https://mif-spec.dev)
 [![CI](https://github.com/modeled-information-format/MIF/actions/workflows/validate.yml/badge.svg)](https://github.com/modeled-information-format/MIF/actions/workflows/validate.yml)
 [![JSON-LD](https://img.shields.io/badge/format-JSON--LD-orange.svg)](https://json-ld.org/)
-[![W3C PROV](https://img.shields.io/badge/provenance-W3C%20PROV-green.svg)](https://www.w3.org/TR/prov-dm/)
+[![PROV-aligned](https://img.shields.io/badge/provenance-PROV--aligned-green.svg)](https://www.w3.org/TR/prov-dm/)
 
 **MIF is the opinionated, OKF-compliant content model that fills OKF's
 deliberately empty envelope.** [OKF](https://github.com/google/open-knowledge-format)
@@ -49,9 +49,9 @@ answers to exactly the questions OKF leaves open:
 | No concept-type taxonomy | `semantic` / `episodic` / `procedural` base types |
 | Untyped markdown-link edges | Typed relationships (overlay on OKF links) |
 | No merge / contradiction semantics | `Supersedes`, `ConflictsWith` |
-| No trust tiers | Provenance `source_type` + `trust_level` |
+| No trust tiers | Provenance `sourceType` + `trustLevel` |
 | Stale-vs-live left to process | Validity windows + TTL/freshness |
-| No provenance | W3C PROV |
+| No provenance | Lightweight provenance core + optional W3C-PROV-aligned layer |
 | Markdown only | First-class JSON-LD projection |
 
 OKF compliance is achieved as a **superset, not by subordination**: every MIF
@@ -112,7 +112,7 @@ python scripts/mif_convert.py emit-jsonld examples --out-dir jsonld
 | **Typed Relationships** | Typed overlay on standard OKF markdown-link edges |
 | **Base types** | `semantic` / `episodic` / `procedural` knowledge taxonomy |
 | **Bi-Temporal** | Validity windows & freshness (when recorded AND when valid) |
-| **Provenance & Trust** | W3C PROV + `source_type` / `trust_level` |
+| **Provenance & Trust** | Lightweight `sourceType` / `trustLevel` core + optional W3C-PROV-aligned layer |
 | **Model-Agnostic Embeddings** | Store model + source text for re-embedding |
 | **Stable identity** | UUID `id` survives concept relocation |
 | **JSON Schema** | Automated validation for the JSON-LD projection |
@@ -169,7 +169,7 @@ This specification is open source. Contributions welcome:
 
 ## Related
 
-- [Subcog](https://github.com/modeled-information-format/subcog) - AI memory system implementing MIF
+- [Subcog](https://github.com/zircote/subcog) - AI memory system implementing MIF
 - [Mnemonic](https://github.com/modeled-information-format/mnemonic) - Claude Code plugin using MIF ontologies
 
 ## Citing This Project

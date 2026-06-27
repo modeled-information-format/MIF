@@ -51,9 +51,9 @@ question OKF leaves open.
 | No concept-type taxonomy | `semantic` / `episodic` / `procedural` base types |
 | Untyped markdown-link edges | Typed relationships (overlay on OKF links) |
 | No merge / contradiction semantics | `Supersedes`, `ConflictsWith` |
-| No trust tiers | Provenance `source_type` + `trust_level` |
+| No trust tiers | Provenance `sourceType` + `trustLevel` |
 | Stale-vs-live left to process | Validity windows + TTL/freshness |
-| No provenance | W3C PROV |
+| No provenance | Lightweight provenance core + optional W3C-PROV-aligned layer |
 | Markdown only | First-class JSON-LD projection |
 
 ---
@@ -664,7 +664,7 @@ Implementations MAY apply compression when memories meet these criteria:
     {
       "prov": "http://www.w3.org/ns/prov#",
       "dc": "http://purl.org/dc/terms/",
-      "subcog": "https://github.com/modeled-information-format/subcog/ns/"
+      "subcog": "https://github.com/zircote/subcog/ns/"
     }
   ],
   "@type": ["Memory", "prov:Entity"],
@@ -732,17 +732,18 @@ Implementations MAY apply compression when memories meet these criteria:
   "provenance": {
     "@type": "prov:Entity",
     "sourceType": "user_explicit",
-    "prov:wasGeneratedBy": {
+    "wasGeneratedBy": {
+      "@id": "urn:mif:activity:extraction:mem-001",
       "@type": "prov:Activity",
-      "prov:wasAssociatedWith": {
+      "wasAssociatedWith": {
         "@id": "urn:mif:agent:claude-3-opus",
         "@type": "prov:SoftwareAgent"
       }
     },
-    "prov:wasDerivedFrom": {
+    "wasDerivedFrom": {
       "@id": "urn:mif:conversation:conv-456"
     },
-    "prov:wasAttributedTo": {
+    "wasAttributedTo": {
       "@id": "urn:mif:entity:person:jane-doe"
     },
     "confidence": 0.95,
@@ -1558,7 +1559,20 @@ embedding:
 
 ## 12. Provenance
 
-MIF uses W3C PROV vocabulary for provenance tracking.
+MIF provenance has two layers. The **core** is a lightweight, always-available
+set of fields — `sourceType`, `confidence`, `trustLevel`, plus optional
+`sourceRef` / `agent` / `agentVersion` — that captures how a unit came to exist
+and how much to trust it. Layered on top is an **optional W3C-PROV-aligned** set
+of fields (`wasGeneratedBy`, `wasAttributedTo`, `wasDerivedFrom`) that lets a
+unit carry a real PROV entity/activity/agent lineage when richer provenance is
+needed. The entity/activity/agent roles are expressed through the `@type`
+values (`prov:Entity`, `prov:Activity`, `prov:SoftwareAgent`) on the provenance
+object and its nested nodes.
+
+Both layers are OPTIONAL and additive: a conforming unit MAY omit provenance
+entirely, MAY use only the lightweight core, or MAY include the PROV-aligned
+fields. The PROV fields project to the W3C PROV vocabulary (`prov:`) through the
+JSON-LD context, so a full PROV graph is expressible but never required.
 
 ### 12.1 Source Types
 
@@ -1583,18 +1597,38 @@ MIF uses W3C PROV vocabulary for provenance tracking.
 
 ### 12.3 Provenance Schema
 
+The lightweight core (all fields here are OPTIONAL within an OPTIONAL block):
+
 ```yaml
 provenance:
-  source_type: user_explicit
-  source_ref: conversation:conv-456
-  agent: claude-3-opus
-  agent_version: "20240229"
+  sourceType: user_explicit                 # how the unit was created
+  sourceRef: conversation:conv-456          # reference to the originating source
+  agent: claude-3-opus                      # creating agent
+  agentVersion: "20240229"                  # creating-agent version
+  confidence: 0.95                          # confidence score (0-1)
+  trustLevel: user_stated                   # trust classification
+```
+
+To attach a W3C-PROV-aligned lineage, add the OPTIONAL PROV fields. Keys stay
+plain (no `prov:` prefix) and are mapped to the W3C PROV vocabulary by the
+JSON-LD context; the `@type` values use the `prov:` prefix:
+
+```yaml
+provenance:
+  '@type': prov:Entity
+  sourceType: user_explicit
   confidence: 0.95
-  trust_level: user_stated
-  derived_from:
-    - memory:parent-memory-id
-  attribution:
-    - entity:person:jane-doe
+  trustLevel: user_stated
+  wasGeneratedBy:                           # prov:wasGeneratedBy
+    '@id': urn:mif:activity:extraction:mem-001
+    '@type': prov:Activity
+    wasAssociatedWith:                      # prov:wasAssociatedWith
+      '@id': urn:mif:agent:claude-3-opus
+      '@type': prov:SoftwareAgent
+  wasAttributedTo:                          # prov:wasAttributedTo
+    '@id': urn:mif:entity:person:jane-doe
+  wasDerivedFrom:                           # prov:wasDerivedFrom
+    '@id': urn:mif:conversation:conv-456
 ```
 
 ---
@@ -1620,7 +1654,7 @@ provenance:
 - All Level 2 requirements
 - Bi-temporal model
 - Decay functions
-- W3C PROV provenance
+- Optional W3C-PROV-aligned provenance layer
 - Embedding references
 - Citations with rich metadata
 - Compression support
@@ -1727,8 +1761,26 @@ https://mif-spec.dev/schema/context.jsonld
     "sourceType": "mif:sourceType",
     "sourceRef": "mif:sourceRef",
     "agent": "mif:agent",
+    "agentVersion": "mif:agentVersion",
     "confidence": "mif:confidence",
     "trustLevel": "mif:trustLevel",
+
+    "wasGeneratedBy": {
+      "@id": "prov:wasGeneratedBy",
+      "@type": "@id"
+    },
+    "wasAttributedTo": {
+      "@id": "prov:wasAttributedTo",
+      "@type": "@id"
+    },
+    "wasDerivedFrom": {
+      "@id": "prov:wasDerivedFrom",
+      "@type": "@id"
+    },
+    "wasAssociatedWith": {
+      "@id": "prov:wasAssociatedWith",
+      "@type": "@id"
+    },
 
     "model": "mif:model",
     "modelVersion": "mif:modelVersion",
@@ -2063,11 +2115,12 @@ temporal:
   last_accessed: ISO-8601-datetime
 
 provenance:
-  source_type: user_explicit|user_implicit|agent_inferred|external_import|system_generated
-  source_ref: uri
+  sourceType: user_explicit|user_implicit|agent_inferred|external_import|system_generated
+  sourceRef: uri
   agent: string
   confidence: 0.0-1.0
-  trust_level: verified|user_stated|high_confidence|moderate_confidence|low_confidence|uncertain
+  trustLevel: verified|user_stated|high_confidence|moderate_confidence|low_confidence|uncertain
+  # Optional W3C-PROV-aligned layer (see §12.3): wasGeneratedBy, wasAttributedTo, wasDerivedFrom
 
 embedding:
   model: string
