@@ -71,7 +71,7 @@ def _update_index(version: str, check: bool, problems: list[str]) -> None:
 
     versions = sorted(set(index.get("versions", [])) | {version}, key=_semver_key)
     newest = versions[-1]
-    majors = sorted({v.split(".")[0] for v in versions})
+    majors = sorted({v.split(".")[0] for v in versions}, key=int)
     aliases = {"latest": newest}
     for m in majors:
         aliases[f"v{m}"] = max((v for v in versions if v.split(".")[0] == m), key=_semver_key)
