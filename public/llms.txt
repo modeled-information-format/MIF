@@ -1,4 +1,4 @@
-# Memory Interchange Format (MIF) - Open Standard for Portable AI Memory
+# Modeled Information Format (MIF) - Open Standard for Portable AI Memory
 
 ## Documentation Index
 
@@ -19,14 +19,14 @@
 - [API Reference](https://mif-spec.dev/guides/api-reference/)
 - [Migration Guide](https://mif-spec.dev/guides/migration/)
 - [Architecture Decisions](https://mif-spec.dev/design/decisions/)
-- [GitHub Repository](https://github.com/zircote/MIF)
+- [GitHub Repository](https://github.com/modeled-information-format/MIF)
 
 ## Overview
 
-MIF (Memory Interchange Format) is an open standard for portable AI
+MIF (Modeled Information Format) is an open standard for portable AI
 memory representation. It defines a vendor-neutral data model with dual
-representations: human-readable Markdown files (.memory.md) and
-machine-processable JSON-LD documents (.memory.json).
+representations: human-readable Markdown files (.md) and
+machine-processable JSON-LD documents (.jsonld).
 
 The AI memory ecosystem is fragmented. Mem0, Zep, Letta, LangMem,
 Subcog, and others each use proprietary schemas with no
@@ -35,7 +35,7 @@ that any provider can adopt.
 
 ## Key Concepts
 
-- Dual format: .memory.md (Markdown + YAML frontmatter) and .memory.json (JSON-LD)
+- Dual format: .md (Markdown + YAML frontmatter) and derived .jsonld (JSON-LD)
 - Three memory types: semantic (facts), episodic (events), procedural (how-to)
 - Bi-temporal model: event time (when it happened) and recording time (when stored)
 - Memory decay: confidence degrades over time (exponential, step, linear models)

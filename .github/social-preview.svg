@@ -44,7 +44,7 @@
   <path d="M1280,520 Q1200,560 1120,540 Q1040,520 1000,560 Q960,600 880,580"
         fill="none" stroke="#d4bc94" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
 
-  <!-- Memory interchange visualization -->
+  <!-- Modeled information visualization -->
   <g transform="translate(640, 280)" filter="url(#softShadow)">
     <!-- Central hub - larger organic shape -->
     <ellipse cx="0" cy="0" rx="90" ry="85" fill="url(#memoryGrad)" opacity="0.9"/>
@@ -91,12 +91,12 @@
 
     <!-- Central text -->
     <text x="0" y="-5" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5c4a32" text-anchor="middle">MIF</text>
-    <text x="0" y="18" font-family="Georgia, serif" font-size="11" fill="#7a6548" text-anchor="middle">interchange</text>
+    <text x="0" y="18" font-family="Georgia, serif" font-size="11" fill="#7a6548" text-anchor="middle">modeled</text>
   </g>
 
   <!-- Title -->
   <text x="640" y="80" font-family="Georgia, serif" font-size="48" font-weight="bold" fill="#4a3c28" text-anchor="middle">
-    Memory Interchange Format
+    Modeled Information Format
   </text>
 
   <!-- Tagline -->

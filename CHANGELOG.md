@@ -229,5 +229,5 @@ See [MIGRATION.md](MIGRATION.md) and run
 - MIF specification draft v0.1
 - Market research framework
 
-[Unreleased]: https://github.com/zircote/MIF/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/zircote/MIF/releases/tag/v0.1.0
+[Unreleased]: https://github.com/modeled-information-format/MIF/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/modeled-information-format/MIF/releases/tag/v0.1.0

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://mif-spec.dev/schema/mif.schema.json",
-  "title": "Memory Interchange Format (MIF)",
+  "title": "Modeled Information Format (MIF)",
   "description": "JSON Schema for validating MIF memory documents",
   "type": "object",
   "required": ["@context", "@type", "@id", "memoryType", "content", "created"],
