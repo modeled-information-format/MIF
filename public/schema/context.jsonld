@@ -30,6 +30,10 @@
       "@id": "mif:content",
       "@type": "xsd:string"
     },
+    "conceptType": {
+      "@id": "mif:conceptType",
+      "@type": "@vocab"
+    },
     "memoryType": {
       "@id": "mif:memoryType",
       "@type": "@vocab"
@@ -111,9 +115,52 @@
     },
     "note": "mif:note",
 
+    "documents": {
+      "@id": "mif:documents",
+      "@container": "@set",
+      "@context": {
+        "hash": {
+          "@id": "mif:hash",
+          "@context": {
+            "algorithm": "mif:algorithm",
+            "value": "mif:value"
+          }
+        }
+      }
+    },
+    "DocumentReference": "mif:DocumentReference",
+    "documentType": {
+      "@id": "mif:documentType",
+      "@type": "@vocab"
+    },
+    "contentType": "mif:contentType",
+    "byteLength": {
+      "@id": "mif:byteLength",
+      "@type": "xsd:integer"
+    },
+    "retrievedAt": {
+      "@id": "mif:retrievedAt",
+      "@type": "xsd:dateTime"
+    },
+
     "relationships": {
       "@id": "mif:relationships",
-      "@container": "@set"
+      "@container": "@set",
+      "@context": {
+        "@vocab": "https://mif-spec.dev/ns/",
+        "type": {
+          "@id": "mif:relationshipType",
+          "@type": "@vocab"
+        },
+        "target": {
+          "@id": "mif:target",
+          "@type": "@id"
+        },
+        "metadata": {
+          "@id": "mif:metadata",
+          "@type": "@json"
+        }
+      }
     },
     "relationshipType": {
       "@id": "mif:relationshipType",
@@ -200,6 +247,23 @@
     "trustLevel": {
       "@id": "mif:trustLevel",
       "@type": "@vocab"
+    },
+
+    "wasGeneratedBy": {
+      "@id": "prov:wasGeneratedBy",
+      "@type": "@id"
+    },
+    "wasAttributedTo": {
+      "@id": "prov:wasAttributedTo",
+      "@type": "@id"
+    },
+    "wasDerivedFrom": {
+      "@id": "prov:wasDerivedFrom",
+      "@type": "@id"
+    },
+    "wasAssociatedWith": {
+      "@id": "prov:wasAssociatedWith",
+      "@type": "@id"
     },
 
     "user_explicit": "mif:UserExplicit",
