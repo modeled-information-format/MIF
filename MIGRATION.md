@@ -20,7 +20,7 @@ python scripts/okf_validate.py <new-bundle>     # should print PASS
 | --- | --- | --- |
 | `*.memory.md` files | `*.md` files | OKF concept ID is the path minus `.md`; a `.memory` infix would leak into the ID. |
 | Relationships as body wiki-links `[[slug]]` only | Authoritative frontmatter `relationships[]` **plus** body `## Relationships` markdown links `[Text](/path/target.md)` | OKF consumers must see every edge as a standard markdown link (Invariant 3). |
-| `id` could be a slug | `id` MUST be a UUID | Stable, location-independent identity (§4.3). Slugs are preserved as `aliases`. |
+| `id` could be a slug | `id` MUST be a UUID | Stable, location-independent identity (§4.1). Slugs are preserved as `aliases`. |
 | Memory-specific framing in the core spec | Moved to `profiles/ai-memory/` | The core is now a general knowledge model; memory is a profile (Invariant 6). |
 | `*.memory.json` committed beside source | JSON-LD is a **derived** projection (regenerate with `mif_convert.py`) | Markdown is canonical (Invariant 2). |
 | Temporal model framed as a "forgetting curve" | Same math, reframed as **validity windows & freshness** | Answers OKF's open "live vs stale" question; the forgetting-curve rationale lives in the AI Memory profile. |

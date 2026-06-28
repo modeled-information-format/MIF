@@ -177,9 +177,9 @@ citations:
 ---
 ```
 
-> **Decay Values:** The `halfLife: P30D` means memory strength halves every 30 days. Common values: P7D (short-term), P14D (medium-term), P30D (long-term). These are pragmatic defaults inspired by Ebbinghaus's forgetting curve research. See [SPECIFICATION.md Section 9.3](../SPECIFICATION.md#93-decay-rationale) for details.
+> **Decay Values:** The `halfLife: P30D` means memory strength halves every 30 days. Common values: P7D (short-term), P14D (medium-term), P30D (long-term). These are pragmatic defaults inspired by Ebbinghaus's forgetting curve research. See [SPECIFICATION.md Section 9.3](../SPECIFICATION.md#93-freshness-rationale) for details.
 
-> **Naming Convention:** Markdown frontmatter uses `snake_case` field names (`valid_from`, `source_type`, `trust_level`). JSON-LD uses `camelCase` equivalents (`validFrom`, `sourceType`, `trustLevel`). Exception: `halfLife` uses camelCase in both formats. See the [Field Name Mapping](../examples/README.md#field-name-mapping) table for a complete reference.
+> **Naming Convention:** Markdown frontmatter uses `snake_case` field names (`valid_from`, `source_type`, `trust_level`). JSON-LD uses `camelCase` equivalents (`validFrom`, `sourceType`, `trustLevel`). Exception: `halfLife` uses camelCase in both formats. See the Field Name Mapping table for a complete reference.
 
 ## Directory Structure
 
