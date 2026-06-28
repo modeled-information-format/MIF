@@ -3,10 +3,10 @@
 # MIF — Modeled Information Format
 
 **Version**: 1.0.0
-**Status**: Release Candidate
+**Status**: Released
 **Last Updated**: 2026-06-18
 **Authors**: Robert Allen (zircote)
-**Repository**: https://github.com/modeled-information-format/MIF
+**Repository**: <https://github.com/modeled-information-format/MIF>
 
 ---
 
@@ -34,6 +34,7 @@ criteria in [`docs/okf-conformance.md`](docs/okf-conformance.md), which is
 normative within MIF (Invariant 5).
 
 MIF is designed to be:
+
 - **OKF-compliant**: every bundle is a valid OKF bundle (a tested invariant).
 - **Markdown-canonical**: the `.md` file is the source of truth; JSON-LD is a
   derived projection (Invariant 2).
@@ -76,7 +77,7 @@ question OKF leaves open.
 14. [JSON-LD Context](#14-json-ld-context)
 15. [Conversion Rules](#15-conversion-rules)
 16. [Examples](#16-examples)
-17. [Migration Guides](#17-migration-guides)
+17. [Migration](#17-migration)
 18. [Security Considerations](#18-security-considerations)
 19. [IANA Considerations](#19-iana-considerations)
 
@@ -113,7 +114,7 @@ Both representations MUST be losslessly convertible to each other. A conforming 
 
 The Markdown format MUST be valid Obsidian notes, ensuring files work in Obsidian vaults without modification while remaining readable in any text editor or Markdown processor.
 
-**Required Obsidian Features:**
+#### Required Obsidian Features
 
 - **YAML Frontmatter**: Structured metadata at the top of files, enclosed in `---` delimiters. Obsidian's Properties panel reads and writes this data, supporting typed fields (text, number, date, checkbox, list).
 
@@ -127,7 +128,7 @@ The Markdown format MUST be valid Obsidian notes, ensuring files work in Obsidia
 
 - **Standard Markdown**: All content uses CommonMark-compatible Markdown, ensuring portability to other tools and platforms.
 
-**Optional Obsidian Extensions:**
+#### Optional Obsidian Extensions
 
 - **Callouts**: Admonition blocks using `> [!type]` syntax for notes, warnings, tips, etc.
 - **Embeds**: Transclusion using `![[Note]]` to embed content from other files
@@ -136,6 +137,7 @@ The Markdown format MUST be valid Obsidian notes, ensuring files work in Obsidia
 ### 2.3 Semantic Web Compatibility
 
 The JSON-LD format MUST be valid JSON-LD 1.1:
+
 - Use `@context` for vocabulary mapping
 - Use `@id` for unique identifiers
 - Use `@type` for entity classification
@@ -144,6 +146,7 @@ The JSON-LD format MUST be valid JSON-LD 1.1:
 ### 2.4 Local-First
 
 MIF is designed for local-first storage:
+
 - No required network dependencies
 - Files can be read with any text editor
 - No proprietary database required
@@ -156,7 +159,7 @@ MIF is designed for local-first storage:
 ### 3.1 File Extensions
 
 | Extension | Format | MIME Type |
-|-----------|--------|-----------|
+| --- | --- | --- |
 | `.md` | Markdown | `text/markdown; variant=mif` |
 | `.jsonld` | JSON-LD | `application/ld+json; profile="https://mif-spec.dev"` |
 
@@ -164,19 +167,21 @@ MIF is designed for local-first storage:
 
 Files SHOULD be named using the memory's identifier:
 
-```
+```text
 {id}.md
 {id}.jsonld
 ```
 
 Example:
-```
+
+```text
 550e8400-e29b-41d4-a716-446655440000.md
 550e8400-e29b-41d4-a716-446655440000.jsonld
 ```
 
 Human-readable names MAY be used when the `id` is specified in frontmatter:
-```
+
+```text
 dark-mode-preference.md
 ```
 
@@ -184,7 +189,7 @@ dark-mode-preference.md
 
 A MIF vault SHOULD follow this structure:
 
-```
+```text
 vault/
 ├── .mif/                           # MIF configuration
 │   ├── config.yaml                 # Vault configuration
@@ -212,7 +217,7 @@ vault/
 A Memory Unit is the atomic element of MIF. It contains:
 
 | Property | Required | Type | Description |
-|----------|----------|------|-------------|
+| --- | --- | --- | --- |
 | `id` | REQUIRED | UUID | Globally unique identifier |
 | `content` | REQUIRED | String | The memory content (Markdown) |
 | `type` | REQUIRED | Enum | Memory classification (see 4.2) |
@@ -236,12 +241,12 @@ A Memory Unit is the atomic element of MIF. It contains:
 MIF uses three **base memory types**, reflecting how human memory systems organize information:
 
 | Type | Description | Namespace Hint |
-|------|-------------|----------------|
+| --- | --- | --- |
 | `semantic` | Facts, concepts, relationships, and knowledge | `semantic/*` |
 | `episodic` | Events, experiences, sessions, and timelines | `episodic/*` |
 | `procedural` | Step-by-step processes, runbooks, and patterns | `procedural/*` |
 
-**Base Type Descriptions:**
+#### Base Type Descriptions
 
 - **Semantic**: Declarative knowledge about the world—facts, concepts, decisions, preferences, and relationships between entities. Examples: architectural decisions, technology choices, user preferences, domain knowledge.
 
@@ -285,12 +290,12 @@ This allows ontologies to define rich taxonomies while maintaining interoperabil
 A Memory Unit MAY declare which ontology it conforms to using the `ontology` field:
 
 | Property | Required | Type | Description |
-|----------|----------|------|-------------|
+| --- | --- | --- | --- |
 | `id` | REQUIRED | String | Ontology identifier (matches `ontology.id` in ontology definition) |
 | `version` | OPTIONAL | String | Semantic version (e.g., "1.0.0") |
 | `uri` | OPTIONAL | URI | URL to the ontology definition file |
 
-**Example:**
+#### Example
 
 ```yaml
 ontology:
@@ -300,6 +305,7 @@ ontology:
 ```
 
 The `ontology.id` MUST match the `ontology.id` field in the referenced ontology definition file. This enables:
+
 - Validation that namespace paths conform to the ontology's defined namespaces
 - Discovery pattern matching for entity type suggestions
 - Schema validation for entity-specific fields
@@ -521,7 +527,7 @@ citations:
 #### 5.5.2 Citation Fields
 
 | Field | Required | Type | Description |
-|-------|----------|------|-------------|
+| --- | --- | --- | --- |
 | `type` | REQUIRED | Enum | Source category (see 5.5.3) |
 | `title` | REQUIRED | String | Citation title |
 | `url` | REQUIRED | URI | Valid URL or URI |
@@ -535,7 +541,7 @@ citations:
 #### 5.5.3 Citation Types
 
 | Type | Description | Example |
-|------|-------------|---------|
+| --- | --- | --- |
 | `article` | Journal article, blog post | arXiv paper, Medium article |
 | `book` | Published book | O'Reilly book, academic text |
 | `paper` | Conference/research paper | ACM paper, IEEE publication |
@@ -554,7 +560,7 @@ Custom types MAY use namespace prefixes: `acme:internal-memo`, `research:lab-not
 #### 5.5.4 Citation Roles
 
 | Role | Description | Use Case |
-|------|-------------|----------|
+| --- | --- | --- |
 | `supports` | Provides supporting evidence | Confirming research, alignment |
 | `refutes` | Contradicts or disputes | Opposing viewpoint, correction |
 | `background` | General context/reference | Related reading, foundation |
@@ -611,29 +617,29 @@ author: "Jane Smith et al."
 
 Implementations SHOULD validate citations according to these rules:
 
-**Required Field Constraints:**
+##### Required Field Constraints
 
 | Field | Constraint |
-|-------|------------|
+| --- | --- |
 | `type` | MUST be a value from Section 5.5.3 or a custom namespaced type (e.g., `acme:memo`) |
 | `title` | MUST be a non-empty string |
 | `url` | MUST be a valid URI (http, https, or custom schemes) |
 | `role` | MUST be a value from Section 5.5.4 or a custom namespaced role (e.g., `legal:precedent`) |
 
-**Optional Field Constraints:**
+##### Optional Field Constraints
 
 | Field | Constraint |
-|-------|------------|
+| --- | --- |
 | `author` | SHOULD be entity reference(s) `@[[Name\|Type]]` or plain text; multiple authors comma-separated |
 | `date` | MUST be ISO 8601 date format (`YYYY-MM-DD`) |
 | `accessed` | MUST be ISO 8601 date format (`YYYY-MM-DD`) |
 | `relevance` | MUST be decimal between 0.0 and 1.0 inclusive |
 | `note` | SHOULD be under 1000 characters; longer notes SHOULD use body section |
 
-**Validation Errors:**
+##### Validation Errors
 
 | Error | Severity | Action |
-|-------|----------|--------|
+| --- | --- | --- |
 | Missing required field | Error | Reject citation |
 | Invalid `type` value | Warning | Accept with `type: "other"` fallback |
 | Invalid `role` value | Warning | Accept with `role: "background"` fallback |
@@ -648,11 +654,11 @@ Compression allows large memories to be summarized while preserving the original
 #### 5.6.1 Compression Fields
 
 | Field | Required | Type | Description |
-|-------|----------|------|-------------|
+| --- | --- | --- | --- |
 | `summary` | OPTIONAL | String | Concise 2-3 sentence summary (max 500 characters) |
 | `compressed_at` | OPTIONAL | DateTime | When compression was applied (ISO 8601) |
 
-**Frontmatter Schema:**
+##### Frontmatter Schema
 
 ```yaml
 # === OPTIONAL: Compression (Level 3) ===
@@ -665,9 +671,9 @@ compressed_at: 2026-01-24T10:00:00Z
 Implementations MAY apply compression when memories meet these criteria:
 
 | Condition | Threshold |
-|-----------|-----------|
+| --- | --- |
 | Age AND Size | Age > 30 days AND content > 100 lines |
-| Decay AND Size | Strength < 0.3 AND content > 100 lines |
+| Decay AND Size | Strength `< 0.3` AND content > 100 lines |
 
 #### 5.6.3 Compression Behavior
 
@@ -680,7 +686,7 @@ Implementations MAY apply compression when memories meet these criteria:
 #### 5.6.4 Compression Validation
 
 | Field | Constraint |
-|-------|------------|
+| --- | --- |
 | `summary` | MUST be 500 characters or fewer |
 | `compressed_at` | MUST be ISO 8601 datetime format |
 
@@ -904,7 +910,7 @@ entity_types:
 For maximum interoperability, implementations SHOULD recognize these five core types:
 
 | Type | Description | Example | URI |
-|------|-------------|---------|-----|
+| --- | --- | --- | --- |
 | `Person` | Human individual | User, team member | `mif:Person` |
 | `Organization` | Company, team, or group | Acme Corp | `mif:Organization` |
 | `Technology` | Tool, language, or framework | Python, React | `mif:Technology` |
@@ -930,7 +936,7 @@ entity_types:
         type: string
 ```
 
-**JSON-LD representation of custom types:**
+#### JSON-LD representation of custom types
 
 ```json
 {
@@ -963,7 +969,7 @@ properties:
   role: Engineer
 ```
 
-**JSON-LD:**
+#### JSON-LD
 
 ```json
 {
@@ -981,7 +987,8 @@ properties:
 
 ### 7.5 Entity References in Memories
 
-**Markdown:**
+#### Markdown
+
 ```markdown
 ## Entities
 
@@ -990,7 +997,8 @@ properties:
 - about @[[Dark Mode|Concept]]
 ```
 
-**JSON-LD:**
+#### JSON-LD
+
 ```json
 "entities": [
   {
@@ -1079,7 +1087,7 @@ relationship_types:
 For maximum interoperability, implementations SHOULD recognize these nine core types:
 
 | Type | Description | Inverse | Symmetric |
-|------|-------------|---------|-----------|
+| --- | --- | --- | --- |
 | `RelatesTo` | General relationship | `RelatesTo` | Yes |
 | `DerivedFrom` | Created based on source | `Derives` | No |
 | `Supersedes` | Replaces older memory | `SupersededBy` | No |
@@ -1110,7 +1118,7 @@ relationship_types:
         range: [0.0, 1.0]
 ```
 
-**JSON-LD representation of custom relationship types:**
+#### JSON-LD representation of custom relationship types
 
 ```json
 {
@@ -1134,7 +1142,7 @@ relationship_types:
 
 ### 8.4 Relationship Schema
 
-**Markdown syntax:**
+#### Markdown syntax
 
 Relationships use a simple `type [[target]]` format in a dedicated section:
 
@@ -1150,7 +1158,7 @@ Relationships use a simple `type [[target]]` format in a dedicated section:
 
 The relationship type name is converted to kebab-case in Markdown. The target uses wiki-link syntax `[[]]` which resolves to the memory's `@id` or title.
 
-**JSON-LD schema:**
+#### JSON-LD schema
 
 ```json
 "relationships": [
@@ -1169,7 +1177,7 @@ The relationship type name is converted to kebab-case in Markdown. The target us
 ### 8.5 Relationship Properties
 
 | Property | Type | Required | Description |
-|----------|------|----------|-------------|
+| --- | --- | --- | --- |
 | `type` | String | Yes | Type identifier (kebab-case; optional `ns:` prefix) |
 | `target` | URI Reference | Yes | Target memory or entity URI |
 | `strength` | Decimal | No | Relationship strength (0.0-1.0) |
@@ -1187,7 +1195,7 @@ MIF uses a bi-temporal model distinguishing between:
 ### 9.1 Temporal Properties
 
 | Property | Type | Description |
-|----------|------|-------------|
+| --- | --- | --- |
 | `validFrom` | DateTime | When fact becomes valid |
 | `validUntil` | DateTime | When fact expires (null = indefinite) |
 | `recordedAt` | DateTime | When recorded (transaction time) |
@@ -1199,7 +1207,7 @@ MIF uses a bi-temporal model distinguishing between:
 ### 9.2 Decay Models
 
 | Model | Formula | Use Case |
-|-------|---------|----------|
+| --- | --- | --- |
 | `none` | No decay | Permanent memories |
 | `linear` | strength = 1 - (t / ttl) | Simple linear decay |
 | `exponential` | strength = e^(-t/halfLife) | Gradual freshness decay |
@@ -1220,13 +1228,14 @@ windows bounding the interval in which a fact is asserted to hold.
 #### Why These Specific Values?
 
 | Half-Life | Use Case | Rationale |
-|-----------|----------|-----------|
+| --- | --- | --- |
 | **P7D** | Short-term context | Aligns with weekly work cycles |
 | **P14D** | Medium-term projects | Spans typical sprint/iteration boundaries |
 | **P30D** | Long-term knowledge | Corresponds to monthly review cycles |
 | **P90D** | Default TTL | Quarterly relevance for most organizational knowledge |
 
 Implementations SHOULD tune these based on:
+
 - Knowledge kind (`episodic` records go stale faster than `semantic` facts)
 - Organizational context (high-velocity vs. stable environments)
 - Access patterns (frequently accessed knowledge can reinforce slower decay)
@@ -1266,11 +1275,12 @@ temporal:
 
 Namespaces use a flexible scoping model with reserved prefixes for cross-organization sharing:
 
-```
+```text
 {root}/{scope}+[/{session}]
 ```
 
 Where `{root}` is either:
+
 - **Organization name** - private to that organization
 - **Reserved prefix** - special namespace with defined semantics
 
@@ -1279,15 +1289,15 @@ Where `{root}` is either:
 Names beginning with underscore (`_`) are reserved for special namespaces:
 
 | Prefix | Visibility | Description |
-|--------|------------|-------------|
+| --- | --- | --- |
 | `_public` | Global | Publicly accessible by anyone |
 | `_shared` | Negotiated | Cross-organization sharing with explicit agreements |
 | `_local` | Local only | Never synchronized or exported |
 | `_system` | Implementation | Reserved for system/implementation use |
 
-**Examples:**
+#### Examples
 
-```
+```text
 # Public knowledge (globally accessible)
 _public/python/async-patterns
 _public/react/hooks-best-practices
@@ -1308,7 +1318,7 @@ acme-corp/team-frontend/patterns
 
 Within an organization, scopes are **peer-level** - users, projects, teams, and other organizational units are treated equally:
 
-```
+```text
 {organization}/{scope}+
 
 Examples:
@@ -1383,11 +1393,12 @@ reserved_prefixes:
 
 Full URI form for cross-system references:
 
-```
+```text
 mif://{domain}/{namespace}/{memory-id}
 ```
 
 Examples:
+
 - `mif://github.com/modeled-information-format/acme-corp/project-x/550e8400...`
 - `mif://registry/_public/python/async-patterns/abc123...`
 - `mif://local/_local/scratch/memory-123`
@@ -1419,7 +1430,7 @@ They enable domain-specific customization while maintaining MIF compatibility.
 
 Ontologies are defined in YAML files with optional JSON-LD export:
 
-```
+```text
 .mif/ontologies/
 ├── mif-base.ontology.yaml       # Base ontology (semantic/episodic/procedural)
 ├── mif-base.ontology.jsonld     # JSON-LD export for semantic web
@@ -1520,18 +1531,18 @@ traits:
       status: { type: string, enum: [draft, active, archived] }
 ```
 
-**Conflict Resolution Strategy:**
+##### Conflict Resolution Strategy
 
 When multiple traits define the same field (e.g., both `auditable` and `lifecycle` inherit `created` from `timestamped`), implementations MUST apply the following resolution rules:
 
 | Scenario | Resolution | Rationale |
-|----------|------------|-----------|
+| --- | --- | --- |
 | Same field inherited via different paths | Use shared ancestor definition | Diamond inheritance resolved to common base |
 | Same field defined in multiple independent traits | Error at composition time | Ambiguous definition requires explicit resolution |
 | Field in trait overrides inherited field | Child definition wins | Explicit override is intentional |
 | Field in entity overrides trait field | Entity definition wins | Most specific wins |
 
-**Example - Diamond Inheritance:**
+##### Example - Diamond Inheritance
 
 ```yaml
 # Both auditable and lifecycle inherit timestamped
@@ -1540,7 +1551,7 @@ entity_types:
     traits: [auditable, lifecycle]  # No conflict: `created` from shared `timestamped`
 ```
 
-**Example - Conflict Requiring Resolution:**
+##### Example - Conflict Requiring Resolution
 
 ```yaml
 traits:
@@ -1562,7 +1573,7 @@ entity_types:
         status: { type: string, enum: [draft, open, published, closed] }
 ```
 
-**Implementation Guidance:**
+##### Implementation Guidance
 
 1. **Validation**: Implementations SHOULD detect conflicts at ontology load time
 2. **Error Messages**: Include both conflicting definitions and their sources
@@ -1588,6 +1599,7 @@ embedding:
 ```
 
 This allows:
+
 - Re-embedding on import with different models
 - Smaller file sizes
 - Model migration without data loss
@@ -1596,7 +1608,8 @@ This allows:
 
 For providers that need vector portability:
 
-**External Reference:**
+#### External Reference
+
 ```yaml
 embedding:
   model: text-embedding-3-small
@@ -1604,7 +1617,8 @@ embedding:
   vectorUri: "urn:mif:vector:550e8400-e29b-41d4-a716-446655440000"
 ```
 
-**Inline (JSON-LD only):**
+#### Inline (JSON-LD only)
+
 ```json
 "embedding": {
   "model": "text-embedding-3-small",
@@ -1639,7 +1653,7 @@ JSON-LD context, so a full PROV graph is expressible but never required.
 ### 12.1 Source Types
 
 | Type | Description | Confidence Range |
-|------|-------------|------------------|
+| --- | --- | --- |
 | `user_explicit` | User directly stated | 0.90 - 1.00 |
 | `user_implicit` | Inferred from user actions | 0.70 - 0.89 |
 | `agent_inferred` | AI reasoning from context | 0.50 - 0.69 |
@@ -1649,7 +1663,7 @@ JSON-LD context, so a full PROV graph is expressible but never required.
 ### 12.2 Trust Levels
 
 | Level | Description |
-|-------|-------------|
+| --- | --- |
 | `verified` | Confirmed by multiple sources |
 | `user_stated` | User explicitly provided |
 | `high_confidence` | Strong inference |
@@ -1741,7 +1755,7 @@ extensions:
 
 ### 14.1 Context URL
 
-```
+```text
 https://mif-spec.dev/schema/context.jsonld
 ```
 
@@ -1750,7 +1764,7 @@ https://mif-spec.dev/schema/context.jsonld
 The canonical JSON-LD context is maintained in `schema/context.jsonld` at the
 root of this repository and is served at:
 
-```
+```text
 https://mif-spec.dev/schema/context.jsonld
 ```
 
@@ -1784,7 +1798,8 @@ new major version of the specification.
 
 ### 15.3 Example Conversion
 
-**Input (JSON-LD):**
+#### Input (JSON-LD)
+
 ```json
 {
   "@context": "https://mif-spec.dev/schema/context.jsonld",
@@ -1798,7 +1813,8 @@ new major version of the specification.
 }
 ```
 
-**Output (Markdown):**
+#### Output (Markdown)
+
 ```markdown
 ---
 id: 550e8400
@@ -1817,7 +1833,7 @@ User prefers dark mode
 
 ### 15.4 Citations Conversion
 
-**Markdown to JSON-LD:**
+#### Markdown to JSON-LD
 
 1. Parse frontmatter `citations` array
 2. For each citation:
@@ -1832,7 +1848,7 @@ User prefers dark mode
    - Merge with frontmatter (frontmatter takes precedence)
 4. Build `Citation` objects array
 
-**JSON-LD to Markdown:**
+#### JSON-LD to Markdown
 
 1. Generate frontmatter `citations` array from JSON-LD
 2. Convert entity URIs to wiki-link syntax
@@ -1840,7 +1856,7 @@ User prefers dark mode
    - Create `## Citations` body section
    - Format as markdown list with metadata
 
-**Example:**
+#### Example
 
 ```yaml
 # Frontmatter
@@ -1874,7 +1890,8 @@ Converts to:
 
 ### 16.1 Minimal Memory (Level 1)
 
-**Markdown:**
+#### Markdown
+
 ```markdown
 ---
 id: 550e8400-e29b-41d4-a716-446655440000
@@ -1885,7 +1902,8 @@ created: 2026-01-15T10:30:00Z
 User prefers dark mode for all applications.
 ```
 
-**JSON-LD:**
+#### JSON-LD
+
 ```json
 {
   "@context": "https://mif-spec.dev/schema/context.jsonld",
@@ -1899,7 +1917,8 @@ User prefers dark mode for all applications.
 
 ### 16.2 Decision Memory (Level 2)
 
-**Markdown:**
+#### Markdown
+
 ```markdown
 ---
 id: decision-react-over-vue
@@ -1988,21 +2007,24 @@ see [`profiles/ai-memory/SPECIFICATION.md`](profiles/ai-memory/SPECIFICATION.md)
 
 ### 19.1 Media Type Registration
 
-**Markdown Format:**
+#### Markdown Format
+
 - Type name: text
 - Subtype name: markdown
 - Required parameters: variant=mif
 - Optional parameters: version
 
-**JSON-LD Format:**
+#### JSON-LD Format
+
 - Type name: application
 - Subtype name: ld+json
-- Required parameters: profile="https://mif-spec.dev"
+- Required parameters: `profile="https://mif-spec.dev"`
 
 ### 19.2 URI Scheme
 
 MIF URIs use the `mif:` scheme:
-```
+
+```text
 mif://{authority}/{namespace}/{memory-id}
 ```
 
@@ -2067,7 +2089,7 @@ extensions:
 ## Appendix B: Relationship Types Quick Reference
 
 | Markdown Syntax | JSON-LD `type` | Description |
-|-----------------|----------------|-------------|
+| --- | --- | --- |
 | `[[X]]` | `relates-to` | General relationship |
 | `[[X\|derived-from]]` | `derived-from` | Created from source |
 | `[[X\|supersedes]]` | `supersedes` | Replaces older |
@@ -2083,7 +2105,7 @@ extensions:
 ## Appendix C: Entity Reference Syntax
 
 | Markdown | Meaning |
-|----------|---------|
+| --- | --- |
 | `@[[Name]]` | Reference entity by name |
 | `@[[Name\|Person]]` | Reference with explicit type |
 | `@[[Name\|uses]]` | Reference with relationship |
@@ -2096,7 +2118,7 @@ extensions:
 ### Citation Types
 
 | Type | Description |
-|------|-------------|
+| --- | --- |
 | `article` | Journal article, blog post |
 | `book` | Published book |
 | `paper` | Conference/research paper |
@@ -2113,7 +2135,7 @@ extensions:
 ### Citation Roles
 
 | Role | Description |
-|------|-------------|
+| --- | --- |
 | `supports` | Provides supporting evidence |
 | `refutes` | Contradicts or disputes |
 | `background` | General context/reference |
