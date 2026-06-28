@@ -30,6 +30,10 @@
       "@id": "mif:content",
       "@type": "xsd:string"
     },
+    "conceptType": {
+      "@id": "mif:conceptType",
+      "@type": "@vocab"
+    },
     "memoryType": {
       "@id": "mif:memoryType",
       "@type": "@vocab"
@@ -141,7 +145,22 @@
 
     "relationships": {
       "@id": "mif:relationships",
-      "@container": "@set"
+      "@container": "@set",
+      "@context": {
+        "@vocab": "https://mif-spec.dev/ns/",
+        "type": {
+          "@id": "mif:relationshipType",
+          "@type": "@vocab"
+        },
+        "target": {
+          "@id": "mif:target",
+          "@type": "@id"
+        },
+        "metadata": {
+          "@id": "mif:metadata",
+          "@type": "@json"
+        }
+      }
     },
     "relationshipType": {
       "@id": "mif:relationshipType",
