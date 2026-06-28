@@ -122,9 +122,9 @@ Tuning guidance:
   than a stable `observation`. Apply a shorter half-life (e.g. P7D) to episodic
   memories and a longer one (e.g. P30D) to semantic facts.
 - **Access reinforces.** Each recall MAY reset or slow decay by updating
-  `last_reinforced` and incrementing `access_count`, analogous to spaced
+  `lastReinforced` and incrementing `accessCount`, analogous to spaced
   repetition strengthening a memory trace. This is why the `recallable` trait
-  carries `access_count` and `last_accessed`.
+  carries `accessCount` and `lastAccessed`.
 - **High-velocity environments forget faster.** Shorten half-lives where context
   churns quickly; lengthen them for stable domains.
 
@@ -132,17 +132,17 @@ Tuning guidance:
 
 ```yaml
 temporal:
-  valid_from: 2026-01-15T00:00:00Z
-  valid_until: null
-  recorded_at: 2026-01-15T10:30:00Z
+  validFrom: 2026-01-15T00:00:00Z
+  validUntil: null
+  recordedAt: 2026-01-15T10:30:00Z
   ttl: P90D
   decay:
     model: exponential
     halfLife: P7D          # forgetting-curve half-life
     strength: 0.85
-    last_reinforced: 2026-01-18T09:00:00Z
-  access_count: 5
-  last_accessed: 2026-01-20T14:22:00Z
+    lastReinforced: 2026-01-18T09:00:00Z
+  accessCount: 5
+  lastAccessed: 2026-01-20T14:22:00Z
 ```
 
 **References**
@@ -187,24 +187,24 @@ purpose: **similarity recall** — finding the memories most relevant to the
 agent's current context.
 
 The `recallable` trait in [`./ontology.yaml`](./ontology.yaml) adds
-`embedding_model` and `embedding_source_text` alongside `access_count` and
-`last_accessed`. Profile guidance:
+`model` and `sourceText` alongside `accessCount` and
+`lastAccessed`. Profile guidance:
 
-- Embed the `source_text` that best represents *what the agent would search for*,
+- Embed the `sourceText` that best represents *what the agent would search for*,
   not necessarily the full stored content. For a session, that is usually the
   `summary`; for an observation, the `statement`.
 - Recall ranking SHOULD combine embedding similarity with decay `strength`: a
   highly similar but heavily-decayed memory is less useful than a fresh one. A
   simple composite is `score = similarity * strength`.
 - Re-embedding on import (per core §11.1) is expected when migrating between
-  models; only the metadata and `source_text` need survive.
+  models; only the metadata and `sourceText` need survive.
 
 ```yaml
 embedding:
   model: text-embedding-3-small
-  model_version: "2024-01"
+  modelVersion: "2024-01"
   dimensions: 1536
-  source_text: "User prefers dark mode"
+  sourceText: "User prefers dark mode"
   normalized: true
 ```
 
@@ -236,7 +236,7 @@ Mem0 stores flat memories with a free-form `metadata.category`.
     "@context": "https://mif-spec.dev/schema/context.jsonld",
     "@id": "urn:mif:mem0_123",                 # id -> @id
     "content": "User prefers dark mode",       # memory -> content
-    "memoryType": "semantic",                  # a preference is a known fact
+    "conceptType": "semantic",                  # a preference is a known fact
     "namespace": "_semantic/preferences",      # base type + category
     "created": "2026-01-15T10:30:00Z",         # created_at -> created
     "extensions": {
@@ -296,13 +296,13 @@ memory per fact so decay and recall apply at the right granularity.
 # MIF mapping (one memory per fact)
 {
     "@id": "urn:mif:letta-human-name",
-    "memoryType": "semantic",
+    "conceptType": "semantic",
     "content": "Name: Alice",
     "namespace": "_semantic/entities"
 },
 {
     "@id": "urn:mif:letta-human-pref",
-    "memoryType": "semantic",
+    "conceptType": "semantic",
     "content": "Prefers dark mode",
     "namespace": "_semantic/preferences"
 }
@@ -328,7 +328,7 @@ namespace with its triad base type.
 {
     "@id": "urn:mif:subcog_abc",
     "content": "Decision: Use React",
-    "memoryType": "semantic",                  # a decision is known knowledge
+    "conceptType": "semantic",                  # a decision is known knowledge
     "namespace": "_semantic/decisions",        # base prefix + category
     "tags": ["frontend"],
     "created": "2026-01-15T10:30:00Z"
@@ -360,8 +360,8 @@ created: 2026-01-15T10:30:00Z
 ontology:
   id: ai-memory
 relationships:
-  - target: urn:mif:entity:auth-service   # [[Auth Service]] -> relates_to
-    relationshipType: RelatesTo
+  - type: relates-to
+    target: urn:mif:entity:auth-service   # [[Auth Service]] -> relates_to
 ---
 The auth timeout was caused by JWT clock skew producing 401s.
 ```
@@ -380,8 +380,8 @@ core-spec conformance:
    `procedural` triad.
 2. It applies an exponential (forgetting-curve) decay model by default to
    un-reinforced memories, with per-type half-lives per §3.2.
-3. It updates `access_count` / `last_accessed` (and MAY update
-   `last_reinforced`) on each recall.
+3. It updates `accessCount` / `lastAccessed` (and MAY update
+   `lastReinforced`) on each recall.
 4. It uses recall-oriented embedding metadata per §5 for similarity retrieval.
 
 Profile conformance is independent of which ontology entity types are used; an

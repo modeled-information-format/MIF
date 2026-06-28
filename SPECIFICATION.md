@@ -350,8 +350,8 @@ carry `temporal` validity to bound when they hold (see 9):
 type: episodic
 namespace: episodic/sessions
 temporal:
-  valid_from: 2026-01-15T00:00:00Z
-  valid_until: 2026-01-15T11:00:00Z
+  validFrom: 2026-01-15T00:00:00Z
+  validUntil: 2026-01-15T11:00:00Z
 ---
 ```
 
@@ -421,31 +421,31 @@ tags:                                       # Classification
 
 # === OPTIONAL: Temporal ===
 temporal:
-  valid_from: 2026-01-15T00:00:00Z         # When fact becomes valid
-  valid_until: null                         # When fact expires (null = indefinite)
-  recorded_at: 2026-01-15T10:30:00Z        # When recorded (transaction time)
+  validFrom: 2026-01-15T00:00:00Z          # When fact becomes valid
+  validUntil: null                          # When fact expires (null = indefinite)
+  recordedAt: 2026-01-15T10:30:00Z         # When recorded (transaction time)
   ttl: P90D                                 # Time-to-live (ISO 8601 duration)
   decay:
     model: exponential                      # Decay model
     halfLife: P7D                          # Half-life duration
     strength: 0.85                          # Current strength (0-1)
-  access_count: 5                           # Times accessed
-  last_accessed: 2026-01-20T14:22:00Z      # Last access time
+  accessCount: 5                            # Times accessed
+  lastAccessed: 2026-01-20T14:22:00Z       # Last access time
 
 # === OPTIONAL: Provenance ===
 provenance:
-  source_type: user_explicit                # How memory was created
-  source_ref: conversation:conv_456         # Reference to source
+  sourceType: user_explicit                 # How memory was created
+  sourceRef: conversation:conv_456          # Reference to source
   agent: claude-3-opus                      # Creating agent
   confidence: 0.95                          # Confidence score (0-1)
-  trust_level: user_stated                  # Trust classification
+  trustLevel: user_stated                   # Trust classification
 
 # === OPTIONAL: Embedding ===
 embedding:
   model: text-embedding-3-small             # Embedding model
-  model_version: "2024-01"                  # Model version
+  modelVersion: "2024-01"                   # Model version
   dimensions: 1536                          # Vector dimensions
-  source_text: "User prefers dark mode"     # Text that was embedded
+  sourceText: "User prefers dark mode"      # Text that was embedded
   # Note: Actual vectors stored externally or in JSON-LD format
 
 # === OPTIONAL: Aliases ===
@@ -698,11 +698,11 @@ Implementations MAY apply compression when memories meet these criteria:
 ```json
 {
   "@context": "https://mif-spec.dev/schema/context.jsonld",
-  "@type": "Memory",
+  "@type": "Concept",
   "@id": "urn:mif:550e8400-e29b-41d4-a716-446655440000",
 
   "content": "User prefers dark mode for all applications",
-  "memoryType": "semantic",
+  "conceptType": "semantic",
   "title": "Dark Mode Preference",
 
   "created": "2026-01-15T10:30:00Z",
@@ -732,11 +732,11 @@ Implementations MAY apply compression when memories meet these criteria:
       "subcog": "https://github.com/zircote/subcog/ns/"
     }
   ],
-  "@type": ["Memory", "prov:Entity"],
+  "@type": ["Concept", "prov:Entity"],
   "@id": "urn:mif:550e8400-e29b-41d4-a716-446655440000",
 
   "content": "User prefers dark mode for all applications. This applies to:\n- IDE themes\n- Terminal colors\n- Web applications\n- Mobile apps",
-  "memoryType": "semantic",
+  "conceptType": "semantic",
   "title": "Dark Mode Preference",
 
   "dc:created": "2026-01-15T10:30:00Z",
@@ -767,15 +767,13 @@ Implementations MAY apply compression when memories meet these criteria:
 
   "relationships": [
     {
-      "@type": "Relationship",
-      "relationshipType": "RelatesTo",
-      "target": {"@id": "urn:mif:memory:ui-preferences"},
+      "type": "relates-to",
+      "target": "urn:mif:memory:ui-preferences",
       "strength": 0.85
     },
     {
-      "@type": "Relationship",
-      "relationshipType": "Supersedes",
-      "target": {"@id": "urn:mif:memory:old-theme-preference"}
+      "type": "supersedes",
+      "target": "urn:mif:memory:old-theme-preference"
     }
   ],
 
@@ -1122,12 +1120,13 @@ relationship_types:
   ],
   "relationships": [
     {
-      "@type": "Relationship",
-      "relationshipType": "farm:BreedsWith",
-      "target": {"@id": "urn:mif:entity:animal:ram-001"},
+      "type": "farm:breeds-with",
+      "target": "urn:mif:entity:animal:ram-001",
       "strength": 1.0,
-      "farm:breeding_date": "2025-10-15",
-      "farm:success": true
+      "metadata": {
+        "farm:breeding_date": "2025-10-15",
+        "farm:success": true
+      }
     }
   ]
 }
@@ -1156,9 +1155,8 @@ The relationship type name is converted to kebab-case in Markdown. The target us
 ```json
 "relationships": [
   {
-    "@type": "Relationship",
-    "relationshipType": "DerivedFrom",
-    "target": {"@id": "urn:mif:memory:source-memory"},
+    "type": "derived-from",
+    "target": "urn:mif:memory:source-memory",
     "strength": 0.9,
     "metadata": {
       "reason": "Extracted key insight",
@@ -1173,7 +1171,7 @@ The relationship type name is converted to kebab-case in Markdown. The target us
 | Property | Type | Required | Description |
 |----------|------|----------|-------------|
 | `@type` | String | Yes | Always `"Relationship"` |
-| `relationshipType` | URI/Vocab | Yes | Type identifier (core or custom) |
+| `type` | String | Yes | Type identifier (kebab-case; optional `ns:` prefix) |
 | `target` | URI Reference | Yes | Target memory or entity URI |
 | `strength` | Decimal | No | Relationship strength (0.0-1.0) |
 | `metadata` | Object | No | Additional relationship metadata |
@@ -1248,17 +1246,17 @@ reinforcement — each access can reset or slow the freshness decay.
 
 ```yaml
 temporal:
-  valid_from: 2026-01-15T00:00:00Z
-  valid_until: null
-  recorded_at: 2026-01-15T10:30:00Z
+  validFrom: 2026-01-15T00:00:00Z
+  validUntil: null
+  recordedAt: 2026-01-15T10:30:00Z
   ttl: P90D
   decay:
     model: exponential
     halfLife: P7D
     strength: 0.85
-    last_reinforced: 2026-01-18T09:00:00Z
-  access_count: 5
-  last_accessed: 2026-01-20T14:22:00Z
+    lastReinforced: 2026-01-18T09:00:00Z
+  accessCount: 5
+  lastAccessed: 2026-01-20T14:22:00Z
 ```
 
 ---
@@ -1583,9 +1581,9 @@ MIF stores embedding metadata, not raw vectors:
 ```yaml
 embedding:
   model: text-embedding-3-small
-  model_version: "2024-01"
+  modelVersion: "2024-01"
   dimensions: 1536
-  source_text: "The text that was embedded"
+  sourceText: "The text that was embedded"
   normalized: true
   quantization: null  # or "float16", "int8"
 ```
@@ -1603,8 +1601,8 @@ For providers that need vector portability:
 ```yaml
 embedding:
   model: text-embedding-3-small
-  source_text: "..."
-  vector_uri: "vectors/550e8400.bin"
+  sourceText: "..."
+  vectorUri: "urn:mif:vector:550e8400-e29b-41d4-a716-446655440000"
 ```
 
 **Inline (JSON-LD only):**
@@ -1731,7 +1729,7 @@ Implementations SHOULD declare their conformance level:
 
 ```yaml
 # .mif/config.yaml
-mif_version: "0.1.0"
+mif_version: "1.0.0"
 conformance_level: 2
 extensions:
   - subcog
@@ -1750,151 +1748,17 @@ https://mif-spec.dev/schema/context.jsonld
 
 ### 14.2 Context Definition
 
-```json
-{
-  "@context": {
-    "@version": 1.1,
-    "mif": "https://mif-spec.dev/ns/",
-    "dc": "http://purl.org/dc/terms/",
-    "prov": "http://www.w3.org/ns/prov#",
-    "xsd": "http://www.w3.org/2001/XMLSchema#",
+The canonical JSON-LD context is maintained in `schema/context.jsonld` at the
+root of this repository and is served at:
 
-    "Memory": "mif:Memory",
-    "Entity": "mif:Entity",
-    "Relationship": "mif:Relationship",
-    "TemporalMetadata": "mif:TemporalMetadata",
-    "EmbeddingReference": "mif:EmbeddingReference",
-    "EntityReference": "mif:EntityReference",
-    "OntologyReference": "mif:OntologyReference",
-
-    "Person": "mif:Person",
-    "Organization": "mif:Organization",
-    "Technology": "mif:Technology",
-    "Concept": "mif:Concept",
-    "File": "mif:File",
-
-    "id": "@id",
-    "type": "@type",
-    "content": "mif:content",
-    "memoryType": "mif:memoryType",
-    "title": "dc:title",
-    "namespace": "mif:namespace",
-    "tags": "mif:tags",
-    "aliases": "mif:aliases",
-
-    "created": {
-      "@id": "dc:created",
-      "@type": "xsd:dateTime"
-    },
-    "modified": {
-      "@id": "dc:modified",
-      "@type": "xsd:dateTime"
-    },
-
-    "ontology": "mif:ontology",
-    "entities": "mif:entities",
-    "relationships": "mif:relationships",
-    "temporal": "mif:temporal",
-    "provenance": "mif:provenance",
-    "embedding": "mif:embedding",
-    "extensions": "mif:extensions",
-
-    "relationshipType": "mif:relationshipType",
-    "target": "mif:target",
-    "strength": "mif:strength",
-
-    "validFrom": {
-      "@id": "mif:validFrom",
-      "@type": "xsd:dateTime"
-    },
-    "validUntil": {
-      "@id": "mif:validUntil",
-      "@type": "xsd:dateTime"
-    },
-    "recordedAt": {
-      "@id": "mif:recordedAt",
-      "@type": "xsd:dateTime"
-    },
-    "ttl": "mif:ttl",
-    "decay": "mif:decay",
-    "accessCount": "mif:accessCount",
-    "lastAccessed": {
-      "@id": "mif:lastAccessed",
-      "@type": "xsd:dateTime"
-    },
-
-    "sourceType": "mif:sourceType",
-    "sourceRef": "mif:sourceRef",
-    "agent": "mif:agent",
-    "agentVersion": "mif:agentVersion",
-    "confidence": "mif:confidence",
-    "trustLevel": "mif:trustLevel",
-
-    "wasGeneratedBy": {
-      "@id": "prov:wasGeneratedBy",
-      "@type": "@id"
-    },
-    "wasAttributedTo": {
-      "@id": "prov:wasAttributedTo",
-      "@type": "@id"
-    },
-    "wasDerivedFrom": {
-      "@id": "prov:wasDerivedFrom",
-      "@type": "@id"
-    },
-    "wasAssociatedWith": {
-      "@id": "prov:wasAssociatedWith",
-      "@type": "@id"
-    },
-
-    "model": "mif:model",
-    "modelVersion": "mif:modelVersion",
-    "dimensions": "mif:dimensions",
-    "sourceText": "mif:sourceText",
-    "vectorUri": "mif:vectorUri",
-
-    "citations": {
-      "@id": "mif:citations",
-      "@container": "@set"
-    },
-    "Citation": "mif:Citation",
-    "citationType": {
-      "@id": "mif:citationType",
-      "@type": "@vocab"
-    },
-    "citationRole": {
-      "@id": "mif:citationRole",
-      "@type": "@vocab"
-    },
-    "url": {
-      "@id": "schema:url",
-      "@type": "@id"
-    },
-    "author": {
-      "@id": "dc:creator"
-    },
-    "date": {
-      "@id": "dc:date",
-      "@type": "xsd:date"
-    },
-    "relevance": {
-      "@id": "mif:relevance",
-      "@type": "xsd:decimal"
-    },
-    "accessed": {
-      "@id": "schema:accessDate",
-      "@type": "xsd:date"
-    },
-    "note": "schema:description",
-
-    "summary": "mif:summary",
-    "compressedAt": {
-      "@id": "mif:compressedAt",
-      "@type": "xsd:dateTime"
-    }
-  }
-}
 ```
+https://mif-spec.dev/schema/context.jsonld
+```
+
+That file is the normative definition of all term mappings for MIF documents.
+Implementations MUST dereference the context URL rather than inlining a local
+copy. The context is versioned alongside the schema; breaking changes to term
+mappings require a new major version of the specification.
 
 ---
 
@@ -1925,12 +1789,12 @@ https://mif-spec.dev/schema/context.jsonld
 ```json
 {
   "@context": "https://mif-spec.dev/schema/context.jsonld",
-  "@type": "Memory",
+  "@type": "Concept",
   "@id": "urn:mif:550e8400",
   "title": "Dark Mode",
   "content": "User prefers dark mode",
   "relationships": [
-    {"relationshipType": "RelatesTo", "target": {"@id": "urn:mif:ui-prefs"}}
+    {"type": "relates-to", "target": "urn:mif:ui-prefs"}
   ]
 }
 ```
@@ -2026,9 +1890,9 @@ User prefers dark mode for all applications.
 ```json
 {
   "@context": "https://mif-spec.dev/schema/context.jsonld",
-  "@type": "Memory",
+  "@type": "Concept",
   "@id": "urn:mif:550e8400-e29b-41d4-a716-446655440000",
-  "memoryType": "semantic",
+  "conceptType": "semantic",
   "content": "User prefers dark mode for all applications.",
   "created": "2026-01-15T10:30:00Z"
 }
@@ -2115,7 +1979,7 @@ see [`profiles/ai-memory/SPECIFICATION.md`](profiles/ai-memory/SPECIFICATION.md)
 
 ### 18.3 Provenance Trust
 
-- `provenance.trust_level` indicates data reliability
+- `provenance.trustLevel` indicates data reliability
 - Implementations SHOULD NOT elevate trust levels on import
 - External sources SHOULD be marked as `external_import`
 
@@ -2168,16 +2032,16 @@ tags: [tag1, tag2]
 aliases: ["Alt Name 1", "Alt Name 2"]
 
 temporal:
-  valid_from: ISO-8601-datetime
-  valid_until: ISO-8601-datetime | null
-  recorded_at: ISO-8601-datetime
+  validFrom: ISO-8601-datetime
+  validUntil: ISO-8601-datetime | null
+  recordedAt: ISO-8601-datetime
   ttl: ISO-8601-duration
   decay:
     model: none|linear|exponential|step
     halfLife: ISO-8601-duration
     strength: 0.0-1.0
-  access_count: integer
-  last_accessed: ISO-8601-datetime
+  accessCount: integer
+  lastAccessed: ISO-8601-datetime
 
 provenance:
   sourceType: user_explicit|user_implicit|agent_inferred|external_import|system_generated
@@ -2189,9 +2053,9 @@ provenance:
 
 embedding:
   model: string
-  model_version: string
+  modelVersion: string
   dimensions: integer
-  source_text: string
+  sourceText: string
 
 extensions:
   provider_name:
@@ -2203,17 +2067,17 @@ extensions:
 
 ## Appendix B: Relationship Types Quick Reference
 
-| Markdown Syntax | JSON-LD relationshipType | Description |
-|-----------------|-------------------------|-------------|
-| `[[X]]` | `RelatesTo` | General relationship |
-| `[[X\|derived-from]]` | `DerivedFrom` | Created from source |
-| `[[X\|supersedes]]` | `Supersedes` | Replaces older |
-| `[[X\|conflicts-with]]` | `ConflictsWith` | Contradicts |
-| `[[X\|part-of]]` | `PartOf` | Component of |
-| `[[X\|implements]]` | `Implements` | Realizes |
-| `[[X\|uses]]` | `Uses` | Utilizes |
-| `[[X\|created-by]]` | `Created` | Authored by |
-| `[[X\|mentioned-in]]` | `MentionedIn` | Referenced in |
+| Markdown Syntax | JSON-LD `type` | Description |
+|-----------------|----------------|-------------|
+| `[[X]]` | `relates-to` | General relationship |
+| `[[X\|derived-from]]` | `derived-from` | Created from source |
+| `[[X\|supersedes]]` | `supersedes` | Replaces older |
+| `[[X\|conflicts-with]]` | `conflicts-with` | Contradicts |
+| `[[X\|part-of]]` | `part-of` | Component of |
+| `[[X\|implements]]` | `implements` | Realizes |
+| `[[X\|uses]]` | `uses` | Utilizes |
+| `[[X\|created-by]]` | `created-by` | Authored by |
+| `[[X\|mentioned-in]]` | `mentioned-in` | Referenced in |
 
 ---
 

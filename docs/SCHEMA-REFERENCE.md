@@ -30,7 +30,7 @@ All schemas use JSON Schema Draft 2020-12.
 | Field | Type | Description |
 |-------|------|-------------|
 | `@context` | string/array/object | JSON-LD context |
-| `@type` | `"Concept"` or `"Memory"` (or array containing `"Concept"`) | Document type; the projection emits `"Concept"` |
+| `@type` | `"Concept"` (or array containing `"Concept"`) | Document type |
 | `@id` | string (pattern: `^urn:mif:`) | Unique identifier |
 | `conceptType` | enum | Knowledge taxonomy classification |
 | `content` | string (minLength: 1) | Memory content |
@@ -123,9 +123,8 @@ Ontologies can define extended types that map to these base types via namespace 
 ```json
 "relationships": [
   {
-    "@type": "Relationship",
-    "relationshipType": "DerivedFrom",
-    "target": { "@id": "urn:mif:memory:source-id" },
+    "type": "derived-from",
+    "target": "urn:mif:memory:source-id",
     "strength": 0.9,
     "metadata": { "reason": "Extracted insight" }
   }
@@ -134,9 +133,8 @@ Ontologies can define extended types that map to these base types via namespace 
 
 | Field | Required | Description |
 |-------|----------|-------------|
-| `@type` | Yes | Must be `"Relationship"` |
-| `relationshipType` | Yes | See relationship types below |
-| `target` | Yes | Object with `@id` (pattern: `^urn:mif:`) |
+| `type` | Yes | Kebab-case token (e.g. `derived-from`); optional `ns:` prefix |
+| `target` | Yes | String path or URN identifying the related concept |
 | `strength` | No | 0.0-1.0 relationship strength |
 | `metadata` | No | Additional properties |
 
@@ -144,15 +142,15 @@ Ontologies can define extended types that map to these base types via namespace 
 
 | Type | Description |
 |------|-------------|
-| `RelatesTo` | General relationship |
-| `DerivedFrom` | Created based on source |
-| `Supersedes` | Replaces older memory |
-| `ConflictsWith` | Contradicts another memory |
-| `PartOf` | Component of larger whole |
-| `Implements` | Realizes a concept/pattern |
-| `Uses` | Utilizes a technology/tool |
-| `Created` | Authored by entity |
-| `MentionedIn` | Referenced in memory |
+| `relates-to` | General relationship |
+| `derived-from` | Created based on source |
+| `supersedes` | Replaces older memory |
+| `conflicts-with` | Contradicts another memory |
+| `part-of` | Component of larger whole |
+| `implements` | Realizes a concept/pattern |
+| `uses` | Utilizes a technology/tool |
+| `created` | Authored by entity |
+| `mentioned-in` | Referenced in memory |
 
 #### Temporal Metadata
 
@@ -189,12 +187,12 @@ Ontologies can define extended types that map to these base types via namespace 
 
 **Reinforcement History Entry:**
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `date` | date-time | When reinforcement occurred |
-| `source` | string | What triggered the reinforcement |
-| `delta` | number | Strength change amount |
-| `newStrength` | number | Strength after reinforcement |
+| Field | Required | Type | Description |
+|-------|----------|------|-------------|
+| `timestamp` | Yes | date-time | When reinforcement occurred |
+| `event` | Yes | string | What triggered the reinforcement |
+| `strengthDelta` | No | number | Strength change amount |
+| `context` | No | string | Additional context about the reinforcement |
 
 **Recommended Half-Life Values:**
 
@@ -516,7 +514,7 @@ jsonschema.validate(document, schema)
 | Error | Cause | Fix |
 |-------|-------|-----|
 | `@id must match pattern` | Invalid URN format | Use `urn:mif:` prefix |
-| `memoryType must be equal to one of` | Invalid type | Use valid memory type |
+| `conceptType must be equal to one of` | Invalid type | Use valid concept type |
 | `created must match format date-time` | Bad timestamp | Use ISO 8601 format |
 | `namespace must match pattern` | Invalid namespace | Use alphanumeric with `/` separators |
 
@@ -524,7 +522,7 @@ jsonschema.validate(document, schema)
 
 ## Schema URLs
 
-Production schemas will be available at:
+Production schemas are available at:
 
 - `https://mif-spec.dev/schema/mif.schema.json`
 - `https://mif-spec.dev/schema/citation.schema.json`
