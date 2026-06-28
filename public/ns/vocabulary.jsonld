@@ -1,0 +1,704 @@
+{
+  "@context": {
+    "mif": "https://mif-spec.dev/ns/",
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@id": "https://mif-spec.dev/ns/",
+  "@type": "owl:Ontology",
+  "rdfs:label": "MIF Vocabulary",
+  "rdfs:comment": "The Modeled Information Format (MIF) vocabulary for portable AI memory. Term descriptions are derived from the canonical JSON-LD context at https://mif-spec.dev/schema/context.jsonld. MIF also reuses Dublin Core (dc), Schema.org (schema), W3C PROV (prov), and XML Schema (xsd) terms; those are defined by their own vocabularies and are not redefined here.",
+  "rdfs:seeAlso": {
+    "@id": "https://mif-spec.dev/schema/context.jsonld"
+  },
+  "@graph": [
+    {
+      "@id": "mif:AgentInferred",
+      "@type": "rdfs:Class",
+      "rdfs:label": "AgentInferred",
+      "rdfs:comment": "Inferred by an AI agent."
+    },
+    {
+      "@id": "mif:Citation",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Citation",
+      "rdfs:comment": "A citation or bibliographic reference."
+    },
+    {
+      "@id": "mif:Concept",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Concept",
+      "rdfs:comment": "The concept document type: every MIF concept declares @type Concept. Also used as the entity type for an abstract idea or topic."
+    },
+    {
+      "@id": "mif:ConflictsWith",
+      "@type": "rdfs:Class",
+      "rdfs:label": "ConflictsWith",
+      "rdfs:comment": "Contradicts another concept."
+    },
+    {
+      "@id": "mif:Created",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Created",
+      "rdfs:comment": "Authored by an entity."
+    },
+    {
+      "@id": "mif:DerivedFrom",
+      "@type": "rdfs:Class",
+      "rdfs:label": "DerivedFrom",
+      "rdfs:comment": "Created based on a source."
+    },
+    {
+      "@id": "mif:DocumentReference",
+      "@type": "rdfs:Class",
+      "rdfs:label": "DocumentReference",
+      "rdfs:comment": "A reference to an external document, by URI and hash, rather than embedded content."
+    },
+    {
+      "@id": "mif:EmbeddingReference",
+      "@type": "rdfs:Class",
+      "rdfs:label": "EmbeddingReference",
+      "rdfs:comment": "A reference to a vector embedding."
+    },
+    {
+      "@id": "mif:Entity",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Entity",
+      "rdfs:comment": "A named entity."
+    },
+    {
+      "@id": "mif:EntityData",
+      "@type": "rdfs:Class",
+      "rdfs:label": "EntityData",
+      "rdfs:comment": "Structured entity data."
+    },
+    {
+      "@id": "mif:EntityReference",
+      "@type": "rdfs:Class",
+      "rdfs:label": "EntityReference",
+      "rdfs:comment": "A reference to an entity within a concept."
+    },
+    {
+      "@id": "mif:EpisodicType",
+      "@type": "rdfs:Class",
+      "rdfs:label": "EpisodicType",
+      "rdfs:comment": "Concept type for events, experiences, sessions, and incidents."
+    },
+    {
+      "@id": "mif:ExternalImport",
+      "@type": "rdfs:Class",
+      "rdfs:label": "ExternalImport",
+      "rdfs:comment": "Imported from an external system."
+    },
+    {
+      "@id": "mif:File",
+      "@type": "rdfs:Class",
+      "rdfs:label": "File",
+      "rdfs:comment": "A file or document."
+    },
+    {
+      "@id": "mif:HighConfidence",
+      "@type": "rdfs:Class",
+      "rdfs:label": "HighConfidence",
+      "rdfs:comment": "High confidence inference."
+    },
+    {
+      "@id": "mif:Implements",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Implements",
+      "rdfs:comment": "Realizes a concept or pattern."
+    },
+    {
+      "@id": "mif:LowConfidence",
+      "@type": "rdfs:Class",
+      "rdfs:label": "LowConfidence",
+      "rdfs:comment": "Low confidence inference."
+    },
+    {
+      "@id": "mif:Memory",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Memory",
+      "rdfs:comment": "The concept document type under the v0.1 name. Deprecated alias of Concept.",
+      "owl:deprecated": true,
+      "rdfs:seeAlso": {
+        "@id": "mif:Concept"
+      }
+    },
+    {
+      "@id": "mif:MentionedIn",
+      "@type": "rdfs:Class",
+      "rdfs:label": "MentionedIn",
+      "rdfs:comment": "Referenced in a concept."
+    },
+    {
+      "@id": "mif:ModerateConfidence",
+      "@type": "rdfs:Class",
+      "rdfs:label": "ModerateConfidence",
+      "rdfs:comment": "Moderate confidence inference."
+    },
+    {
+      "@id": "mif:OntologyReference",
+      "@type": "rdfs:Class",
+      "rdfs:label": "OntologyReference",
+      "rdfs:comment": "A reference to an ontology definition."
+    },
+    {
+      "@id": "mif:Organization",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Organization",
+      "rdfs:comment": "A company, institution, or group."
+    },
+    {
+      "@id": "mif:PartOf",
+      "@type": "rdfs:Class",
+      "rdfs:label": "PartOf",
+      "rdfs:comment": "Component of a larger whole."
+    },
+    {
+      "@id": "mif:Person",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Person",
+      "rdfs:comment": "A human individual."
+    },
+    {
+      "@id": "mif:ProceduralType",
+      "@type": "rdfs:Class",
+      "rdfs:label": "ProceduralType",
+      "rdfs:comment": "Concept type for processes, runbooks, patterns, and how-to guides."
+    },
+    {
+      "@id": "mif:RelatesTo",
+      "@type": "rdfs:Class",
+      "rdfs:label": "RelatesTo",
+      "rdfs:comment": "General relationship."
+    },
+    {
+      "@id": "mif:Relationship",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Relationship",
+      "rdfs:comment": "A typed relationship between concepts or entities."
+    },
+    {
+      "@id": "mif:SemanticType",
+      "@type": "rdfs:Class",
+      "rdfs:label": "SemanticType",
+      "rdfs:comment": "Concept type for facts, concepts, decisions, preferences, and knowledge."
+    },
+    {
+      "@id": "mif:Supersedes",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Supersedes",
+      "rdfs:comment": "Replaces an older concept."
+    },
+    {
+      "@id": "mif:SystemGenerated",
+      "@type": "rdfs:Class",
+      "rdfs:label": "SystemGenerated",
+      "rdfs:comment": "Generated by the system."
+    },
+    {
+      "@id": "mif:Technology",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Technology",
+      "rdfs:comment": "A technology, framework, or tool."
+    },
+    {
+      "@id": "mif:TemporalMetadata",
+      "@type": "rdfs:Class",
+      "rdfs:label": "TemporalMetadata",
+      "rdfs:comment": "Temporal validity and decay metadata."
+    },
+    {
+      "@id": "mif:Uncertain",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Uncertain",
+      "rdfs:comment": "Uncertain or unverified."
+    },
+    {
+      "@id": "mif:UserExplicit",
+      "@type": "rdfs:Class",
+      "rdfs:label": "UserExplicit",
+      "rdfs:comment": "Directly stated by the user."
+    },
+    {
+      "@id": "mif:UserImplicit",
+      "@type": "rdfs:Class",
+      "rdfs:label": "UserImplicit",
+      "rdfs:comment": "Inferred from user behavior."
+    },
+    {
+      "@id": "mif:UserStated",
+      "@type": "rdfs:Class",
+      "rdfs:label": "UserStated",
+      "rdfs:comment": "Stated by the user."
+    },
+    {
+      "@id": "mif:Uses",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Uses",
+      "rdfs:comment": "Uses a technology or tool."
+    },
+    {
+      "@id": "mif:Vector",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Vector",
+      "rdfs:comment": "An embedding vector."
+    },
+    {
+      "@id": "mif:Verified",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Verified",
+      "rdfs:comment": "Independently verified."
+    },
+    {
+      "@id": "mif:accessCount",
+      "@type": "rdf:Property",
+      "rdfs:label": "accessCount",
+      "rdfs:comment": "Number of times accessed.",
+      "rdfs:range": {
+        "@id": "xsd:integer"
+      }
+    },
+    {
+      "@id": "mif:accessed",
+      "@type": "rdf:Property",
+      "rdfs:label": "accessed",
+      "rdfs:comment": "When the citation was last accessed.",
+      "rdfs:range": {
+        "@id": "xsd:dateTime"
+      }
+    },
+    {
+      "@id": "mif:agent",
+      "@type": "rdf:Property",
+      "rdfs:label": "agent",
+      "rdfs:comment": "The agent that created the concept."
+    },
+    {
+      "@id": "mif:agentVersion",
+      "@type": "rdf:Property",
+      "rdfs:label": "agentVersion",
+      "rdfs:comment": "Version of the creating agent."
+    },
+    {
+      "@id": "mif:algorithm",
+      "@type": "rdf:Property",
+      "rdfs:label": "algorithm",
+      "rdfs:comment": "Hash algorithm."
+    },
+    {
+      "@id": "mif:aliases",
+      "@type": "rdf:Property",
+      "rdfs:label": "aliases",
+      "rdfs:comment": "Alternative names or identifiers."
+    },
+    {
+      "@id": "mif:blocks",
+      "@type": "rdf:Property",
+      "rdfs:label": "blocks",
+      "rdfs:comment": "Named content blocks."
+    },
+    {
+      "@id": "mif:byteLength",
+      "@type": "rdf:Property",
+      "rdfs:label": "byteLength",
+      "rdfs:comment": "Size of the referenced document in bytes.",
+      "rdfs:range": {
+        "@id": "xsd:integer"
+      }
+    },
+    {
+      "@id": "mif:citationRole",
+      "@type": "rdf:Property",
+      "rdfs:label": "citationRole",
+      "rdfs:comment": "How the citation relates to the concept."
+    },
+    {
+      "@id": "mif:citationType",
+      "@type": "rdf:Property",
+      "rdfs:label": "citationType",
+      "rdfs:comment": "Category of the citation source."
+    },
+    {
+      "@id": "mif:citations",
+      "@type": "rdf:Property",
+      "rdfs:label": "citations",
+      "rdfs:comment": "Collection of citations."
+    },
+    {
+      "@id": "mif:conceptType",
+      "@type": "rdf:Property",
+      "rdfs:label": "conceptType",
+      "rdfs:comment": "The base concept type classification."
+    },
+    {
+      "@id": "mif:confidence",
+      "@type": "rdf:Property",
+      "rdfs:label": "confidence",
+      "rdfs:comment": "Confidence score (0.0-1.0).",
+      "rdfs:range": {
+        "@id": "xsd:decimal"
+      }
+    },
+    {
+      "@id": "mif:content",
+      "@type": "rdf:Property",
+      "rdfs:label": "content",
+      "rdfs:comment": "The textual content of a concept.",
+      "rdfs:range": {
+        "@id": "xsd:string"
+      }
+    },
+    {
+      "@id": "mif:contentType",
+      "@type": "rdf:Property",
+      "rdfs:label": "contentType",
+      "rdfs:comment": "MIME type of the referenced document."
+    },
+    {
+      "@id": "mif:currentStrength",
+      "@type": "rdf:Property",
+      "rdfs:label": "currentStrength",
+      "rdfs:comment": "Current concept strength (0.0-1.0).",
+      "rdfs:range": {
+        "@id": "xsd:decimal"
+      }
+    },
+    {
+      "@id": "mif:data",
+      "@type": "rdf:Property",
+      "rdfs:label": "data",
+      "rdfs:comment": "Raw vector data."
+    },
+    {
+      "@id": "mif:decay",
+      "@type": "rdf:Property",
+      "rdfs:label": "decay",
+      "rdfs:comment": "Decay model container."
+    },
+    {
+      "@id": "mif:dimensions",
+      "@type": "rdf:Property",
+      "rdfs:label": "dimensions",
+      "rdfs:comment": "Vector dimensions.",
+      "rdfs:range": {
+        "@id": "xsd:integer"
+      }
+    },
+    {
+      "@id": "mif:documentType",
+      "@type": "rdf:Property",
+      "rdfs:label": "documentType",
+      "rdfs:comment": "Category of the referenced document."
+    },
+    {
+      "@id": "mif:documents",
+      "@type": "rdf:Property",
+      "rdfs:label": "documents",
+      "rdfs:comment": "Collection of external document references."
+    },
+    {
+      "@id": "mif:embedding",
+      "@type": "rdf:Property",
+      "rdfs:label": "embedding",
+      "rdfs:comment": "Embedding reference container."
+    },
+    {
+      "@id": "mif:encoding",
+      "@type": "rdf:Property",
+      "rdfs:label": "encoding",
+      "rdfs:comment": "Vector encoding format."
+    },
+    {
+      "@id": "mif:entities",
+      "@type": "rdf:Property",
+      "rdfs:label": "entities",
+      "rdfs:comment": "Entity references."
+    },
+    {
+      "@id": "mif:entity",
+      "@type": "rdf:Property",
+      "rdfs:label": "entity",
+      "rdfs:comment": "Reference to a single entity."
+    },
+    {
+      "@id": "mif:entityType",
+      "@type": "rdf:Property",
+      "rdfs:label": "entityType",
+      "rdfs:comment": "Type classification of an entity."
+    },
+    {
+      "@id": "mif:entity_id",
+      "@type": "rdf:Property",
+      "rdfs:label": "entity_id",
+      "rdfs:comment": "Entity identifier."
+    },
+    {
+      "@id": "mif:entity_type",
+      "@type": "rdf:Property",
+      "rdfs:label": "entity_type",
+      "rdfs:comment": "Alias for entityType."
+    },
+    {
+      "@id": "mif:extensions",
+      "@type": "rdf:Property",
+      "rdfs:label": "extensions",
+      "rdfs:comment": "Vendor-specific extension data."
+    },
+    {
+      "@id": "mif:halfLife",
+      "@type": "rdf:Property",
+      "rdfs:label": "halfLife",
+      "rdfs:comment": "Decay half-life duration.",
+      "rdfs:range": {
+        "@id": "xsd:duration"
+      }
+    },
+    {
+      "@id": "mif:hash",
+      "@type": "rdf:Property",
+      "rdfs:label": "hash",
+      "rdfs:comment": "Content hash of a referenced document."
+    },
+    {
+      "@id": "mif:lastAccessed",
+      "@type": "rdf:Property",
+      "rdfs:label": "lastAccessed",
+      "rdfs:comment": "When the concept was last accessed.",
+      "rdfs:range": {
+        "@id": "xsd:dateTime"
+      }
+    },
+    {
+      "@id": "mif:lastReinforced",
+      "@type": "rdf:Property",
+      "rdfs:label": "lastReinforced",
+      "rdfs:comment": "When the concept was last reinforced.",
+      "rdfs:range": {
+        "@id": "xsd:dateTime"
+      }
+    },
+    {
+      "@id": "mif:memoryType",
+      "@type": "rdf:Property",
+      "rdfs:label": "memoryType",
+      "rdfs:comment": "The base memory type classification. Deprecated alias of conceptType.",
+      "owl:deprecated": true,
+      "rdfs:seeAlso": {
+        "@id": "mif:conceptType"
+      }
+    },
+    {
+      "@id": "mif:metadata",
+      "@type": "rdf:Property",
+      "rdfs:label": "metadata",
+      "rdfs:comment": "Arbitrary relationship metadata, carried as a JSON literal."
+    },
+    {
+      "@id": "mif:model",
+      "@type": "rdf:Property",
+      "rdfs:label": "model",
+      "rdfs:comment": "Decay model type (none, linear, exponential, step)."
+    },
+    {
+      "@id": "mif:modelVersion",
+      "@type": "rdf:Property",
+      "rdfs:label": "modelVersion",
+      "rdfs:comment": "Embedding model version."
+    },
+    {
+      "@id": "mif:namespace",
+      "@type": "rdf:Property",
+      "rdfs:label": "namespace",
+      "rdfs:comment": "Hierarchical scope for categorization."
+    },
+    {
+      "@id": "mif:normalized",
+      "@type": "rdf:Property",
+      "rdfs:label": "normalized",
+      "rdfs:comment": "Whether the vector is normalized.",
+      "rdfs:range": {
+        "@id": "xsd:boolean"
+      }
+    },
+    {
+      "@id": "mif:note",
+      "@type": "rdf:Property",
+      "rdfs:label": "note",
+      "rdfs:comment": "Annotation or note text."
+    },
+    {
+      "@id": "mif:ontology",
+      "@type": "rdf:Property",
+      "rdfs:label": "ontology",
+      "rdfs:comment": "Ontology reference container."
+    },
+    {
+      "@id": "mif:provenance",
+      "@type": "rdf:Property",
+      "rdfs:label": "provenance",
+      "rdfs:comment": "Provenance metadata container."
+    },
+    {
+      "@id": "mif:recordedAt",
+      "@type": "rdf:Property",
+      "rdfs:label": "recordedAt",
+      "rdfs:comment": "Transaction time (when recorded).",
+      "rdfs:range": {
+        "@id": "xsd:dateTime"
+      }
+    },
+    {
+      "@id": "mif:reinforcementHistory",
+      "@type": "rdf:Property",
+      "rdfs:label": "reinforcementHistory",
+      "rdfs:comment": "Ordered list of reinforcement events."
+    },
+    {
+      "@id": "mif:relationshipType",
+      "@type": "rdf:Property",
+      "rdfs:label": "relationshipType",
+      "rdfs:comment": "The type of relationship."
+    },
+    {
+      "@id": "mif:relationships",
+      "@type": "rdf:Property",
+      "rdfs:label": "relationships",
+      "rdfs:comment": "Relationship references."
+    },
+    {
+      "@id": "mif:relevance",
+      "@type": "rdf:Property",
+      "rdfs:label": "relevance",
+      "rdfs:comment": "Relevance score (0.0-1.0).",
+      "rdfs:range": {
+        "@id": "xsd:decimal"
+      }
+    },
+    {
+      "@id": "mif:retrievedAt",
+      "@type": "rdf:Property",
+      "rdfs:label": "retrievedAt",
+      "rdfs:comment": "When the referenced document was retrieved.",
+      "rdfs:range": {
+        "@id": "xsd:dateTime"
+      }
+    },
+    {
+      "@id": "mif:role",
+      "@type": "rdf:Property",
+      "rdfs:label": "role",
+      "rdfs:comment": "Role in the concept context."
+    },
+    {
+      "@id": "mif:sourceRef",
+      "@type": "rdf:Property",
+      "rdfs:label": "sourceRef",
+      "rdfs:comment": "Reference to the original source."
+    },
+    {
+      "@id": "mif:sourceText",
+      "@type": "rdf:Property",
+      "rdfs:label": "sourceText",
+      "rdfs:comment": "Text that was embedded."
+    },
+    {
+      "@id": "mif:sourceType",
+      "@type": "rdf:Property",
+      "rdfs:label": "sourceType",
+      "rdfs:comment": "How the concept was created."
+    },
+    {
+      "@id": "mif:strength",
+      "@type": "rdf:Property",
+      "rdfs:label": "strength",
+      "rdfs:comment": "Relationship strength (0.0-1.0).",
+      "rdfs:range": {
+        "@id": "xsd:decimal"
+      }
+    },
+    {
+      "@id": "mif:tags",
+      "@type": "rdf:Property",
+      "rdfs:label": "tags",
+      "rdfs:comment": "Classification tags."
+    },
+    {
+      "@id": "mif:target",
+      "@type": "rdf:Property",
+      "rdfs:label": "target",
+      "rdfs:comment": "The target of the relationship."
+    },
+    {
+      "@id": "mif:temporal",
+      "@type": "rdf:Property",
+      "rdfs:label": "temporal",
+      "rdfs:comment": "Temporal metadata container."
+    },
+    {
+      "@id": "mif:trustLevel",
+      "@type": "rdf:Property",
+      "rdfs:label": "trustLevel",
+      "rdfs:comment": "Trust classification level."
+    },
+    {
+      "@id": "mif:ttl",
+      "@type": "rdf:Property",
+      "rdfs:label": "ttl",
+      "rdfs:comment": "Time-to-live duration.",
+      "rdfs:range": {
+        "@id": "xsd:duration"
+      }
+    },
+    {
+      "@id": "mif:uri",
+      "@type": "rdf:Property",
+      "rdfs:label": "uri",
+      "rdfs:comment": "URI reference."
+    },
+    {
+      "@id": "mif:validFrom",
+      "@type": "rdf:Property",
+      "rdfs:label": "validFrom",
+      "rdfs:comment": "When the fact becomes valid.",
+      "rdfs:range": {
+        "@id": "xsd:dateTime"
+      }
+    },
+    {
+      "@id": "mif:validUntil",
+      "@type": "rdf:Property",
+      "rdfs:label": "validUntil",
+      "rdfs:comment": "When the fact expires.",
+      "rdfs:range": {
+        "@id": "xsd:dateTime"
+      }
+    },
+    {
+      "@id": "mif:value",
+      "@type": "rdf:Property",
+      "rdfs:label": "value",
+      "rdfs:comment": "Hash value."
+    },
+    {
+      "@id": "mif:vector",
+      "@type": "rdf:Property",
+      "rdfs:label": "vector",
+      "rdfs:comment": "Vector data container."
+    },
+    {
+      "@id": "mif:vectorUri",
+      "@type": "rdf:Property",
+      "rdfs:label": "vectorUri",
+      "rdfs:comment": "URI to external vector data."
+    },
+    {
+      "@id": "mif:version",
+      "@type": "rdf:Property",
+      "rdfs:label": "version",
+      "rdfs:comment": "Version string."
+    }
+  ]
+}

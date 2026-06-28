@@ -134,6 +134,7 @@ export default defineConfig({
                 { label: "Conversion Rules", slug: "specification/conversion" },
                 { label: "Security", slug: "specification/security" },
                 { label: "Appendices", slug: "specification/appendices" },
+                { label: "Namespace", slug: "ns" },
               ],
             },
           ],

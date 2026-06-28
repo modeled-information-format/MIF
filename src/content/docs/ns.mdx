@@ -1,0 +1,69 @@
+---
+title: MIF Namespace
+description: The MIF JSON-LD vocabulary served at https://mif-spec.dev/ns/, with human and machine-readable forms.
+head:
+  - tag: link
+    attrs:
+      rel: alternate
+      type: application/ld+json
+      href: /ns/vocabulary.jsonld
+---
+
+import vocabRaw from '../../../public/ns/vocabulary.jsonld?raw';
+
+export const vocab = JSON.parse(vocabRaw);
+export const classes = vocab['@graph'].filter((t) => t['@type'] === 'rdfs:Class');
+export const properties = vocab['@graph'].filter((t) => t['@type'] === 'rdf:Property');
+export const rangeOf = (t) => (t['rdfs:range'] && t['rdfs:range']['@id']) || '';
+
+Base IRI: `https://mif-spec.dev/ns/`
+
+The MIF vocabulary defines the terms used by the JSON-LD projection of MIF
+concept documents. It is the `@vocab` base of the canonical context at
+[`/schema/context.jsonld`](/schema/context.jsonld). Term IRIs follow the pattern
+`https://mif-spec.dev/ns/<Term>` (for example `https://mif-spec.dev/ns/Concept`).
+
+This page is derived from the canonical context, so it stays in step with the
+schema. The same vocabulary is available as a machine-readable RDFS document:
+
+- Machine-readable vocabulary: [`/ns/vocabulary.jsonld`](/ns/vocabulary.jsonld)
+- Canonical JSON-LD context: [`/schema/context.jsonld`](/schema/context.jsonld)
+
+MIF also reuses Dublin Core (`dc`), Schema.org (`schema`), W3C PROV (`prov`), and
+XML Schema (`xsd`) terms. Those are defined by their own vocabularies and are not
+redefined here.
+
+## Classes
+
+<table>
+  <thead>
+    <tr><th>Term</th><th>IRI</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    {classes.map((t) => (
+      <tr key={t['@id']}>
+        <td><code>{t['rdfs:label']}</code></td>
+        <td><code>{t['@id']}</code></td>
+        <td>{t['rdfs:comment']}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+## Properties
+
+<table>
+  <thead>
+    <tr><th>Property</th><th>IRI</th><th>Range</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    {properties.map((t) => (
+      <tr key={t['@id']}>
+        <td><code>{t['rdfs:label']}</code></td>
+        <td><code>{t['@id']}</code></td>
+        <td>{rangeOf(t) ? <code>{rangeOf(t)}</code> : '—'}</td>
+        <td>{t['rdfs:comment']}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
