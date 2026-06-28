@@ -1170,7 +1170,6 @@ The relationship type name is converted to kebab-case in Markdown. The target us
 
 | Property | Type | Required | Description |
 |----------|------|----------|-------------|
-| `@type` | String | Yes | Always `"Relationship"` |
 | `type` | String | Yes | Type identifier (kebab-case; optional `ns:` prefix) |
 | `target` | URI Reference | Yes | Target memory or entity URI |
 | `strength` | Decimal | No | Relationship strength (0.0-1.0) |
