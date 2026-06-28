@@ -302,5 +302,3 @@ this conversion cites the file-accurate names. The three-tier *model* — the
 substance of the decision — is fully compliant.
 
 **Action Required:** None.
-</content>
-</invoke>

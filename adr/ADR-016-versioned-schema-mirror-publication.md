@@ -311,6 +311,21 @@ served `Content-Type` for schema detection.
    mirrored ones. This is the intended behavior: the mirror pins bytes, the
    `$id` graph stays canonical.
 
+## Decision Outcome
+
+The versioned-mirror approach meets all four primary drivers: pinned version
+paths give immutable, byte-stable URLs; the canonical unversioned `$id` is
+preserved in every mirror (per ADR-007); the mirror is committed source, so
+SLSA provenance covers each snapshot; and the release workflow's `--check` gate
+fails closed when a mirror is missing. The secondary drivers are also satisfied:
+an `index.json` catalog for discovery, doc-site-served version paths, and an
+offline `mif-schemas-<version>.tar.gz`.
+
+Mitigations for the negatives: the growing `public/schema/` directory is accepted
+as the cost of the immutability guarantee (no pruning, by design); the
+release-prep discipline of running `snapshot-schema-version.py` before tagging is
+backed by the fail-closed gate, which blocks a tag whose mirror is absent.
+
 ## Implementation
 
 ### Release-prep sequence

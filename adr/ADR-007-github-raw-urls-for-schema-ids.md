@@ -229,14 +229,17 @@ values continue to use relative paths within the repository.
 ### Negative
 
 1. **Domain ownership cost**: `mif-spec.dev` must be registered and renewed.
-2. **Two identifier authorities**: Contributors must understand why schema `$id`
-   lives on `mif-spec.dev` while the namespace IRI lives on GitHub raw.
+2. **Two identifier authorities** *(historical, pre-2026-06)*: for a time the
+   schema `$id` lived on `mif-spec.dev` while the namespace IRI stayed on GitHub
+   raw. The 2026-06 amendment migrated the namespace IRI to `mif-spec.dev/ns/`,
+   closing this split (see the Amendment section).
 
 ### Neutral
 
-1. **Split is by design, not drift**: The schema-vs-namespace URI divergence is
-   an intentional architectural choice documented in `ns/README.md`, not an
-   inconsistency to be "fixed."
+1. **Split was by design, not drift** *(historical, pre-2026-06)*: the
+   schema-vs-namespace URI divergence was an intentional choice, not drift; the
+   2026-06 amendment subsequently unified both onto `mif-spec.dev`. See
+   `ns/README.md` and the Amendment section.
 
 ## Decision Outcome
 
@@ -244,8 +247,10 @@ The custom-domain approach achieves the primary drivers: resolvability (HTTP
 dereferenceable), low infrastructure (GitHub Pages), and identifier stability
 (domain outlives hosting path). Mitigations:
 
-- The intentional schema-`$id` vs. namespace-IRI split is documented inline in
-  `ns/README.md` so it reads as a decision rather than a bug.
+- The schema-`$id` vs. namespace-IRI split (the 2026-02 state) was documented
+  inline in `ns/README.md` as a deliberate decision; the 2026-06 amendment then
+  unified both onto `mif-spec.dev/ns/`, removing the split (see the Amendment
+  section).
 - The amendment preserved the zero-infrastructure benefit of the original
   GitHub-raw decision by keeping delivery on GitHub Pages.
 
@@ -261,7 +266,7 @@ dereferenceable), low infrastructure (GitHub Pages), and identifier stability
 
 ## More Information
 
-- **Date:** 2026-01-27 (original); amended 2026-02
+- **Date:** 2026-01-27 (original); amended 2026-02 and 2026-06
 - **Source:** `schema/mif.schema.json` and sibling schema `$id` values; `schema/context.jsonld`; `ns/README.md`.
 - **Related ADRs:** ADR-002, ADR-011
 
