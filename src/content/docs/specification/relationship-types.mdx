@@ -13,44 +13,44 @@ Relationship types are **not hard-coded**. They are defined in vault configurati
 # .mif/config.yaml
 relationship_types:
   # Core types (RECOMMENDED for interoperability)
-  - name: RelatesTo
+  - name: relates-to
     description: General semantic relationship
     symmetric: true
-  - name: DerivedFrom
+  - name: derived-from
     description: Memory created based on source
-    inverse: Derives
-  - name: Supersedes
+    inverse: derives
+  - name: supersedes
     description: Replaces an older memory
-    inverse: SupersededBy
-  - name: ConflictsWith
+    inverse: superseded-by
+  - name: conflicts-with
     description: Contradicts another memory
     symmetric: true
-  - name: PartOf
+  - name: part-of
     description: Component of a larger whole
-    inverse: Contains
-  - name: Implements
+    inverse: contains
+  - name: implements
     description: Realizes a concept or pattern
-    inverse: ImplementedBy
-  - name: Uses
+    inverse: implemented-by
+  - name: uses
     description: Utilizes a technology or tool
-    inverse: UsedBy
-  - name: Created
+    inverse: used-by
+  - name: created-by
     description: Authored by an entity
-    inverse: CreatedBy
-  - name: MentionedIn
+    inverse: creates
+  - name: mentioned-in
     description: Referenced within a memory
-    inverse: Mentions
+    inverse: mentions
 
   # Custom types (domain-specific)
-  - name: Reinforces
+  - name: reinforces
     namespace: subcog
     description: Strengthens confidence in another memory
-    inverse: ReinforcedBy
-  - name: Contradicts
+    inverse: reinforced-by
+  - name: contradicts
     namespace: subcog
     description: Provides evidence against another memory
-    inverse: ContradictedBy
-  - name: BreedsWith
+    inverse: contradicted-by
+  - name: breeds-with
     namespace: farm
     description: Animal breeding relationship
     symmetric: false
@@ -67,15 +67,15 @@ For maximum interoperability, implementations SHOULD recognize these nine core t
 
 | Type | Description | Inverse | Symmetric |
 |------|-------------|---------|-----------|
-| `RelatesTo` | General relationship | `RelatesTo` | Yes |
-| `DerivedFrom` | Created based on source | `Derives` | No |
-| `Supersedes` | Replaces older memory | `SupersededBy` | No |
-| `ConflictsWith` | Contradicts another memory | `ConflictsWith` | Yes |
-| `PartOf` | Component of larger whole | `Contains` | No |
-| `Implements` | Realizes a concept/pattern | `ImplementedBy` | No |
-| `Uses` | Utilizes a technology/tool | `UsedBy` | No |
-| `Created` | Authored by entity | `CreatedBy` | No |
-| `MentionedIn` | Referenced in memory | `Mentions` | No |
+| `relates-to` | General relationship | `relates-to` | Yes |
+| `derived-from` | Created based on source | `derives` | No |
+| `supersedes` | Replaces older memory | `superseded-by` | No |
+| `conflicts-with` | Contradicts another memory | `conflicts-with` | Yes |
+| `part-of` | Component of larger whole | `contains` | No |
+| `implements` | Realizes a concept/pattern | `implemented-by` | No |
+| `uses` | Utilizes a technology/tool | `used-by` | No |
+| `created-by` | Authored by entity | `creates` | No |
+| `mentioned-in` | Referenced in memory | `mentions` | No |
 
 ### Custom Relationship Types
 
@@ -84,10 +84,10 @@ Providers MAY define additional relationship types using namespaced URIs:
 ```yaml
 # Custom relationship type definition
 relationship_types:
-  - name: Contradicts
+  - name: contradicts
     namespace: farm           # Results in type token: farm:contradicts
     description: Provides conflicting evidence
-    inverse: ContradictedBy
+    inverse: contradicted-by
     properties:
       - name: contradiction_type
         type: string
