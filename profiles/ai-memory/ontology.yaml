@@ -214,7 +214,7 @@ traits:
 
 # Relationships
 relationships:
-  recalled_in:
+  recalled-in:
     description: "A memory was recalled during a session"
     from:
       - observation
@@ -223,7 +223,7 @@ relationships:
       - session
     symmetric: false
 
-  learned_in:
+  learned-in:
     description: "A semantic or procedural memory was formed during a session"
     from:
       - observation

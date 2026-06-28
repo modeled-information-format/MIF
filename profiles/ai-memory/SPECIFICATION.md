@@ -174,7 +174,7 @@ Session types correspond to recognizable agent activities:
 - **meeting session** — a sync, standup, or review with other participants.
 
 Facts learned and skills practiced during a session SHOULD link back to it via
-the `learned_in` / `recalled_in` relationships, so the agent can trace *which
+the `learned-in` / `recalled-in` relationships, so the agent can trace *which
 episode* a piece of semantic or procedural memory came from.
 
 ---

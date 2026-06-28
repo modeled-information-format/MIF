@@ -206,7 +206,7 @@ The `examples/` directory contains domain-specific ontologies:
 - `regenerative-agriculture.ontology.yaml` - Farm operations and carbon markets
 - `k12-educational-publishing.ontology.yaml` - Educational content publishing
 - `biology-research-lab.ontology.yaml` - Academic research lab operations
-- `backstage/` - Backstage.io developer portal entities
+- `backstage.ontology.yaml` - Backstage.io developer portal entities
 - `csi-5w1h.ontology.yaml` - CSI 5W1H investigative framework
 
 The top-level `ontologies/` directory also contains:
