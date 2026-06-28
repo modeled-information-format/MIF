@@ -198,17 +198,17 @@ traits:
   recallable:
     description: "Adds recall-oriented access tracking and embedding metadata"
     fields:
-      access_count:
+      accessCount:
         type: integer
         description: "Number of times the memory has been recalled"
-      last_accessed:
+      lastAccessed:
         type: string
         format: date-time
         description: "When the memory was last recalled"
-      embedding_model:
+      model:
         type: string
         description: "Model used to embed the memory for similarity recall"
-      embedding_source_text:
+      sourceText:
         type: string
         description: "Text that was embedded for recall"
 

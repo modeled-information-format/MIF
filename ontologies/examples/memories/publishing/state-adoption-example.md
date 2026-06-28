@@ -129,6 +129,6 @@ Based on previous cycles, focus preparation on:
 
 ## Relationships
 
-- submitted_to [[into-math-k8-program]]
-- relates_to [[teks-math-standards]]
-- relates_to [[adoption-ca-math-2025]]
+- submitted-to [[into-math-k8-program]]
+- relates-to [[teks-math-standards]]
+- relates-to [[adoption-ca-math-2025]]

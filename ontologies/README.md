@@ -167,7 +167,7 @@ created: 2026-01-26T10:00:00Z
 ontology:
   id: regenerative-agriculture
   version: "0.1.0"
-  uri: https://github.com/modeled-information-format/MIF/ontologies/examples/regenerative-agriculture.ontology.yaml
+  uri: https://raw.githubusercontent.com/modeled-information-format/MIF/main/ontologies/examples/regenerative-agriculture.ontology.yaml
 namespace: _semantic/livestock
 ---
 ```
@@ -183,7 +183,7 @@ namespace: _semantic/livestock
     "@type": "OntologyReference",
     "id": "regenerative-agriculture",
     "version": "0.1.0",
-    "uri": "https://github.com/modeled-information-format/MIF/ontologies/examples/regenerative-agriculture.ontology.yaml"
+    "uri": "https://raw.githubusercontent.com/modeled-information-format/MIF/main/ontologies/examples/regenerative-agriculture.ontology.yaml"
   },
   "namespace": "_semantic/livestock",
   "content": "..."
@@ -206,8 +206,11 @@ The `examples/` directory contains domain-specific ontologies:
 - `regenerative-agriculture.ontology.yaml` - Farm operations and carbon markets
 - `k12-educational-publishing.ontology.yaml` - Educational content publishing
 - `biology-research-lab.ontology.yaml` - Academic research lab operations
-- `backstage.ontology.yaml` - Backstage.io developer portal entities
+- `backstage/` - Backstage.io developer portal entities
 - `csi-5w1h.ontology.yaml` - CSI 5W1H investigative framework
+
+The top-level `ontologies/` directory also contains:
+
 - `shared-traits.ontology.yaml` - Reusable trait mixins
 
 ## Creating Custom Ontologies

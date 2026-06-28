@@ -112,7 +112,7 @@ traits:
 # Base relationships
 # Standard relationships that apply across all knowledge types.
 relationships:
-  relates_to:
+  relates-to:
     description: "General association between records"
     from: []
     to: []
@@ -124,7 +124,7 @@ relationships:
     to: []
     symmetric: false
 
-  derived_from:
+  derived-from:
     description: "Record was derived from another"
     from: []
     to: []

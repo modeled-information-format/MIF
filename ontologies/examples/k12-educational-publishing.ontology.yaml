@@ -797,7 +797,7 @@ entity_types:
 # ===========================================================================
 
 relationships:
-  belongs_to:
+  belongs-to:
     description: "Title belongs to program"
     from:
       - title
@@ -806,7 +806,7 @@ relationships:
       - program
     symmetric: false
 
-  authored_by:
+  authored-by:
     description: "Content authored by contributor"
     from:
       - title
@@ -816,7 +816,7 @@ relationships:
       - author
     symmetric: false
 
-  aligns_to:
+  aligns-to:
     description: "Content aligns to standard"
     from:
       - title
@@ -826,7 +826,7 @@ relationships:
       - standard
     symmetric: false
 
-  submitted_to:
+  submitted-to:
     description: "Title submitted to state adoption"
     from:
       - title
@@ -835,7 +835,7 @@ relationships:
       - state-adoption
     symmetric: false
 
-  sold_to:
+  sold-to:
     description: "Title sold to district"
     from:
       - title
@@ -860,7 +860,7 @@ relationships:
       - title
     symmetric: false
 
-  reviewed_by:
+  reviewed-by:
     description: "Content reviewed by team/author"
     from:
       - manuscript
@@ -869,6 +869,23 @@ relationships:
       - author
       - editorial-team
     symmetric: false
+
+  applies-to:
+    description: "Editorial workflow applies to a program"
+    from:
+      - editorial-milestone
+    to:
+      - program
+    symmetric: false
+
+  owned-by:
+    description: "Editorial workflow is owned by an editorial team"
+    from:
+      - editorial-milestone
+    to:
+      - editorial-team
+    symmetric: false
+
 
 # ===========================================================================
 # DISCOVERY PATTERNS
