@@ -19,6 +19,7 @@ Markdown is canonical. The JSON-LD form below is a **derived projection**: regen
 
   "created": "2026-01-15T10:30:00Z",
   "modified": "2026-01-20T14:22:00Z",
+  "timestamp": "2026-01-20T14:22:00Z",
 
   "namespace": "_semantic/preferences",
   "tags": ["preference", "ui", "accessibility"],
@@ -31,6 +32,8 @@ Markdown is canonical. The JSON-LD form below is a **derived projection**: regen
   "extensions": {...}
 }
 ```
+
+The projection always includes two OKF-legible mirror fields the converter derives: `timestamp` (the value of `modified`, or `created` when there is no `modified`) and, when the source has a `summary`, `description` (mapped from `summary`). These are derived mirrors of the canonical frontmatter; markdown remains authoritative.
 
 ### Full Example
 
@@ -52,6 +55,7 @@ Markdown is canonical. The JSON-LD form below is a **derived projection**: regen
 
   "created": "2026-01-15T10:30:00Z",
   "modified": "2026-01-20T14:22:00Z",
+  "timestamp": "2026-01-20T14:22:00Z",
 
   "ontology": {
     "@type": "OntologyReference",
