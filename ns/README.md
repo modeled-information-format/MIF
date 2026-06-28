@@ -8,10 +8,10 @@ Base IRI: `https://mif-spec.dev/ns/`
 
 The MIF vocabulary defines terms for portable AI memory representation.
 
-> **Note:** Schema `$id` values use `https://mif-spec.dev/schema/...` while the
-> JSON-LD namespace IRI uses `https://mif-spec.dev/ns/`.
-> This is intentional: the namespace IRI is a stable identifier, while schema URLs
-> may change with hosting.
+> **Note:** Both the schema `$id` values (`https://mif-spec.dev/schema/...`) and
+> the JSON-LD namespace IRI (`https://mif-spec.dev/ns/`) are stable, resolvable
+> identifiers on the `mif-spec.dev` domain (per ADR-007). Neither is expected to
+> change.
 
 ## Vocabulary Terms
 

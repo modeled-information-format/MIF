@@ -196,6 +196,6 @@ expression. Version 2.1 updated January 2026.
 
 ## Relationships
 
-- uses_equipment [[equipment-chemidoc]]
-- uses_equipment [[equipment-transblot]]
-- used_by [[experiment-metabolic-screen-001]]
+- uses-equipment [[equipment-chemidoc]]
+- uses-equipment [[equipment-transblot]]
+- used-by [[experiment-metabolic-screen-001]]

@@ -424,7 +424,7 @@ traits:
 
 # Relationships
 relationships:
-  depends_on:
+  depends-on:
     description: "Component dependency relationship"
     from:
       - component
@@ -442,7 +442,7 @@ relationships:
       - architectural-decision
     symmetric: false
 
-  caused_by:
+  caused-by:
     description: "Incident causality"
     from:
       - incident-report

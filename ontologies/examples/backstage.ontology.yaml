@@ -592,7 +592,7 @@ traits:
 # ===========================================================================
 
 relationships:
-  owned_by:
+  owned-by:
     description: "Entity is owned by a group"
     from:
       - component
@@ -605,7 +605,7 @@ relationships:
       - group
     symmetric: false
 
-  part_of:
+  part-of:
     description: "Entity is part of a system/domain"
     from:
       - component
@@ -615,7 +615,7 @@ relationships:
       - system
     symmetric: false
 
-  has_part:
+  has-part:
     description: "System has component parts"
     from:
       - system
@@ -625,7 +625,7 @@ relationships:
       - resource
     symmetric: false
 
-  member_of:
+  member-of:
     description: "User is member of group"
     from:
       - user
@@ -633,7 +633,7 @@ relationships:
       - group
     symmetric: false
 
-  has_member:
+  has-member:
     description: "Group has user members"
     from:
       - group
@@ -641,7 +641,7 @@ relationships:
       - user
     symmetric: false
 
-  parent_of:
+  parent-of:
     description: "Parent group relationship"
     from:
       - group
@@ -649,7 +649,7 @@ relationships:
       - group
     symmetric: false
 
-  child_of:
+  child-of:
     description: "Child group relationship"
     from:
       - group
@@ -657,7 +657,7 @@ relationships:
       - group
     symmetric: false
 
-  provides_api:
+  provides-api:
     description: "Component provides an API"
     from:
       - component
@@ -665,7 +665,7 @@ relationships:
       - api
     symmetric: false
 
-  consumes_api:
+  consumes-api:
     description: "Component consumes an API"
     from:
       - component
@@ -673,7 +673,7 @@ relationships:
       - api
     symmetric: false
 
-  depends_on:
+  depends-on:
     description: "Component depends on resource or component"
     from:
       - component
@@ -683,7 +683,7 @@ relationships:
       - resource
     symmetric: false
 
-  dependency_of:
+  dependency-of:
     description: "Resource is a dependency of component"
     from:
       - resource

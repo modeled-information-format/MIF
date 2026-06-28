@@ -101,6 +101,6 @@ Check weekly:
 ## Relationships
 
 - documents [Herd Beef Main](/herd-beef-main.md)
-- located_on [[field-pasture-north]]
-- located_on [[field-pasture-south]]
-- contributes_to [[carbon-credit-2026]]
+- located-on [[field-pasture-north]]
+- located-on [[field-pasture-south]]
+- contributes-to [[carbon-credit-2026]]

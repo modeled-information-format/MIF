@@ -54,7 +54,7 @@ python ../../scripts/yaml2jsonld.py ../../ontologies/mif-base.ontology.yaml
 
 ## Schema Evolution
 
-- **v0.1.0** (current): Three-type hierarchy with nested namespaces
+- **v1.0** (current): Three-type hierarchy with nested namespaces
 
 When updating the schema:
 1. Increment version in `$id`
