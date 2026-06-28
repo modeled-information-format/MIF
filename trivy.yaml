@@ -11,6 +11,14 @@
 # Trivy matches license.ignored against the full SPDX expression, not its
 # components, so the compound expressions the @img/sharp-* packages declare are
 # listed explicitly alongside the standalone LGPL identifiers.
+#
+# Permissive / notice / public-domain licenses: the org's reusable Trivy workflow
+# runs `--scanners misconfig,license`, and the pinned trivy-action version does not
+# apply the `--severity HIGH,CRITICAL` filter to license findings. As a result every
+# transitive dependency's permissive license surfaced as its own code-scanning alert
+# (542 such detections — license classifications, not vulnerabilities; npm audit and
+# the OSV-Scanner gate report 0 CVEs). These licenses are accepted org-wide and are
+# ignored here so the license scanner reports only genuinely-restrictive findings.
 license:
   ignored:
     - LGPL-3.0-or-later
@@ -18,3 +26,17 @@ license:
     - LGPL-3.0
     - Apache-2.0 AND LGPL-3.0-or-later
     - Apache-2.0 AND LGPL-3.0-or-later AND MIT
+    # Permissive / notice / public-domain (accepted by policy)
+    - Apache-2.0
+    - MIT
+    - ISC
+    - BSD-2-Clause
+    - BSD-3-Clause
+    - BSD-3-Clause-Clear
+    - 0BSD
+    - CC0-1.0
+    - Unlicense
+    - Python-2.0
+    - BlueOak-1.0.0
+    - Zlib
+    - MPL-2.0
