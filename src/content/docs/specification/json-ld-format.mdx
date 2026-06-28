@@ -33,7 +33,7 @@ Markdown is canonical. The JSON-LD form below is a **derived projection**: regen
 }
 ```
 
-The projection always includes two OKF-legible mirror fields the converter derives: `timestamp` (the value of `modified`, or `created` when there is no `modified`) and, when the source has a `summary`, `description` (mapped from `summary`). These are derived mirrors of the canonical frontmatter; markdown remains authoritative.
+The projection always includes the OKF-legible mirror field `timestamp` (the value of `modified`, or `created` when there is no `modified`). When the source has a `summary`, it also includes `description` (mapped from `summary`). These are derived mirrors of the canonical frontmatter; markdown remains authoritative.
 
 ### Full Example
 
