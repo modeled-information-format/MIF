@@ -85,7 +85,7 @@ Providers MAY define additional relationship types using namespaced URIs:
 # Custom relationship type definition
 relationship_types:
   - name: Contradicts
-    namespace: farm           # Results in URI: farm:Contradicts
+    namespace: farm           # Results in type token: farm:contradicts
     description: Provides conflicting evidence
     inverse: ContradictedBy
     properties:
@@ -107,7 +107,7 @@ relationship_types:
   ],
   "relationships": [
     {
-      "type": "breeds-with",
+      "type": "farm:breeds-with",
       "target": "urn:mif:entity:animal:ram-001",
       "strength": 1.0,
       "metadata": {
