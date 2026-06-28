@@ -30,14 +30,13 @@ MIF uses W3C PROV vocabulary for provenance tracking.
 
 ```yaml
 provenance:
-  source_type: user_explicit
-  source_ref: conversation:conv-456
+  sourceType: user_explicit
+  sourceRef: conversation:conv-456
   agent: claude-3-opus
-  agent_version: "20240229"
+  agentVersion: "20240229"
   confidence: 0.95
-  trust_level: user_stated
-  derived_from:
+  trustLevel: user_stated
+  wasDerivedFrom:
     - memory:parent-memory-id
-  attribution:
-    - entity:person:jane-doe
+  wasAttributedTo: entity:person:jane-doe
 ```
