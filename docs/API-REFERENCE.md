@@ -355,11 +355,18 @@ for (const file of fs.readdirSync(defsDir)) {
 }
 
 const validateMif = ajv.compile(JSON.parse(fs.readFileSync('schema/mif.schema.json')));
+const validateCitation = ajv.compile(JSON.parse(fs.readFileSync('schema/citation.schema.json')));
 
 // Validate a derived JSON-LD projection (produced by scripts/mif_convert.py emit-jsonld)
 const document = JSON.parse(fs.readFileSync('memory.json'));
 if (!validateMif(document)) {
-  console.log('Validation errors:', validateMif.errors);
+  console.log('MIF validation errors:', validateMif.errors);
+}
+
+// Validate a citation object
+const citation = JSON.parse(fs.readFileSync('citation.json'));
+if (!validateCitation(citation)) {
+  console.log('Citation validation errors:', validateCitation.errors);
 }
 ```
 
