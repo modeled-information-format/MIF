@@ -156,7 +156,10 @@
           "@id": "mif:target",
           "@type": "@id"
         },
-        "metadata": "mif:metadata"
+        "metadata": {
+          "@id": "mif:metadata",
+          "@type": "@json"
+        }
       }
     },
     "relationshipType": {
