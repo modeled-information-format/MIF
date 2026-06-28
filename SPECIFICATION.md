@@ -2018,7 +2018,7 @@ see [`profiles/ai-memory/SPECIFICATION.md`](profiles/ai-memory/SPECIFICATION.md)
 
 - Type name: application
 - Subtype name: ld+json
-- Required parameters: profile="<https://mif-spec.dev>"
+- Required parameters: `profile="https://mif-spec.dev"`
 
 ### 19.2 URI Scheme
 
