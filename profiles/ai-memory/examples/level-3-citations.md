@@ -34,9 +34,9 @@ temporal:
   accessCount: 12
   lastAccessed: '2026-01-22T15:30:00Z'
 provenance:
-  source_ref: meeting:arch-review-2026-01-20
+  sourceRef: meeting:arch-review-2026-01-20
   agent: claude-3-opus
-  agent_version: '20240229'
+  agentVersion: '20240229'
   confidence: 0.98
   sourceType: user_explicit
   trustLevel: verified

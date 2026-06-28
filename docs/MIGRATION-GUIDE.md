@@ -29,11 +29,11 @@ MIF uses three base memory types. When migrating, map provider-specific categori
 | `episodic` | Events, sessions, incidents, conversations | `episode`, `event`, `session`, `conversation` |
 | `procedural` | Processes, runbooks, patterns, how-to | `pattern`, `procedure`, `workflow`, `template` |
 
-**Key Principle:** The `memoryType` field uses one of the three base types, while specific categorization is expressed through the `namespace` field:
+**Key Principle:** The `conceptType` field uses one of the three base types, while specific categorization is expressed through the `namespace` field:
 
 ```json
 {
-  "memoryType": "semantic",
+  "conceptType": "semantic",
   "namespace": "_semantic/decisions"
 }
 ```
@@ -69,7 +69,7 @@ Mem0 stores memories as JSON objects:
 | `id` | `@id` | Prefix with `urn:mif:` |
 | `memory` | `content` | Direct mapping |
 | `user_id` | `namespace` | Use base type prefix (e.g., `_semantic/preferences`) |
-| `metadata.category` | `memoryType` | Map to base types (`semantic`, `episodic`, `procedural`) |
+| `metadata.category` | `conceptType` | Map to base types (`semantic`, `episodic`, `procedural`) |
 | `metadata.category` | `namespace` (second part) | Preserve as namespace suffix (e.g., `_semantic/{category}`) |
 | `metadata.created_at` | `created` | Direct mapping |
 | `metadata.*` | `extensions.mem0.*` | Preserve in extensions |
@@ -85,7 +85,7 @@ import uuid
 def mem0_to_mif(mem0_data: dict) -> dict:
     """Convert Mem0 memory to MIF format with base memory types."""
 
-    # Map category to base memoryType and namespace
+    # Map category to base conceptType and namespace
     # MIF uses semantic/episodic/procedural as base types
     # Specific categorization is expressed via namespace
     category_map = {
@@ -106,9 +106,9 @@ def mem0_to_mif(mem0_data: dict) -> dict:
     # Build MIF document
     mif = {
         "@context": "https://mif-spec.dev/schema/context.jsonld",
-        "@type": "Memory",
+        "@type": "Concept",
         "@id": f"urn:mif:{mem0_data['id']}",
-        "memoryType": memory_type,
+        "conceptType": memory_type,
         "content": mem0_data["memory"],
         "created": mem0_data.get("metadata", {}).get(
             "created_at",
@@ -228,9 +228,9 @@ def zep_to_mif(zep_data: dict) -> dict:
 
     mif = {
         "@context": "https://mif-spec.dev/schema/context.jsonld",
-        "@type": "Memory",
+        "@type": "Concept",
         "@id": f"urn:mif:{zep_data['uuid']}",
-        "memoryType": "semantic",  # Default to semantic for factual memories
+        "conceptType": "semantic",  # Default to semantic for factual memories
         "content": zep_data["content"],
         "created": zep_data["created_at"],
         "namespace": "_semantic/knowledge",  # Categorize via namespace
@@ -250,11 +250,8 @@ def zep_to_mif(zep_data: dict) -> dict:
         mif["relationships"] = []
         for edge in zep_data["entity_edges"]:
             mif["relationships"].append({
-                "@type": "Relationship",
-                "relationshipType": map_zep_relation(edge["relation"]),
-                "target": {
-                    "@id": f"urn:mif:entity:{edge['target'].replace(':', '-')}"
-                },
+                "type": map_zep_relation(edge["relation"]),
+                "target": f"urn:mif:entity:{edge['target'].replace(':', '-')}",
                 "metadata": {
                     "source": edge["source"],
                     "original_relation": edge["relation"]
@@ -276,13 +273,13 @@ def zep_to_mif(zep_data: dict) -> dict:
 def map_zep_relation(relation: str) -> str:
     """Map Zep relation types to MIF relationship types."""
     mapping = {
-        "prefers": "RelatesTo",
-        "uses": "Uses",
-        "knows": "RelatesTo",
-        "created": "Created",
-        "part_of": "PartOf",
+        "prefers": "relates-to",
+        "uses": "uses",
+        "knows": "relates-to",
+        "created": "created",
+        "part_of": "part-of",
     }
-    return mapping.get(relation, "RelatesTo")
+    return mapping.get(relation, "relates-to")
 ```
 
 ---
@@ -344,9 +341,9 @@ def letta_to_mif(letta_data: dict) -> list:
             memory_type, namespace = classify_fact(fact)
             mif = {
                 "@context": "https://mif-spec.dev/schema/context.jsonld",
-                "@type": "Memory",
+                "@type": "Concept",
                 "@id": f"urn:mif:letta-{block_name}-{i}",
-                "memoryType": memory_type,
+                "conceptType": memory_type,
                 "content": fact,
                 "created": datetime.now(timezone.utc).isoformat() + "Z",
                 "namespace": namespace,
@@ -436,7 +433,7 @@ Subcog format is closest to MIF (MIF was partially inspired by Subcog):
 |--------------|-----------|-------|
 | `id` | `@id` | Prefix with `urn:mif:` |
 | `content` | `content` | Direct mapping |
-| `namespace` | `memoryType` + `namespace` | Map to base type and MIF namespace |
+| `namespace` | `conceptType` + `namespace` | Map to base type and MIF namespace |
 | `domain` | `extensions.subcog.domain` | Preserved in extensions |
 | `tags` | `tags` | Direct mapping |
 | `created_at` | `created` | Direct mapping |
@@ -450,7 +447,7 @@ from datetime import datetime, timezone
 def subcog_to_mif(subcog_data: dict) -> dict:
     """Convert Subcog memory to MIF format with base memory types."""
 
-    # Map Subcog namespace to base memoryType and MIF namespace
+    # Map Subcog namespace to base conceptType and MIF namespace
     namespace_map = {
         "decisions": ("semantic", "_semantic/decisions"),
         "patterns": ("procedural", "_procedural/patterns"),
@@ -470,9 +467,9 @@ def subcog_to_mif(subcog_data: dict) -> dict:
 
     mif = {
         "@context": "https://mif-spec.dev/schema/context.jsonld",
-        "@type": "Memory",
+        "@type": "Concept",
         "@id": f"urn:mif:{subcog_data['id']}",
-        "memoryType": memory_type,
+        "conceptType": memory_type,
         "content": subcog_data["content"],
         "created": subcog_data.get("created_at", datetime.now(timezone.utc).isoformat() + "Z"),
         "namespace": mif_namespace,
@@ -550,9 +547,9 @@ def text_to_mif(text_file: str) -> list:
 
         mif = {
             "@context": "https://mif-spec.dev/schema/context.jsonld",
-            "@type": "Memory",
+            "@type": "Concept",
             "@id": f"urn:mif:import-{uuid.uuid4()}",
-            "memoryType": "semantic",  # Base memory type
+            "conceptType": "semantic",  # Base concept type
             "namespace": "_semantic/preferences" if ":" in line else "_semantic/knowledge",
             "content": content,
             "created": datetime.now(timezone.utc).isoformat() + "Z",
@@ -625,9 +622,9 @@ def langmem_to_mif(langmem_data: dict) -> list:
 
         mif = {
             "@context": "https://mif-spec.dev/schema/context.jsonld",
-            "@type": "Memory",
+            "@type": "Concept",
             "@id": f"urn:mif:{mem['id']}",
-            "memoryType": memory_type,
+            "conceptType": memory_type,
             "namespace": namespace,
             "content": mem["text"],
             "created": mem.get("metadata", {}).get(
@@ -640,9 +637,8 @@ def langmem_to_mif(langmem_data: dict) -> list:
         if mem["id"] in relationships:
             mif["relationships"] = [
                 {
-                    "@type": "Relationship",
-                    "relationshipType": map_langmem_relation(rel["type"]),
-                    "target": {"@id": f"urn:mif:{rel['target']}"}
+                    "type": map_langmem_relation(rel["type"]),
+                    "target": f"urn:mif:{rel['target']}"
                 }
                 for rel in relationships[mem["id"]]
             ]
@@ -672,12 +668,12 @@ def map_langmem_type(langmem_type: str) -> tuple:
 def map_langmem_relation(relation: str) -> str:
     """Map LangMem relation to MIF relationship type."""
     mapping = {
-        "related": "RelatesTo",
-        "derived": "DerivedFrom",
-        "supersedes": "Supersedes",
-        "conflicts": "ConflictsWith",
+        "related": "relates-to",
+        "derived": "derived-from",
+        "supersedes": "supersedes",
+        "conflicts": "conflicts-with",
     }
-    return mapping.get(relation, "RelatesTo")
+    return mapping.get(relation, "relates-to")
 ```
 
 ---
@@ -699,7 +695,7 @@ done
 
 If validation fails for missing fields, ensure:
 - `@context` is set to `"https://mif-spec.dev/schema/context.jsonld"`
-- `@type` is `"Memory"`
+- `@type` is `"Concept"`
 - `@id` starts with `urn:mif:`
 - `created` is a valid ISO 8601 datetime
 
