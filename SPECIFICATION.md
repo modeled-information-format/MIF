@@ -1754,10 +1754,10 @@ root of this repository and is served at:
 https://mif-spec.dev/schema/context.jsonld
 ```
 
-That file is the normative definition of all term mappings for MIF documents.
-Implementations MUST dereference the context URL rather than inlining a local
-copy. The context is versioned alongside the schema; breaking changes to term
-mappings require a new major version of the specification.
+That file defines the JSON-LD term mappings for MIF documents. Implementations
+MUST dereference the context URL rather than inlining a local copy. The context
+is versioned alongside the schema; breaking changes to term mappings require a
+new major version of the specification.
 
 ---
 

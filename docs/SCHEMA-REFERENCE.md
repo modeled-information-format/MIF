@@ -30,7 +30,7 @@ All schemas use JSON Schema Draft 2020-12.
 | Field | Type | Description |
 |-------|------|-------------|
 | `@context` | string/array/object | JSON-LD context |
-| `@type` | `"Concept"` (or array containing `"Concept"`) | Document type |
+| `@type` | `"Concept"` (or array containing `"Concept"`; the deprecated alias `"Memory"` is also accepted) | Document type |
 | `@id` | string (pattern: `^urn:mif:`) | Unique identifier |
 | `conceptType` | enum | Knowledge taxonomy classification |
 | `content` | string (minLength: 1) | Memory content |
@@ -149,7 +149,7 @@ Ontologies can define extended types that map to these base types via namespace 
 | `part-of` | Component of larger whole |
 | `implements` | Realizes a concept/pattern |
 | `uses` | Utilizes a technology/tool |
-| `created` | Authored by entity |
+| `created-by` | Authored by entity |
 | `mentioned-in` | Referenced in memory |
 
 #### Temporal Metadata

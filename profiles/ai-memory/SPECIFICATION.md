@@ -186,9 +186,10 @@ and is deliberately model-agnostic. This profile uses that mechanism for one
 purpose: **similarity recall** — finding the memories most relevant to the
 agent's current context.
 
-The `recallable` trait in [`./ontology.yaml`](./ontology.yaml) adds
-`model` and `sourceText` alongside `accessCount` and
-`lastAccessed`. Profile guidance:
+The `recallable` trait in [`./ontology.yaml`](./ontology.yaml) carries
+access-frequency and last-access metadata together with an embedding reference;
+in the JSON-LD projection these correspond to the schema's `accessCount`/`lastAccessed`
+and `model`/`sourceText`. Profile guidance:
 
 - Embed the `sourceText` that best represents *what the agent would search for*,
   not necessarily the full stored content. For a session, that is usually the
@@ -361,7 +362,7 @@ ontology:
   id: ai-memory
 relationships:
   - type: relates-to
-    target: urn:mif:entity:auth-service   # [[Auth Service]] -> relates_to
+    target: urn:mif:entity:auth-service   # [[Auth Service]] -> relates-to
 ---
 The auth timeout was caused by JWT clock skew producing 401s.
 ```
