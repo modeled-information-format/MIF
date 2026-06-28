@@ -27,8 +27,8 @@ jobs:
         with:
           node-version: 'lts/*'
 
-      - name: Install ajv
-        run: npm install -g ajv-cli ajv-formats
+      - name: Install pinned dependencies (ajv-cli via lockfile)
+        run: npm ci
 
       - name: Compile every schema set (valid JSON Schema 2020-12)
         run: |
@@ -45,7 +45,7 @@ jobs:
                      "$d"/ontology/*.schema.json; do
               [ -f "$r" ] && refs+=( -r "$r" )
             done
-            if ajv compile -s "$d/mif.schema.json" "${refs[@]}" \
+            if npx --no-install ajv compile -s "$d/mif.schema.json" "${refs[@]}" \
                  --spec=draft2020 -c ajv-formats --strict=false; then
               echo "ok: $d"
             else
