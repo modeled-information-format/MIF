@@ -24,8 +24,10 @@ A concept is the atomic element of MIF — a single `.md` file in a bundle. It c
 | `embedding` | OPTIONAL | Object | Embedding reference |
 | `citations` | OPTIONAL | Array | Citation references (Level 3) |
 | `summary` | OPTIONAL | String | Compressed content summary (Level 3) |
-| `compressed_at` | OPTIONAL | DateTime | When compression was applied (Level 3) |
+| `compressedAt` | OPTIONAL | DateTime | When compression was applied (Level 3) |
 | `extensions` | OPTIONAL | Object | Provider-specific data |
+
+The frontmatter `type` field holds the base knowledge classification; in the JSON-LD projection produced by `mif_convert.py`, this value is surfaced as `conceptType`.
 
 ### Knowledge Types
 
@@ -94,7 +96,7 @@ A concept MAY declare which ontology it conforms to using the `ontology` field:
 ontology:
   id: regenerative-agriculture
   version: "1.0.0"
-  uri: https://github.com/modeled-information-format/MIF/ontologies/examples/regenerative-agriculture.ontology.yaml
+  uri: https://raw.githubusercontent.com/modeled-information-format/MIF/main/ontologies/examples/regenerative-agriculture.ontology.yaml
 ```
 
 The `ontology.id` MUST match the `ontology.id` field in the referenced ontology definition file. This enables:

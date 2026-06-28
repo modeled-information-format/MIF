@@ -49,7 +49,7 @@ modified: 2026-01-20T14:22:00Z             # Last modification
 ontology:                                   # Applied ontology reference
   id: mif-base                             # Ontology identifier
   version: "1.0.0"                         # Ontology version
-  uri: https://mif-spec.dev/ontologies/mif-base  # Ontology identifier (not a resolvable URL)
+  uri: https://mif-spec.dev/ontologies/mif-base  # Ontology URI
 namespace: org/user/project                 # Hierarchical scope
 title: "Human-readable title"               # Display title
 tags:                                       # Classification
@@ -58,32 +58,32 @@ tags:                                       # Classification
 
 # === OPTIONAL: Temporal ===
 temporal:
-  valid_from: 2026-01-15T00:00:00Z         # When fact becomes valid
-  valid_until: null                         # When fact expires (null = indefinite)
-  recorded_at: 2026-01-15T10:30:00Z        # When recorded (transaction time)
+  validFrom: 2026-01-15T00:00:00Z          # When fact becomes valid
+  validUntil: null                          # When fact expires (null = indefinite)
+  recordedAt: 2026-01-15T10:30:00Z         # When recorded (transaction time)
   ttl: P90D                                 # Time-to-live (ISO 8601 duration)
   decay:
     model: exponential                      # Decay model
     halfLife: P7D                          # Half-life duration
     strength: 0.85                          # Current strength (0-1)
-  access_count: 5                           # Times accessed
-  last_accessed: 2026-01-20T14:22:00Z      # Last access time
+  accessCount: 5                            # Times accessed
+  lastAccessed: 2026-01-20T14:22:00Z       # Last access time
 
 # === OPTIONAL: Provenance ===
 provenance:
-  source_type: user_explicit                # How memory was created
-  source_ref: conversation:conv_456         # Reference to source
+  sourceType: user_explicit                 # How memory was created
+  sourceRef: conversation:conv_456          # Reference to source
   agent: claude-3-opus                      # Creating agent
   confidence: 0.95                          # Confidence score (0-1)
-  trust_level: user_stated                  # Trust classification
+  trustLevel: user_stated                   # Trust classification
 
 # === OPTIONAL: Embedding ===
 embedding:
   model: text-embedding-3-small             # Embedding model
-  model_version: "2024-01"                  # Model version
+  modelVersion: "2024-01"                   # Model version
   dimensions: 1536                          # Vector dimensions
-  source_text: "User prefers dark mode"     # Text that was embedded
-  # Note: Actual vectors stored externally or in JSON-LD format
+  sourceText: "User prefers dark mode"      # Text that was embedded
+  # Note: Actual vectors stored externally via vectorUri
 
 # === OPTIONAL: Aliases ===
 aliases:
@@ -288,14 +288,14 @@ Compression allows large memories to be summarized while preserving the original
 | Field | Required | Type | Description |
 |-------|----------|------|-------------|
 | `summary` | OPTIONAL | String | Concise 2-3 sentence summary (max 500 characters) |
-| `compressed_at` | OPTIONAL | DateTime | When compression was applied (ISO 8601) |
+| `compressedAt` | OPTIONAL | DateTime | When compression was applied (ISO 8601) |
 
 **Frontmatter Schema:**
 
 ```yaml
 # === OPTIONAL: Compression (Level 3) ===
 summary: "User prefers dark mode for reduced eye strain during extended coding sessions. Applies to IDE, terminal, and web applications."
-compressed_at: 2026-01-24T10:00:00Z
+compressedAt: 2026-01-24T10:00:00Z
 ```
 
 #### Compression Criteria
@@ -312,7 +312,7 @@ Implementations MAY apply compression when memories meet these criteria:
 - The `content` field SHOULD be replaced with the compressed summary
 - The original `content` MAY be preserved in `extensions.original_content`
 - The `summary` field contains the generated summary text
-- The `compressed_at` timestamp indicates when compression occurred
+- The `compressedAt` timestamp indicates when compression occurred
 - Compressed memories retain all other metadata (relationships, entities, etc.)
 
 #### Compression Validation
@@ -320,4 +320,4 @@ Implementations MAY apply compression when memories meet these criteria:
 | Field | Constraint |
 |-------|------------|
 | `summary` | MUST be 500 characters or fewer |
-| `compressed_at` | MUST be ISO 8601 datetime format |
+| `compressedAt` | MUST be ISO 8601 datetime format |

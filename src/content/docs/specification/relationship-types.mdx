@@ -107,12 +107,13 @@ relationship_types:
   ],
   "relationships": [
     {
-      "@type": "Relationship",
-      "relationshipType": "farm:BreedsWith",
-      "target": {"@id": "urn:mif:entity:animal:ram-001"},
+      "type": "breeds-with",
+      "target": "urn:mif:entity:animal:ram-001",
       "strength": 1.0,
-      "farm:breeding_date": "2025-10-15",
-      "farm:success": true
+      "metadata": {
+        "farm:breeding_date": "2025-10-15",
+        "farm:success": true
+      }
     }
   ]
 }
@@ -155,9 +156,8 @@ relationships:
 ```json
 "relationships": [
   {
-    "@type": "Relationship",
-    "relationshipType": "DerivedFrom",
-    "target": {"@id": "urn:mif:memory:source-memory"},
+    "type": "derived-from",
+    "target": "urn:mif:memory:source-memory",
     "strength": 0.9,
     "metadata": {
       "reason": "Extracted key insight",
@@ -171,8 +171,7 @@ relationships:
 
 | Property | Type | Required | Description |
 |----------|------|----------|-------------|
-| `@type` | String | Yes | Always `"Relationship"` |
-| `relationshipType` | URI/Vocab | Yes | Type identifier (core or custom) |
-| `target` | URI Reference | Yes | Target memory or entity URI |
+| `type` | String | Yes | Relationship type in kebab-case (e.g. `derived-from`) |
+| `target` | String | Yes | Target memory or entity path/URN |
 | `strength` | Decimal | No | Relationship strength (0.0-1.0) |
 | `metadata` | Object | No | Additional relationship metadata |

@@ -30,12 +30,13 @@ Markdown is canonical; the JSON-LD projection is regenerated from it. The round 
 ```json
 {
   "@context": "https://mif-spec.dev/schema/context.jsonld",
-  "@type": "Memory",
+  "@type": "Concept",
+  "conceptType": "semantic",
   "@id": "urn:mif:550e8400",
   "title": "Dark Mode",
   "content": "User prefers dark mode",
   "relationships": [
-    {"relationshipType": "RelatesTo", "target": {"@id": "urn:mif:ui-prefs"}}
+    {"type": "relates-to", "target": "urn:mif:ui-prefs"}
   ]
 }
 ```

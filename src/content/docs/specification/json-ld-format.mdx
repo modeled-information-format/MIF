@@ -10,11 +10,11 @@ Markdown is canonical. The JSON-LD form below is a **derived projection**: regen
 ```json
 {
   "@context": "https://mif-spec.dev/schema/context.jsonld",
-  "@type": "Memory",
+  "@type": "Concept",
   "@id": "urn:mif:550e8400-e29b-41d4-a716-446655440000",
 
   "content": "User prefers dark mode for all applications",
-  "memoryType": "semantic",
+  "conceptType": "semantic",
   "title": "Dark Mode Preference",
 
   "created": "2026-01-15T10:30:00Z",
@@ -44,11 +44,11 @@ Markdown is canonical. The JSON-LD form below is a **derived projection**: regen
       "subcog": "https://github.com/zircote/subcog/ns/"
     }
   ],
-  "@type": ["Memory", "prov:Entity"],
+  "@type": ["Concept", "prov:Entity"],
   "@id": "urn:mif:550e8400-e29b-41d4-a716-446655440000",
 
   "content": "User prefers dark mode for all applications. This applies to:\n- IDE themes\n- Terminal colors\n- Web applications\n- Mobile apps",
-  "memoryType": "semantic",
+  "conceptType": "semantic",
   "title": "Dark Mode Preference",
 
   "dc:created": "2026-01-15T10:30:00Z",
@@ -79,15 +79,13 @@ Markdown is canonical. The JSON-LD form below is a **derived projection**: regen
 
   "relationships": [
     {
-      "@type": "Relationship",
-      "relationshipType": "RelatesTo",
-      "target": {"@id": "urn:mif:memory:ui-preferences"},
+      "type": "relates-to",
+      "target": "urn:mif:memory:ui-preferences",
       "strength": 0.85
     },
     {
-      "@type": "Relationship",
-      "relationshipType": "Supersedes",
-      "target": {"@id": "urn:mif:memory:old-theme-preference"}
+      "type": "supersedes",
+      "target": "urn:mif:memory:old-theme-preference"
     }
   ],
 

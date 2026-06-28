@@ -26,29 +26,29 @@ tags: [tag1, tag2]
 aliases: ["Alt Name 1", "Alt Name 2"]
 
 temporal:
-  valid_from: ISO-8601-datetime
-  valid_until: ISO-8601-datetime | null
-  recorded_at: ISO-8601-datetime
+  validFrom: ISO-8601-datetime
+  validUntil: ISO-8601-datetime | null
+  recordedAt: ISO-8601-datetime
   ttl: ISO-8601-duration
   decay:
     model: none|linear|exponential|step
     halfLife: ISO-8601-duration
     strength: 0.0-1.0
-  access_count: integer
-  last_accessed: ISO-8601-datetime
+  accessCount: integer
+  lastAccessed: ISO-8601-datetime
 
 provenance:
-  source_type: user_explicit|user_implicit|agent_inferred|external_import|system_generated
-  source_ref: uri
+  sourceType: user_explicit|user_implicit|agent_inferred|external_import|system_generated
+  sourceRef: uri
   agent: string
   confidence: 0.0-1.0
-  trust_level: verified|user_stated|high_confidence|moderate_confidence|low_confidence|uncertain
+  trustLevel: verified|user_stated|high_confidence|moderate_confidence|low_confidence|uncertain
 
 embedding:
   model: string
-  model_version: string
+  modelVersion: string
   dimensions: integer
-  source_text: string
+  sourceText: string
 
 extensions:
   provider_name:
@@ -62,17 +62,17 @@ extensions:
 
 Relationships appear in a `## Relationships` body section as `- <type> [Text](/path/target.md)`, mirroring the authoritative frontmatter `relationships[]`.
 
-| Body Markdown Syntax | JSON-LD relationshipType | Description |
-|----------------------|-------------------------|-------------|
-| `- relates-to [X](/path/x.md)` | `RelatesTo` | General relationship |
-| `- derived-from [X](/path/x.md)` | `DerivedFrom` | Created from source |
-| `- supersedes [X](/path/x.md)` | `Supersedes` | Replaces older |
-| `- conflicts-with [X](/path/x.md)` | `ConflictsWith` | Contradicts |
-| `- part-of [X](/path/x.md)` | `PartOf` | Component of |
-| `- implements [X](/path/x.md)` | `Implements` | Realizes |
-| `- uses [X](/path/x.md)` | `Uses` | Utilizes |
-| `- created-by [X](/path/x.md)` | `Created` | Authored by |
-| `- mentioned-in [X](/path/x.md)` | `MentionedIn` | Referenced in |
+| Body Markdown Syntax | JSON-LD `type` | Description |
+|----------------------|----------------|-------------|
+| `- relates-to [X](/path/x.md)` | `relates-to` | General relationship |
+| `- derived-from [X](/path/x.md)` | `derived-from` | Created from source |
+| `- supersedes [X](/path/x.md)` | `supersedes` | Replaces older |
+| `- conflicts-with [X](/path/x.md)` | `conflicts-with` | Contradicts |
+| `- part-of [X](/path/x.md)` | `part-of` | Component of |
+| `- implements [X](/path/x.md)` | `implements` | Realizes |
+| `- uses [X](/path/x.md)` | `uses` | Utilizes |
+| `- created-by [X](/path/x.md)` | `created-by` | Authored by |
+| `- mentioned-in [X](/path/x.md)` | `mentioned-in` | Referenced in |
 
 ---
 
@@ -158,4 +158,3 @@ citations:
 - [W3C PROV-DM](https://www.w3.org/TR/prov-dm/)
 - [ISO 8601: Date and Time Format](https://www.iso.org/iso-8601-date-and-time-format.html)
 - [Obsidian Help](https://help.obsidian.md/)
-- [JSON Canvas Specification](https://jsoncanvas.org/)

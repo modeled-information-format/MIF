@@ -10,11 +10,10 @@ MIF stores embedding metadata, not raw vectors:
 ```yaml
 embedding:
   model: text-embedding-3-small
-  model_version: "2024-01"
+  modelVersion: "2024-01"
   dimensions: 1536
-  source_text: "The text that was embedded"
+  sourceText: "The text that was embedded"
   normalized: true
-  quantization: null  # or "float16", "int8"
 ```
 
 This allows:
@@ -30,19 +29,15 @@ For providers that need vector portability:
 ```yaml
 embedding:
   model: text-embedding-3-small
-  source_text: "..."
-  vector_uri: "vectors/550e8400.bin"
+  sourceText: "..."
+  vectorUri: "vectors/550e8400.bin"
 ```
 
-**Inline (JSON-LD only):**
+**JSON-LD with external vector URI:**
 ```json
 "embedding": {
   "model": "text-embedding-3-small",
   "sourceText": "...",
-  "vector": {
-    "@type": "Vector",
-    "encoding": "base64-float32",
-    "data": "SGVsbG8gV29ybGQh..."
-  }
+  "vectorUri": "urn:mif:vector:550e8400-e29b-41d4-a716-446655440000"
 }
 ```

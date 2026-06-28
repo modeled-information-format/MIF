@@ -11,11 +11,14 @@ https://mif-spec.dev/schema/context.jsonld
 
 ### Context Definition
 
+The following is a representative subset of `schema/context.jsonld`; the full context includes additional term definitions.
+
 ```json
 {
   "@context": {
     "@version": 1.1,
     "mif": "https://mif-spec.dev/ns/",
+    "schema": "https://schema.org/",
     "dc": "http://purl.org/dc/terms/",
     "prov": "http://www.w3.org/ns/prov#",
     "xsd": "http://www.w3.org/2001/XMLSchema#",
@@ -113,11 +116,9 @@ https://mif-spec.dev/schema/context.jsonld
       "@id": "schema:url",
       "@type": "@id"
     },
-    "author": {
-      "@id": "dc:creator"
-    },
+    "author": "schema:author",
     "date": {
-      "@id": "dc:date",
+      "@id": "schema:datePublished",
       "@type": "xsd:date"
     },
     "relevance": {
@@ -125,10 +126,10 @@ https://mif-spec.dev/schema/context.jsonld
       "@type": "xsd:decimal"
     },
     "accessed": {
-      "@id": "schema:accessDate",
-      "@type": "xsd:date"
+      "@id": "mif:accessed",
+      "@type": "xsd:dateTime"
     },
-    "note": "schema:description",
+    "note": "mif:note",
 
     "summary": "mif:summary",
     "compressedAt": {
