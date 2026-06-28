@@ -23,6 +23,9 @@ jobs:
       id-token: write
       contents: read
       actions: read
-    uses: modeled-information-format/.github/.github/workflows/reusable-scorecard.yml@ff8adc6b1267c272beef916af851d9506160354f
+    uses: modeled-information-format/.github/.github/workflows/reusable-scorecard.yml@f83ee8058630235396f7242580570b26cf3617fa
     with:
       publish-results: true
+    secrets:
+      # Org CI App private key → Scorecard reads branch protection (administration:read).
+      app-private-key: ${{ secrets.MIF_CI_CLIENT_APP_PRIVATE_KEY }}
