@@ -62,6 +62,11 @@
       "@id": "mif:definesTrait",
       "@container": "@id"
     },
+    "subtype_of": {
+      "@id": "mif:subtypeOf",
+      "@type": "@id",
+      "@container": "@set"
+    },
     "fields": {
       "@id": "mif:hasField",
       "@container": "@id"
@@ -122,62 +127,69 @@
   "@type": "mif:Ontology",
   "identifier": "mif-base",
   "version": "1.0.0",
-  "description": "MIF base ontology with cognitive triad namespace hierarchy",
-  "schema_url": "https://mif-spec.dev/schema/ontology/v1",
+  "description": "MIF base ontology with the general knowledge triad namespace hierarchy",
+  "schema_url": "https://mif-spec.dev/schema/ontology/ontology.schema.json",
   "namespaces": {
-    "semantic": {
-      "@id": "mif:namespace/semantic",
+    "_semantic": {
+      "@id": "mif:namespace/_semantic",
       "@type": "mif:Namespace",
-      "name": "semantic",
+      "name": "_semantic",
       "description": "Facts, concepts, relationships - declarative knowledge",
       "type_hint": "semantic",
       "children": {
         "decisions": {
-          "@id": "mif:namespace/semantic/decisions",
+          "@id": "mif:namespace/_semantic/decisions",
           "@type": "mif:Namespace",
           "name": "decisions",
           "description": "Architectural choices with rationale",
           "type_hint": "semantic"
         },
         "knowledge": {
-          "@id": "mif:namespace/semantic/knowledge",
+          "@id": "mif:namespace/_semantic/knowledge",
           "@type": "mif:Namespace",
           "name": "knowledge",
           "description": "APIs, context, learnings, security - factual knowledge",
           "type_hint": "semantic"
         },
         "entities": {
-          "@id": "mif:namespace/semantic/entities",
+          "@id": "mif:namespace/_semantic/entities",
           "@type": "mif:Namespace",
           "name": "entities",
           "description": "Entity definitions - technologies, components, systems",
           "type_hint": "semantic"
+        },
+        "preferences": {
+          "@id": "mif:namespace/_semantic/preferences",
+          "@type": "mif:Namespace",
+          "name": "preferences",
+          "description": "User preferences, settings, configuration choices",
+          "type_hint": "semantic"
         }
       }
     },
-    "episodic": {
-      "@id": "mif:namespace/episodic",
+    "_episodic": {
+      "@id": "mif:namespace/_episodic",
       "@type": "mif:Namespace",
-      "name": "episodic",
-      "description": "Events, experiences, timelines - autobiographical memory",
+      "name": "_episodic",
+      "description": "Events, experiences, timelines - time-bound records",
       "type_hint": "episodic",
       "children": {
         "incidents": {
-          "@id": "mif:namespace/episodic/incidents",
+          "@id": "mif:namespace/_episodic/incidents",
           "@type": "mif:Namespace",
           "name": "incidents",
           "description": "Production issues, outages, postmortems",
           "type_hint": "episodic"
         },
         "sessions": {
-          "@id": "mif:namespace/episodic/sessions",
+          "@id": "mif:namespace/_episodic/sessions",
           "@type": "mif:Namespace",
           "name": "sessions",
           "description": "Debug sessions, work sessions, meeting notes",
           "type_hint": "episodic"
         },
         "blockers": {
-          "@id": "mif:namespace/episodic/blockers",
+          "@id": "mif:namespace/_episodic/blockers",
           "@type": "mif:Namespace",
           "name": "blockers",
           "description": "Impediments, issues preventing progress",
@@ -185,29 +197,29 @@
         }
       }
     },
-    "procedural": {
-      "@id": "mif:namespace/procedural",
+    "_procedural": {
+      "@id": "mif:namespace/_procedural",
       "@type": "mif:Namespace",
-      "name": "procedural",
-      "description": "Step-by-step processes - skill-based knowledge",
+      "name": "_procedural",
+      "description": "Step-by-step processes - how-to knowledge",
       "type_hint": "procedural",
       "children": {
         "runbooks": {
-          "@id": "mif:namespace/procedural/runbooks",
+          "@id": "mif:namespace/_procedural/runbooks",
           "@type": "mif:Namespace",
           "name": "runbooks",
           "description": "Operational procedures, SOPs, playbooks",
           "type_hint": "procedural"
         },
         "patterns": {
-          "@id": "mif:namespace/procedural/patterns",
+          "@id": "mif:namespace/_procedural/patterns",
           "@type": "mif:Namespace",
           "name": "patterns",
           "description": "Code conventions, best practices, testing strategies",
           "type_hint": "procedural"
         },
         "migrations": {
-          "@id": "mif:namespace/procedural/migrations",
+          "@id": "mif:namespace/_procedural/migrations",
           "@type": "mif:Namespace",
           "name": "migrations",
           "description": "Migration steps, upgrade procedures, data transformations",
@@ -226,12 +238,12 @@
         "created_at": {
           "type": "string",
           "format": "date-time",
-          "description": "When the memory was created"
+          "description": "When the record was created"
         },
         "updated_at": {
           "type": "string",
           "format": "date-time",
-          "description": "When the memory was last updated"
+          "description": "When the record was last updated"
         }
       }
     },
@@ -239,7 +251,7 @@
       "@id": "mif:trait/confidence",
       "@type": "mif:Trait",
       "name": "confidence",
-      "description": "Adds confidence score for memory decay",
+      "description": "Adds confidence score for freshness and validity tracking",
       "fields": {
         "confidence": {
           "type": "number",
@@ -259,7 +271,7 @@
         },
         "author": {
           "type": "string",
-          "description": "Who captured this memory"
+          "description": "Who captured this record"
         }
       }
     }
@@ -269,7 +281,7 @@
       "@id": "mif:relationship/relates_to",
       "@type": "mif:Relationship",
       "name": "relates_to",
-      "description": "General association between memories",
+      "description": "General association between records",
       "from": [],
       "to": [],
       "symmetric": true
@@ -278,7 +290,7 @@
       "@id": "mif:relationship/supersedes",
       "@type": "mif:Relationship",
       "name": "supersedes",
-      "description": "Newer memory replaces older one",
+      "description": "Newer record replaces older one",
       "from": [],
       "to": [],
       "symmetric": false
@@ -287,7 +299,7 @@
       "@id": "mif:relationship/derived_from",
       "@type": "mif:Relationship",
       "name": "derived_from",
-      "description": "Memory was derived from another",
+      "description": "Record was derived from another",
       "from": [],
       "to": [],
       "symmetric": false

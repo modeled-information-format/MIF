@@ -1,8 +1,10 @@
-# Memory Interchange Format (MIF)
+<!-- diataxis_type: reference -->
 
-**Version**: 0.1.0-draft
-**Status**: Draft
-**Last Updated**: 2026-01-26
+# MIF — Modeled Information Format
+
+**Version**: 1.0.0
+**Status**: Release Candidate
+**Last Updated**: 2026-06-18
 **Authors**: Robert Allen (zircote)
 **Repository**: https://github.com/modeled-information-format/MIF
 
@@ -10,16 +12,49 @@
 
 ## Abstract
 
-The Memory Interchange Format (MIF) is a proposed open standard for portable AI memory representation. The AI memory ecosystem is currently fragmented—Mem0, Zep, Letta, LangMem, Subcog, and others each use proprietary schemas with no interoperability. MIF aims to address this by defining a common data model with dual representations: human-readable Markdown files and machine-processable JSON-LD documents.
+MIF (Modeled Information Format) is an opinionated, OKF-compliant content model
+for agent-readable knowledge. The Open Knowledge Format (OKF) defines a minimal
+interoperability surface — a directory of markdown files with YAML frontmatter,
+one required `type` field, a concept graph of standard markdown links, and the
+reserved filenames `index.md` and `log.md` — and **deliberately refuses to
+define a content model**. MIF fills that envelope: it supplies a concrete type
+system, typed relationships, provenance/trust tiers, and validity/freshness
+semantics.
 
-**Current Status**: This is a draft specification. No providers currently implement MIF. The goal is to establish a vendor-neutral interchange format that providers may choose to adopt.
+> **MIF is the opinionated, OKF-compliant content model that fills OKF's
+> deliberately empty envelope.** OKF is the transport surface; MIF supplies the
+> concrete type system. AI memory is the first domain profile of MIF, not its
+> identity (see `profiles/ai-memory/`).
+
+OKF compliance is achieved as a **superset, not by subordination**: every MIF
+bundle MUST validate as a conformant OKF bundle, but MIF remains an independent
+specification with its own identity model and governance. MIF takes **no
+normative dependency** on OKF's evolving draft — it pins OKF v0.1's conformance
+criteria in [`docs/okf-conformance.md`](docs/okf-conformance.md), which is
+normative within MIF (Invariant 5).
 
 MIF is designed to be:
-- **Portable**: Move memories between providers without vendor lock-in
-- **Human-Readable**: Valid Obsidian notes that work in any Markdown editor
-- **Machine-Processable**: JSON-LD with semantic web compatibility
-- **Extensible**: Support custom properties without breaking compatibility
-- **Privacy-Respecting**: Local-first with no required cloud dependencies
+- **OKF-compliant**: every bundle is a valid OKF bundle (a tested invariant).
+- **Markdown-canonical**: the `.md` file is the source of truth; JSON-LD is a
+  derived projection (Invariant 2).
+- **Human-Readable**: valid Obsidian-compatible notes in any Markdown editor.
+- **Machine-Processable**: JSON-LD with semantic web compatibility.
+- **Extensible**: domain profiles extend the base without breaking compatibility.
+
+### MIF answers OKF's open questions
+
+This table is the positioning thesis: it states what MIF supplies for each
+question OKF leaves open.
+
+| OKF open design space | MIF's opinionated answer |
+| --- | --- |
+| No concept-type taxonomy | `semantic` / `episodic` / `procedural` base types |
+| Untyped markdown-link edges | Typed relationships (overlay on OKF links) |
+| No merge / contradiction semantics | `Supersedes`, `ConflictsWith` |
+| No trust tiers | Provenance `sourceType` + `trustLevel` |
+| Stale-vs-live left to process | Validity windows + TTL/freshness |
+| No provenance | Lightweight provenance core + optional W3C-PROV-aligned layer |
+| Markdown only | First-class JSON-LD projection |
 
 ---
 
@@ -29,8 +64,8 @@ MIF is designed to be:
 2. [Design Principles](#2-design-principles)
 3. [File Format](#3-file-format)
 4. [Data Model](#4-data-model)
-5. [Markdown Format (.memory.md)](#5-markdown-format-memorymd)
-6. [JSON-LD Format (.memory.json)](#6-json-ld-format-memoryjson)
+5. [Markdown Format (.md)](#5-markdown-format-md)
+6. [JSON-LD Projection (derived)](#6-json-ld-projection-derived)
 7. [Entity Types](#7-entity-types)
 8. [Relationship Types](#8-relationship-types)
 9. [Temporal Model](#9-temporal-model)
@@ -69,14 +104,14 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 MIF defines two equivalent representations:
 
-1. **Markdown Format** (`.memory.md`): Human-readable, Obsidian-compatible
-2. **JSON-LD Format** (`.memory.json`): Machine-processable, semantically linked
+1. **Markdown Format** (`.md`): Human-readable, Obsidian-compatible
+2. **JSON-LD Format** (`.jsonld`): Machine-processable, semantically linked
 
 Both representations MUST be losslessly convertible to each other. A conforming implementation MAY support either or both formats.
 
 ### 2.2 Obsidian Compatibility
 
-The Markdown format MUST be valid Obsidian notes, ensuring files work seamlessly in Obsidian vaults while remaining readable in any text editor or Markdown processor.
+The Markdown format MUST be valid Obsidian notes, ensuring files work in Obsidian vaults without modification while remaining readable in any text editor or Markdown processor.
 
 **Required Obsidian Features:**
 
@@ -122,27 +157,27 @@ MIF is designed for local-first storage:
 
 | Extension | Format | MIME Type |
 |-----------|--------|-----------|
-| `.memory.md` | Markdown | `text/markdown; variant=mif` |
-| `.memory.json` | JSON-LD | `application/ld+json; profile="https://mif-spec.dev"` |
+| `.md` | Markdown | `text/markdown; variant=mif` |
+| `.jsonld` | JSON-LD | `application/ld+json; profile="https://mif-spec.dev"` |
 
 ### 3.2 File Naming
 
 Files SHOULD be named using the memory's identifier:
 
 ```
-{id}.memory.md
-{id}.memory.json
+{id}.md
+{id}.jsonld
 ```
 
 Example:
 ```
-550e8400-e29b-41d4-a716-446655440000.memory.md
-550e8400-e29b-41d4-a716-446655440000.memory.json
+550e8400-e29b-41d4-a716-446655440000.md
+550e8400-e29b-41d4-a716-446655440000.jsonld
 ```
 
 Human-readable names MAY be used when the `id` is specified in frontmatter:
 ```
-dark-mode-preference.memory.md
+dark-mode-preference.md
 ```
 
 ### 3.3 Directory Structure
@@ -162,8 +197,8 @@ vault/
 │       └── file/
 ├── memories/                       # Memory files
 │   ├── {namespace}/               # Namespace directories
-│   │   ├── {id}.memory.md
-│   │   └── {id}.memory.json
+│   │   ├── {id}.md
+│   │   └── {id}.jsonld
 │   └── ...
 └── README.md                       # Vault documentation
 ```
@@ -269,9 +304,74 @@ The `ontology.id` MUST match the `ontology.id` field in the referenced ontology 
 - Discovery pattern matching for entity type suggestions
 - Schema validation for entity-specific fields
 
+### 4.4 Categorizing Memories (Fact, Event, and Beyond)
+
+Common categories such as **Fact** and **Event** are already expressible with the
+fields defined above; MIF therefore does **not** define a separate flat
+`category` field. Domain categories are composed from two orthogonal axes that a
+memory unit can declare directly:
+
+1. **`type`** (REQUIRED, see 4.2) — the cognitive memory type: `semantic`,
+   `episodic`, or `procedural`.
+2. **`namespace`** (RECOMMENDED, see 10) — hierarchical scope that carries the
+   finer-grained label (e.g. `semantic/knowledge`, `episodic/sessions`).
+
+A memory unit has no field to name an ontology-extended type directly. Instead,
+**ontologies define extended types and their namespace mappings** (OPTIONAL, see
+4.2.1 and 10.8): an ontology declares each extended type as an `entity_types`
+entry with a `base` type, and implementations express that extended type by
+following the referenced ontology's namespace hierarchy on the `namespace` axis
+above (e.g. an `incident` extended type whose `base` is `episodic`, reached via
+`episodic/incidents`). The extended type is therefore a richer label *on* the
+namespace axis, not a separate third axis the unit declares.
+
+> **Note on namespace form.** The namespace examples in this section use the
+> unprefixed form (e.g. `semantic/knowledge`). Other sections (e.g. 4.2.1 and
+> 10.8.4) use the underscore-prefixed `_semantic/…` form. Section 10 is
+> authoritative for namespace structure; follow the form it defines for your
+> deployment. Where an ontology is referenced, follow the namespace hierarchy it
+> declares; the examples below omit ontology binding for clarity.
+
+A **Fact** is a `semantic` memory — declarative knowledge that holds independently
+of any single moment:
+
+```yaml
+---
+type: semantic
+namespace: semantic/knowledge
+---
+```
+
+An **Event** is an `episodic` memory — something that happened. Events MAY
+carry `temporal` validity to bound when they hold (see 9):
+
+```yaml
+---
+type: episodic
+namespace: episodic/sessions
+temporal:
+  validFrom: 2026-01-15T00:00:00Z
+  validUntil: 2026-01-15T11:00:00Z
+---
+```
+
+Finer distinctions are added through the namespace (e.g. `episodic/incidents`),
+whose path MAY map to an ontology-extended type defined by a referenced ontology
+(e.g. an `incident` whose `base` is `episodic`) — not through a new unit-level
+field. Implementations SHOULD express domain categories through `type` +
+`namespace` (the namespace path mapping to an ontology-extended type where the
+referenced ontology defines one) rather than
+introducing a separate flat `category` (or `memoryCategory`) field: such a field
+would duplicate the `type` taxonomy, fork it across implementations, and break
+the interoperability the base types provide.
+
+> **Note.** The entity types in 7 (Person, Organization, …) classify the
+> entities a memory *references* via its `entities` array; they are a distinct
+> axis and do not categorize the memory itself.
+
 ---
 
-## 5. Markdown Format (.memory.md)
+## 5. Markdown Format (.md)
 
 ### 5.1 Structure
 
@@ -321,31 +421,31 @@ tags:                                       # Classification
 
 # === OPTIONAL: Temporal ===
 temporal:
-  valid_from: 2026-01-15T00:00:00Z         # When fact becomes valid
-  valid_until: null                         # When fact expires (null = indefinite)
-  recorded_at: 2026-01-15T10:30:00Z        # When recorded (transaction time)
+  validFrom: 2026-01-15T00:00:00Z          # When fact becomes valid
+  validUntil: null                          # When fact expires (null = indefinite)
+  recordedAt: 2026-01-15T10:30:00Z         # When recorded (transaction time)
   ttl: P90D                                 # Time-to-live (ISO 8601 duration)
   decay:
     model: exponential                      # Decay model
     halfLife: P7D                          # Half-life duration
     strength: 0.85                          # Current strength (0-1)
-  access_count: 5                           # Times accessed
-  last_accessed: 2026-01-20T14:22:00Z      # Last access time
+  accessCount: 5                            # Times accessed
+  lastAccessed: 2026-01-20T14:22:00Z       # Last access time
 
 # === OPTIONAL: Provenance ===
 provenance:
-  source_type: user_explicit                # How memory was created
-  source_ref: conversation:conv_456         # Reference to source
+  sourceType: user_explicit                 # How memory was created
+  sourceRef: conversation:conv_456          # Reference to source
   agent: claude-3-opus                      # Creating agent
   confidence: 0.95                          # Confidence score (0-1)
-  trust_level: user_stated                  # Trust classification
+  trustLevel: user_stated                   # Trust classification
 
 # === OPTIONAL: Embedding ===
 embedding:
   model: text-embedding-3-small             # Embedding model
-  model_version: "2024-01"                  # Model version
+  modelVersion: "2024-01"                   # Model version
   dimensions: 1536                          # Vector dimensions
-  source_text: "User prefers dark mode"     # Text that was embedded
+  sourceText: "User prefers dark mode"      # Text that was embedded
   # Note: Actual vectors stored externally or in JSON-LD format
 
 # === OPTIONAL: Aliases ===
@@ -586,18 +686,23 @@ Implementations MAY apply compression when memories meet these criteria:
 
 ---
 
-## 6. JSON-LD Format (.memory.json)
+## 6. JSON-LD Projection (derived)
+
+> **Markdown is canonical (Invariant 2).** The JSON-LD form below is a *derived*
+> projection: regenerate it from the `.md` source with `scripts/mif_convert.py`.
+> It MUST NOT use the `.md` extension (so OKF's `*.md` glob never ingests it) and
+> MUST round-trip losslessly back to markdown. If the two disagree, markdown wins.
 
 ### 6.1 Structure
 
 ```json
 {
   "@context": "https://mif-spec.dev/schema/context.jsonld",
-  "@type": "Memory",
+  "@type": "Concept",
   "@id": "urn:mif:550e8400-e29b-41d4-a716-446655440000",
 
   "content": "User prefers dark mode for all applications",
-  "memoryType": "semantic",
+  "conceptType": "semantic",
   "title": "Dark Mode Preference",
 
   "created": "2026-01-15T10:30:00Z",
@@ -627,11 +732,11 @@ Implementations MAY apply compression when memories meet these criteria:
       "subcog": "https://github.com/zircote/subcog/ns/"
     }
   ],
-  "@type": ["Memory", "prov:Entity"],
+  "@type": ["Concept", "prov:Entity"],
   "@id": "urn:mif:550e8400-e29b-41d4-a716-446655440000",
 
   "content": "User prefers dark mode for all applications. This applies to:\n- IDE themes\n- Terminal colors\n- Web applications\n- Mobile apps",
-  "memoryType": "semantic",
+  "conceptType": "semantic",
   "title": "Dark Mode Preference",
 
   "dc:created": "2026-01-15T10:30:00Z",
@@ -662,15 +767,13 @@ Implementations MAY apply compression when memories meet these criteria:
 
   "relationships": [
     {
-      "@type": "Relationship",
-      "relationshipType": "RelatesTo",
-      "target": {"@id": "urn:mif:memory:ui-preferences"},
+      "type": "relates-to",
+      "target": "urn:mif:memory:ui-preferences",
       "strength": 0.85
     },
     {
-      "@type": "Relationship",
-      "relationshipType": "Supersedes",
-      "target": {"@id": "urn:mif:memory:old-theme-preference"}
+      "type": "supersedes",
+      "target": "urn:mif:memory:old-theme-preference"
     }
   ],
 
@@ -692,17 +795,18 @@ Implementations MAY apply compression when memories meet these criteria:
   "provenance": {
     "@type": "prov:Entity",
     "sourceType": "user_explicit",
-    "prov:wasGeneratedBy": {
+    "wasGeneratedBy": {
+      "@id": "urn:mif:activity:extraction:mem-001",
       "@type": "prov:Activity",
-      "prov:wasAssociatedWith": {
+      "wasAssociatedWith": {
         "@id": "urn:mif:agent:claude-3-opus",
         "@type": "prov:SoftwareAgent"
       }
     },
-    "prov:wasDerivedFrom": {
+    "wasDerivedFrom": {
       "@id": "urn:mif:conversation:conv-456"
     },
-    "prov:wasAttributedTo": {
+    "wasAttributedTo": {
       "@id": "urn:mif:entity:person:jane-doe"
     },
     "confidence": 0.95,
@@ -1016,12 +1120,13 @@ relationship_types:
   ],
   "relationships": [
     {
-      "@type": "Relationship",
-      "relationshipType": "farm:BreedsWith",
-      "target": {"@id": "urn:mif:entity:animal:ram-001"},
+      "type": "farm:breeds-with",
+      "target": "urn:mif:entity:animal:ram-001",
       "strength": 1.0,
-      "farm:breeding_date": "2025-10-15",
-      "farm:success": true
+      "metadata": {
+        "farm:breeding_date": "2025-10-15",
+        "farm:success": true
+      }
     }
   ]
 }
@@ -1050,9 +1155,8 @@ The relationship type name is converted to kebab-case in Markdown. The target us
 ```json
 "relationships": [
   {
-    "@type": "Relationship",
-    "relationshipType": "DerivedFrom",
-    "target": {"@id": "urn:mif:memory:source-memory"},
+    "type": "derived-from",
+    "target": "urn:mif:memory:source-memory",
     "strength": 0.9,
     "metadata": {
       "reason": "Extracted key insight",
@@ -1066,8 +1170,7 @@ The relationship type name is converted to kebab-case in Markdown. The target us
 
 | Property | Type | Required | Description |
 |----------|------|----------|-------------|
-| `@type` | String | Yes | Always `"Relationship"` |
-| `relationshipType` | URI/Vocab | Yes | Type identifier (core or custom) |
+| `type` | String | Yes | Type identifier (kebab-case; optional `ns:` prefix) |
 | `target` | URI Reference | Yes | Target memory or entity URI |
 | `strength` | Decimal | No | Relationship strength (0.0-1.0) |
 | `metadata` | Object | No | Additional relationship metadata |
@@ -1099,65 +1202,60 @@ MIF uses a bi-temporal model distinguishing between:
 |-------|---------|----------|
 | `none` | No decay | Permanent memories |
 | `linear` | strength = 1 - (t / ttl) | Simple linear decay |
-| `exponential` | strength = e^(-t/halfLife) | Natural forgetting curve |
+| `exponential` | strength = e^(-t/halfLife) | Gradual freshness decay |
 | `step` | strength = 1 if t < ttl else 0 | Hard expiration |
 
-### 9.3 Decay Rationale
+### 9.3 Freshness Rationale
 
-MIF's decay model values (P7D, P14D, P30D half-lives) are **pragmatic defaults** for AI memory systems, inspired by but not directly derived from cognitive psychology research. They represent reasonable approximations for memory management in agentic contexts.
+In the core model, the temporal decay function expresses **freshness** — how
+current a piece of knowledge is — and answers OKF's open "live vs. stale"
+question. The decay half-life defaults (P7D, P14D, P30D) are **pragmatic
+defaults** for how quickly knowledge of a given kind loses currency; they are
+not prescriptive.
 
-#### Scientific Background
-
-The exponential decay model `strength = e^(-t/halfLife)` is inspired by Hermann Ebbinghaus's forgetting curve (1885), which demonstrates that memory retention follows an exponential decline:
-
-| Time Elapsed | Approximate Retention |
-|--------------|----------------------|
-| 1 hour       | ~50% |
-| 24 hours     | ~30-35% |
-| 7 days       | ~25% |
-| 30 days      | ~10% |
-
-The mathematical form `R = e^(-t/S)` where R is retrievability, t is time elapsed, and S is memory strength, has been validated by modern replication studies.
+The `strength = e^(-t/halfLife)` curve models a value that is fully current when
+recorded and decays gradually toward stale, with `validFrom`/`validUntil`
+windows bounding the interval in which a fact is asserted to hold.
 
 #### Why These Specific Values?
 
 | Half-Life | Use Case | Rationale |
 |-----------|----------|-----------|
-| **P7D** | Short-term context | Aligns with weekly work cycles and episodic memory consolidation windows |
+| **P7D** | Short-term context | Aligns with weekly work cycles |
 | **P14D** | Medium-term projects | Spans typical sprint/iteration boundaries |
-| **P30D** | Long-term knowledge | Corresponds to monthly review cycles and hippocampal consolidation periods (~30 days in animal studies) |
+| **P30D** | Long-term knowledge | Corresponds to monthly review cycles |
 | **P90D** | Default TTL | Quarterly relevance for most organizational knowledge |
 
-These values are **not** prescriptive—implementations SHOULD tune them based on:
-- Memory type (episodic decays faster than semantic)
+Implementations SHOULD tune these based on:
+- Knowledge kind (`episodic` records go stale faster than `semantic` facts)
 - Organizational context (high-velocity vs. stable environments)
-- Access patterns (frequently accessed memories reinforce slower decay)
+- Access patterns (frequently accessed knowledge can reinforce slower decay)
 
-#### Memory Consolidation Considerations
+The `lastAccessed` and `accessCount` fields let implementations model
+reinforcement — each access can reset or slow the freshness decay.
 
-Research on memory consolidation suggests memories transition from hippocampus-dependent (recent) to cortex-dependent (remote) storage over time. MIF's `lastAccessed` and `accessCount` fields enable implementations to model reinforcement—each access can reset or slow decay, analogous to spaced repetition strengthening memory traces.
-
-**References:**
-- Ebbinghaus, H. (1885). *Memory: A Contribution to Experimental Psychology*
-- Murre & Dros (2015). [Replication and Analysis of Ebbinghaus' Forgetting Curve](https://pmc.ncbi.nlm.nih.gov/articles/PMC4492928/)
-- Squire & Bayley (2007). [The neuroscience of remote memory](https://pmc.ncbi.nlm.nih.gov/articles/PMC2791502/)
-- Wickelgren (1972). [Trace resistance and the decay of long-term memory](https://psycnet.apa.org/record/1973-08477-007)
+> **Cognitive-memory origin.** This exponential curve originates in the
+> cognitive-science account of human memory decay. That rationale — including
+> the underlying experimental references and decay tuning for retrieval-oriented
+> systems — now lives in the **AI Memory profile**
+> (`profiles/ai-memory/SPECIFICATION.md`), keeping the core framed purely as
+> freshness.
 
 ### 9.4 Example
 
 ```yaml
 temporal:
-  valid_from: 2026-01-15T00:00:00Z
-  valid_until: null
-  recorded_at: 2026-01-15T10:30:00Z
+  validFrom: 2026-01-15T00:00:00Z
+  validUntil: null
+  recordedAt: 2026-01-15T10:30:00Z
   ttl: P90D
   decay:
     model: exponential
     halfLife: P7D
     strength: 0.85
-    last_reinforced: 2026-01-18T09:00:00Z
-  access_count: 5
-  last_accessed: 2026-01-20T14:22:00Z
+    lastReinforced: 2026-01-18T09:00:00Z
+  accessCount: 5
+  lastAccessed: 2026-01-20T14:22:00Z
 ```
 
 ---
@@ -1482,9 +1580,9 @@ MIF stores embedding metadata, not raw vectors:
 ```yaml
 embedding:
   model: text-embedding-3-small
-  model_version: "2024-01"
+  modelVersion: "2024-01"
   dimensions: 1536
-  source_text: "The text that was embedded"
+  sourceText: "The text that was embedded"
   normalized: true
   quantization: null  # or "float16", "int8"
 ```
@@ -1502,8 +1600,8 @@ For providers that need vector portability:
 ```yaml
 embedding:
   model: text-embedding-3-small
-  source_text: "..."
-  vector_uri: "vectors/550e8400.bin"
+  sourceText: "..."
+  vectorUri: "urn:mif:vector:550e8400-e29b-41d4-a716-446655440000"
 ```
 
 **Inline (JSON-LD only):**
@@ -1523,7 +1621,20 @@ embedding:
 
 ## 12. Provenance
 
-MIF uses W3C PROV vocabulary for provenance tracking.
+MIF provenance has two layers. The **core** is a lightweight, always-available
+set of fields — `sourceType`, `confidence`, `trustLevel`, plus optional
+`sourceRef` / `agent` / `agentVersion` — that captures how a unit came to exist
+and how much to trust it. Layered on top is an **optional W3C-PROV-aligned** set
+of fields (`wasGeneratedBy`, `wasAttributedTo`, `wasDerivedFrom`) that lets a
+unit carry a real PROV entity/activity/agent lineage when richer provenance is
+needed. The entity/activity/agent roles are expressed through the `@type`
+values (`prov:Entity`, `prov:Activity`, `prov:SoftwareAgent`) on the provenance
+object and its nested nodes.
+
+Both layers are OPTIONAL and additive: a conforming unit MAY omit provenance
+entirely, MAY use only the lightweight core, or MAY include the PROV-aligned
+fields. The PROV fields project to the W3C PROV vocabulary (`prov:`) through the
+JSON-LD context, so a full PROV graph is expressible but never required.
 
 ### 12.1 Source Types
 
@@ -1548,18 +1659,38 @@ MIF uses W3C PROV vocabulary for provenance tracking.
 
 ### 12.3 Provenance Schema
 
+The lightweight core (all fields here are OPTIONAL within an OPTIONAL block):
+
 ```yaml
 provenance:
-  source_type: user_explicit
-  source_ref: conversation:conv-456
-  agent: claude-3-opus
-  agent_version: "20240229"
+  sourceType: user_explicit                 # how the unit was created
+  sourceRef: conversation:conv-456          # reference to the originating source
+  agent: claude-3-opus                      # creating agent
+  agentVersion: "20240229"                  # creating-agent version
+  confidence: 0.95                          # confidence score (0-1)
+  trustLevel: user_stated                   # trust classification
+```
+
+To attach a W3C-PROV-aligned lineage, add the OPTIONAL PROV fields. Keys stay
+plain (no `prov:` prefix) and are mapped to the W3C PROV vocabulary by the
+JSON-LD context; the `@type` values use the `prov:` prefix:
+
+```yaml
+provenance:
+  '@type': prov:Entity
+  sourceType: user_explicit
   confidence: 0.95
-  trust_level: user_stated
-  derived_from:
-    - memory:parent-memory-id
-  attribution:
-    - entity:person:jane-doe
+  trustLevel: user_stated
+  wasGeneratedBy:                           # prov:wasGeneratedBy
+    '@id': urn:mif:activity:extraction:mem-001
+    '@type': prov:Activity
+    wasAssociatedWith:                      # prov:wasAssociatedWith
+      '@id': urn:mif:agent:claude-3-opus
+      '@type': prov:SoftwareAgent
+  wasAttributedTo:                          # prov:wasAttributedTo
+    '@id': urn:mif:entity:person:jane-doe
+  wasDerivedFrom:                           # prov:wasDerivedFrom
+    '@id': urn:mif:conversation:conv-456
 ```
 
 ---
@@ -1585,7 +1716,7 @@ provenance:
 - All Level 2 requirements
 - Bi-temporal model
 - Decay functions
-- W3C PROV provenance
+- Optional W3C-PROV-aligned provenance layer
 - Embedding references
 - Citations with rich metadata
 - Compression support
@@ -1597,7 +1728,7 @@ Implementations SHOULD declare their conformance level:
 
 ```yaml
 # .mif/config.yaml
-mif_version: "0.1.0"
+mif_version: "1.0.0"
 conformance_level: 2
 extensions:
   - subcog
@@ -1616,133 +1747,17 @@ https://mif-spec.dev/schema/context.jsonld
 
 ### 14.2 Context Definition
 
-```json
-{
-  "@context": {
-    "@version": 1.1,
-    "mif": "https://mif-spec.dev/ns/",
-    "dc": "http://purl.org/dc/terms/",
-    "prov": "http://www.w3.org/ns/prov#",
-    "xsd": "http://www.w3.org/2001/XMLSchema#",
+The canonical JSON-LD context is maintained in `schema/context.jsonld` at the
+root of this repository and is served at:
 
-    "Memory": "mif:Memory",
-    "Entity": "mif:Entity",
-    "Relationship": "mif:Relationship",
-    "TemporalMetadata": "mif:TemporalMetadata",
-    "EmbeddingReference": "mif:EmbeddingReference",
-    "EntityReference": "mif:EntityReference",
-    "OntologyReference": "mif:OntologyReference",
-
-    "Person": "mif:Person",
-    "Organization": "mif:Organization",
-    "Technology": "mif:Technology",
-    "Concept": "mif:Concept",
-    "File": "mif:File",
-
-    "id": "@id",
-    "type": "@type",
-    "content": "mif:content",
-    "memoryType": "mif:memoryType",
-    "title": "dc:title",
-    "namespace": "mif:namespace",
-    "tags": "mif:tags",
-    "aliases": "mif:aliases",
-
-    "created": {
-      "@id": "dc:created",
-      "@type": "xsd:dateTime"
-    },
-    "modified": {
-      "@id": "dc:modified",
-      "@type": "xsd:dateTime"
-    },
-
-    "ontology": "mif:ontology",
-    "entities": "mif:entities",
-    "relationships": "mif:relationships",
-    "temporal": "mif:temporal",
-    "provenance": "mif:provenance",
-    "embedding": "mif:embedding",
-    "extensions": "mif:extensions",
-
-    "relationshipType": "mif:relationshipType",
-    "target": "mif:target",
-    "strength": "mif:strength",
-
-    "validFrom": {
-      "@id": "mif:validFrom",
-      "@type": "xsd:dateTime"
-    },
-    "validUntil": {
-      "@id": "mif:validUntil",
-      "@type": "xsd:dateTime"
-    },
-    "recordedAt": {
-      "@id": "mif:recordedAt",
-      "@type": "xsd:dateTime"
-    },
-    "ttl": "mif:ttl",
-    "decay": "mif:decay",
-    "accessCount": "mif:accessCount",
-    "lastAccessed": {
-      "@id": "mif:lastAccessed",
-      "@type": "xsd:dateTime"
-    },
-
-    "sourceType": "mif:sourceType",
-    "sourceRef": "mif:sourceRef",
-    "agent": "mif:agent",
-    "confidence": "mif:confidence",
-    "trustLevel": "mif:trustLevel",
-
-    "model": "mif:model",
-    "modelVersion": "mif:modelVersion",
-    "dimensions": "mif:dimensions",
-    "sourceText": "mif:sourceText",
-    "vectorUri": "mif:vectorUri",
-
-    "citations": {
-      "@id": "mif:citations",
-      "@container": "@set"
-    },
-    "Citation": "mif:Citation",
-    "citationType": {
-      "@id": "mif:citationType",
-      "@type": "@vocab"
-    },
-    "citationRole": {
-      "@id": "mif:citationRole",
-      "@type": "@vocab"
-    },
-    "url": {
-      "@id": "schema:url",
-      "@type": "@id"
-    },
-    "author": {
-      "@id": "dc:creator"
-    },
-    "date": {
-      "@id": "dc:date",
-      "@type": "xsd:date"
-    },
-    "relevance": {
-      "@id": "mif:relevance",
-      "@type": "xsd:decimal"
-    },
-    "accessed": {
-      "@id": "schema:accessDate",
-      "@type": "xsd:date"
-    },
-    "note": "schema:description",
-
-    "summary": "mif:summary",
-    "compressedAt": {
-      "@id": "mif:compressedAt",
-      "@type": "xsd:dateTime"
-    }
-  }
-}
 ```
+https://mif-spec.dev/schema/context.jsonld
+```
+
+That file defines the JSON-LD term mappings for MIF documents. Implementations
+MUST dereference the context URL rather than inlining a local copy. The context
+is versioned alongside the schema; breaking changes to term mappings require a
+new major version of the specification.
 
 ---
 
@@ -1773,12 +1788,12 @@ https://mif-spec.dev/schema/context.jsonld
 ```json
 {
   "@context": "https://mif-spec.dev/schema/context.jsonld",
-  "@type": "Memory",
+  "@type": "Concept",
   "@id": "urn:mif:550e8400",
   "title": "Dark Mode",
   "content": "User prefers dark mode",
   "relationships": [
-    {"relationshipType": "RelatesTo", "target": {"@id": "urn:mif:ui-prefs"}}
+    {"type": "relates-to", "target": "urn:mif:ui-prefs"}
   ]
 }
 ```
@@ -1874,9 +1889,9 @@ User prefers dark mode for all applications.
 ```json
 {
   "@context": "https://mif-spec.dev/schema/context.jsonld",
-  "@type": "Memory",
+  "@type": "Concept",
   "@id": "urn:mif:550e8400-e29b-41d4-a716-446655440000",
-  "memoryType": "semantic",
+  "conceptType": "semantic",
   "content": "User prefers dark mode for all applications.",
   "created": "2026-01-15T10:30:00Z"
 }
@@ -1934,117 +1949,17 @@ See Section 6.2 for a complete Level 3 example.
 
 ---
 
-## 17. Migration Guides
+## 17. Migration
 
-### 17.1 From Mem0
+MIF v1.0.0 ships a complete upgrade path from `0.1.0-draft`. The mechanical
+transform (drops the legacy `.memory` infix to plain `.md`, adds UUID identity, wiki-links → OKF-legible body
+markdown links + frontmatter `relationships`, ISO 8601 timestamps) is automated
+by `scripts/migrate_0_1_to_1_0.py` and documented in
+[`MIGRATION.md`](MIGRATION.md).
 
-```python
-# Mem0 export structure
-{
-    "id": "mem0_123",
-    "memory": "User prefers dark mode",
-    "user_id": "user_456",
-    "metadata": {"category": "preference"},
-    "created_at": "2026-01-15T10:30:00Z"
-}
-
-# MIF mapping
-{
-    "@context": "https://mif-spec.dev/schema/context.jsonld",
-    "@id": "urn:mif:mem0_123",                    # id → @id
-    "content": "User prefers dark mode",          # memory → content
-    "memoryType": "semantic",                     # preferences are semantic knowledge
-    "namespace": "_semantic/preferences",          # categorize by base type + category
-    "created": "2026-01-15T10:30:00Z",           # created_at → created
-    "extensions": {
-        "mem0": {"original_id": "mem0_123", "category": "preference"}
-    }
-}
-```
-
-### 17.2 From Zep
-
-```python
-# Zep temporal knowledge graph structure
-{
-    "uuid": "zep_789",
-    "content": "User prefers dark mode",
-    "created_at": "2026-01-15T10:30:00Z",
-    "t_valid": "2026-01-15T00:00:00Z",
-    "t_invalid": null,
-    "entity_edges": [...],
-    "embedding": [0.1, 0.2, ...]
-}
-
-# MIF mapping
-{
-    "@id": "urn:mif:zep_789",
-    "content": "User prefers dark mode",
-    "created": "2026-01-15T10:30:00Z",
-    "temporal": {
-        "validFrom": "2026-01-15T00:00:00Z",     # t_valid
-        "validUntil": null,                       # t_invalid
-        "recordedAt": "2026-01-15T10:30:00Z"     # created_at
-    },
-    "relationships": [...],                       # entity_edges
-    "embedding": {
-        "model": "zep-default",
-        "sourceText": "User prefers dark mode"
-        # vectors stored externally
-    }
-}
-```
-
-### 17.3 From Letta (Agent File)
-
-```python
-# Letta Agent File memory block
-{
-    "label": "human",
-    "value": "Name: Alice. Prefers dark mode.",
-    "limit": 5000
-}
-
-# MIF mapping (multiple memories)
-{
-    "@id": "urn:mif:letta-human-name",
-    "memoryType": "semantic",
-    "content": "Name: Alice",
-    "namespace": "_semantic/entities"
-},
-{
-    "@id": "urn:mif:letta-human-pref",
-    "memoryType": "semantic",
-    "content": "Prefers dark mode",
-    "namespace": "_semantic/preferences"
-}
-```
-
-### 17.4 From Subcog
-
-```python
-# Subcog memory
-{
-    "id": "subcog_abc",
-    "content": "Decision: Use React",
-    "namespace": "decisions",
-    "domain": "project",
-    "tags": ["frontend"],
-    "created_at": "2026-01-15T10:30:00Z"
-}
-
-# MIF mapping (mostly 1:1)
-{
-    "@id": "urn:mif:subcog_abc",
-    "content": "Decision: Use React",
-    "memoryType": "semantic",                     # decisions are semantic knowledge
-    "namespace": "_semantic/decisions",            # base type prefix + category
-    "tags": ["frontend"],
-    "created": "2026-01-15T10:30:00Z"
-}
-```
-
----
+System-specific migration guides for individual AI-memory providers are part
+of the AI Memory profile, not the core model:
+see [`profiles/ai-memory/SPECIFICATION.md`](profiles/ai-memory/SPECIFICATION.md).
 
 ## 18. Security Considerations
 
@@ -2063,7 +1978,7 @@ See Section 6.2 for a complete Level 3 example.
 
 ### 18.3 Provenance Trust
 
-- `provenance.trust_level` indicates data reliability
+- `provenance.trustLevel` indicates data reliability
 - Implementations SHOULD NOT elevate trust levels on import
 - External sources SHOULD be marked as `external_import`
 
@@ -2116,29 +2031,30 @@ tags: [tag1, tag2]
 aliases: ["Alt Name 1", "Alt Name 2"]
 
 temporal:
-  valid_from: ISO-8601-datetime
-  valid_until: ISO-8601-datetime | null
-  recorded_at: ISO-8601-datetime
+  validFrom: ISO-8601-datetime
+  validUntil: ISO-8601-datetime | null
+  recordedAt: ISO-8601-datetime
   ttl: ISO-8601-duration
   decay:
     model: none|linear|exponential|step
     halfLife: ISO-8601-duration
     strength: 0.0-1.0
-  access_count: integer
-  last_accessed: ISO-8601-datetime
+  accessCount: integer
+  lastAccessed: ISO-8601-datetime
 
 provenance:
-  source_type: user_explicit|user_implicit|agent_inferred|external_import|system_generated
-  source_ref: uri
+  sourceType: user_explicit|user_implicit|agent_inferred|external_import|system_generated
+  sourceRef: uri
   agent: string
   confidence: 0.0-1.0
-  trust_level: verified|user_stated|high_confidence|moderate_confidence|low_confidence|uncertain
+  trustLevel: verified|user_stated|high_confidence|moderate_confidence|low_confidence|uncertain
+  # Optional W3C-PROV-aligned layer (see §12.3): wasGeneratedBy, wasAttributedTo, wasDerivedFrom
 
 embedding:
   model: string
-  model_version: string
+  modelVersion: string
   dimensions: integer
-  source_text: string
+  sourceText: string
 
 extensions:
   provider_name:
@@ -2150,17 +2066,17 @@ extensions:
 
 ## Appendix B: Relationship Types Quick Reference
 
-| Markdown Syntax | JSON-LD relationshipType | Description |
-|-----------------|-------------------------|-------------|
-| `[[X]]` | `RelatesTo` | General relationship |
-| `[[X\|derived-from]]` | `DerivedFrom` | Created from source |
-| `[[X\|supersedes]]` | `Supersedes` | Replaces older |
-| `[[X\|conflicts-with]]` | `ConflictsWith` | Contradicts |
-| `[[X\|part-of]]` | `PartOf` | Component of |
-| `[[X\|implements]]` | `Implements` | Realizes |
-| `[[X\|uses]]` | `Uses` | Utilizes |
-| `[[X\|created-by]]` | `Created` | Authored by |
-| `[[X\|mentioned-in]]` | `MentionedIn` | Referenced in |
+| Markdown Syntax | JSON-LD `type` | Description |
+|-----------------|----------------|-------------|
+| `[[X]]` | `relates-to` | General relationship |
+| `[[X\|derived-from]]` | `derived-from` | Created from source |
+| `[[X\|supersedes]]` | `supersedes` | Replaces older |
+| `[[X\|conflicts-with]]` | `conflicts-with` | Contradicts |
+| `[[X\|part-of]]` | `part-of` | Component of |
+| `[[X\|implements]]` | `implements` | Realizes |
+| `[[X\|uses]]` | `uses` | Utilizes |
+| `[[X\|created-by]]` | `created-by` | Authored by |
+| `[[X\|mentioned-in]]` | `mentioned-in` | Referenced in |
 
 ---
 
@@ -2235,30 +2151,6 @@ citations:
   - **Relevance**: 0.95
   - Long-form annotation here.
 ```
-
----
-
-## Changelog
-
-### 0.1.0-draft (2026-01-26)
-- **BREAKING**: Replaced ad-hoc memory types with three base types (Section 4.2)
-  - New base types: `semantic`, `episodic`, `procedural`
-  - Removed: `memory`, `decision`, `preference`, `fact`, `episode`, `pattern`, `learning`, `context`
-  - Specific categorization via namespace hierarchy (e.g., `_semantic/decisions`)
-- Added `ontology` field for declaring applied ontology (Section 4.3)
-- Added `OntologyReference` type to JSON-LD context
-- Updated frontmatter schema with ontology reference
-- Updated JSON-LD example with ontology field
-
-### 0.1.0-draft (2026-01-23)
-- Initial draft specification
-- Dual format (Markdown + JSON-LD)
-- Core data model
-- Entity and relationship types
-- Bi-temporal model
-- Hierarchical namespaces
-- Provenance model
-- Embedding references
 
 ---
 

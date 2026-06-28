@@ -1,0 +1,450 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mif-spec.dev/schema/mif.schema.json",
+  "title": "Memory Interchange Format (MIF)",
+  "description": "JSON Schema for validating MIF memory documents",
+  "type": "object",
+  "required": ["@context", "@type", "@id", "memoryType", "content", "created"],
+  "properties": {
+    "@context": {
+      "description": "JSON-LD context",
+      "oneOf": [
+        { "type": "string", "format": "uri" },
+        { "type": "array", "items": { "type": ["string", "object"] } },
+        { "type": "object" }
+      ]
+    },
+    "@type": {
+      "description": "Type of the memory document",
+      "oneOf": [
+        { "const": "Memory" },
+        { "type": "array", "contains": { "const": "Memory" } }
+      ]
+    },
+    "@id": {
+      "type": "string",
+      "pattern": "^urn:mif:",
+      "description": "Unique identifier in URN format"
+    },
+    "memoryType": {
+      "type": "string",
+      "enum": ["semantic", "episodic", "procedural"],
+      "description": "Memory classification using cognitive triad: semantic (facts/knowledge), episodic (events/experiences), procedural (processes/how-to)"
+    },
+    "content": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The memory content in Markdown format"
+    },
+    "title": {
+      "type": "string",
+      "description": "Human-readable title"
+    },
+    "created": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Creation timestamp (ISO 8601)"
+    },
+    "modified": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last modification timestamp (ISO 8601)"
+    },
+    "ontology": {
+      "$ref": "#/$defs/OntologyReference",
+      "description": "Reference to the ontology this memory conforms to"
+    },
+    "entity": {
+      "$ref": "#/$defs/EntityData",
+      "description": "Structured entity data for ontology-typed memories"
+    },
+    "namespace": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9_-]+(/[a-zA-Z0-9_-]+)*$",
+      "description": "Hierarchical namespace path"
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Classification tags"
+    },
+    "aliases": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Alternative names for the memory"
+    },
+    "entities": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/EntityReference" },
+      "description": "Referenced entities"
+    },
+    "relationships": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Relationship" },
+      "description": "Typed relationships to other memories"
+    },
+    "temporal": {
+      "$ref": "#/$defs/TemporalMetadata",
+      "description": "Temporal validity and decay data"
+    },
+    "provenance": {
+      "$ref": "#/$defs/Provenance",
+      "description": "Source and trust data"
+    },
+    "embedding": {
+      "$ref": "#/$defs/EmbeddingReference",
+      "description": "Embedding model reference"
+    },
+    "citations": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Citation" },
+      "description": "Citation references (Level 3)"
+    },
+    "summary": {
+      "type": "string",
+      "maxLength": 500,
+      "description": "Compressed content summary (Level 3, max 500 chars)"
+    },
+    "compressedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When compression was applied (Level 3)"
+    },
+    "blocks": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "description": "Named block references (^block-id) with their text content for granular linking"
+    },
+    "extensions": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Provider-specific extensions"
+    }
+  },
+  "$defs": {
+    "Citation": {
+      "type": "object",
+      "required": ["@type", "citationType", "citationRole", "title", "url"],
+      "properties": {
+        "@type": {
+          "const": "Citation"
+        },
+        "citationType": {
+          "type": "string",
+          "description": "Source category",
+          "oneOf": [
+            {
+              "enum": [
+                "article",
+                "book",
+                "paper",
+                "website",
+                "documentation",
+                "repository",
+                "video",
+                "podcast",
+                "specification",
+                "dataset",
+                "tool",
+                "other"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^[a-zA-Z][a-zA-Z0-9]*:[a-zA-Z][a-zA-Z0-9-]*$",
+              "description": "Custom namespaced type"
+            }
+          ]
+        },
+        "citationRole": {
+          "type": "string",
+          "description": "Relationship to memory",
+          "oneOf": [
+            {
+              "enum": [
+                "supports",
+                "refutes",
+                "background",
+                "methodology",
+                "contradicts",
+                "extends",
+                "derived",
+                "source",
+                "example",
+                "review"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^[a-zA-Z][a-zA-Z0-9]*:[a-zA-Z][a-zA-Z0-9-]*$",
+              "description": "Custom namespaced role"
+            }
+          ]
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Citation title"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Citation URL"
+        },
+        "author": {
+          "description": "Author(s) as entity reference(s) or plain text",
+          "oneOf": [
+            { "$ref": "#/$defs/EntityReference" },
+            {
+              "type": "array",
+              "items": { "$ref": "#/$defs/EntityReference" }
+            },
+            { "type": "string" }
+          ]
+        },
+        "date": {
+          "type": "string",
+          "format": "date",
+          "description": "Publication date (ISO 8601)"
+        },
+        "accessed": {
+          "type": "string",
+          "format": "date",
+          "description": "Access date (ISO 8601)"
+        },
+        "relevance": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Relevance score (0.0-1.0)"
+        },
+        "note": {
+          "type": "string",
+          "maxLength": 1000,
+          "description": "Free-form annotation"
+        }
+      },
+      "additionalProperties": false
+    },
+    "EntityReference": {
+      "$ref": "./definitions/entity-reference.schema.json"
+    },
+    "Relationship": {
+      "type": "object",
+      "required": ["@type", "relationshipType", "target"],
+      "properties": {
+        "@type": {
+          "const": "Relationship"
+        },
+        "relationshipType": {
+          "type": "string",
+          "description": "Relationship type",
+          "oneOf": [
+            {
+              "enum": [
+                "RelatesTo",
+                "DerivedFrom",
+                "Supersedes",
+                "ConflictsWith",
+                "PartOf",
+                "Implements",
+                "Uses",
+                "Created",
+                "MentionedIn"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^[a-zA-Z][a-zA-Z0-9]*:[a-zA-Z][a-zA-Z0-9-]*$",
+              "description": "Custom namespaced relationship type (e.g., farm:BreedsWith)"
+            }
+          ]
+        },
+        "target": {
+          "type": "object",
+          "required": ["@id"],
+          "properties": {
+            "@id": {
+              "type": "string",
+              "pattern": "^urn:mif:"
+            }
+          }
+        },
+        "strength": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Relationship strength"
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "TemporalMetadata": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "const": "TemporalMetadata"
+        },
+        "validFrom": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        },
+        "validUntil": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        },
+        "recordedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "ttl": {
+          "type": "string",
+          "pattern": "^P",
+          "description": "ISO 8601 duration"
+        },
+        "decay": {
+          "type": "object",
+          "properties": {
+            "model": {
+              "type": "string",
+              "enum": ["none", "linear", "exponential", "step"]
+            },
+            "halfLife": {
+              "type": "string",
+              "pattern": "^P"
+            },
+            "currentStrength": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          }
+        },
+        "accessCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "lastAccessed": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": false
+    },
+    "Provenance": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        },
+        "sourceType": {
+          "type": "string",
+          "enum": [
+            "user_explicit",
+            "user_implicit",
+            "agent_inferred",
+            "external_import",
+            "system_generated"
+          ]
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "trustLevel": {
+          "type": "string",
+          "enum": [
+            "verified",
+            "user_stated",
+            "high_confidence",
+            "moderate_confidence",
+            "low_confidence",
+            "uncertain"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "EmbeddingReference": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "const": "EmbeddingReference"
+        },
+        "model": {
+          "type": "string"
+        },
+        "modelVersion": {
+          "type": "string"
+        },
+        "dimensions": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sourceText": {
+          "type": "string"
+        },
+        "vectorUri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "normalized": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "OntologyReference": {
+      "type": "object",
+      "description": "Reference to the ontology this memory conforms to",
+      "required": ["id"],
+      "properties": {
+        "@type": {
+          "const": "OntologyReference"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "description": "Ontology identifier (must match ontology.id in ontology definition)"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+.*$",
+          "description": "Semantic version of the ontology"
+        },
+        "uri": {
+          "type": "string",
+          "format": "uri",
+          "description": "URI to the ontology definition"
+        }
+      },
+      "additionalProperties": false
+    },
+    "EntityData": {
+      "type": "object",
+      "description": "Structured entity data for ontology-typed memories. Fields are defined by the entity_type schema in the referenced ontology.",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Human-readable name for the entity"
+        },
+        "entity_type": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "description": "Entity type from ontology (e.g., grazing-plan, soil-profile)"
+        },
+        "entity_id": {
+          "type": "string",
+          "description": "Unique identifier for this entity instance"
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

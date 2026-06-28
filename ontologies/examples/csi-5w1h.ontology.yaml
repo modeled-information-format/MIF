@@ -1224,7 +1224,7 @@ traits:
 # Relationships between entity types capturing the CSI ontology structure.
 
 relationships:
-  classified_as:
+  classified-as:
     description: "Ticket is classified under a symptom category"
     from:
       - support-ticket
@@ -1232,7 +1232,7 @@ relationships:
       - symptom-category
     symmetric: false
 
-  has_failure_type:
+  has-failure-type:
     description: "Ticket has a failure mechanism classification"
     from:
       - support-ticket
@@ -1240,7 +1240,7 @@ relationships:
       - failure-mechanism
     symmetric: false
 
-  resolved_with:
+  resolved-with:
     description: "Ticket was resolved with a resolution type"
     from:
       - support-ticket
@@ -1248,7 +1248,7 @@ relationships:
       - resolution-type
     symmetric: false
 
-  fixed_in:
+  fixed-in:
     description: "Ticket was fixed in a specific engineering area"
     from:
       - support-ticket
@@ -1256,7 +1256,7 @@ relationships:
       - fix-area
     symmetric: false
 
-  affects_platform:
+  affects-platform:
     description: "Ticket affects a specific platform"
     from:
       - support-ticket
@@ -1264,7 +1264,7 @@ relationships:
       - platform
     symmetric: false
 
-  involves_element:
+  involves-element:
     description: "Ticket involves a specific system element"
     from:
       - support-ticket
@@ -1272,7 +1272,7 @@ relationships:
       - system-element
     symmetric: false
 
-  concerns_discipline:
+  concerns-discipline:
     description: "Ticket concerns a subject discipline"
     from:
       - support-ticket
@@ -1280,7 +1280,7 @@ relationships:
       - subject-discipline
     symmetric: false
 
-  relates_to_product:
+  relates-to-product:
     description: "Ticket or element relates to an HMH product"
     from:
       - support-ticket
@@ -1289,7 +1289,7 @@ relationships:
       - product
     symmetric: false
 
-  assigned_to_team:
+  assigned-to-team:
     description: "Ticket is assigned to a support team"
     from:
       - support-ticket
@@ -1297,7 +1297,7 @@ relationships:
       - support-team
     symmetric: false
 
-  resolved_by_sme:
+  resolved-by-sme:
     description: "Ticket was resolved by a subject matter expert"
     from:
       - support-ticket
@@ -1305,7 +1305,7 @@ relationships:
       - subject-matter-expert
     symmetric: false
 
-  reported_by:
+  reported-by:
     description: "Ticket was reported by an actor"
     from:
       - support-ticket
@@ -1313,7 +1313,7 @@ relationships:
       - ticket-actor
     symmetric: false
 
-  has_impact:
+  has-impact:
     description: "Ticket has an impact assessment"
     from:
       - support-ticket
@@ -1337,7 +1337,7 @@ relationships:
       - product
     symmetric: false
 
-  covers_discipline:
+  covers-discipline:
     description: "Product covers a subject discipline"
     from:
       - product
@@ -1345,7 +1345,7 @@ relationships:
       - subject-discipline
     symmetric: false
 
-  member_of:
+  member-of:
     description: "SME is a member of a support team"
     from:
       - subject-matter-expert
@@ -1353,7 +1353,7 @@ relationships:
       - support-team
     symmetric: false
 
-  occurs_during:
+  occurs-during:
     description: "Symptom category spikes during a temporal pattern"
     from:
       - symptom-category
@@ -1361,7 +1361,7 @@ relationships:
       - temporal-pattern
     symmetric: false
 
-  dominant_in_era:
+  dominant-in-era:
     description: "Platform or symptom was dominant in a platform era"
     from:
       - platform
@@ -1370,7 +1370,7 @@ relationships:
       - platform-era
     symmetric: false
 
-  authenticates_via:
+  authenticates-via:
     description: "Platform authenticates via an SSO provider"
     from:
       - platform
@@ -1378,7 +1378,7 @@ relationships:
       - sso-provider
     symmetric: false
 
-  addresses_finding:
+  addresses-finding:
     description: "Recommendation addresses a specific ontology finding"
     from:
       - recommendation
@@ -1389,7 +1389,7 @@ relationships:
       - platform
     symmetric: false
 
-  applied_in:
+  applied-in:
     description: "Application scenario is applied in a domain"
     from:
       - application-scenario
@@ -1399,7 +1399,7 @@ relationships:
       - support-team
     symmetric: false
 
-  labeled_with:
+  labeled-with:
     description: "Ticket is labeled with a Jira label"
     from:
       - support-ticket
@@ -1407,7 +1407,7 @@ relationships:
       - jira-label
     symmetric: false
 
-  has_component:
+  has-component:
     description: "Ticket is tagged with a Jira component"
     from:
       - support-ticket
@@ -1415,7 +1415,7 @@ relationships:
       - jira-component
     symmetric: false
 
-  quality_issue_in:
+  quality-issue-in:
     description: "Data quality issue affects an ontology dimension"
     from:
       - data-quality-issue

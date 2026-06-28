@@ -8,8 +8,15 @@ export default defineConfig({
   integrations: [
     astroMermaid(),
     starlight({
-      plugins: [starlightLlmsTxt()],
+      plugins: [
+        starlightLlmsTxt({
+          projectName: "Modeled Information Format (MIF)",
+          description:
+            "Modeled Information Format (MIF): an open standard for portable AI memory",
+        }),
+      ],
       title: "MIF",
+      customCss: ["./src/styles/mif-brand.css"],
       logo: {
         light: "./src/assets/logo-light.svg",
         dark: "./src/assets/logo-dark.svg",
@@ -129,21 +136,6 @@ export default defineConfig({
                 { label: "Appendices", slug: "specification/appendices" },
               ],
             },
-          ],
-        },
-        {
-          label: "Guides",
-          items: [
-            { label: "Getting Started", slug: "guides/getting-started" },
-            { label: "Schema Reference", slug: "guides/schema-reference" },
-            { label: "API Reference", slug: "guides/api-reference" },
-            { label: "Migration", slug: "guides/migration" },
-          ],
-        },
-        {
-          label: "Design",
-          items: [
-            { label: "Architecture Decisions", slug: "design/decisions" },
           ],
         },
       ],

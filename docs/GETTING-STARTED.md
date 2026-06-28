@@ -4,7 +4,7 @@ diataxis_type: tutorial
 
 # Getting Started with MIF
 
-This guide walks you through implementing the Memory Interchange Format (MIF) in your project.
+This guide walks you through implementing the Modeled Information Format (MIF) in your project.
 
 ## Prerequisites
 
@@ -28,7 +28,7 @@ created: 2026-01-26T10:00:00Z
 User prefers dark mode for all applications.
 ```
 
-Save this as `my-first-memory.memory.md`.
+Save this as `my-first-memory.md`.
 
 ### Step 2: Add Metadata
 
@@ -156,30 +156,31 @@ id: uuid-here
 type: semantic
 created: 2026-01-26T10:00:00Z
 temporal:
-  valid_from: 2026-01-26T00:00:00Z
-  recorded_at: 2026-01-26T10:00:00Z
+  validFrom: 2026-01-26T00:00:00Z
+  recordedAt: 2026-01-26T10:00:00Z
   ttl: P365D
   decay:
     model: exponential
     halfLife: P30D
     strength: 1.0
 provenance:
-  source_type: user_explicit
+  sourceType: user_explicit
   agent: claude-opus-4
   confidence: 0.95
-  trust_level: user_stated
+  trustLevel: user_stated
 citations:
-  - type: documentation
+  - "@type": Citation
+    citationType: documentation
+    citationRole: background
     title: "PostgreSQL Documentation"
     url: https://www.postgresql.org/docs/
-    role: background
     relevance: 0.9
 ---
 ```
 
-> **Decay Values:** The `halfLife: P30D` means memory strength halves every 30 days. Common values: P7D (short-term), P14D (medium-term), P30D (long-term). These are pragmatic defaults inspired by Ebbinghaus's forgetting curve research. See [SPECIFICATION.md Section 9.3](../SPECIFICATION.md#93-decay-rationale) for details.
+> **Decay Values:** The `halfLife: P30D` means memory strength halves every 30 days. Common values: P7D (short-term), P14D (medium-term), P30D (long-term). These are pragmatic defaults inspired by Ebbinghaus's forgetting curve research. See [SPECIFICATION.md Section 9.3](../SPECIFICATION.md#93-freshness-rationale) for details.
 
-> **Naming Convention:** Markdown frontmatter uses `snake_case` field names (`valid_from`, `source_type`, `trust_level`). JSON-LD uses `camelCase` equivalents (`validFrom`, `sourceType`, `trustLevel`). Exception: `halfLife` uses camelCase in both formats. See the [Field Name Mapping](../examples/README.md#field-name-mapping) table for a complete reference.
+> **Naming Convention:** Field names use `camelCase` in both the Markdown frontmatter and the JSON-LD projection (e.g. `validFrom`, `recordedAt`, `sourceType`, `trustLevel`, `citationType`). The `temporal`, `provenance`, `embedding`, and `citations` blocks are carried into the projection unchanged, so author them with the schema's `camelCase` field names.
 
 ## Directory Structure
 
@@ -280,17 +281,20 @@ For machine processing, use JSON-LD:
 Validate MIF documents using JSON Schema:
 
 ```bash
-# Install ajv-cli
-npm install -g ajv-cli
+# Install ajv-cli + ajv-formats
+npm install -g ajv-cli ajv-formats
 
-# Validate a memory
-npx ajv validate -s schema/mif.schema.json -d my-memory.json
+# Validate the JSON-LD projection of a memory.
+# The converter emits .jsonld; ajv-cli reads .json, so validate a .json copy.
+npx ajv validate -s schema/mif.schema.json -r "schema/definitions/*.schema.json" \
+  -d my-memory.json --spec=draft2020 -c ajv-formats
 
 # Validate a citation
-npx ajv validate -s schema/citation.schema.json -d citation.json
+npx ajv validate -s schema/citation.schema.json -r "schema/definitions/*.schema.json" \
+  -d citation.json --spec=draft2020 -c ajv-formats
 
-# Validate an ontology
-npx ajv validate -s schema/ontology/ontology.schema.json -d ontology.yaml
+# Validate all ontology files (ajv-cli does not read YAML; use the project validator)
+python scripts/validate-ontologies.py
 ```
 
 ## Converting Ontologies

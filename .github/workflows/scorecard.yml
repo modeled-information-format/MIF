@@ -1,0 +1,28 @@
+name: scorecard
+
+# OpenSSF Scorecard posture assessment via the org's central reusable workflow.
+# Runs on default-branch push, a scattered weekly schedule, and branch-protection
+# changes; results upload to code scanning and (public repo) the OpenSSF API.
+
+"on":
+  push:
+    branches: [main]
+  branch_protection_rule:
+  schedule:
+    - cron: "23 5 * * 2"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  scorecard:
+    name: scorecard
+    permissions:
+      security-events: write
+      id-token: write
+      contents: read
+      actions: read
+    uses: modeled-information-format/.github/.github/workflows/reusable-scorecard.yml@ff8adc6b1267c272beef916af851d9506160354f
+    with:
+      publish-results: true

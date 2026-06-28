@@ -338,25 +338,36 @@ def validate_ontology(ontology: dict) -> bool:
 ### Using ajv (JavaScript/Node.js)
 
 ```javascript
-const Ajv = require('ajv');
+const Ajv2020 = require('ajv/dist/2020');
+const addFormats = require('ajv-formats');
 const fs = require('fs');
+const path = require('path');
 
-const ajv = new Ajv({ allErrors: true });
+const ajv = new Ajv2020({ allErrors: true });
+addFormats(ajv);
 
-// Load schemas
-const mifSchema = JSON.parse(fs.readFileSync('schema/mif.schema.json'));
-const citationSchema = JSON.parse(fs.readFileSync('schema/citation.schema.json'));
+// Register the referenced definition schemas so $refs resolve
+const defsDir = 'schema/definitions';
+for (const file of fs.readdirSync(defsDir)) {
+  if (file.endsWith('.schema.json')) {
+    ajv.addSchema(JSON.parse(fs.readFileSync(path.join(defsDir, file))));
+  }
+}
 
-// Compile validators
-const validateMif = ajv.compile(mifSchema);
-const validateCitation = ajv.compile(citationSchema);
+const validateMif = ajv.compile(JSON.parse(fs.readFileSync('schema/mif.schema.json')));
+const validateCitation = ajv.compile(JSON.parse(fs.readFileSync('schema/citation.schema.json')));
 
-// Validate a document
-const document = JSON.parse(fs.readFileSync('memory.json'));
-const valid = validateMif(document);
+// Validate a derived JSON-LD projection (produced by scripts/mif_convert.py emit-jsonld).
+// Node reads .jsonld directly (unlike ajv-cli, which needs a .json file).
+const document = JSON.parse(fs.readFileSync('memory.jsonld'));
+if (!validateMif(document)) {
+  console.log('MIF validation errors:', validateMif.errors);
+}
 
-if (!valid) {
-  console.log('Validation errors:', validateMif.errors);
+// Validate a citation object
+const citation = JSON.parse(fs.readFileSync('citation.json'));
+if (!validateCitation(citation)) {
+  console.log('Citation validation errors:', validateCitation.errors);
 }
 ```
 
@@ -517,7 +528,7 @@ convert_file(Path("ontology.yaml"))
 
 | MIF Version | Python | Node.js | JSON Schema Draft |
 |-------------|--------|---------|-------------------|
-| 0.1.x | 3.8+ | 16+ | 2020-12 |
+| 1.0.x | 3.10+ | 22+ | 2020-12 |
 
 ---
 

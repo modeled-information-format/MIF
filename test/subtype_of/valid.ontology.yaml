@@ -1,0 +1,15 @@
+# Valid: security-control is a declared subtype of a locally-declared control, and its
+# required set includes the parent's (control_name) plus more — schema-compatible.
+ontology:
+  id: valid-subtype
+  version: "0.1.0"
+entity_types:
+  - name: control
+    base: semantic
+    schema:
+      required: [control_name]
+  - name: security-control
+    base: semantic
+    subtype_of: [control]
+    schema:
+      required: [control_name, framework_ref]

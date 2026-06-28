@@ -1,12 +1,12 @@
 ---
 title: Temporal Model
-description: Bi-temporal tracking and memory decay models.
+description: Validity windows and freshness — bi-temporal tracking and decay models.
 ---
 
-MIF uses a bi-temporal model distinguishing between:
+MIF's temporal model answers OKF's open "live vs. stale" question with **validity windows and freshness**. It uses a bi-temporal model distinguishing between:
 
-1. **Transaction Time**: When the memory was recorded in the system
-2. **Valid Time**: When the fact represented by the memory is true
+1. **Transaction Time**: When the concept was recorded in the system
+2. **Valid Time**: When the fact represented by the concept is true
 
 ### Temporal Properties
 
@@ -24,65 +24,48 @@ MIF uses a bi-temporal model distinguishing between:
 
 | Model | Formula | Use Case |
 |-------|---------|----------|
-| `none` | No decay | Permanent memories |
+| `none` | No decay | Permanent concepts |
 | `linear` | strength = 1 - (t / ttl) | Simple linear decay |
-| `exponential` | strength = e^(-t/halfLife) | Natural forgetting curve |
+| `exponential` | strength = e^(-t/halfLife) | Gradual freshness decay |
 | `step` | strength = 1 if t < ttl else 0 | Hard expiration |
 
-### Decay Rationale
+### Freshness Rationale
 
-MIF's decay model values (P7D, P14D, P30D half-lives) are **pragmatic defaults** for AI memory systems, inspired by but not directly derived from cognitive psychology research. They represent reasonable approximations for memory management in agentic contexts.
+In the core model, the temporal decay function expresses **freshness** — how current a piece of knowledge is — and answers OKF's open "live vs. stale" question. The decay half-life defaults (P7D, P14D, P30D) are **pragmatic defaults** for how quickly knowledge of a given kind loses currency; they are not prescriptive.
 
-#### Scientific Background
+The `strength = e^(-t/halfLife)` curve models a value that is fully current when recorded and decays gradually toward stale, with `validFrom`/`validUntil` windows bounding the interval in which a fact is asserted to hold.
 
-The exponential decay model `strength = e^(-t/halfLife)` is inspired by Hermann Ebbinghaus's forgetting curve (1885), which demonstrates that memory retention follows an exponential decline:
-
-| Time Elapsed | Approximate Retention |
-|--------------|----------------------|
-| 1 hour       | ~50% |
-| 24 hours     | ~30-35% |
-| 7 days       | ~25% |
-| 30 days      | ~10% |
-
-The mathematical form `R = e^(-t/S)` where R is retrievability, t is time elapsed, and S is memory strength, has been validated by modern replication studies.
-
-#### Why These Specific Values?
+#### Half-Life Defaults
 
 | Half-Life | Use Case | Rationale |
 |-----------|----------|-----------|
-| **P7D** | Short-term context | Aligns with weekly work cycles and episodic memory consolidation windows |
+| **P7D** | Short-term context | Aligns with weekly work cycles |
 | **P14D** | Medium-term projects | Spans typical sprint/iteration boundaries |
-| **P30D** | Long-term knowledge | Corresponds to monthly review cycles and hippocampal consolidation periods (~30 days in animal studies) |
+| **P30D** | Long-term knowledge | Corresponds to monthly review cycles |
 | **P90D** | Default TTL | Quarterly relevance for most organizational knowledge |
 
-These values are **not** prescriptive—implementations SHOULD tune them based on:
-- Memory type (episodic decays faster than semantic)
+Implementations SHOULD tune these based on:
+- Knowledge kind (`episodic` records go stale faster than `semantic` facts)
 - Organizational context (high-velocity vs. stable environments)
-- Access patterns (frequently accessed memories reinforce slower decay)
+- Access patterns (frequently accessed knowledge can reinforce slower decay)
 
-#### Memory Consolidation Considerations
+The `lastAccessed` and `accessCount` fields let implementations model reinforcement — each access can reset or slow the freshness decay.
 
-Research on memory consolidation suggests memories transition from hippocampus-dependent (recent) to cortex-dependent (remote) storage over time. MIF's `lastAccessed` and `accessCount` fields enable implementations to model reinforcement—each access can reset or slow decay, analogous to spaced repetition strengthening memory traces.
-
-**References:**
-- Ebbinghaus, H. (1885). *Memory: A Contribution to Experimental Psychology*
-- Murre & Dros (2015). [Replication and Analysis of Ebbinghaus' Forgetting Curve](https://pmc.ncbi.nlm.nih.gov/articles/PMC4492928/)
-- Squire & Bayley (2007). [The neuroscience of remote memory](https://pmc.ncbi.nlm.nih.gov/articles/PMC2791502/)
-- Wickelgren (1972). [Trace resistance and the decay of long-term memory](https://psycnet.apa.org/record/1973-08477-007)
+The cognitive-memory rationale that originally motivated this exponential curve — including the underlying experimental references and decay tuning for retrieval-oriented systems — lives in the AI Memory profile (`profiles/ai-memory/`), keeping the core framed purely as freshness.
 
 ### Example
 
 ```yaml
 temporal:
-  valid_from: 2026-01-15T00:00:00Z
-  valid_until: null
-  recorded_at: 2026-01-15T10:30:00Z
+  validFrom: 2026-01-15T00:00:00Z
+  validUntil: null
+  recordedAt: 2026-01-15T10:30:00Z
   ttl: P90D
   decay:
     model: exponential
     halfLife: P7D
     strength: 0.85
-    last_reinforced: 2026-01-18T09:00:00Z
-  access_count: 5
-  last_accessed: 2026-01-20T14:22:00Z
+    lastReinforced: 2026-01-18T09:00:00Z
+  accessCount: 5
+  lastAccessed: 2026-01-20T14:22:00Z
 ```

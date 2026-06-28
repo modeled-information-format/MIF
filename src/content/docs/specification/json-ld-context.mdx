@@ -11,11 +11,14 @@ https://mif-spec.dev/schema/context.jsonld
 
 ### Context Definition
 
+The following is a representative subset of `schema/context.jsonld`; the full context includes additional term definitions.
+
 ```json
 {
   "@context": {
     "@version": 1.1,
     "mif": "https://mif-spec.dev/ns/",
+    "schema": "https://schema.org/",
     "dc": "http://purl.org/dc/terms/",
     "prov": "http://www.w3.org/ns/prov#",
     "xsd": "http://www.w3.org/2001/XMLSchema#",
@@ -37,7 +40,8 @@ https://mif-spec.dev/schema/context.jsonld
     "id": "@id",
     "type": "@type",
     "content": "mif:content",
-    "memoryType": "mif:memoryType",
+    "conceptType": { "@id": "mif:conceptType", "@type": "@vocab" },
+    "memoryType": { "@id": "mif:memoryType", "@type": "@vocab" },
     "title": "dc:title",
     "namespace": "mif:namespace",
     "tags": "mif:tags",
@@ -54,7 +58,15 @@ https://mif-spec.dev/schema/context.jsonld
 
     "ontology": "mif:ontology",
     "entities": "mif:entities",
-    "relationships": "mif:relationships",
+    "relationships": {
+      "@id": "mif:relationships",
+      "@container": "@set",
+      "@context": {
+        "@vocab": "https://mif-spec.dev/ns/",
+        "type": { "@id": "mif:relationshipType", "@type": "@vocab" },
+        "target": { "@id": "mif:target", "@type": "@id" }
+      }
+    },
     "temporal": "mif:temporal",
     "provenance": "mif:provenance",
     "embedding": "mif:embedding",
@@ -113,11 +125,9 @@ https://mif-spec.dev/schema/context.jsonld
       "@id": "schema:url",
       "@type": "@id"
     },
-    "author": {
-      "@id": "dc:creator"
-    },
+    "author": "schema:author",
     "date": {
-      "@id": "dc:date",
+      "@id": "schema:datePublished",
       "@type": "xsd:date"
     },
     "relevance": {
@@ -125,10 +135,10 @@ https://mif-spec.dev/schema/context.jsonld
       "@type": "xsd:decimal"
     },
     "accessed": {
-      "@id": "schema:accessDate",
-      "@type": "xsd:date"
+      "@id": "mif:accessed",
+      "@type": "xsd:dateTime"
     },
-    "note": "schema:description",
+    "note": "mif:note",
 
     "summary": "mif:summary",
     "compressedAt": {
@@ -138,3 +148,5 @@ https://mif-spec.dev/schema/context.jsonld
   }
 }
 ```
+
+The canonical terms are `conceptType` (the knowledge taxonomy) and, inside each `relationships[]` entry, `type` (the kebab-case relationship type, scoped to `mif:relationshipType`) and `target`. The legacy terms `memoryType`, the document `@type` value `Memory`, `relationshipType`, and the PascalCase relationship terms (`RelatesTo`, `DerivedFrom`, and so on) are retained as deprecated aliases so existing documents continue to expand.

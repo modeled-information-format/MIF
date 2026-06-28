@@ -84,6 +84,15 @@ def transform_entity_type(et_data: Dict[str, Any]) -> Dict[str, Any]:
         result["description"] = et_data["description"]
     if "traits" in et_data:
         result["traits"] = [f"mif:trait/{t}" for t in et_data["traits"]]
+    if "subtype_of" in et_data:
+        sub = et_data["subtype_of"]
+        if isinstance(sub, list):
+            # Map string parents to entity-type @ids; pass any non-string item through
+            # unchanged so malformed input SURFACES in the projection rather than being
+            # silently dropped (validate-ontologies.py / the schema are the gate).
+            result["subtype_of"] = [f"mif:entityType/{s}" if isinstance(s, str) else s for s in sub]
+        else:
+            result["subtype_of"] = sub
     if "schema" in et_data:
         result["schema"] = et_data["schema"]
 

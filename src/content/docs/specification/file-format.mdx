@@ -7,28 +7,30 @@ description: File extensions, encoding requirements, and YAML frontmatter struct
 
 | Extension | Format | MIME Type |
 |-----------|--------|-----------|
-| `.memory.md` | Markdown | `text/markdown; variant=mif` |
-| `.memory.json` | JSON-LD | `application/ld+json; profile="https://mif-spec.dev"` |
+| `.md` | Markdown (canonical) | `text/markdown; variant=mif` |
+| `.jsonld` | JSON-LD (derived projection) | `application/ld+json; profile="https://mif-spec.dev"` |
+
+Concept files use the `.md` extension only. The derived JSON-LD projection uses `.jsonld` (never `.md`), so OKF's `*.md` glob never ingests it.
+
+### Concept Identity
+
+A concept's OKF identity is its bundle-relative path minus the `.md` extension. The frontmatter `id` field MUST be a UUID, providing a stable identity that survives concept relocation; it is MIF-only and invisible to OKF.
 
 ### File Naming
 
-Files SHOULD be named using the memory's identifier:
+Human-readable, path-meaningful names are RECOMMENDED, since the OKF concept ID is derived from the path:
 
 ```
-{id}.memory.md
-{id}.memory.json
+dark-mode-preference.md
 ```
 
-Example:
+The UUID lives in frontmatter rather than the filename:
+
 ```
-550e8400-e29b-41d4-a716-446655440000.memory.md
-550e8400-e29b-41d4-a716-446655440000.memory.json
+_semantic/preferences/dark-mode-preference.md
 ```
 
-Human-readable names MAY be used when the `id` is specified in frontmatter:
-```
-dark-mode-preference.memory.md
-```
+The derived projection sits alongside as `dark-mode-preference.jsonld`.
 
 ### Directory Structure
 
@@ -45,10 +47,10 @@ vault/
 │       ├── technology/
 │       ├── concept/
 │       └── file/
-├── memories/                       # Memory files
+├── memories/                       # Concept files
 │   ├── {namespace}/               # Namespace directories
-│   │   ├── {id}.memory.md
-│   │   └── {id}.memory.json
+│   │   ├── {slug}.md              # Canonical concept
+│   │   └── {slug}.jsonld          # Derived projection
 │   └── ...
 └── README.md                       # Vault documentation
 ```

@@ -5,7 +5,7 @@ diataxis_type: reference
 # Industry Ontologies for MIF
 
 This document provides comprehensive documentation for the four industry
-ontologies created for the Memory Interchange Format (MIF) system.
+ontologies created for the Modeled Information Format (MIF) system.
 
 ## Overview
 
@@ -22,7 +22,7 @@ ontology for different industries:
 All four ontologies:
 - Extend `mif-base.ontology.yaml` (base type namespaces)
 - Use traits from `shared-traits.ontology.yaml` (DRY mixins)
-- Follow the MIF schema specification v2
+- Follow the MIF schema specification v1.0
 - Include discovery patterns for entity suggestion
 
 ---
@@ -48,13 +48,13 @@ supply chain integration, carbon credit markets, and certification bodies.
 ### Design Rationale
 
 **Namespace Structure:**
-- `semantic/land` - Physical assets (fields, soil profiles)
-- `semantic/livestock` - Animal management
-- `semantic/crops` - Crop types and rotations
-- `semantic/carbon` - Carbon credits and baselines
-- `semantic/supply-chain` - Buyers, contracts
-- `episodic/seasons` - Growing cycle events
-- `procedural/soil-health` - Regenerative practices
+- `_semantic/land` - Physical assets (fields, soil profiles)
+- `_semantic/livestock` - Animal management
+- `_semantic/crops` - Crop types and rotations
+- `_semantic/carbon` - Carbon credits and baselines
+- `_semantic/supply-chain` - Buyers, contracts
+- `_episodic/seasons` - Growing cycle events
+- `_procedural/soil-health` - Regenerative practices
 
 **Key Design Decisions:**
 
@@ -119,14 +119,14 @@ Designed after legacy publishers like Houghton Mifflin Harcourt.
 ### Design Rationale
 
 **Namespace Structure:**
-- `semantic/titles` - Published products
-- `semantic/programs` - Curriculum series
-- `semantic/content` - Content assets
-- `semantic/standards` - Educational standards
-- `semantic/contributors` - Authors, editors
-- `semantic/adoptions` - State adoption entities
-- `episodic/editorial` - Development milestones
-- `procedural/editorial-workflow` - Production SOPs
+- `_semantic/titles` - Published products
+- `_semantic/programs` - Curriculum series
+- `_semantic/content` - Content assets
+- `_semantic/standards` - Educational standards
+- `_semantic/contributors` - Authors, editors
+- `_semantic/adoptions` - State adoption entities
+- `_episodic/editorial` - Development milestones
+- `_procedural/editorial-workflow` - Production SOPs
 
 **Key Design Decisions:**
 
@@ -187,15 +187,15 @@ handling, publication pipeline, and regulatory compliance.
 ### Design Rationale
 
 **Namespace Structure:**
-- `semantic/personnel` - PIs, lab members
-- `semantic/grants` - Funding awards
-- `semantic/projects` - Research projects
-- `semantic/samples` - Biological specimens
-- `semantic/datasets` - Research data
-- `semantic/publications` - Papers, patents
-- `semantic/compliance` - IRB, IACUC, IBC
-- `episodic/experiments` - Experiment runs
-- `procedural/lab-protocols` - SOPs
+- `_semantic/personnel` - PIs, lab members
+- `_semantic/grants` - Funding awards
+- `_semantic/projects` - Research projects
+- `_semantic/samples` - Biological specimens
+- `_semantic/datasets` - Research data
+- `_semantic/publications` - Papers, patents
+- `_semantic/compliance` - IRB, IACUC, IBC
+- `_episodic/experiments` - Experiment runs
+- `_procedural/lab-protocols` - SOPs
 
 **Key Design Decisions:**
 
@@ -289,18 +289,19 @@ ontologies/
 │   ├── k12-educational-publishing.ontology.yaml
 │   ├── biology-research-lab.ontology.yaml
 │   ├── csi-5w1h.ontology.yaml
+│   ├── backstage/
 │   ├── INDUSTRY-ONTOLOGIES.md      # This file
 │   ├── BACKSTAGE-MAPPING.md        # Backstage integration
 │   └── memories/
 │       ├── agriculture/
-│       │   ├── soil-profile-example.memory.md
-│       │   └── grazing-plan-example.memory.md
+│       │   ├── soil-profile-example.md
+│       │   └── grazing-plan-example.md
 │       ├── publishing/
-│       │   ├── state-adoption-example.memory.md
-│       │   └── editorial-workflow-example.memory.md
+│       │   ├── state-adoption-example.md
+│       │   └── editorial-workflow-example.md
 │       └── biology-lab/
-│           ├── grant-example.memory.md
-│           └── protocol-example.memory.md
+│           ├── grant-example.md
+│           └── protocol-example.md
 ```
 
 ---
@@ -321,7 +322,7 @@ cp ontologies/examples/biology-research-lab.ontology.yaml \
 Use the entity types and namespaces defined in the ontology:
 
 ```bash
-/mnemonic:capture semantic/grants "NIH R01 Award" \
+/mnemonic:capture _semantic/grants "NIH R01 Award" \
   --entity-type grant \
   --tags nih,funding
 ```
@@ -335,7 +336,7 @@ types based on content:
 User: "We got the R01 funded!"
 Claude: Detected grant-related content. Suggesting:
   - Entity type: grant
-  - Namespace: semantic/grants
+  - Namespace: _semantic/grants
 ```
 
 ---
@@ -345,11 +346,6 @@ Claude: Detected grant-related content. Suggesting:
 | Version | Date | Changes |
 |---------|------|---------|
 | 1.0.0 | 2026-01-26 | Initial release |
-
-## Authors
-
-- Created with Claude Code (claude-opus-4)
-- Based on MIF specification by zircote
 
 ## License
 

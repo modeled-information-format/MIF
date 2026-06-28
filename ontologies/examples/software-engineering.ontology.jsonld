@@ -62,6 +62,11 @@
       "@id": "mif:definesTrait",
       "@container": "@id"
     },
+    "subtype_of": {
+      "@id": "mif:subtypeOf",
+      "@type": "@id",
+      "@container": "@set"
+    },
     "fields": {
       "@id": "mif:hasField",
       "@container": "@id"
@@ -121,7 +126,7 @@
   "@id": "mif:ontology/software-engineering",
   "@type": "mif:Ontology",
   "identifier": "software-engineering",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Software engineering domain ontology",
   "namespaces": {
     "semantic": {
@@ -310,6 +315,63 @@
           "duration_minutes": {
             "type": "integer",
             "description": "Incident duration in minutes"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/security-incident",
+      "@type": "mif:EntityType",
+      "name": "security-incident",
+      "base": "episodic",
+      "description": "A security breach/incident \u2014 a specialization of incident-report carrying the VERIS Actor/Action/Asset/Attribute",
+      "traits": [
+        "mif:trait/timeline",
+        "mif:trait/stakeholders"
+      ],
+      "subtype_of": [
+        "mif:entityType/incident-report"
+      ],
+      "schema": {
+        "required": [
+          "severity",
+          "impact",
+          "resolution"
+        ],
+        "properties": {
+          "severity": {
+            "type": "string",
+            "description": "Incident severity level",
+            "enum": [
+              "critical",
+              "high",
+              "medium",
+              "low"
+            ]
+          },
+          "impact": {
+            "type": "string",
+            "description": "Business/user impact description"
+          },
+          "resolution": {
+            "type": "string",
+            "description": "How the incident was resolved"
+          },
+          "actor": {
+            "type": "string",
+            "description": "VERIS Actor \u2014 external / internal / partner"
+          },
+          "action": {
+            "type": "string",
+            "description": "VERIS Action \u2014 malware / hacking / social / error / misuse"
+          },
+          "asset": {
+            "type": "string",
+            "description": "VERIS Asset \u2014 the device/data affected"
+          },
+          "attribute": {
+            "type": "string",
+            "description": "VERIS Attribute \u2014 how affected (CIA)"
           }
         }
       }

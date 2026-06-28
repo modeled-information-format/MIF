@@ -1,0 +1,14 @@
+# OSV-Scanner configuration.
+#
+# Accepted, justified vulnerability exceptions. Each entry is a deliberate risk
+# decision, not a silent suppression: low severity, no clean fix path, and no
+# production exposure. Revisit on each release.
+
+[[IgnoredVulns]]
+id = "GHSA-g7r4-m6w7-qqqr"
+# esbuild 0.27.7, CVSS 2.5 (low). esbuild is a build-time/dev-server transitive
+# dependency pulled through Astro/Vite; it is not part of the deployed static
+# site, so this has no production exposure. The fix (0.28.1) requires forcing a
+# transitive override under Vite, which risks the Astro build. Remove this entry
+# once Vite/Astro pull esbuild >= 0.28.1.
+reason = "Low-severity build-time-only transitive (esbuild via Vite); no production exposure; no fix without a risky forced transitive bump. Revisit when Vite bumps esbuild."

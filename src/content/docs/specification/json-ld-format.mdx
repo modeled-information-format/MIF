@@ -1,22 +1,25 @@
 ---
 title: JSON-LD Format
-description: The .memory.json format specification for machine-processable memory documents.
+description: The derived .jsonld projection for machine-processable concept documents.
 ---
+
+Markdown is canonical. The JSON-LD form below is a **derived projection**: regenerate it from the `.md` source with `scripts/mif_convert.py`. It uses the `.jsonld` extension (never `.md`, so OKF's `*.md` glob never ingests it) and MUST round-trip losslessly back to markdown. If the two disagree, markdown wins.
 
 ### Structure
 
 ```json
 {
   "@context": "https://mif-spec.dev/schema/context.jsonld",
-  "@type": "Memory",
+  "@type": "Concept",
   "@id": "urn:mif:550e8400-e29b-41d4-a716-446655440000",
 
   "content": "User prefers dark mode for all applications",
-  "memoryType": "semantic",
+  "conceptType": "semantic",
   "title": "Dark Mode Preference",
 
   "created": "2026-01-15T10:30:00Z",
   "modified": "2026-01-20T14:22:00Z",
+  "timestamp": "2026-01-20T14:22:00Z",
 
   "namespace": "_semantic/preferences",
   "tags": ["preference", "ui", "accessibility"],
@@ -30,6 +33,8 @@ description: The .memory.json format specification for machine-processable memor
 }
 ```
 
+The projection always includes the OKF-legible mirror field `timestamp` (the value of `modified`, or `created` when there is no `modified`). When the source has a `summary`, it also includes `description` (mapped from `summary`). These are derived mirrors of the canonical frontmatter; markdown remains authoritative.
+
 ### Full Example
 
 ```json
@@ -38,19 +43,19 @@ description: The .memory.json format specification for machine-processable memor
     "https://mif-spec.dev/schema/context.jsonld",
     {
       "prov": "http://www.w3.org/ns/prov#",
-      "dc": "http://purl.org/dc/terms/",
       "subcog": "https://github.com/zircote/subcog/ns/"
     }
   ],
-  "@type": ["Memory", "prov:Entity"],
+  "@type": ["Concept", "prov:Entity"],
   "@id": "urn:mif:550e8400-e29b-41d4-a716-446655440000",
 
   "content": "User prefers dark mode for all applications. This applies to:\n- IDE themes\n- Terminal colors\n- Web applications\n- Mobile apps",
-  "memoryType": "semantic",
+  "conceptType": "semantic",
   "title": "Dark Mode Preference",
 
-  "dc:created": "2026-01-15T10:30:00Z",
-  "dc:modified": "2026-01-20T14:22:00Z",
+  "created": "2026-01-15T10:30:00Z",
+  "modified": "2026-01-20T14:22:00Z",
+  "timestamp": "2026-01-20T14:22:00Z",
 
   "ontology": {
     "@type": "OntologyReference",
@@ -77,15 +82,13 @@ description: The .memory.json format specification for machine-processable memor
 
   "relationships": [
     {
-      "@type": "Relationship",
-      "relationshipType": "RelatesTo",
-      "target": {"@id": "urn:mif:memory:ui-preferences"},
+      "type": "relates-to",
+      "target": "urn:mif:memory:ui-preferences",
       "strength": 0.85
     },
     {
-      "@type": "Relationship",
-      "relationshipType": "Supersedes",
-      "target": {"@id": "urn:mif:memory:old-theme-preference"}
+      "type": "supersedes",
+      "target": "urn:mif:memory:old-theme-preference"
     }
   ],
 

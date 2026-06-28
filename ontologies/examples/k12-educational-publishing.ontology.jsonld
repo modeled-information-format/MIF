@@ -62,6 +62,11 @@
       "@id": "mif:definesTrait",
       "@container": "@id"
     },
+    "subtype_of": {
+      "@id": "mif:subtypeOf",
+      "@type": "@id",
+      "@container": "@set"
+    },
     "fields": {
       "@id": "mif:hasField",
       "@container": "@id"
@@ -121,9 +126,9 @@
   "@id": "mif:ontology/k12-educational-publishing",
   "@type": "mif:Ontology",
   "identifier": "k12-educational-publishing",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "K-12 educational publishing ontology",
-  "schema_url": "https://mif-spec.dev/schema/ontology/v2",
+  "schema_url": "https://mif-spec.dev/schema/ontology/ontology.schema.json",
   "namespaces": {
     "semantic": {
       "@id": "mif:namespace/semantic",

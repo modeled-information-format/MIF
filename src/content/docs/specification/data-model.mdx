@@ -3,15 +3,15 @@ title: Data Model
 description: Required and optional fields, schema definitions, and core data structures.
 ---
 
-### Memory Unit
+### Concept
 
-A Memory Unit is the atomic element of MIF. It contains:
+A concept is the atomic element of MIF — a single `.md` file in a bundle. It contains:
 
 | Property | Required | Type | Description |
 |----------|----------|------|-------------|
-| `id` | REQUIRED | UUID | Globally unique identifier |
-| `content` | REQUIRED | String | The memory content (Markdown) |
-| `type` | REQUIRED | Enum | Memory classification (see below) |
+| `id` | REQUIRED | UUID | Globally unique identifier (stable across relocation) |
+| `content` | REQUIRED | String | The concept content (Markdown) |
+| `type` | REQUIRED | Enum | Knowledge classification (see below) |
 | `created` | REQUIRED | DateTime | When the memory was created |
 | `modified` | RECOMMENDED | DateTime | When last modified |
 | `ontology` | RECOMMENDED | Object | Reference to applied ontology |
@@ -24,26 +24,30 @@ A Memory Unit is the atomic element of MIF. It contains:
 | `embedding` | OPTIONAL | Object | Embedding reference |
 | `citations` | OPTIONAL | Array | Citation references (Level 3) |
 | `summary` | OPTIONAL | String | Compressed content summary (Level 3) |
-| `compressed_at` | OPTIONAL | DateTime | When compression was applied (Level 3) |
+| `compressedAt` | OPTIONAL | DateTime | When compression was applied (Level 3) |
 | `extensions` | OPTIONAL | Object | Provider-specific data |
 
-### Memory Types
+The frontmatter `type` field holds the base knowledge classification; in the JSON-LD projection produced by `scripts/mif_convert.py`, this value is surfaced as `conceptType`.
 
-MIF uses three **base memory types**, reflecting how human memory systems organize information:
+### Knowledge Types
+
+Every concept declares one of three **base knowledge types**, a general taxonomy of how knowledge is structured:
 
 | Type | Description | Namespace Hint |
 |------|-------------|----------------|
-| `semantic` | Facts, concepts, relationships, and knowledge | `semantic/*` |
-| `episodic` | Events, experiences, sessions, and timelines | `episodic/*` |
-| `procedural` | Step-by-step processes, runbooks, and patterns | `procedural/*` |
+| `semantic` | Declarative knowledge: facts, concepts, decisions, schemas | `semantic/*` |
+| `episodic` | Time-bound records: events, incidents, changelog/deprecation | `episodic/*` |
+| `procedural` | How-to knowledge: runbooks, processes, patterns, migrations | `procedural/*` |
 
 **Base Type Descriptions:**
 
-- **Semantic**: Declarative knowledge about the world—facts, concepts, decisions, preferences, and relationships between entities. Examples: architectural decisions, technology choices, user preferences, domain knowledge.
+- **Semantic**: Declarative knowledge about the world—facts, concepts, decisions, preferences, and relationships between entities. Examples: architectural decisions, technology choices, schemas, domain knowledge.
 
-- **Episodic**: Time-bound experiences and events—incidents, conversations, sessions, and blockers. These memories have strong temporal context and represent "what happened."
+- **Episodic**: Time-bound records of events—incidents, deprecations, changelog entries. These concepts have strong temporal context and represent "what happened."
 
-- **Procedural**: How-to knowledge—runbooks, migration guides, code patterns, and step-by-step processes. These memories describe "how to do" something.
+- **Procedural**: How-to knowledge—runbooks, migration guides, code patterns, and step-by-step processes. These concepts describe "how to do" something.
+
+The cognitive-memory origin of this triad, and its reinterpretation for agent memory, live in the AI Memory profile (`profiles/ai-memory/`).
 
 #### Ontology-Extended Types
 
@@ -78,7 +82,7 @@ This allows ontologies to define rich taxonomies while maintaining interoperabil
 
 ### Ontology Reference
 
-A Memory Unit MAY declare which ontology it conforms to using the `ontology` field:
+A concept MAY declare which ontology it conforms to using the `ontology` field:
 
 | Property | Required | Type | Description |
 |----------|----------|------|-------------|
@@ -92,7 +96,7 @@ A Memory Unit MAY declare which ontology it conforms to using the `ontology` fie
 ontology:
   id: regenerative-agriculture
   version: "1.0.0"
-  uri: https://github.com/modeled-information-format/MIF/ontologies/examples/regenerative-agriculture.ontology.yaml
+  uri: https://raw.githubusercontent.com/modeled-information-format/MIF/main/ontologies/examples/regenerative-agriculture.ontology.yaml
 ```
 
 The `ontology.id` MUST match the `ontology.id` field in the referenced ontology definition file. This enables:

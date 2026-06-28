@@ -904,7 +904,7 @@ entity_types:
 # ==============================================================================
 
 relationships:
-  located_on:
+  located-on:
     description: "Entity is located on a field or farm"
     from:
       - herd
@@ -915,7 +915,7 @@ relationships:
       - farm
     symmetric: false
 
-  part_of:
+  part-of:
     description: "Entity is part of a larger entity"
     from:
       - field
@@ -925,7 +925,7 @@ relationships:
       - herd
     symmetric: false
 
-  certified_by:
+  certified-by:
     description: "Entity holds certification"
     from:
       - farm
@@ -935,7 +935,7 @@ relationships:
       - certification
     symmetric: false
 
-  supplies_to:
+  supplies-to:
     description: "Farm supplies products to buyer"
     from:
       - farm
@@ -981,6 +981,14 @@ relationships:
     to:
       - herd
       - field
+    symmetric: false
+
+  contributes-to:
+    description: "Grazing plan contributes to carbon credit generation"
+    from:
+      - grazing-plan
+    to:
+      - carbon-credit
     symmetric: false
 
 # ==============================================================================

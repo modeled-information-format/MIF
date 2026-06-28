@@ -1,0 +1,61 @@
+/* MIF brand — maps .claude/skills/mif-brand tokens onto Starlight theme vars.
+   machine-cyan = primary interactive accent; human-amber = emphasis.
+   Dark is the default; the brand lives there. */
+:root {
+  --mif-machine: #34d3e8;
+  --mif-machine-strong: #1bb6cc;
+  --mif-human: #f5b642;
+  --mif-text: #e8eef6;
+  --sl-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --sl-font-mono: ui-monospace, "SF Mono", "JetBrains Mono", "Fira Code", Menlo, Consolas, monospace;
+}
+
+/* Dark theme (default) */
+:root,
+:root[data-theme="dark"] {
+  --sl-color-accent-low: #0a2630;
+  --sl-color-accent: #34d3e8;
+  --sl-color-accent-high: #afedf6;
+  --sl-color-white: #e8eef6;
+  --sl-color-gray-1: #e8eef6;
+  --sl-color-gray-2: #aebccf;
+  --sl-color-gray-3: #7c8aa0;
+  --sl-color-gray-4: #3c4b63;
+  --sl-color-gray-5: #2e3a4d;
+  --sl-color-gray-6: #222c3c;
+  --sl-color-gray-7: #151b27;
+  --sl-color-black: #0a0d13;
+  --sl-color-bg: #0e121b;
+  --sl-color-bg-nav: #0a0d13;
+  --sl-color-bg-sidebar: #0a0d13;
+  --sl-color-bg-inline-code: #1c2433;
+  --sl-color-hairline: #222c3c;
+  --sl-color-text-accent: #34d3e8;
+}
+
+/* Light theme — accents darkened for AA on white */
+:root[data-theme="light"] {
+  --sl-color-accent-low: #e1f5f9;
+  --sl-color-accent: #0b7488;
+  --sl-color-accent-high: #06343d;
+  --sl-color-white: #0a0d13;
+  --sl-color-gray-1: #0e121b;
+  --sl-color-gray-2: #3a465b;
+  --sl-color-gray-3: #5a6678;
+  --sl-color-gray-4: #a9b6cb;
+  --sl-color-gray-5: #cfd8e5;
+  --sl-color-gray-6: #e2e8f1;
+  --sl-color-gray-7: #edf1f7;
+  --sl-color-black: #f8fafd;
+  --sl-color-bg: #f8fafd;
+  --sl-color-bg-nav: #eef2f8;
+  --sl-color-bg-sidebar: #eef2f8;
+  --sl-color-bg-inline-code: #edf1f7;
+  --sl-color-hairline: #e2e8f1;
+  --sl-color-text-accent: #0b7488;
+}
+
+/* Human-amber as the emphasis accent: the quote/promise marker (used sparingly) */
+.sl-markdown-content blockquote {
+  border-inline-start: 3px solid var(--mif-human);
+}

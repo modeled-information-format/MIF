@@ -1,6 +1,6 @@
 ---
 title: Relationship Types
-description: The nine core relationship types for connecting memories.
+description: The nine core relationship types for connecting concepts.
 ---
 
 MIF provides an **extensible relationship type system**. Implementations SHOULD support the core types for interoperability, but MAY define custom relationship types for domain-specific needs.
@@ -13,44 +13,44 @@ Relationship types are **not hard-coded**. They are defined in vault configurati
 # .mif/config.yaml
 relationship_types:
   # Core types (RECOMMENDED for interoperability)
-  - name: RelatesTo
+  - name: relates-to
     description: General semantic relationship
     symmetric: true
-  - name: DerivedFrom
+  - name: derived-from
     description: Memory created based on source
-    inverse: Derives
-  - name: Supersedes
+    inverse: derives
+  - name: supersedes
     description: Replaces an older memory
-    inverse: SupersededBy
-  - name: ConflictsWith
+    inverse: superseded-by
+  - name: conflicts-with
     description: Contradicts another memory
     symmetric: true
-  - name: PartOf
+  - name: part-of
     description: Component of a larger whole
-    inverse: Contains
-  - name: Implements
+    inverse: contains
+  - name: implements
     description: Realizes a concept or pattern
-    inverse: ImplementedBy
-  - name: Uses
+    inverse: implemented-by
+  - name: uses
     description: Utilizes a technology or tool
-    inverse: UsedBy
-  - name: Created
+    inverse: used-by
+  - name: created-by
     description: Authored by an entity
-    inverse: CreatedBy
-  - name: MentionedIn
+    inverse: creates
+  - name: mentioned-in
     description: Referenced within a memory
-    inverse: Mentions
+    inverse: mentions
 
   # Custom types (domain-specific)
-  - name: Reinforces
+  - name: reinforces
     namespace: subcog
     description: Strengthens confidence in another memory
-    inverse: ReinforcedBy
-  - name: Contradicts
+    inverse: reinforced-by
+  - name: contradicts
     namespace: subcog
     description: Provides evidence against another memory
-    inverse: ContradictedBy
-  - name: BreedsWith
+    inverse: contradicted-by
+  - name: breeds-with
     namespace: farm
     description: Animal breeding relationship
     symmetric: false
@@ -67,15 +67,15 @@ For maximum interoperability, implementations SHOULD recognize these nine core t
 
 | Type | Description | Inverse | Symmetric |
 |------|-------------|---------|-----------|
-| `RelatesTo` | General relationship | `RelatesTo` | Yes |
-| `DerivedFrom` | Created based on source | `Derives` | No |
-| `Supersedes` | Replaces older memory | `SupersededBy` | No |
-| `ConflictsWith` | Contradicts another memory | `ConflictsWith` | Yes |
-| `PartOf` | Component of larger whole | `Contains` | No |
-| `Implements` | Realizes a concept/pattern | `ImplementedBy` | No |
-| `Uses` | Utilizes a technology/tool | `UsedBy` | No |
-| `Created` | Authored by entity | `CreatedBy` | No |
-| `MentionedIn` | Referenced in memory | `Mentions` | No |
+| `relates-to` | General relationship | `relates-to` | Yes |
+| `derived-from` | Created based on source | `derives` | No |
+| `supersedes` | Replaces older memory | `superseded-by` | No |
+| `conflicts-with` | Contradicts another memory | `conflicts-with` | Yes |
+| `part-of` | Component of larger whole | `contains` | No |
+| `implements` | Realizes a concept/pattern | `implemented-by` | No |
+| `uses` | Utilizes a technology/tool | `used-by` | No |
+| `created-by` | Authored by entity | `creates` | No |
+| `mentioned-in` | Referenced in memory | `mentions` | No |
 
 ### Custom Relationship Types
 
@@ -84,10 +84,10 @@ Providers MAY define additional relationship types using namespaced URIs:
 ```yaml
 # Custom relationship type definition
 relationship_types:
-  - name: Contradicts
-    namespace: farm           # Results in URI: farm:Contradicts
+  - name: contradicts
+    namespace: farm           # Results in type token: farm:contradicts
     description: Provides conflicting evidence
-    inverse: ContradictedBy
+    inverse: contradicted-by
     properties:
       - name: contradiction_type
         type: string
@@ -107,12 +107,13 @@ relationship_types:
   ],
   "relationships": [
     {
-      "@type": "Relationship",
-      "relationshipType": "farm:BreedsWith",
-      "target": {"@id": "urn:mif:entity:animal:ram-001"},
+      "type": "farm:breeds-with",
+      "target": "urn:mif:entity:animal:ram-001",
       "strength": 1.0,
-      "farm:breeding_date": "2025-10-15",
-      "farm:success": true
+      "metadata": {
+        "farm:breeding_date": "2025-10-15",
+        "farm:success": true
+      }
     }
   ]
 }
@@ -122,28 +123,41 @@ relationship_types:
 
 **Markdown syntax:**
 
-Relationships use a simple `type [[target]]` format in a dedicated section:
+Relationships are authoritative in frontmatter `relationships[]` and mirrored as OKF-legible markdown links in a dedicated body section, using the form `- <type> [Text](/path/target.md)`:
 
 ```markdown
 ## Relationships
 
-- relates-to [[Other Memory]]
-- derived-from [[Source Memory]]
-- supersedes [[Old Memory]]
-- conflicts-with [[Contradicting Memory]]
-- part-of [[Parent Memory]]
+- relates-to [Other Concept](/semantic/other-concept.md)
+- derived-from [Source Concept](/episodic/source-concept.md)
+- supersedes [Old Concept](/semantic/old-concept.md)
+- conflicts-with [Contradicting Concept](/semantic/contradicting-concept.md)
+- part-of [Parent Concept](/semantic/parent-concept.md)
 ```
 
-The relationship type name is converted to kebab-case in Markdown. The target uses wiki-link syntax `[[]]` which resolves to the memory's `@id` or title.
+The relationship type name is converted to kebab-case in Markdown. The link target is a bundle-relative path to the target concept's `.md` file, so a generic OKF consumer sees every edge. The matching frontmatter (one entry per body link):
+
+```yaml
+relationships:
+  - type: relates-to
+    target: /semantic/other-concept.md
+  - type: derived-from
+    target: /episodic/source-concept.md
+  - type: supersedes
+    target: /semantic/old-concept.md
+  - type: conflicts-with
+    target: /semantic/contradicting-concept.md
+  - type: part-of
+    target: /semantic/parent-concept.md
+```
 
 **JSON-LD schema:**
 
 ```json
 "relationships": [
   {
-    "@type": "Relationship",
-    "relationshipType": "DerivedFrom",
-    "target": {"@id": "urn:mif:memory:source-memory"},
+    "type": "derived-from",
+    "target": "urn:mif:memory:source-memory",
     "strength": 0.9,
     "metadata": {
       "reason": "Extracted key insight",
@@ -157,8 +171,7 @@ The relationship type name is converted to kebab-case in Markdown. The target us
 
 | Property | Type | Required | Description |
 |----------|------|----------|-------------|
-| `@type` | String | Yes | Always `"Relationship"` |
-| `relationshipType` | URI/Vocab | Yes | Type identifier (core or custom) |
-| `target` | URI Reference | Yes | Target memory or entity URI |
+| `type` | String | Yes | Relationship type in kebab-case (e.g. `derived-from`) |
+| `target` | String | Yes | Target memory or entity path/URN |
 | `strength` | Decimal | No | Relationship strength (0.0-1.0) |
 | `metadata` | Object | No | Additional relationship metadata |

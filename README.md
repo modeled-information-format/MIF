@@ -1,40 +1,64 @@
-# Memory Interchange Format (MIF)
+<!-- diataxis_type: explanation -->
+
+# MIF — Modeled Information Format
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Spec Version](https://img.shields.io/badge/spec-v0.1.0--draft-blue.svg)](./SPECIFICATION.md)
+[![Spec Version](https://img.shields.io/badge/spec-v1.0.0-blue.svg)](./SPECIFICATION.md)
+[![OKF Compliant](https://img.shields.io/badge/OKF-v0.1%20compliant-5c4a32.svg)](./docs/okf-conformance.md)
 [![Docs](https://img.shields.io/badge/docs-mif--spec.dev-5c4a32.svg)](https://mif-spec.dev)
 [![CI](https://github.com/modeled-information-format/MIF/actions/workflows/validate.yml/badge.svg)](https://github.com/modeled-information-format/MIF/actions/workflows/validate.yml)
 [![JSON-LD](https://img.shields.io/badge/format-JSON--LD-orange.svg)](https://json-ld.org/)
-[![W3C PROV](https://img.shields.io/badge/provenance-W3C%20PROV-green.svg)](https://www.w3.org/TR/prov-dm/)
-[![GitHub topics](https://img.shields.io/github/topics/modeled-information-format/MIF)](https://github.com/modeled-information-format/MIF)
+[![PROV-aligned](https://img.shields.io/badge/provenance-PROV--aligned-green.svg)](https://www.w3.org/TR/prov-dm/)
 
-An open standard for portable AI memory representation.
+**MIF is the opinionated, OKF-compliant content model that fills OKF's
+deliberately empty envelope.** [OKF](https://github.com/google/open-knowledge-format)
+defines the transport surface — a directory of markdown files with YAML
+frontmatter and one required `type` field — and explicitly leaves the *content
+model* open. MIF supplies the concrete type system, typed relationships,
+provenance/trust, and validity/freshness semantics. **AI memory is the first
+domain profile of MIF, not its identity.**
+
+> **Brand note (v1.0.0):** The `MIF` mark expands to *Modeled Information Format*. *Memory Interchange Format* is retired. AI Memory is a profile of MIF, not a separate product name.
 
 ## Overview
 
-MIF is a proposed standard that aims to enable interoperability between AI memory providers by defining a common data model with dual representations:
+A MIF bundle is a directory tree of `.md` concept files — **a valid OKF
+bundle**. Markdown is the canonical representation; JSON-LD is a derived,
+regenerable projection.
 
-- **Markdown** (`.memory.md`) - Human-readable, Obsidian-compatible
-- **JSON-LD** (`.memory.json`) - Machine-processable, semantically linked
+- **Markdown** (`.md`) — canonical, human-readable, Obsidian-compatible.
+- **JSON-LD** (`*.jsonld`, derived) — machine-processable, semantically linked,
+  regenerated from markdown with `scripts/mif_convert.py`.
 
-## Why MIF?
+Every concept declares one of three **base knowledge types**:
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset=".github/readme-infographic-dark.svg">
-  <source media="(prefers-color-scheme: light)" srcset=".github/readme-infographic.svg">
-  <img src=".github/readme-infographic.svg" alt="How MIF Works" width="100%">
-</picture>
+- `semantic` — declarative knowledge: facts, concepts, decisions, schemas.
+- `episodic` — time-bound records: events, incidents, changelog/deprecation.
+- `procedural` — how-to knowledge: runbooks, processes, patterns, migrations.
 
-The AI memory ecosystem is fragmented. Mem0, Zep, Letta, LangMem, Subcog, and others all use proprietary schemas. MIF solves:
+## MIF answers OKF's open questions
 
-- **Vendor lock-in** - Move memories between providers
-- **Data ownership** - Local-first, plain text files
-- **Interoperability** - Common vocabulary for relationships and entities
-- **Future-proofing** - Standard formats survive provider discontinuation
+OKF deliberately refuses to define a content model. MIF supplies opinionated
+answers to exactly the questions OKF leaves open:
+
+| OKF open design space | MIF's opinionated answer |
+| --- | --- |
+| No concept-type taxonomy | `semantic` / `episodic` / `procedural` base types |
+| Untyped markdown-link edges | Typed relationships (overlay on OKF links) |
+| No merge / contradiction semantics | `Supersedes`, `ConflictsWith` |
+| No trust tiers | Provenance `sourceType` + `trustLevel` |
+| Stale-vs-live left to process | Validity windows + TTL/freshness |
+| No provenance | Lightweight provenance core + optional W3C-PROV-aligned layer |
+| Markdown only | First-class JSON-LD projection |
+
+OKF compliance is achieved as a **superset, not by subordination**: every MIF
+bundle validates as a conformant OKF bundle, but MIF remains an independent
+specification with its own identity model and governance, pinned to OKF v0.1 in
+[docs/okf-conformance.md](./docs/okf-conformance.md).
 
 ## Quick Start
 
-### Minimal Memory (Markdown)
+A minimal concept (canonical markdown):
 
 ```markdown
 ---
@@ -44,73 +68,120 @@ created: 2026-01-15T10:30:00Z
 namespace: _semantic/preferences
 ---
 
-User prefers dark mode for all applications.
+A declarative fact stated in plain markdown.
 ```
 
-### Minimal Memory (JSON-LD)
+A concept with typed relationships — authoritative in frontmatter, mirrored as
+OKF-legible body links:
 
-```json
-{
-  "@context": "https://mif-spec.dev/schema/context.jsonld",
-  "@type": "Memory",
-  "@id": "urn:mif:550e8400-e29b-41d4-a716-446655440000",
-  "memoryType": "semantic",
-  "namespace": "_semantic/preferences",
-  "content": "User prefers dark mode for all applications.",
-  "created": "2026-01-15T10:30:00Z"
-}
+```markdown
+---
+id: 7b3c1e90-5a2f-4c8d-9e10-2f6a4b8c1d3e
+type: semantic
+created: 2026-01-15T10:30:00Z
+title: API Rate Limit Policy
+relationships:
+  - type: derived-from
+    target: /episodic/incident-2026-01-rate-spike.md
+---
+
+# API Rate Limit Policy
+
+The gateway enforces 600 req/min per key.
+
+## Relationships
+
+- derived-from [Rate Spike Incident](/episodic/incident-2026-01-rate-spike.md)
+```
+
+The derived JSON-LD projection is regenerated, never hand-edited:
+
+```bash
+python scripts/mif_convert.py emit-jsonld examples --out-dir jsonld
 ```
 
 ## Key Features
 
 | Feature | Description |
 |---------|-------------|
-| **Dual Format** | Markdown AND JSON-LD representations |
-| **Obsidian Native** | Valid Obsidian notes with wiki-links |
-| **Typed Relationships** | 9 core relationship types (RelatesTo, DerivedFrom, Supersedes, etc.) |
-| **Entity Types** | Person, Organization, Technology, Concept, File |
-| **Bi-Temporal** | Track when recorded AND when facts are valid |
-| **Flexible Namespaces** | `_public`, `_shared`, `{org}/{scope}+` with reserved prefixes |
+| **OKF compliant** | Every bundle is a valid OKF bundle (tested invariant) |
+| **Markdown canonical** | `.md` is the source of truth; JSON-LD is derived |
+| **Typed Relationships** | Typed overlay on standard OKF markdown-link edges |
+| **Base types** | `semantic` / `episodic` / `procedural` knowledge taxonomy |
+| **Bi-Temporal** | Validity windows & freshness (when recorded AND when valid) |
+| **Provenance & Trust** | Lightweight `sourceType` / `trustLevel` core + optional W3C-PROV-aligned layer |
 | **Model-Agnostic Embeddings** | Store model + source text for re-embedding |
-| **Citations** | Structured references with type/role taxonomy (Level 3) |
-| **W3C PROV** | Standard provenance tracking |
-| **JSON Schema** | Automated validation for MIF documents |
-| **Ontology System** | Three-type hierarchy with domain extensions |
+| **Stable identity** | UUID `id` survives concept relocation |
+| **JSON Schema** | Automated validation for the JSON-LD projection |
+| **Ontology System** | Base knowledge taxonomy with domain profiles |
 
-## Ontology System
+## What a MIF memory can carry
 
-MIF includes an ontology system for organizing memories into three base types:
+A single MIF unit already models **27 top-level properties** — far more than the
+six required for a minimal record. They are grouped below by
+[conformance level](./SPECIFICATION.md#13-conformance-levels): **Level 1 (Core,
+required to conform)**, **Level 2 (Standard, recommended)**, and **Level 3
+(Full, optional)**. Level 1 is the schema's required set plus the structural
+fields validated at that tier; everything in the Standard tier is Level 2; the
+fields the spec marks `(Level 3)` are Level 3.
 
-```
-semantic/              # Facts, concepts, relationships
-├── decisions/         # Architectural choices, rationale
-├── knowledge/         # APIs, context, learnings, security
-└── entities/          # Entity definitions
+For per-field detail, types, patterns, and examples, see the
+[Schema Reference](./docs/SCHEMA-REFERENCE.md). The authoritative, machine-checkable
+definition of every property is [`schema/mif.schema.json`](./schema/mif.schema.json).
 
-episodic/              # Events, experiences, timelines
-├── incidents/         # Production issues, postmortems
-├── sessions/          # Debug sessions, work sessions
-└── blockers/          # Impediments, issues
+### Level 1 — Core (required to conform)
 
-procedural/            # Step-by-step processes
-├── runbooks/          # Operational procedures
-├── patterns/          # Code conventions, testing
-└── migrations/        # Migration steps, upgrades
-```
+| Property | Purpose |
+|----------|---------|
+| `@context` | JSON-LD context binding terms to the MIF vocabulary |
+| `@type` | Document type (`"Concept"` or `"Memory"`, or an array containing `"Concept"`); the projection emits `"Concept"` |
+| `@id` | Unique identifier in `urn:mif:` URN form |
+| `conceptType` | Knowledge taxonomy: `semantic` / `episodic` / `procedural` |
+| `memoryType` | **Deprecated** v0.1 alias for `conceptType`, kept for back-compat |
+| `content` | The memory content, in Markdown |
+| `created` | Creation timestamp (ISO 8601) |
 
-### Features
+> Property names above are the JSON-LD projection. In Markdown frontmatter,
+> `type` maps to `conceptType` in JSON-LD; `memoryType` is a separate deprecated
+> frontmatter key passed through as `memoryType`, not an alias for `type`.
+>
+> The Level 1 rows omit the per-field reference links used for Level 2/3 because
+> these are the core/required fields defined authoritatively in
+> [`schema/mif.schema.json`](./schema/mif.schema.json) — treat that schema as the
+> source of truth for required field names, types, and constraints.
 
-- **Hierarchical namespaces** - Cognitive memory types with sub-namespaces
-- **Entity types** - Define custom entities with traits and schemas
-- **Discovery patterns** - Auto-detect capture opportunities from content
-- **JSON-LD export** - Semantic web compatibility via `yaml2jsonld.py`
-- **Extensible** - Domain-specific ontologies extend the base
+### Level 2 — Standard (recommended)
 
-See [ontologies/](./ontologies/) for base ontology and examples.
+| Property | Purpose | Reference |
+|----------|---------|-----------|
+| `title` | Human-readable title | [Basic metadata](./docs/SCHEMA-REFERENCE.md#basic-metadata) |
+| `description` | OKF-recommended description (mapped from MIF `summary`) | [Basic metadata](./docs/SCHEMA-REFERENCE.md#basic-metadata) |
+| `modified` | Last-modification timestamp (ISO 8601) | [Basic metadata](./docs/SCHEMA-REFERENCE.md#basic-metadata) |
+| `timestamp` | OKF-recommended mirror of `modified` (or `created`) | [Basic metadata](./docs/SCHEMA-REFERENCE.md#basic-metadata) |
+| `namespace` | Hierarchical scope for the memory | [Basic metadata](./docs/SCHEMA-REFERENCE.md#basic-metadata) |
+| `tags` | Classification tags | [Basic metadata](./docs/SCHEMA-REFERENCE.md#basic-metadata) |
+| `aliases` | Alternative names for the memory | [Basic metadata](./docs/SCHEMA-REFERENCE.md#basic-metadata) |
+| `properties` | First-class scalar key/value pairs with no concept target | [Basic metadata](./docs/SCHEMA-REFERENCE.md#basic-metadata) |
+| `blocks` | Named block references (`^block-id`) with their text, for granular linking | [Basic metadata](./docs/SCHEMA-REFERENCE.md#basic-metadata) |
+| `ontology` | Reference to the ontology this memory conforms to | [Ontology reference](./docs/SCHEMA-REFERENCE.md#ontology-reference) |
+| `entity` | Structured entity data for ontology-typed memories | [Entities](./docs/SCHEMA-REFERENCE.md#entities) |
+| `entities` | Referenced entities (people, orgs, technologies, …) | [Entities](./docs/SCHEMA-REFERENCE.md#entities) |
+| `relationships` | Typed relationships to other memories | [Relationships](./docs/SCHEMA-REFERENCE.md#relationships) |
+| `temporal` | Temporal validity data (timestamps) | [Temporal metadata](./docs/SCHEMA-REFERENCE.md#temporal-metadata) |
 
-## Specification
+> The `temporal` field enters at Level 2 for basic timestamps; its bi-temporal
+> model and decay-function sub-features are Level 3.
 
-See [SPECIFICATION.md](./SPECIFICATION.md) for the complete technical specification.
+### Level 3 — Full (optional)
+
+| Property | Purpose | Reference |
+|----------|---------|-----------|
+| `provenance` | Source and trust data (W3C PROV + `sourceType` / `trustLevel`) | [Provenance](./docs/SCHEMA-REFERENCE.md#provenance) |
+| `embedding` | Embedding-model reference (model + source text for re-embedding) | [Embedding reference](./docs/SCHEMA-REFERENCE.md#embedding-reference) |
+| `citations` | Citation references with rich metadata | [Citations](./docs/SCHEMA-REFERENCE.md#citations) |
+| `summary` | Compressed content summary (max 500 chars) | [Compression](./docs/SCHEMA-REFERENCE.md#compression-level-3) |
+| `compressedAt` | When compression was applied | [Compression](./docs/SCHEMA-REFERENCE.md#compression-level-3) |
+| `extensions` | Provider-specific extension data | [Extensions](./docs/SCHEMA-REFERENCE.md#extensions) |
 
 ## LLM-friendly documentation
 
@@ -123,55 +194,53 @@ alongside `llms-full.txt` (full corpus) and `llms-small.txt` (condensed):
 - <https://mif-spec.dev/llms-full.txt>
 - <https://mif-spec.dev/llms-small.txt>
 
-## Validation
-
-JSON Schema files are available for automated validation:
+## OKF conformance & validation
 
 ```bash
-# Validate a MIF document
-npx ajv validate -s schema/mif.schema.json -d your-memory.json
+# OKF conformance + relationship sync + lossless round-trip
+python scripts/okf_validate.py
 
-# Validate citations only
-npx ajv validate -s schema/citation.schema.json -d citation.json
+# Lossless markdown -> json-ld -> markdown round trip
+python scripts/mif_convert.py roundtrip examples profiles/ai-memory/examples
 
-# Validate ontology definitions
-npx ajv validate -s schema/ontology/ontology.schema.json -d ontology.yaml
+# JSON Schema validation of the JSON-LD projection.
+# The converter emits .jsonld; ajv-cli reads .json, so validate a .json copy
+# (e.g. cp your-concept.jsonld your-concept.json).
+# Requires: npm install -g ajv-cli ajv-formats
+npx ajv validate -s schema/mif.schema.json -r "schema/definitions/*.schema.json" \
+  -d your-concept.json --spec=draft2020 -c ajv-formats
 ```
 
-### Ontology Conversion
-
-Convert YAML ontologies to JSON-LD for semantic web compatibility:
-
-```bash
-python scripts/yaml2jsonld.py ontologies/mif-base.ontology.yaml
-python scripts/yaml2jsonld.py --all  # Convert all ontologies
-```
+See [docs/okf-conformance.md](./docs/okf-conformance.md) for the pinned OKF v0.1
+criteria and the MIF → OKF mapping.
 
 ## Examples
 
-See the [examples/](./examples/) directory for:
+The [examples/](./examples/) directory is a generalized (non-memory) core bundle
+demonstrating the three base types with body-link relationships. Memory-flavored
+examples live under [profiles/ai-memory/examples/](./profiles/ai-memory/examples/).
 
-- Minimal memories (Level 1)
-- Standard memories with relationships (Level 2)
-- Full-featured memories with temporal, provenance, and citations (Level 3)
+## AI Memory profile
 
-## Conformance Levels
-
-| Level | Requirements |
-|-------|--------------|
-| **Level 1: Core** | id, type, content, created |
-| **Level 2: Standard** | + namespace, entities, relationships, timestamps |
-| **Level 3: Full** | + bi-temporal, decay, provenance, embeddings, citations |
+Memory-specific material — forgetting-curve decay tuning, episodic *session*
+framing, recall-oriented embeddings, and migration guides for Mem0, Zep, Letta,
+Subcog, and Basic-Memory — lives in the AI Memory profile:
+[profiles/ai-memory/](./profiles/ai-memory/).
 
 ## Migration
 
-MIF includes migration guides for:
+Upgrading a `0.1.0-draft` bundle? See [MIGRATION.md](./MIGRATION.md) and run:
 
-- Mem0
-- Zep
-- Letta (Agent File)
-- Subcog
-- Basic Memory
+```bash
+python scripts/migrate_0_1_to_1_0.py <old-bundle> <new-bundle>
+```
+
+## Specification
+
+See [SPECIFICATION.md](./SPECIFICATION.md) for the complete v1.0.0 specification,
+and the [Schema Reference](./docs/SCHEMA-REFERENCE.md) for a per-field reference to
+the top-level properties. The authoritative, machine-checkable definition of every
+property is [`schema/mif.schema.json`](./schema/mif.schema.json).
 
 ## Contributing
 
@@ -185,7 +254,6 @@ This specification is open source. Contributions welcome:
 
 - [Subcog](https://github.com/zircote/subcog) - AI memory system implementing MIF
 - [Mnemonic](https://github.com/modeled-information-format/mnemonic) - Claude Code plugin using MIF ontologies
-- [Issue #82](https://github.com/zircote/subcog/issues/82) - Original proposal
 
 ## Citing This Project
 
@@ -194,15 +262,16 @@ If you use MIF in your research or projects, please cite it:
 ```bibtex
 @software{allen_mif_2026,
   author       = {Allen, Robert},
-  title        = {{Memory Interchange Format (MIF)}},
-  version      = {0.1.0},
-  date         = {2026-01-23},
+  title        = {{MIF: Modeled Information Format}},
+  version      = {1.0.0},
+  date         = {2026-06-18},
   url          = {https://mif-spec.dev},
   license      = {MIT}
 }
 ```
 
-You can also use GitHub's built-in **"Cite this repository"** button on the repository page to get an auto-generated citation in APA or BibTeX format.
+You can also use GitHub's built-in **"Cite this repository"** button on the
+repository page to get an auto-generated citation in APA or BibTeX format.
 
 ### Acknowledgments
 

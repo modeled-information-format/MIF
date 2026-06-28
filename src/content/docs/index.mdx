@@ -1,102 +1,41 @@
 ---
 title: "Introduction"
-description: "An open standard for portable AI memory representation."
+description: "MIF — the Modeled Information Format specification: a vendor-neutral data model for portable AI memory."
 ---
 
-# Memory Interchange Format
+# Modeled Information Format
 
-> An open standard for portable AI memory representation.
+> A vendor-neutral data model for portable AI memory, with dual human-readable
+> Markdown and machine-processable JSON-LD representations.
 
-MIF defines a vendor-neutral data model for AI memories with dual
-representations: human-readable Markdown files and machine-processable
-JSON-LD documents. One format, every provider.
+This site is the **normative specification** for MIF (Modeled Information
+Format). It defines the data model, the two on-disk formats, the type system,
+and the conformance rules, and it serves the canonical JSON Schemas.
 
-## Why MIF?
+## Read the specification
 
-AI memory is fragmented. Mem0, Zep, Letta, LangMem, and others each use
-proprietary schemas with no interoperability. Switching providers means
-losing memories or writing custom migration code.
+Start with the [Specification Overview](/specification/overview/), then work
+through the core model, the Markdown and JSON-LD formats, the data types, and
+the reference sections (conformance, conversion, security, appendices) from the
+sidebar.
 
-MIF fixes this.
+## Schemas
 
-**For memory providers**: Adopt a common interchange format. Users gain
-confidence knowing their data is portable, which lowers switching costs
-and raises adoption.
+The canonical JSON Schemas are served under
+[`/schema/`](https://mif-spec.dev/schema/index.json):
 
-**For developers**: Build on a stable schema with semantic web
-compatibility. MIF memories are valid JSON-LD documents that work with
-existing linked data tooling.
+- `https://mif-spec.dev/schema/mif.schema.json`
+- `https://mif-spec.dev/schema/citation.schema.json`
+- `https://mif-spec.dev/schema/ontology/ontology.schema.json`
+- `https://mif-spec.dev/schema/definitions/entity-reference.schema.json`
 
-**For users**: Own your memories. MIF files are valid Obsidian notes
-that work in any Markdown editor. No cloud dependency required.
+`$id` values are stable and unversioned; immutable per-release mirrors are
+available at `/schema/<version>/…`. See the
+[schema catalog](https://mif-spec.dev/schema/index.json) and
+[versioning notes](https://mif-spec.dev/schema/VERSIONING.md).
 
-## Quick Start
+## Guides, tutorials, and design records
 
-A minimal MIF memory in Markdown:
-
-```markdown
----
-id: "urn:mif:memory:a1b2c3"
-type: "semantic"
-title: "User prefers dark mode"
-confidence: 0.92
-created: "2026-01-15T10:30:00Z"
----
-
-The user consistently selects dark mode across all applications.
-They mentioned it reduces eye strain during late-night coding sessions.
-
-## Relationships
-
-- relates_to: [[urn:mif:memory:ui-prefs]] "UI Preferences"
-```
-
-The same memory as JSON-LD:
-
-```json
-{
-  "@context": "https://mif-spec.dev/schema/context.jsonld",
-  "@type": "mif:Memory",
-  "mif:id": "urn:mif:memory:a1b2c3",
-  "mif:memoryType": "semantic",
-  "mif:title": "User prefers dark mode",
-  "mif:confidence": 0.92,
-  "mif:created": "2026-01-15T10:30:00Z",
-  "mif:content": "The user consistently selects dark mode across all applications. They mentioned it reduces eye strain during late-night coding sessions.",
-  "mif:relationships": [
-    {
-      "@type": "mif:Relationship",
-      "mif:type": "relates_to",
-      "mif:target": "urn:mif:memory:ui-prefs",
-      "mif:label": "UI Preferences"
-    }
-  ]
-}
-```
-
-## Key Features
-
-| Feature | Description |
-|---------|-------------|
-| **Dual Format** | Human-readable `.memory.md` and machine-processable `.memory.json` |
-| **Semantic Web** | JSON-LD with full linked data compatibility |
-| **Obsidian Native** | Markdown files work as valid Obsidian vault notes |
-| **Bi-Temporal** | Track both event time and recording time |
-| **Memory Decay** | Built-in confidence decay models (exponential, step, linear) |
-| **Entity System** | Typed entities: Person, Organization, Technology, Concept, File |
-| **9 Relationship Types** | `relates_to`, `derived_from`, `supersedes`, `contradicts`, and more |
-| **Provenance** | W3C PROV-based origin tracking |
-| **Namespaces** | Hierarchical organization with reserved cognitive prefixes |
-| **3 Conformance Levels** | Progressive adoption from basic to full compliance |
-
-## Current Status
-
-**Version**: 0.1.0-draft
-
-This is a draft specification. No providers currently implement MIF. The
-goal is to establish a vendor-neutral interchange format that providers
-may choose to adopt. Feedback and contributions are welcome.
-
-- [Specification](/specification/overview/) - Full format specification
-- [Getting Started](/guides/getting-started/) - Implementation guide
-- [GitHub Repository](https://github.com/modeled-information-format/MIF) - Source and issues
+Task-oriented guides, tutorials, API references, and the Architecture Decision
+Records live in the ecosystem documentation at
+[modeled-information-format.github.io](https://modeled-information-format.github.io/).

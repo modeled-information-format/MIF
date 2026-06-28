@@ -5,7 +5,7 @@ diataxis_type: how-to
 # Backstage.io Entity Mapping Guide
 
 This document maps MIF industry ontologies to Backstage.io's Software Catalog
-model, enabling organizations to leverage both systems together.
+model, so organizations can use both systems together.
 
 ## Complete Catalog Examples
 
@@ -347,7 +347,7 @@ traits from `shared-traits.ontology.yaml`:
 
 1. **Use MIF for Deep Domain Knowledge**
    - Store detailed domain-specific memories in MIF format
-   - Leverage base types for proper categorization
+   - Use base types for proper categorization
    - Enable agent-based discovery patterns
 
 2. **Use Backstage for Developer/Operator Experience**

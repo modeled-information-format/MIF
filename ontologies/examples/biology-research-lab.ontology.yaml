@@ -1104,7 +1104,7 @@ relationships:
       - grant
     symmetric: false
 
-  funded_by:
+  funded-by:
     description: "Project funded by grant"
     from:
       - project
@@ -1113,7 +1113,7 @@ relationships:
       - grant
     symmetric: false
 
-  uses_protocol:
+  uses-protocol:
     description: "Experiment uses protocol"
     from:
       - experiment
@@ -1131,7 +1131,7 @@ relationships:
       - publication
     symmetric: false
 
-  covered_by:
+  covered-by:
     description: "Sample/experiment covered by compliance protocol"
     from:
       - sample
@@ -1142,7 +1142,7 @@ relationships:
       - ibc-protocol
     symmetric: false
 
-  collaborates_with:
+  collaborates-with:
     description: "PI collaborates with external party"
     from:
       - principal-investigator
@@ -1151,7 +1151,7 @@ relationships:
       - collaborator
     symmetric: true
 
-  cites_grant:
+  cites-grant:
     description: "Publication cites grant funding"
     from:
       - publication
@@ -1159,7 +1159,7 @@ relationships:
       - grant
     symmetric: false
 
-  uses_sample:
+  uses-sample:
     description: "Experiment uses sample"
     from:
       - experiment
@@ -1167,13 +1167,21 @@ relationships:
       - sample
     symmetric: false
 
-  uses_equipment:
+  uses-equipment:
     description: "Protocol uses equipment"
     from:
       - protocol
       - experiment
     to:
       - equipment
+    symmetric: false
+
+  used-by:
+    description: "Protocol is used by an experiment"
+    from:
+      - protocol
+    to:
+      - experiment
     symmetric: false
 
 # ===========================================================================

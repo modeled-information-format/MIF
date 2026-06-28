@@ -1,0 +1,8 @@
+# Invalid: parent `control` is undeclared and the ontology extends nothing.
+ontology:
+  id: dangling-subtype
+  version: "0.1.0"
+entity_types:
+  - name: security-control
+    base: semantic
+    subtype_of: [control]

@@ -134,8 +134,10 @@ def main():
     repo_root = Path(__file__).parent.parent
     memory_dirs = [
         repo_root / "examples",
+        repo_root / "profiles" / "ai-memory" / "examples",
         repo_root / "ontologies" / "examples" / "memories",
     ]
+    reserved = {"index.md", "log.md"}
 
     # Load all ontologies
     ontologies = load_all_ontologies(repo_root)
@@ -148,7 +150,9 @@ def main():
     for memory_dir in memory_dirs:
         if not memory_dir.exists():
             continue
-        for memory_file in memory_dir.rglob("*.memory.md"):
+        for memory_file in memory_dir.rglob("*.md"):
+            if memory_file.name in reserved:
+                continue
             errors = validate_memory_namespace(
                 memory_file, ontologies, mif_base_namespaces
             )

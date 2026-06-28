@@ -146,7 +146,7 @@ discovery:
 |------|----|----------|---------|
 | `ontologies/mif-base.ontology.yaml` | mif-base | 0 | Base cognitive triad |
 | `ontologies/shared-traits.ontology.yaml` | shared-traits | 0 | Reusable traits library |
-| `ontologies/examples/software-engineering.ontology.yaml` | software-engineering | 8 | Dev domain example |
-| `ontologies/examples/biology-research-lab.ontology.yaml` | biology-research-lab | - | Science domain |
-| `ontologies/examples/k12-educational-publishing.ontology.yaml` | k12-educational-publishing | - | Education domain |
-| `ontologies/examples/regenerative-agriculture.ontology.yaml` | regenerative-agriculture | - | Agriculture domain |
+| `ontologies/examples/software-engineering.ontology.yaml` | software-engineering | 9 | Dev domain example |
+| `ontologies/examples/biology-research-lab.ontology.yaml` | biology-research-lab | 19 | Science domain |
+| `ontologies/examples/k12-educational-publishing.ontology.yaml` | k12-educational-publishing | 16 | Education domain |
+| `ontologies/examples/regenerative-agriculture.ontology.yaml` | regenerative-agriculture | 19 | Agriculture domain |

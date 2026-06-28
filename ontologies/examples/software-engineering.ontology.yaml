@@ -144,6 +144,50 @@ entity_types:
           type: integer
           description: "Incident duration in minutes"
 
+  # A security breach is a specialization of incident-report: it is substitutable
+  # wherever incident-report is admissible, and adds the VERIS four A's. Demonstrates
+  # `subtype_of` (entity-type subsumption).
+  - name: security-incident
+    description: "A security breach/incident — a specialization of incident-report carrying the VERIS Actor/Action/Asset/Attribute"
+    base: episodic
+    subtype_of:
+      - incident-report
+    traits:
+      - timeline
+      - stakeholders
+    schema:
+      required:
+        - severity
+        - impact
+        - resolution
+      properties:
+        severity:
+          type: string
+          description: "Incident severity level"
+          enum:
+            - critical
+            - high
+            - medium
+            - low
+        impact:
+          type: string
+          description: "Business/user impact description"
+        resolution:
+          type: string
+          description: "How the incident was resolved"
+        actor:
+          type: string
+          description: "VERIS Actor — external / internal / partner"
+        action:
+          type: string
+          description: "VERIS Action — malware / hacking / social / error / misuse"
+        asset:
+          type: string
+          description: "VERIS Asset — the device/data affected"
+        attribute:
+          type: string
+          description: "VERIS Attribute — how affected (CIA)"
+
   - name: technology
     description: "A technology, framework, or tool"
     base: semantic
@@ -380,7 +424,7 @@ traits:
 
 # Relationships
 relationships:
-  depends_on:
+  depends-on:
     description: "Component dependency relationship"
     from:
       - component
@@ -398,7 +442,7 @@ relationships:
       - architectural-decision
     symmetric: false
 
-  caused_by:
+  caused-by:
     description: "Incident causality"
     from:
       - incident-report

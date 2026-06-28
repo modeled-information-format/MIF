@@ -1,6 +1,6 @@
 # Contributing to MIF
 
-Thank you for your interest in contributing to the Memory Interchange Format specification.
+Thank you for your interest in contributing to the Modeled Information Format specification.
 
 ## Ways to Contribute
 
@@ -34,11 +34,15 @@ Help grow the ecosystem by building:
 Use the provided schemas to validate your implementations:
 
 ```bash
-# Validate MIF documents
-npx ajv validate -s schema/mif.schema.json -d your-memory.json
+# Requires: npm install -g ajv-cli ajv-formats
+# Validate the JSON-LD projection of a MIF document.
+# The converter emits .jsonld; ajv-cli reads .json, so validate a .json copy.
+npx ajv validate -s schema/mif.schema.json -r "schema/definitions/*.schema.json" \
+  -d your-memory.json --spec=draft2020 -c ajv-formats
 
 # Validate citations
-npx ajv validate -s schema/citation.schema.json -d citation.json
+npx ajv validate -s schema/citation.schema.json -r "schema/definitions/*.schema.json" \
+  -d citation.json --spec=draft2020 -c ajv-formats
 ```
 
 ## Specification Change Guidelines

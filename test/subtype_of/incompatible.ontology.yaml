@@ -1,0 +1,15 @@
+# Invalid: sub-thing subtypes base-thing but drops the parent's required field `b`,
+# breaking substitutability (a sub-thing used as a base-thing would be missing `b`).
+ontology:
+  id: incompatible-subtype
+  version: "0.1.0"
+entity_types:
+  - name: base-thing
+    base: semantic
+    schema:
+      required: [a, b]
+  - name: sub-thing
+    base: semantic
+    subtype_of: [base-thing]
+    schema:
+      required: [a]
