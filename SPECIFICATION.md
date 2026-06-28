@@ -3,7 +3,7 @@
 # MIF — Modeled Information Format
 
 **Version**: 1.0.0
-**Status**: Release
+**Status**: Release Candidate
 **Last Updated**: 2026-06-18
 **Authors**: Robert Allen (zircote)
 **Repository**: https://github.com/modeled-information-format/MIF
@@ -111,7 +111,7 @@ Both representations MUST be losslessly convertible to each other. A conforming 
 
 ### 2.2 Obsidian Compatibility
 
-The Markdown format MUST be valid Obsidian notes, ensuring files work seamlessly in Obsidian vaults while remaining readable in any text editor or Markdown processor.
+The Markdown format MUST be valid Obsidian notes, ensuring files work in Obsidian vaults without modification while remaining readable in any text editor or Markdown processor.
 
 **Required Obsidian Features:**
 
@@ -2151,30 +2151,6 @@ citations:
   - **Relevance**: 0.95
   - Long-form annotation here.
 ```
-
----
-
-## Changelog
-
-### 0.1.0-draft (2026-01-26)
-- **BREAKING**: Replaced ad-hoc memory types with three base types (Section 4.2)
-  - New base types: `semantic`, `episodic`, `procedural`
-  - Removed: `memory`, `decision`, `preference`, `fact`, `episode`, `pattern`, `learning`, `context`
-  - Specific categorization via namespace hierarchy (e.g., `_semantic/decisions`)
-- Added `ontology` field for declaring applied ontology (Section 4.3)
-- Added `OntologyReference` type to JSON-LD context
-- Updated frontmatter schema with ontology reference
-- Updated JSON-LD example with ontology field
-
-### 0.1.0-draft (2026-01-23)
-- Initial draft specification
-- Dual format (Markdown + JSON-LD)
-- Core data model
-- Entity and relationship types
-- Bi-temporal model
-- Hierarchical namespaces
-- Provenance model
-- Embedding references
 
 ---
 

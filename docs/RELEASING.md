@@ -9,6 +9,8 @@ the sections in order; each step has a verification checkpoint.
 
 ## Overview
 
+> This runbook covers MIF-repo-specific mechanics. The governing org release process is documented in the [org release runbook](https://github.com/modeled-information-format/.github/blob/main/docs/runbooks/release-runbook.md).
+
 MIF releases are GitHub-Release-driven. The `release.yml` workflow fires on the
 `release: published` event -- a published GitHub Release named `vX.Y.Z` is the
 trigger, not a bare `git push --tags`. Pushing a tag alone does not fire
@@ -277,7 +279,7 @@ command.
 
 | Workflow | Trigger | Purpose |
 |---|---|---|
-| `validate.yml` | push + PR to `main`, `develop/**`, `release/**` | OKF conformance, schema validation, Astro build, ontology checks |
+| `validate.yml` | push to `main`; PR to `main`, `release/**`, `develop/**` | OKF conformance, schema validation, Astro build, ontology checks |
 | `schema-check.yml` | push + PR to `main`, `develop/**`, `release/**` | JSON Schema 2020-12 compilation, JSON-LD parse, mirror alias consistency |
 | `ci.yml` | push + PR to `main`, `develop/v*` | actionlint, SHA pin-check, SCA (OSV), Trivy IaC, Checkov, secrets scan, ShellCheck |
 | `sast.yml` | push + PR to `main`, `develop/v*`; weekly schedule | CodeQL (Python + TypeScript), Semgrep |

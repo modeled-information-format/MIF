@@ -18,10 +18,7 @@ model* open. MIF supplies the concrete type system, typed relationships,
 provenance/trust, and validity/freshness semantics. **AI memory is the first
 domain profile of MIF, not its identity.**
 
-> **Brand note (v1.0.0):** The `MIF` mark is retained; the working expansion for
-> this release is *Modeled Information Format*. Whether *Memory Interchange
-> Format* is kept as the name of the AI Memory profile is a maintainer decision
-> pending before final release.
+> **Brand note (v1.0.0):** The `MIF` mark expands to *Modeled Information Format*. *Memory Interchange Format* is retired. AI Memory is a profile of MIF, not a separate product name.
 
 ## Overview
 
