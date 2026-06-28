@@ -11,6 +11,19 @@
 # Trivy matches license.ignored against the full SPDX expression, not its
 # components, so the compound expressions the @img/sharp-* packages declare are
 # listed explicitly alongside the standalone LGPL identifiers.
+#
+# Accepted-license policy: the org's reusable Trivy workflow runs
+# `--scanners misconfig,license`, and the pinned trivy-action version does not apply
+# the `--severity HIGH,CRITICAL` filter to license findings. As a result every
+# transitive dependency's license surfaced as its own code-scanning alert (542 such
+# detections — license classifications, not vulnerabilities; npm audit and the
+# OSV-Scanner gate report 0 CVEs). The list below ignores the licenses present in
+# the dependency tree that the org accepts: permissive/notice/public-domain, plus
+# the weak (file-level) copyleft MPL-2.0 — whose copyleft is confined to the
+# dependency's own modified files and does not reach MIF's spec, schemas, or
+# generated output. Strong copyleft (GPL/AGPL) and forbidden licenses are NOT in the
+# list and remain flagged; the LGPL entries above are the documented sharp/libvips
+# build-time exception.
 license:
   ignored:
     - LGPL-3.0-or-later
@@ -18,3 +31,19 @@ license:
     - LGPL-3.0
     - Apache-2.0 AND LGPL-3.0-or-later
     - Apache-2.0 AND LGPL-3.0-or-later AND MIT
+    # Permissive / notice / public-domain (accepted by policy)
+    - Apache-2.0
+    - MIT
+    - ISC
+    - BSD-2-Clause
+    - BSD-3-Clause
+    - BSD-3-Clause-Clear
+    - 0BSD
+    - CC0-1.0
+    - Unlicense
+    - Python-2.0
+    - BlueOak-1.0.0
+    - Zlib
+    # Weak / file-level copyleft (e.g. lightningcss); copyleft confined to the
+    # dependency's own files — accepted by policy
+    - MPL-2.0
