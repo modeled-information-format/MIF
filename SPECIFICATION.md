@@ -1283,7 +1283,7 @@ Where `{root}` is either:
 
 - **Organization name** - private to that organization
 - **Reserved prefix** - special namespace with defined semantics. Two kinds of
-  reserved prefix exist (both begin with `_`): **visibility prefixes** that
+  reserved prefixes exist (both begin with `_`): **visibility prefixes** that
   control sharing scope, and **base-type prefixes** that name the cognitive
   memory type. Both are defined in 10.2.
 
