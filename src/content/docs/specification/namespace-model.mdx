@@ -13,11 +13,13 @@ Namespaces use a flexible scoping model with reserved prefixes for cross-organiz
 
 Where `{root}` is either:
 - **Organization name** - private to that organization
-- **Reserved prefix** - special namespace with defined semantics
+- **Reserved prefix** - special namespace with defined semantics. Two kinds of reserved prefix exist (both begin with `_`): **visibility prefixes** that control sharing scope, and **base-type prefixes** that name the cognitive memory type.
 
 ### Reserved Namespace Prefixes
 
-Names beginning with underscore (`_`) are reserved for special namespaces:
+Names beginning with underscore (`_`) are reserved for special namespaces. Two kinds exist: **visibility prefixes** that control sharing scope, and **base-type prefixes** that name the cognitive memory type.
+
+#### Visibility Prefixes
 
 | Prefix | Visibility | Description |
 |--------|------------|-------------|
@@ -25,6 +27,16 @@ Names beginning with underscore (`_`) are reserved for special namespaces:
 | `_shared` | Negotiated | Cross-organization sharing with explicit agreements |
 | `_local` | Local only | Never synchronized or exported |
 | `_system` | Implementation | Reserved for system/implementation use |
+
+#### Base-Type Prefixes
+
+Namespace paths use an underscore prefix (`_semantic`, `_episodic`, `_procedural`) to distinguish base-type namespaces from domain-specific namespaces. This convention ensures consistent namespace identification across implementations. Each base-type prefix corresponds to a base memory `type` and is the top-level root of the base ontology's namespace hierarchy.
+
+| Prefix | Base type | Description |
+|--------|-----------|-------------|
+| `_semantic` | `semantic` | Facts, concepts, relationships - declarative knowledge |
+| `_episodic` | `episodic` | Events, experiences, timelines - time-bound records |
+| `_procedural` | `procedural` | Step-by-step processes - how-to knowledge |
 
 **Examples:**
 
@@ -174,19 +186,19 @@ The base ontology uses a three-tier hierarchy based on the base knowledge types:
 
 ```yaml
 namespaces:
-  semantic:                    # Facts, concepts, relationships
+  _semantic:                   # Facts, concepts, relationships
     type_hint: semantic
     children:
       decisions: {}
       knowledge: {}
       entities: {}
-  episodic:                    # Events, experiences, timelines
+  _episodic:                   # Events, experiences, timelines
     type_hint: episodic
     children:
       incidents: {}
       sessions: {}
       blockers: {}
-  procedural:                  # Step-by-step processes
+  _procedural:                 # Step-by-step processes
     type_hint: procedural
     children:
       runbooks: {}

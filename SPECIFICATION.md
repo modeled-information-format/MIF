@@ -242,9 +242,9 @@ MIF uses three **base memory types**, reflecting how human memory systems organi
 
 | Type | Description | Namespace Hint |
 | --- | --- | --- |
-| `semantic` | Facts, concepts, relationships, and knowledge | `semantic/*` |
-| `episodic` | Events, experiences, sessions, and timelines | `episodic/*` |
-| `procedural` | Step-by-step processes, runbooks, and patterns | `procedural/*` |
+| `semantic` | Facts, concepts, relationships, and knowledge | `_semantic/*` |
+| `episodic` | Events, experiences, sessions, and timelines | `_episodic/*` |
+| `procedural` | Step-by-step processes, runbooks, and patterns | `_procedural/*` |
 
 #### Base Type Descriptions
 
@@ -320,7 +320,7 @@ memory unit can declare directly:
 1. **`type`** (REQUIRED, see 4.2) — the cognitive memory type: `semantic`,
    `episodic`, or `procedural`.
 2. **`namespace`** (RECOMMENDED, see 10) — hierarchical scope that carries the
-   finer-grained label (e.g. `semantic/knowledge`, `episodic/sessions`).
+   finer-grained label (e.g. `_semantic/knowledge`, `_episodic/sessions`).
 
 A memory unit has no field to name an ontology-extended type directly. Instead,
 **ontologies define extended types and their namespace mappings** (OPTIONAL, see
@@ -328,15 +328,15 @@ A memory unit has no field to name an ontology-extended type directly. Instead,
 entry with a `base` type, and implementations express that extended type by
 following the referenced ontology's namespace hierarchy on the `namespace` axis
 above (e.g. an `incident` extended type whose `base` is `episodic`, reached via
-`episodic/incidents`). The extended type is therefore a richer label *on* the
+`_episodic/incidents`). The extended type is therefore a richer label *on* the
 namespace axis, not a separate third axis the unit declares.
 
-> **Note on namespace form.** The namespace examples in this section use the
-> unprefixed form (e.g. `semantic/knowledge`). Other sections (e.g. 4.2.1 and
-> 10.8.4) use the underscore-prefixed `_semantic/…` form. Section 10 is
-> authoritative for namespace structure; follow the form it defines for your
-> deployment. Where an ontology is referenced, follow the namespace hierarchy it
-> declares; the examples below omit ontology binding for clarity.
+> **Note on namespace form.** Base-type roots use the underscore-prefixed form
+> (`_semantic`, `_episodic`, `_procedural`); these are reserved base-type
+> prefixes (see 10.2), distinct from the visibility prefixes (`_public`,
+> `_shared`, `_local`, `_system`) defined alongside them. Where an ontology is
+> referenced, follow the namespace hierarchy it declares; the examples below
+> omit ontology binding for clarity.
 
 A **Fact** is a `semantic` memory — declarative knowledge that holds independently
 of any single moment:
@@ -344,7 +344,7 @@ of any single moment:
 ```yaml
 ---
 type: semantic
-namespace: semantic/knowledge
+namespace: _semantic/knowledge
 ---
 ```
 
@@ -354,14 +354,14 @@ carry `temporal` validity to bound when they hold (see 9):
 ```yaml
 ---
 type: episodic
-namespace: episodic/sessions
+namespace: _episodic/sessions
 temporal:
   validFrom: 2026-01-15T00:00:00Z
   validUntil: 2026-01-15T11:00:00Z
 ---
 ```
 
-Finer distinctions are added through the namespace (e.g. `episodic/incidents`),
+Finer distinctions are added through the namespace (e.g. `_episodic/incidents`),
 whose path MAY map to an ontology-extended type defined by a referenced ontology
 (e.g. an `incident` whose `base` is `episodic`) — not through a new unit-level
 field. Implementations SHOULD express domain categories through `type` +
@@ -1282,11 +1282,18 @@ Namespaces use a flexible scoping model with reserved prefixes for cross-organiz
 Where `{root}` is either:
 
 - **Organization name** - private to that organization
-- **Reserved prefix** - special namespace with defined semantics
+- **Reserved prefix** - special namespace with defined semantics. Two kinds of
+  reserved prefix exist (both begin with `_`): **visibility prefixes** that
+  control sharing scope, and **base-type prefixes** that name the cognitive
+  memory type. Both are defined in 10.2.
 
 ### 10.2 Reserved Namespace Prefixes
 
-Names beginning with underscore (`_`) are reserved for special namespaces:
+Names beginning with underscore (`_`) are reserved for special namespaces. Two
+kinds exist: **visibility prefixes** that control sharing scope, and
+**base-type prefixes** that name the cognitive memory type.
+
+#### Visibility Prefixes
 
 | Prefix | Visibility | Description |
 | --- | --- | --- |
@@ -1294,6 +1301,21 @@ Names beginning with underscore (`_`) are reserved for special namespaces:
 | `_shared` | Negotiated | Cross-organization sharing with explicit agreements |
 | `_local` | Local only | Never synchronized or exported |
 | `_system` | Implementation | Reserved for system/implementation use |
+
+#### Base-Type Prefixes
+
+Namespace paths use an underscore prefix (`_semantic`, `_episodic`,
+`_procedural`) to distinguish base-type namespaces from domain-specific
+namespaces. This convention ensures consistent namespace identification across
+implementations. Each base-type prefix corresponds to a base memory `type`
+(see 4.2) and is the top-level root of the base ontology's namespace hierarchy
+(see 10.8.2).
+
+| Prefix | Base type | Description |
+| --- | --- | --- |
+| `_semantic` | `semantic` | Facts, concepts, relationships - declarative knowledge |
+| `_episodic` | `episodic` | Events, experiences, timelines - time-bound records |
+| `_procedural` | `procedural` | Step-by-step processes - how-to knowledge |
 
 #### Examples
 
@@ -1440,23 +1462,24 @@ Ontologies are defined in YAML files with optional JSON-LD export:
 
 #### 10.8.2 Base Type Hierarchy
 
-The base ontology uses a three-tier hierarchy based on cognitive memory types:
+The base ontology uses a three-tier hierarchy based on cognitive memory types.
+Its three top-level roots are the base-type prefixes defined in 10.2:
 
 ```yaml
 namespaces:
-  semantic:                    # Facts, concepts, relationships
+  _semantic:                   # Facts, concepts, relationships
     type_hint: semantic
     children:
       decisions: {}
       knowledge: {}
       entities: {}
-  episodic:                    # Events, experiences, timelines
+  _episodic:                   # Events, experiences, timelines
     type_hint: episodic
     children:
       incidents: {}
       sessions: {}
       blockers: {}
-  procedural:                  # Step-by-step processes
+  _procedural:                 # Step-by-step processes
     type_hint: procedural
     children:
       runbooks: {}
