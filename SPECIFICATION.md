@@ -482,7 +482,7 @@ citations:
     title: "Memory Systems in AI Agents"   # REQUIRED: Citation title
     url: https://arxiv.org/abs/2024.12345  # REQUIRED: Valid URL
     citationRole: supports                 # REQUIRED: Relationship to memory
-    author: "Jane Smith"                   # OPTIONAL: EntityReference or text
+    author: "Jane Smith"                   # OPTIONAL: string, EntityReference, or array
     date: 2024-06-15                       # OPTIONAL: Publication date
     accessed: 2026-01-20                   # OPTIONAL: Access date
     relevance: 0.95                        # OPTIONAL: Relevance score (0-1)
@@ -498,7 +498,7 @@ citations:
 | `title` | REQUIRED | String | Citation title |
 | `url` | REQUIRED | URI | Valid URL or URI |
 | `citationRole` | REQUIRED | Enum | Relationship to memory (see 5.4.4) |
-| `author` | OPTIONAL | EntityReference or String | Entity reference or plain text |
+| `author` | OPTIONAL | EntityReference, array of EntityReference, or String | One or more entity references, or plain text |
 | `date` | OPTIONAL | Date | Publication date (ISO 8601) |
 | `accessed` | OPTIONAL | Date | Access date (ISO 8601) |
 | `relevance` | OPTIONAL | Decimal | Relevance score (0.0-1.0) |
@@ -1787,17 +1787,14 @@ new major version of the specification.
 
 ### 15.1 Markdown to JSON-LD
 
-1. Parse YAML frontmatter as structured data (including `relationships[]` and `entities[]`)
-2. Map frontmatter properties to JSON-LD using context
-3. Parse the body `## Relationships` section: each `- <type> [Text](<target>)` line maps to a `relationships` entry (reconciled with the authoritative frontmatter array)
-4. Convert body content to `content` field
+1. Parse the YAML frontmatter, including the authoritative `relationships[]` and `entities[]`, and map each property into the JSON-LD projection: `id` becomes `@id` (`urn:mif:<id>`), `type` becomes `conceptType`, and the remaining fields pass through under the context.
+2. Take the full Markdown body, verbatim, as the `content` field. The OKF-legible `## Relationships` body mirror is part of the body, so it is carried inside `content`.
+3. Add the projection mirror fields the converter always emits: `timestamp` (= `modified`, else `created`) and, when `summary` is present, `description` (= `summary`).
 
 ### 15.2 JSON-LD to Markdown
 
-1. Generate YAML frontmatter from JSON-LD properties (including `relationships[]` and `entities[]`)
-2. Set first `title` or H1 from `dc:title`
-3. Convert `content` to Markdown body
-4. Append a "## Relationships" section, rendering each relationship as `- <type> [Text](<target>)`
+1. Recover the frontmatter from the JSON-LD properties: `@id` (`urn:mif:<uuid>`) becomes `id` (`<uuid>`), `conceptType` becomes `type`, and the remaining properties (including `relationships[]`) pass through.
+2. Write the `content` field back as the Markdown body, verbatim. Any `## Relationships` body mirror is authored content preserved unchanged, which is what keeps the round trip lossless.
 
 ### 15.3 Example Conversion
 
@@ -1808,21 +1805,29 @@ new major version of the specification.
   "@context": "https://mif-spec.dev/schema/context.jsonld",
   "@type": "Concept",
   "@id": "urn:mif:550e8400",
+  "conceptType": "semantic",
   "title": "Dark Mode",
-  "content": "User prefers dark mode",
+  "content": "# Dark Mode\n\nUser prefers dark mode\n\n## Relationships\n\n- relates-to [UI Preferences](/semantic/ui-prefs.md)",
+  "created": "2026-01-15T10:30:00Z",
   "relationships": [
-    {"type": "relates-to", "target": "urn:mif:ui-prefs"}
+    {"type": "relates-to", "target": "/semantic/ui-prefs.md"}
   ]
 }
 ```
 
 #### Output (Markdown)
 
+The `content` field is written back verbatim as the body; `relationships[]` passes through to frontmatter. The round trip is lossless:
+
 ```markdown
 ---
 id: 550e8400
 type: semantic
 title: Dark Mode
+created: 2026-01-15T10:30:00Z
+relationships:
+  - type: relates-to
+    target: /semantic/ui-prefs.md
 ---
 
 # Dark Mode
@@ -1831,7 +1836,7 @@ User prefers dark mode
 
 ## Relationships
 
-- relates-to [ui-prefs](urn:mif:ui-prefs)
+- relates-to [UI Preferences](/semantic/ui-prefs.md)
 ```
 
 ### 15.4 Citations Conversion
@@ -2179,7 +2184,7 @@ citations:
     title: "Citation Title"    # REQUIRED
     url: https://example.com   # REQUIRED
     citationRole: supports     # REQUIRED
-    author: "Author Name"      # OPTIONAL (string or EntityReference)
+    author: "Author Name"      # OPTIONAL (string, EntityReference, or array)
     date: 2024-06-15           # OPTIONAL
     accessed: 2026-01-20       # OPTIONAL
     relevance: 0.95            # OPTIONAL (0-1)

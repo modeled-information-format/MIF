@@ -137,7 +137,7 @@ citations:
     title: "Memory Systems in AI Agents"   # REQUIRED: Citation title
     url: https://arxiv.org/abs/2024.12345  # REQUIRED: Valid URL
     citationRole: supports                 # REQUIRED: Relationship to memory
-    author: "Jane Smith"                   # OPTIONAL: EntityReference or text
+    author: "Jane Smith"                   # OPTIONAL: string, EntityReference, or array
     date: 2024-06-15                       # OPTIONAL: Publication date
     accessed: 2026-01-20                   # OPTIONAL: Access date
     relevance: 0.95                        # OPTIONAL: Relevance score (0-1)
@@ -153,7 +153,7 @@ citations:
 | `title` | REQUIRED | String | Citation title |
 | `url` | REQUIRED | URI | Valid URL or URI |
 | `citationRole` | REQUIRED | Enum | Relationship to memory (see Citation Roles) |
-| `author` | OPTIONAL | EntityReference or String | Entity reference or plain text |
+| `author` | OPTIONAL | EntityReference, array of EntityReference, or String | One or more entity references, or plain text |
 | `date` | OPTIONAL | Date | Publication date (ISO 8601) |
 | `accessed` | OPTIONAL | Date | Access date (ISO 8601) |
 | `relevance` | OPTIONAL | Decimal | Relevance score (0.0-1.0) |
