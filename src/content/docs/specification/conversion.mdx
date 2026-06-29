@@ -14,7 +14,7 @@ Markdown is canonical; the JSON-LD projection is regenerated from it. The round 
 ### JSON-LD to Markdown
 
 1. Recover the frontmatter from the JSON-LD properties: `@id` (`urn:mif:<uuid>`) becomes `id` (`<uuid>`), `conceptType` becomes `type`, and the remaining properties (including `relationships[]`) pass through.
-2. Write the `content` field back as the Markdown body, verbatim. Any `## Relationships`/`## Entities` body mirror is authored content preserved unchanged, which is what keeps the round trip lossless.
+2. Write the `content` field back as the Markdown body, verbatim. Any `## Relationships` body mirror is authored content preserved unchanged, which is what keeps the round trip lossless.
 
 ### Example Conversion
 

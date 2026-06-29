@@ -87,11 +87,11 @@ entities:
 
 # Dark Mode UI Preference
 
-User strongly prefers dark mode for all applications. ^main-preference
+User strongly prefers dark mode for all applications.
 
 ## Details
 
-This preference applies to: ^details
+This preference applies to:
 
 - **IDE/Editor**: VS Code, JetBrains IDEs
 - **Terminal**: iTerm2, built-in terminal

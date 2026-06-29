@@ -137,11 +137,11 @@ entities:
 
 ## Context
 
-Our AI systems currently use proprietary memory formats that are incompatible across different providers (Mem0, Zep, Letta, Subcog). This creates vendor lock-in and prevents memory portability when switching or combining AI memory systems. ^context
+Our AI systems currently use proprietary memory formats that are incompatible across different providers (Mem0, Zep, Letta, Subcog). This creates vendor lock-in and prevents memory portability when switching or combining AI memory systems.
 
 ## Decision
 
-We will adopt the **Modeled Information Format (MIF)** as our standard for AI memory representation and interchange. ^decision
+We will adopt the **Modeled Information Format (MIF)** as our standard for AI memory representation and interchange.
 
 ### Key Factors
 

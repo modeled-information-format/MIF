@@ -60,7 +60,6 @@ The MIF vocabulary defines terms for portable AI memory representation.
 | `namespace` | `mif:namespace` | -- | Hierarchical scope for categorization |
 | `tags` | `mif:tags` | `@set` | Classification tags |
 | `aliases` | `mif:aliases` | `@set` | Alternative names or identifiers |
-| `blocks` | `mif:blocks` | `@index` | Named content blocks |
 | `created` | `dc:created` | `xsd:dateTime` | Creation timestamp |
 | `modified` | `dc:modified` | `xsd:dateTime` | Last modification timestamp |
 | `name` | `schema:name` | -- | Display name (from Schema.org) |

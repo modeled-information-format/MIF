@@ -195,7 +195,7 @@ bundle/
 │   │   ├── {id}.md
 │   │   └── {id}.jsonld
 │   └── ...
-└── README.md                       # Vault documentation
+└── README.md                       # Bundle documentation
 ```
 
 ---

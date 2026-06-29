@@ -295,12 +295,6 @@
       "rdfs:comment": "Alternative names or identifiers."
     },
     {
-      "@id": "mif:blocks",
-      "@type": "rdf:Property",
-      "rdfs:label": "blocks",
-      "rdfs:comment": "Named content blocks."
-    },
-    {
       "@id": "mif:byteLength",
       "@type": "rdf:Property",
       "rdfs:label": "byteLength",

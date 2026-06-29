@@ -137,5 +137,5 @@ Based on previous cycles, focus preparation on:
 ## Relationships
 
 - submitted-to [Into Math K8 Program](/into-math-k8-program.md)
-- relates-to [Teks Math Standards](/teks-math-standards.md)
-- relates-to [Adoption Ca Math 2025](/adoption-ca-math-2025.md)
+- relates-to [TEKS Math Standards](/teks-math-standards.md)
+- relates-to [Adoption CA Math 2025](/adoption-ca-math-2025.md)

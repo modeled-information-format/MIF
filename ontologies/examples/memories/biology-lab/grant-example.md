@@ -153,5 +153,5 @@ Test lead compounds in PDX mouse models of PDAC.
 - leads [Project Aim1 Metabolomics](/project-aim1-metabolomics.md)
 - leads [Project Aim2 Targets](/project-aim2-targets.md)
 - leads [Project Aim3 Preclinical](/project-aim3-preclinical.md)
-- funded-by [Nih Nci](/nih-nci.md)
+- funded-by [NIH NCI](/nih-nci.md)
 - produces [Dataset Metabolomics 2025](/dataset-metabolomics-2025.md)

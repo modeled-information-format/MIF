@@ -193,12 +193,12 @@ citations:
 
 ## Directory Structure
 
-Organize your MIF vault using the three base types:
+Organize your MIF bundle using the three base types:
 
 ```
 my-project/
 ├── .mif/
-│   ├── config.yaml           # Vault configuration
+│   ├── config.yaml           # Bundle configuration
 │   └── entities/             # Entity definitions
 ├── memories/
 │   ├── semantic/             # Facts, concepts, knowledge
