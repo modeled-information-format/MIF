@@ -12,7 +12,6 @@ permissions:
   issues: read
 
 network:
-  firewall: true
   allowed:
     - "*.github.com"
     - "github.com"
@@ -21,6 +20,8 @@ network:
     - "api.github.com"
     - "github.blog"
 
+sandbox:
+  agent: awf  # Migrated from deprecated network setting
 engine:
   id: copilot
 
@@ -34,7 +35,7 @@ tools:
     - cat
   edit: {}
   web-fetch: {}
-  memory: cache-memory
+  cache-memory:
 
 safe-outputs:
   create-pull-request:
