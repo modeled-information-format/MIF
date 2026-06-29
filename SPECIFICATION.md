@@ -38,7 +38,7 @@ MIF is designed to be:
 - **OKF-compliant**: every bundle is a valid OKF bundle (a tested invariant).
 - **Markdown-canonical**: the `.md` file is the source of truth; JSON-LD is a
   derived projection (Invariant 2).
-- **Human-Readable**: valid Obsidian-compatible notes in any Markdown editor.
+- **Human-Readable**: valid CommonMark notes in any Markdown editor.
 - **Machine-Processable**: JSON-LD with semantic web compatibility.
 - **Extensible**: domain profiles extend the base without breaking compatibility.
 
@@ -94,7 +94,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 - **Entity**: A named thing (person, organization, technology, concept, or file) that can participate in relationships.
 - **Relationship**: A typed, directed connection between two entities or between a memory and an entity.
 - **Namespace**: A hierarchical scope for organizing memories (e.g., `org/user/project/session`).
-- **Vault**: A collection of MIF files, analogous to an Obsidian vault.
+- **Bundle**: A collection of MIF files organized as a unit.
 - **Provider**: An AI memory system that can import or export MIF format.
 
 ---
@@ -105,34 +105,24 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 MIF defines two equivalent representations:
 
-1. **Markdown Format** (`.md`): Human-readable, Obsidian-compatible
+1. **Markdown Format** (`.md`): Human-readable, plain CommonMark
 2. **JSON-LD Format** (`.jsonld`): Machine-processable, semantically linked
 
 Both representations MUST be losslessly convertible to each other. A conforming implementation MAY support either or both formats.
 
-### 2.2 Obsidian Compatibility
+### 2.2 Markdown Conventions
 
-The Markdown format MUST be valid Obsidian notes, ensuring files work in Obsidian vaults without modification while remaining readable in any text editor or Markdown processor.
+The Markdown format is plain, vendor-neutral CommonMark — readable in any text editor or Markdown processor, and tied to no single tool. It uses a small set of conventions:
 
-#### Required Obsidian Features
+- **YAML Frontmatter**: Structured metadata at the top of files, enclosed in `---` delimiters, supporting typed fields (text, number, date, list).
 
-- **YAML Frontmatter**: Structured metadata at the top of files, enclosed in `---` delimiters. Obsidian's Properties panel reads and writes this data, supporting typed fields (text, number, date, checkbox, list).
+- **Relationships**: Typed relationships are authoritative in frontmatter `relationships[]` and mirrored in the body as standard markdown links (see 5.3).
 
-- **Wiki-Links**: Internal links using double-bracket syntax `[[Target Note]]` enable bidirectional linking. Obsidian automatically tracks backlinks, enabling graph visualization and relationship discovery. Links can include display text `[[Target|Display Text]]` and heading anchors `[[Target#Heading]]`.
-
-- **Block References**: Unique identifiers (`^block-id`) attached to paragraphs, list items, or other blocks enable granular linking and transclusion. References like `[[Note#^block-id]]` link to specific content within a file.
-
-- **Aliases**: The `aliases` frontmatter property allows notes to be found and linked using alternative names, improving discoverability.
+- **Aliases**: The `aliases` frontmatter property lets a memory be referred to by alternative names.
 
 - **Tags**: Both inline `#tags` and frontmatter `tags: [a, b]` are supported, with hierarchical tags using forward slashes (`#category/subcategory`).
 
-- **Standard Markdown**: All content uses CommonMark-compatible Markdown, ensuring portability to other tools and platforms.
-
-#### Optional Obsidian Extensions
-
-- **Callouts**: Admonition blocks using `> [!type]` syntax for notes, warnings, tips, etc.
-- **Embeds**: Transclusion using `![[Note]]` to embed content from other files
-- **Dataview Queries**: Compatible with Dataview plugin for vault-as-database queries
+- **Standard Markdown**: All content uses CommonMark-compatible Markdown, ensuring portability across tools and platforms.
 
 ### 2.3 Semantic Web Compatibility
 
@@ -187,12 +177,12 @@ dark-mode-preference.md
 
 ### 3.3 Directory Structure
 
-A MIF vault SHOULD follow this structure:
+A MIF bundle SHOULD follow this structure:
 
 ```text
-vault/
+bundle/
 ├── .mif/                           # MIF configuration
-│   ├── config.yaml                 # Vault configuration
+│   ├── config.yaml                 # Bundle configuration
 │   ├── context.jsonld              # Local JSON-LD context
 │   └── entities/                   # Entity definitions
 │       ├── person/
@@ -395,13 +385,8 @@ Memory content in Markdown format.
 
 ## Relationships (optional section)
 
-- relates-to [[Other Memory]]
-- derived-from [[Source Memory]]
-
-## Entities (optional section)
-
-- mentions @[[Person Name]]
-- uses @[[Technology Name]]
+- relates-to [Other Memory](/semantic/other-memory.md)
+- derived-from [Source Memory](/episodic/source-memory.md)
 ```
 
 ### 5.2 Frontmatter Schema
@@ -469,46 +454,25 @@ extensions:
 ---
 ```
 
-### 5.3 Wiki-Link Syntax
+### 5.3 Relationship Syntax
 
-MIF extends Obsidian wiki-link syntax for typed relationships:
-
-```markdown
-# Basic link (RelatesTo relationship)
-[[Other Memory]]
-
-# Typed relationship
-[[Other Memory|derives-from]]
-[[Other Memory|supersedes]]
-
-# Entity reference (prefixed with @)
-@[[Person Name]]
-@[[Technology Name|uses]]
-
-# Block reference
-[[Memory Name#^block-id]]
-
-# With display text
-[[Other Memory|derives-from|"See also"]]
-```
-
-### 5.4 Block References
-
-Blocks can be referenced for granular linking:
+Typed relationships are authoritative in the frontmatter `relationships[]` array and mirrored in the body as standard markdown links under a `## Relationships` section, one per line:
 
 ```markdown
-This is an important statement. ^important-point
+## Relationships
 
-- Key insight about the system ^insight-1
+- relates-to [Other Memory](/semantic/other-memory.md)
+- derived-from [Source Incident](/episodic/source-incident.md)
+- supersedes [Old Policy](/semantic/old-policy.md)
 ```
 
-Referenced as: `[[Memory Name#^important-point]]`
+Each line is `- <type> [Text](<target>)`, where `<type>` is a kebab-case relationship type and `<target>` is a bundle-relative path to the target concept or a `urn:mif:` identifier (see 8). Entity references are declared in the frontmatter `entities[]` array (see 7.5).
 
-### 5.5 Citations (Level 3)
+### 5.4 Citations (Level 3)
 
 Citations provide structured references to external sources that inform, support, or relate to the memory content. Citations are a Level 3 (Full) optional feature.
 
-#### 5.5.1 Frontmatter Schema
+#### 5.4.1 Frontmatter Schema
 
 ```yaml
 # === OPTIONAL: Citations (Level 3) ===
@@ -517,28 +481,28 @@ citations:
     title: "Memory Systems in AI Agents"   # REQUIRED: Citation title
     url: https://arxiv.org/abs/2024.12345  # REQUIRED: Valid URL
     role: supports                         # REQUIRED: Relationship to memory
-    author: "@[[Jane Smith|Person]]"       # OPTIONAL: Entity ref or text
+    author: "Jane Smith"                   # OPTIONAL: EntityReference or text
     date: 2024-06-15                       # OPTIONAL: Publication date
     accessed: 2026-01-20                   # OPTIONAL: Access date
     relevance: 0.95                        # OPTIONAL: Relevance score (0-1)
     note: "Foundational paper on semantic memory"  # OPTIONAL: Annotation
 ```
 
-#### 5.5.2 Citation Fields
+#### 5.4.2 Citation Fields
 
 | Field | Required | Type | Description |
 | --- | --- | --- | --- |
-| `type` | REQUIRED | Enum | Source category (see 5.5.3) |
+| `type` | REQUIRED | Enum | Source category (see 5.4.3) |
 | `title` | REQUIRED | String | Citation title |
 | `url` | REQUIRED | URI | Valid URL or URI |
-| `role` | REQUIRED | Enum | Relationship to memory (see 5.5.4) |
+| `role` | REQUIRED | Enum | Relationship to memory (see 5.4.4) |
 | `author` | OPTIONAL | String | Entity reference or plain text |
 | `date` | OPTIONAL | Date | Publication date (ISO 8601) |
 | `accessed` | OPTIONAL | Date | Access date (ISO 8601) |
 | `relevance` | OPTIONAL | Decimal | Relevance score (0.0-1.0) |
 | `note` | OPTIONAL | String | Free-form annotation |
 
-#### 5.5.3 Citation Types
+#### 5.4.3 Citation Types
 
 | Type | Description | Example |
 | --- | --- | --- |
@@ -557,7 +521,7 @@ citations:
 
 Custom types MAY use namespace prefixes: `acme:internal-memo`, `research:lab-notes`
 
-#### 5.5.4 Citation Roles
+#### 5.4.4 Citation Roles
 
 | Role | Description | Use Case |
 | --- | --- | --- |
@@ -574,46 +538,56 @@ Custom types MAY use namespace prefixes: `acme:internal-memo`, `research:lab-not
 
 Custom roles MAY use namespace prefixes: `research:replicates`, `legal:cites-precedent`
 
-#### 5.5.5 Body Section Syntax
+#### 5.4.5 Body Section Syntax
 
 An optional `## Citations` section MAY appear in the memory body for detailed annotations. When present, corresponding entries MUST exist in frontmatter.
 
 ```markdown
 ## Citations
 
-- [Memory Systems in AI Agents](https://arxiv.org/abs/2024.12345) by @[[Jane Smith|Person]] (2024)
+- [Memory Systems in AI Agents](https://arxiv.org/abs/2024.12345) by Jane Smith (2024)
   - **Type**: article
   - **Role**: supports
   - **Relevance**: 0.95
   - Foundational paper on semantic memory structures. Introduces bi-temporal
     model that informed MIF's temporal design.
 
-- [Obsidian Help](https://help.obsidian.md/) by @[[Obsidian Team|Organization]]
+- [JSON-LD 1.1](https://www.w3.org/TR/json-ld11/) by W3C
   - **Type**: documentation
   - **Role**: background
   - **Accessed**: 2026-01-18
-  - Reference for wiki-link syntax and block references.
+  - Reference for the JSON-LD projection format.
 ```
 
-#### 5.5.6 Author Entity References
+#### 5.4.6 Author Entity References
 
-Authors MAY use wiki-link syntax to reference MIF entities:
+A citation `author` MAY be plain text or one or more `EntityReference` objects (see 7.5):
 
 ```yaml
-# Single author entity
-author: "@[[Jane Smith|Person]]"
-
-# Multiple authors (comma-separated)
-author: "@[[Jane Smith|Person]], @[[John Doe|Person]]"
-
-# Organization author
-author: "@[[Anthropic|Organization]]"
-
-# Plain text (no entity reference)
+# Plain text
 author: "Jane Smith et al."
+
+# Single author as an entity reference
+author:
+  "@type": EntityReference
+  entity:
+    "@id": urn:mif:entity:person:jane-smith
+  entityType: Person
+  name: Jane Smith
+
+# Multiple authors
+author:
+  - "@type": EntityReference
+    entity: { "@id": urn:mif:entity:person:jane-smith }
+    entityType: Person
+    name: Jane Smith
+  - "@type": EntityReference
+    entity: { "@id": urn:mif:entity:organization:anthropic }
+    entityType: Organization
+    name: Anthropic
 ```
 
-#### 5.5.7 Citation Validation
+#### 5.4.7 Citation Validation
 
 Implementations SHOULD validate citations according to these rules:
 
@@ -621,16 +595,16 @@ Implementations SHOULD validate citations according to these rules:
 
 | Field | Constraint |
 | --- | --- |
-| `type` | MUST be a value from Section 5.5.3 or a custom namespaced type (e.g., `acme:memo`) |
+| `type` | MUST be a value from Section 5.4.3 or a custom namespaced type (e.g., `acme:memo`) |
 | `title` | MUST be a non-empty string |
 | `url` | MUST be a valid URI (http, https, or custom schemes) |
-| `role` | MUST be a value from Section 5.5.4 or a custom namespaced role (e.g., `legal:precedent`) |
+| `role` | MUST be a value from Section 5.4.4 or a custom namespaced role (e.g., `legal:precedent`) |
 
 ##### Optional Field Constraints
 
 | Field | Constraint |
 | --- | --- |
-| `author` | SHOULD be entity reference(s) `@[[Name\|Type]]` or plain text; multiple authors comma-separated |
+| `author` | SHOULD be an `EntityReference` (or array of them) or plain text |
 | `date` | MUST be ISO 8601 date format (`YYYY-MM-DD`) |
 | `accessed` | MUST be ISO 8601 date format (`YYYY-MM-DD`) |
 | `relevance` | MUST be decimal between 0.0 and 1.0 inclusive |
@@ -863,7 +837,7 @@ MIF provides an **extensible entity type system**. Implementations SHOULD suppor
 
 ### 7.1 Entity Type Architecture
 
-Entity types are **not hard-coded**. They are defined in vault configuration and can be extended per-project:
+Entity types are **not hard-coded**. They are defined in bundle configuration and can be extended per-project:
 
 ```yaml
 # .mif/config.yaml
@@ -987,14 +961,22 @@ properties:
 
 ### 7.5 Entity References in Memories
 
-#### Markdown
+Entity references are declared in the frontmatter `entities[]` array as `EntityReference` objects.
 
-```markdown
-## Entities
+#### Frontmatter
 
-- mentions @[[Jane Doe]]
-- uses @[[Python|Technology]]
-- about @[[Dark Mode|Concept]]
+```yaml
+entities:
+  - "@type": EntityReference
+    entity: { "@id": urn:mif:entity:person:jane-doe }
+    entityType: Person
+    name: Jane Doe
+    role: mentions
+  - "@type": EntityReference
+    entity: { "@id": urn:mif:entity:technology:python }
+    entityType: Technology
+    name: Python
+    role: uses
 ```
 
 #### JSON-LD
@@ -1017,7 +999,7 @@ MIF provides an **extensible relationship type system**. Implementations SHOULD 
 
 ### 8.1 Relationship Type Architecture
 
-Relationship types are **not hard-coded**. They are defined in vault configuration and can be extended per-project:
+Relationship types are **not hard-coded**. They are defined in bundle configuration and can be extended per-project:
 
 ```yaml
 # .mif/config.yaml
@@ -1144,19 +1126,19 @@ relationship_types:
 
 #### Markdown syntax
 
-Relationships use a simple `type [[target]]` format in a dedicated section:
+Relationships are mirrored in the body as standard markdown links under a `## Relationships` section:
 
 ```markdown
 ## Relationships
 
-- relates-to [[Other Memory]]
-- derived-from [[Source Memory]]
-- supersedes [[Old Memory]]
-- conflicts-with [[Contradicting Memory]]
-- part-of [[Parent Memory]]
+- relates-to [Other Memory](/semantic/other-memory.md)
+- derived-from [Source Memory](/episodic/source-memory.md)
+- supersedes [Old Memory](/semantic/old-memory.md)
+- conflicts-with [Contradicting Memory](/semantic/contradicting-memory.md)
+- part-of [Parent Memory](/semantic/parent-memory.md)
 ```
 
-The relationship type name is converted to kebab-case in Markdown. The target uses wiki-link syntax `[[]]` which resolves to the memory's `@id` or title.
+Each line is `- <type> [Text](<target>)`. The type is a kebab-case token; the target is a bundle-relative path to the target concept or a `urn:mif:` identifier. The frontmatter `relationships[]` array is authoritative; the body links are its OKF-legible mirror.
 
 #### JSON-LD schema
 
@@ -1738,7 +1720,7 @@ provenance:
 
 - `id`, `type`, `content`, `created` fields
 - Valid Markdown or JSON-LD structure
-- Basic wiki-link syntax
+- Standard markdown-link relationship syntax
 
 ### 13.2 Level 2: Standard (RECOMMENDED)
 
@@ -1802,22 +1784,17 @@ new major version of the specification.
 
 ### 15.1 Markdown to JSON-LD
 
-1. Parse YAML frontmatter as structured data
+1. Parse YAML frontmatter as structured data (including `relationships[]` and `entities[]`)
 2. Map frontmatter properties to JSON-LD using context
-3. Parse Markdown content for:
-   - Wiki-links → `relationships` array
-   - Entity references (@[[...]]) → `entities` array
-   - Block references (^id) → fragment identifiers
+3. Parse the body `## Relationships` section: each `- <type> [Text](<target>)` line maps to a `relationships` entry (reconciled with the authoritative frontmatter array)
 4. Convert body content to `content` field
 
 ### 15.2 JSON-LD to Markdown
 
-1. Generate YAML frontmatter from JSON-LD properties
+1. Generate YAML frontmatter from JSON-LD properties (including `relationships[]` and `entities[]`)
 2. Set first `title` or H1 from `dc:title`
 3. Convert `content` to Markdown body
-4. Append "## Relationships" section from `relationships`
-5. Append "## Entities" section from `entities`
-6. Convert `@id` URIs to wiki-links
+4. Append a "## Relationships" section, rendering each relationship as `- <type> [Text](<target>)`
 
 ### 15.3 Example Conversion
 
@@ -1851,7 +1828,7 @@ User prefers dark mode
 
 ## Relationships
 
-- relates-to [[ui-prefs]]
+- relates-to [ui-prefs](urn:mif:ui-prefs)
 ```
 
 ### 15.4 Citations Conversion
@@ -1862,8 +1839,8 @@ User prefers dark mode
 2. For each citation:
    - Map `type` → `citationType` vocabulary term
    - Map `role` → `citationRole` vocabulary term
-   - Resolve `@[[Entity|Type]]` author refs → entity URIs
-   - For multiple authors (comma-separated), convert to array of author objects
+   - Resolve `EntityReference` author objects → entity URIs
+   - For multiple authors (an array), convert to an array of author objects
    - Convert dates to ISO 8601 format
 3. If `## Citations` body section exists:
    - Parse markdown links for title/url
@@ -1874,7 +1851,7 @@ User prefers dark mode
 #### JSON-LD to Markdown
 
 1. Generate frontmatter `citations` array from JSON-LD
-2. Convert entity URIs to wiki-link syntax
+2. Convert entity URIs to `EntityReference` objects
 3. If any citation has `note` exceeding 100 characters:
    - Create `## Citations` body section
    - Format as markdown list with metadata
@@ -1888,7 +1865,11 @@ citations:
     title: "Research Paper"
     url: https://example.com/paper
     role: supports
-    author: "@[[Jane Smith|Person]]"
+    author:
+      "@type": EntityReference
+      entity: { "@id": urn:mif:entity:person:jane-smith }
+      entityType: Person
+      name: Jane Smith
 ```
 
 Converts to:
@@ -1952,6 +1933,19 @@ namespace: _semantic/decisions
 tags:
   - frontend
   - architecture
+entities:
+  - "@type": EntityReference
+    entity: { "@id": urn:mif:entity:technology:react }
+    entityType: Technology
+    name: React
+  - "@type": EntityReference
+    entity: { "@id": urn:mif:entity:technology:vuejs }
+    entityType: Technology
+    name: Vue.js
+  - "@type": EntityReference
+    entity: { "@id": urn:mif:entity:organization:project-x }
+    entityType: Organization
+    name: Project X
 ---
 
 # Use React over Vue for the dashboard
@@ -1975,14 +1969,8 @@ We will use React because:
 
 ## Relationships
 
-- relates-to [[frontend-architecture]]
-- supersedes [[vue-exploration]]
-
-## Entities
-
-- @[[React|Technology]]
-- @[[Vue.js|Technology]]
-- @[[Project X|Organization]]
+- relates-to [Frontend Architecture](/semantic/frontend-architecture.md)
+- supersedes [Vue Exploration](/semantic/vue-exploration.md)
 ```
 
 ### 16.3 Full Memory (Level 3)
@@ -2113,26 +2101,38 @@ extensions:
 
 | Markdown Syntax | JSON-LD `type` | Description |
 | --- | --- | --- |
-| `[[X]]` | `relates-to` | General relationship |
-| `[[X\|derived-from]]` | `derived-from` | Created from source |
-| `[[X\|supersedes]]` | `supersedes` | Replaces older |
-| `[[X\|conflicts-with]]` | `conflicts-with` | Contradicts |
-| `[[X\|part-of]]` | `part-of` | Component of |
-| `[[X\|implements]]` | `implements` | Realizes |
-| `[[X\|uses]]` | `uses` | Utilizes |
-| `[[X\|created-by]]` | `created-by` | Authored by |
-| `[[X\|mentioned-in]]` | `mentioned-in` | Referenced in |
+| `- relates-to [X](<target>)` | `relates-to` | General relationship |
+| `- derived-from [X](<target>)` | `derived-from` | Created from source |
+| `- supersedes [X](<target>)` | `supersedes` | Replaces older |
+| `- conflicts-with [X](<target>)` | `conflicts-with` | Contradicts |
+| `- part-of [X](<target>)` | `part-of` | Component of |
+| `- implements [X](<target>)` | `implements` | Realizes |
+| `- uses [X](<target>)` | `uses` | Utilizes |
+| `- created-by [X](<target>)` | `created-by` | Authored by |
+| `- mentioned-in [X](<target>)` | `mentioned-in` | Referenced in |
 
 ---
 
 ## Appendix C: Entity Reference Syntax
 
-| Markdown | Meaning |
-| --- | --- |
-| `@[[Name]]` | Reference entity by name |
-| `@[[Name\|Person]]` | Reference with explicit type |
-| `@[[Name\|uses]]` | Reference with relationship |
-| `@[[Name\|Technology\|uses]]` | Type and relationship |
+Entity references are declared in the frontmatter `entities[]` array as `EntityReference` objects:
+
+| Field | Required | Meaning |
+| --- | --- | --- |
+| `@type` | REQUIRED | Always `EntityReference` |
+| `entity.@id` | REQUIRED | Entity URN (`urn:mif:entity:<type>:<slug>`) |
+| `entityType` | OPTIONAL | `Person`, `Organization`, `Technology`, `Concept`, `File`, or a custom ontology type |
+| `name` | OPTIONAL | Display name |
+| `role` | OPTIONAL | Role in the memory (e.g. `author`, `mentions`, `uses`) |
+
+```yaml
+entities:
+  - "@type": EntityReference
+    entity: { "@id": urn:mif:entity:person:jane-doe }
+    entityType: Person
+    name: Jane Doe
+    role: mentions
+```
 
 ---
 
@@ -2178,7 +2178,7 @@ citations:
     title: "Citation Title"    # REQUIRED
     url: https://example.com   # REQUIRED
     role: supports             # REQUIRED
-    author: "@[[Name|Person]]" # OPTIONAL
+    author: "Author Name"      # OPTIONAL (string or EntityReference)
     date: 2024-06-15           # OPTIONAL
     accessed: 2026-01-20       # OPTIONAL
     relevance: 0.95            # OPTIONAL (0-1)
@@ -2190,7 +2190,7 @@ citations:
 ```markdown
 ## Citations
 
-- [Title](url) by @[[Author|Person]] (date)
+- [Title](url) by Author Name (date)
   - **Type**: article
   - **Role**: supports
   - **Relevance**: 0.95
@@ -2206,7 +2206,7 @@ citations:
 - [Dublin Core Metadata Terms](https://www.dublincore.org/specifications/dublin-core/dcmi-terms/)
 - [W3C PROV-DM](https://www.w3.org/TR/prov-dm/)
 - [ISO 8601: Date and Time Format](https://www.iso.org/iso-8601-date-and-time-format.html)
-- [Obsidian Help](https://help.obsidian.md/)
+- [CommonMark Specification](https://spec.commonmark.org/)
 - [JSON Canvas Specification](https://jsoncanvas.org/)
 
 ---

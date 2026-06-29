@@ -54,7 +54,7 @@ citations:
   title: Modeled Information Format (MIF) Specification
   url: https://github.com/zircote/subcog/blob/main/SPECIFICATION.md
   citationRole: source
-  author: '@[[Robert Allen|Person]]'
+  author: Robert Allen
   date: '2026-01-23'
   accessed: '2026-01-20'
   relevance: 1.0
@@ -64,17 +64,17 @@ citations:
   title: The Case for Portable AI Memory
   url: https://example.com/ai-memory-portability
   citationRole: supports
-  author: '@[[Jane Smith|Person]], @[[John Doe|Person]]'
+  author: Jane Smith, John Doe
   date: '2025-11-15'
   accessed: '2026-01-18'
   relevance: 0.92
   note: Research article supporting vendor-neutral memory formats
 - '@type': Citation
   citationType: documentation
-  title: Obsidian Help Documentation
-  url: https://help.obsidian.md/
+  title: CommonMark Specification
+  url: https://spec.commonmark.org/
   citationRole: background
-  author: '@[[Obsidian Team|Organization]]'
+  author: CommonMark
   accessed: '2026-01-19'
   relevance: 0.85
 - '@type': Citation
@@ -82,7 +82,7 @@ citations:
   title: Bi-temporal Data Models in Knowledge Systems
   url: https://arxiv.org/abs/2024.54321
   citationRole: methodology
-  author: '@[[Research Group|Organization]]'
+  author: Research Group
   date: '2024-08-20'
   relevance: 0.78
   note: Theoretical foundation for MIF's temporal model
@@ -91,7 +91,7 @@ citations:
   title: Subcog Memory System
   url: https://github.com/zircote/subcog
   citationRole: extends
-  author: '@[[Robert Allen|Person]]'
+  author: Robert Allen
   accessed: '2026-01-20'
   relevance: 0.88
 documents:
@@ -110,6 +110,27 @@ extensions:
   subcog:
     domain: architecture
     hash: sha256:7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a
+entities:
+- "@type": EntityReference
+  entity:
+    "@id": urn:mif:entity:technology:mif
+  entityType: Technology
+  name: MIF
+- "@type": EntityReference
+  entity:
+    "@id": urn:mif:entity:technology:subcog
+  entityType: Technology
+  name: Subcog
+- "@type": EntityReference
+  entity:
+    "@id": urn:mif:entity:technology:json-ld
+  entityType: Technology
+  name: JSON-LD
+- "@type": EntityReference
+  entity:
+    "@id": urn:mif:entity:organization:engineering-architecture-team
+  entityType: Organization
+  name: Engineering Architecture Team
 ---
 
 # Adopt MIF for AI Memory Portability
@@ -125,7 +146,7 @@ We will adopt the **Modeled Information Format (MIF)** as our standard for AI me
 ### Key Factors
 
 1. **Dual Representation**: MIF provides both human-readable Markdown and machine-processable JSON-LD formats
-2. **Obsidian Compatibility**: Direct integration with our existing knowledge management workflows
+2. **Plain-Markdown Compatibility**: Works in any Markdown editor, integrating with our existing knowledge management workflows
 3. **Semantic Web Support**: JSON-LD enables RDF tooling and semantic queries
 4. **Local-First**: No cloud dependencies, full data ownership
 5. **Extensibility**: Custom properties without breaking compatibility
@@ -136,7 +157,7 @@ We will adopt the **Modeled Information Format (MIF)** as our standard for AI me
 
 - Memories portable between AI providers
 - Human-readable format for manual review and editing
-- Compatible with existing Obsidian vaults
+- Works in any Markdown editor
 - Future-proof with semantic web standards
 
 ### Negative
@@ -159,31 +180,23 @@ We will adopt the **Modeled Information Format (MIF)** as our standard for AI me
 - part-of [Platform Architecture Decisions](/platform-architecture-decisions.md)
 - implements [Memory Portability Requirement](/memory-portability-requirement.md)
 
-## Entities
-
-- @[[MIF|Technology]]
-- @[[Subcog|Technology]]
-- @[[Obsidian|Technology]]
-- @[[JSON-LD|Technology]]
-- @[[Engineering Architecture Team|Organization]]
-
 ## Citations
 
-- [Modeled Information Format (MIF) Specification](https://github.com/zircote/subcog/blob/main/SPECIFICATION.md) by @[[Robert Allen|Person]] (2026)
+- [Modeled Information Format (MIF) Specification](https://github.com/zircote/subcog/blob/main/SPECIFICATION.md) by Robert Allen (2026)
   - **Type**: specification
   - **Role**: source
   - **Relevance**: 1.0
   - Primary specification document defining the format we are adopting. This is the authoritative
     source for MIF structure, conformance levels, and implementation requirements.
 
-- [The Case for Portable AI Memory](https://example.com/ai-memory-portability) by @[[Jane Smith|Person]], @[[John Doe|Person]] (2025)
+- [The Case for Portable AI Memory](https://example.com/ai-memory-portability) by Jane Smith, John Doe (2025)
   - **Type**: article
   - **Role**: supports
   - **Relevance**: 0.92
   - Research article arguing for vendor-neutral memory formats in AI systems. Provides empirical
     evidence for productivity gains and reduced lock-in risks.
 
-- [Bi-temporal Data Models in Knowledge Systems](https://arxiv.org/abs/2024.54321) by @[[Research Group|Organization]] (2024)
+- [Bi-temporal Data Models in Knowledge Systems](https://arxiv.org/abs/2024.54321) by Research Group (2024)
   - **Type**: paper
   - **Role**: methodology
   - **Relevance**: 0.78

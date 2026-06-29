@@ -24,6 +24,14 @@ fills OKF's deliberately empty envelope. AI memory becomes the first domain
   `relationships` array **and** mirrored as OKF-legible body markdown links in a
   `## Relationships` section (`- <type> [Text](/path/target.md)`). Obsidian
   wiki-links are no longer the canonical edge representation.
+- **[Format]**: Removed all Obsidian-specific conventions for vendor neutrality
+  (ADR-017, superseding ADR-003) — wiki-link relationships (`[[...]]`),
+  `@[[Name|Type]]` entity references, block references, and embeds, plus the
+  Obsidian-compatibility positioning. Relationships use markdown links; entity
+  references use frontmatter `EntityReference` objects. The `blocks` field is
+  removed from the schema and converter; existing data still carrying a `blocks`
+  object continues to validate (the concept object permits additional
+  properties).
 - **[Identity]**: `id` MUST be a UUID (OKF concept ID is the path; the UUID is
   MIF's stable, location-independent identity). Legacy slug ids migrate to a
   deterministic UUIDv5 with the slug preserved as an `alias`.

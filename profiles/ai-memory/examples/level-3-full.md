@@ -62,6 +62,27 @@ extensions:
   subcog:
     domain: user
     hash: sha256:4c04b32ddc2053b5a8f9e2d1c0b7a6e5d4c3b2a1
+entities:
+- "@type": EntityReference
+  entity:
+    "@id": urn:mif:entity:person:jane-doe
+  entityType: Person
+  name: Jane Doe
+- "@type": EntityReference
+  entity:
+    "@id": urn:mif:entity:technology:vs-code
+  entityType: Technology
+  name: VS Code
+- "@type": EntityReference
+  entity:
+    "@id": urn:mif:entity:concept:dark-mode
+  entityType: Concept
+  name: Dark Mode
+- "@type": EntityReference
+  entity:
+    "@id": urn:mif:entity:concept:accessibility
+  entityType: Concept
+  name: Accessibility
 ---
 
 # Dark Mode UI Preference
@@ -99,10 +120,3 @@ This preference has been confirmed multiple times:
 - relates-to [Ide Configuration Preferences](/ide-configuration-preferences.md)
 - relates-to [Terminal Setup](/terminal-setup.md)
 - part-of [User Jane Doe Profile](/user-jane-doe-profile.md)
-
-## Entities
-
-- @[[Jane Doe|Person]]
-- @[[VS Code|Technology]]
-- @[[Dark Mode|Concept]]
-- @[[Accessibility|Concept]]

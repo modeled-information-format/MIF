@@ -55,7 +55,7 @@ User prefers dark mode
 
 ### Citations Conversion
 
-`citations` is authored in frontmatter in its final shape and passes through to the JSON-LD projection verbatim (it is part of the converter's passthrough set, so the frontmatter and projection forms are identical). Each entry is a `Citation` object: `@type`, `citationType`, `citationRole`, `title`, and `url` are required; `author`, `date`, `accessed`, `relevance`, and `note` are optional. The `author` value is a wiki-link string and is preserved as written. Any `## Citations` body mirror is authored content carried inside `content`.
+`citations` is authored in frontmatter in its final shape and passes through to the JSON-LD projection verbatim (it is part of the converter's passthrough set, so the frontmatter and projection forms are identical). Each entry is a `Citation` object: `@type`, `citationType`, `citationRole`, `title`, and `url` are required; `author`, `date`, `accessed`, `relevance`, and `note` are optional. The `author` value is plain text or an `EntityReference` and is preserved as written. Any `## Citations` body mirror is authored content carried inside `content`.
 
 **Example (frontmatter, identical in the JSON-LD projection):**
 
@@ -66,7 +66,7 @@ citations:
     citationRole: supports
     title: "Research Paper"
     url: https://example.com/paper
-    author: "@[[Jane Smith|Person]]"
+    author: "Jane Smith"
     date: "2025-11-15"
     accessed: "2026-01-18"
     relevance: 0.92

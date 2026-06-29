@@ -7,7 +7,7 @@ MIF provides an **extensible entity type system**. Implementations SHOULD suppor
 
 ### Entity Type Architecture
 
-Entity types are **not hard-coded**. They are defined in vault configuration and can be extended per-project:
+Entity types are **not hard-coded**. They are defined in bundle configuration and can be extended per-project:
 
 ```yaml
 # .mif/config.yaml
@@ -159,14 +159,22 @@ properties:
 
 ### Entity References in Memories
 
-**Markdown:**
+Entity references are declared in the frontmatter `entities[]` array as `EntityReference` objects.
 
-```markdown
-## Entities
+**Frontmatter:**
 
-- mentions @[[Jane Doe]]
-- uses @[[Python|Technology]]
-- about @[[Dark Mode|Concept]]
+```yaml
+entities:
+  - "@type": EntityReference
+    entity: { "@id": urn:mif:entity:person:jane-doe }
+    entityType: Person
+    name: Jane Doe
+    role: mentions
+  - "@type": EntityReference
+    entity: { "@id": urn:mif:entity:technology:python }
+    entityType: Technology
+    name: Python
+    role: uses
 ```
 
 **JSON-LD:**

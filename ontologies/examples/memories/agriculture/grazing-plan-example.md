@@ -13,6 +13,12 @@ tags:
 relationships:
 - type: documents
   target: /herd-beef-main.md
+- type: located-on
+  target: /field-pasture-north.md
+- type: located-on
+  target: /field-pasture-south.md
+- type: contributes-to
+  target: /carbon-credit-2026.md
 temporal:
   '@type': TemporalMetadata
   validFrom: '2026-04-01T00:00:00Z'
@@ -101,6 +107,6 @@ Check weekly:
 ## Relationships
 
 - documents [Herd Beef Main](/herd-beef-main.md)
-- located-on [[field-pasture-north]]
-- located-on [[field-pasture-south]]
-- contributes-to [[carbon-credit-2026]]
+- located-on [Field Pasture North](/field-pasture-north.md)
+- located-on [Field Pasture South](/field-pasture-south.md)
+- contributes-to [Carbon Credit 2026](/carbon-credit-2026.md)

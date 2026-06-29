@@ -26,7 +26,7 @@ A MIF bundle is a directory tree of `.md` concept files — **a valid OKF
 bundle**. Markdown is the canonical representation; JSON-LD is a derived,
 regenerable projection.
 
-- **Markdown** (`.md`) — canonical, human-readable, Obsidian-compatible.
+- **Markdown** (`.md`) — canonical, human-readable, plain CommonMark.
 - **JSON-LD** (`*.jsonld`, derived) — machine-processable, semantically linked,
   regenerated from markdown with `scripts/mif_convert.py`.
 
@@ -162,7 +162,6 @@ definition of every property is [`schema/mif.schema.json`](./schema/mif.schema.j
 | `tags` | Classification tags | [Basic metadata](./docs/SCHEMA-REFERENCE.md#basic-metadata) |
 | `aliases` | Alternative names for the memory | [Basic metadata](./docs/SCHEMA-REFERENCE.md#basic-metadata) |
 | `properties` | First-class scalar key/value pairs with no concept target | [Basic metadata](./docs/SCHEMA-REFERENCE.md#basic-metadata) |
-| `blocks` | Named block references (`^block-id`) with their text, for granular linking | [Basic metadata](./docs/SCHEMA-REFERENCE.md#basic-metadata) |
 | `ontology` | Reference to the ontology this memory conforms to | [Ontology reference](./docs/SCHEMA-REFERENCE.md#ontology-reference) |
 | `entity` | Structured entity data for ontology-typed memories | [Entities](./docs/SCHEMA-REFERENCE.md#entities) |
 | `entities` | Referenced entities (people, orgs, technologies, …) | [Entities](./docs/SCHEMA-REFERENCE.md#entities) |

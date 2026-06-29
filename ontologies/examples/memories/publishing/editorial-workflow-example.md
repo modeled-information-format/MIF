@@ -10,6 +10,11 @@ tags:
 - workflow
 - mathematics
 - production
+relationships:
+- type: applies-to
+  target: /program-into-math.md
+- type: owned-by
+  target: /editorial-team-math.md
 temporal:
   '@type': TemporalMetadata
   validFrom: '2026-01-01T00:00:00Z'
@@ -171,5 +176,5 @@ Month:  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20
 
 ## Relationships
 
-- applies-to [[program-into-math]]
-- owned-by [[editorial-team-math]]
+- applies-to [Program Into Math](/program-into-math.md)
+- owned-by [Editorial Team Math](/editorial-team-math.md)

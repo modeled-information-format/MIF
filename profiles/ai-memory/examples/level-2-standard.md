@@ -20,6 +20,27 @@ relationships:
   target: /frontend-architecture-standards.md
 - type: part-of
   target: /project-x-technical-decisions.md
+entities:
+- "@type": EntityReference
+  entity:
+    "@id": urn:mif:entity:technology:react
+  entityType: Technology
+  name: React
+- "@type": EntityReference
+  entity:
+    "@id": urn:mif:entity:technology:typescript
+  entityType: Technology
+  name: TypeScript
+- "@type": EntityReference
+  entity:
+    "@id": urn:mif:entity:technology:vue-js
+  entityType: Technology
+  name: Vue.js
+- "@type": EntityReference
+  entity:
+    "@id": urn:mif:entity:concept:project-x-dashboard
+  entityType: Concept
+  name: Project X Dashboard
 ---
 
 # Use React for Dashboard Frontend
@@ -51,10 +72,3 @@ We will use **React** with TypeScript for the dashboard frontend.
 - supersedes [Vue Exploration 2025](/vue-exploration-2025.md)
 - relates-to [Frontend Architecture Standards](/frontend-architecture-standards.md)
 - part-of [Project X Technical Decisions](/project-x-technical-decisions.md)
-
-## Entities
-
-- @[[React|Technology]]
-- @[[TypeScript|Technology]]
-- @[[Vue.js|Technology]]
-- @[[Project X Dashboard|Concept]]

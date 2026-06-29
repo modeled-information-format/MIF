@@ -8,9 +8,10 @@ tags:
   - markdown
   - compatibility
   - wiki-links
-status: accepted
+status: superseded
+superseded_by: ADR-017-revert-obsidian-compatibility.md
 created: 2026-01-27
-updated: 2026-06-18
+updated: 2026-06-29
 author: MIF Maintainers
 project: MIF
 technologies:
@@ -20,6 +21,7 @@ audience:
   - developers
   - architects
 related:
+  - ADR-017-revert-obsidian-compatibility.md
   - ADR-002-dual-format-design.md
   - ADR-005-underscore-namespace-prefix.md
 ---
@@ -28,7 +30,16 @@ related:
 
 ## Status
 
-Accepted
+Superseded by [ADR-017](ADR-017-revert-obsidian-compatibility.md).
+
+The Obsidian-specific conventions decided here — wiki-link relationships,
+`@[[Name|Type]]` entity references, block references, and embeds — were never
+implemented by the canonical tooling (the OKF conformance gate requires
+markdown-link relationships; entity references are frontmatter `EntityReference`
+objects), so documenting them created a spec-versus-implementation contradiction
+(issue #183). ADR-017 reverts them. YAML frontmatter, plain-text/local-first
+storage, and folder-as-namespace are retained there. The original decision is
+preserved below for the record.
 
 ## Context
 
