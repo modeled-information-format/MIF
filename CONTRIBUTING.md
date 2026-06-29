@@ -67,7 +67,7 @@ When adding examples:
 - Use language tags on all code blocks
 - Ensure JSON is valid and parseable
 - Ensure YAML frontmatter is valid
-- Ensure relationship markdown links use the `- <type> [Text](/path.md)` form
+- Ensure relationship markdown links use the `- <type> [Text](<target>)` form, where `<target>` is a bundle-relative path (`/path.md`) or a `urn:mif:` identifier
 
 ## Style Guide
 

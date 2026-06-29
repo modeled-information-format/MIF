@@ -1854,11 +1854,8 @@ User prefers dark mode
 
 #### JSON-LD to Markdown
 
-1. Generate frontmatter `citations` array from JSON-LD
-2. Convert entity URIs to `EntityReference` objects
-3. If any citation has `note` exceeding 100 characters:
-   - Create `## Citations` body section
-   - Format as markdown list with metadata
+1. Write the `citations` array back to frontmatter verbatim — each entry is already a `Citation` object (`@type: Citation`, `citationType`, `citationRole`, ...) with `author` as plain text or an `EntityReference`; the converter performs no rewriting.
+2. Any `## Citations` body section is authored content carried inside `content` and is preserved unchanged.
 
 #### Example
 
