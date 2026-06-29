@@ -65,7 +65,6 @@ FRONTMATTER_ORDER = [
     "entities",
     "ontology",
     "entity",
-    "blocks",
     "extensions",
 ]
 
@@ -149,7 +148,6 @@ def md_to_jsonld(frontmatter: dict, body: str) -> dict:
         "entities",
         "ontology",
         "entity",
-        "blocks",
         "extensions",
     ]
     for key in passthrough:
@@ -193,7 +191,6 @@ def jsonld_to_md(jsonld: dict) -> tuple[dict, str]:
         "entities",
         "ontology",
         "entity",
-        "blocks",
         "extensions",
     ]
     for key in passthrough:

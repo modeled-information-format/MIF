@@ -120,6 +120,20 @@ title: "Use PostgreSQL for Data Storage"
 tags:
   - database
   - architecture
+relationships:
+  - type: relates-to
+    target: /semantic/database-requirements.md
+  - type: supersedes
+    target: /semantic/sqlite-investigation.md
+entities:
+  - "@type": EntityReference
+    entity: { "@id": urn:mif:entity:technology:postgresql }
+    entityType: Technology
+    name: PostgreSQL
+  - "@type": EntityReference
+    entity: { "@id": urn:mif:entity:technology:mysql }
+    entityType: Technology
+    name: MySQL
 ---
 
 # Use PostgreSQL for Data Storage
@@ -137,13 +151,8 @@ PostgreSQL for:
 
 ## Relationships
 
-- relates-to [[database-requirements]]
-- supersedes [[sqlite-investigation]]
-
-## Entities
-
-- @[[PostgreSQL|Technology]]
-- @[[MySQL|Technology]]
+- relates-to [Database Requirements](/semantic/database-requirements.md)
+- supersedes [SQLite Investigation](/semantic/sqlite-investigation.md)
 ```
 
 ### Level 3: Full
@@ -184,12 +193,12 @@ citations:
 
 ## Directory Structure
 
-Organize your MIF vault using the three base types:
+Organize your MIF bundle using the three base types:
 
 ```
 my-project/
 ├── .mif/
-│   ├── config.yaml           # Vault configuration
+│   ├── config.yaml           # Bundle configuration
 │   └── entities/             # Entity definitions
 ├── memories/
 │   ├── semantic/             # Facts, concepts, knowledge

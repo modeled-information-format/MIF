@@ -27,7 +27,7 @@ For specification changes:
 Help grow the ecosystem by building:
 - Import/export converters for memory providers
 - Validation tools
-- Editor plugins (Obsidian, VS Code, etc.)
+- Editor plugins and integrations (VS Code, etc.)
 
 ### 4. Validate with JSON Schema
 
@@ -67,7 +67,7 @@ When adding examples:
 - Use language tags on all code blocks
 - Ensure JSON is valid and parseable
 - Ensure YAML frontmatter is valid
-- Test wiki-link syntax in Obsidian if possible
+- Ensure relationship markdown links use the `- <type> [Text](<target>)` form, where `<target>` is a bundle-relative path (`/path.md`) or a `urn:mif:` identifier
 
 ## Style Guide
 

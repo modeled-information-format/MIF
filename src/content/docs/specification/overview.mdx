@@ -14,7 +14,7 @@ OKF compliance is achieved as a **superset, not by subordination**: every MIF bu
 MIF is designed to be:
 - **OKF-compliant**: every bundle is a valid OKF bundle (a tested invariant)
 - **Markdown-canonical**: the `.md` file is the source of truth; JSON-LD is a derived projection
-- **Human-Readable**: valid Obsidian-compatible notes that work in any Markdown editor
+- **Human-Readable**: valid CommonMark notes that work in any Markdown editor
 - **Machine-Processable**: JSON-LD with semantic web compatibility
 - **Extensible**: domain profiles extend the base without breaking compatibility
 
@@ -31,7 +31,6 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 - **Entity**: A named thing (person, organization, technology, concept, or file) that can participate in relationships.
 - **Relationship**: A typed, directed connection between two concepts, or between a concept and an entity.
 - **Namespace**: A hierarchical scope for organizing concepts (e.g., `org/user/project/session`).
-- **Vault**: A collection of MIF files, analogous to an Obsidian vault.
 - **Provider**: An implementation that can import or export MIF format.
 
 ---
@@ -42,34 +41,26 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 MIF defines two representations, with markdown as the canonical source:
 
-1. **Markdown Format** (`.md`): Canonical, human-readable, Obsidian-compatible
+1. **Markdown Format** (`.md`): Canonical, human-readable, plain CommonMark
 2. **JSON-LD Format** (`.jsonld`): Derived, machine-processable, semantically linked
 
 The `.md` file is the source of truth; the JSON-LD form is a derived projection, regenerable from markdown with `scripts/mif_convert.py`. The round trip MUST be lossless. A conforming implementation MAY support either or both formats; if the two disagree, markdown wins.
 
-### Obsidian Compatibility
+### Markdown Conventions
 
-The Markdown format is valid Obsidian-compatible notes, so files work in Obsidian vaults while remaining readable in any text editor or Markdown processor. Concept relationships are expressed as standard bundle-relative markdown links (so a generic OKF consumer sees every edge); Obsidian's bidirectional features remain available for authoring.
+The Markdown format is plain, vendor-neutral CommonMark — readable in any text editor or Markdown processor, and tied to no single tool. Concept relationships are expressed as standard bundle-relative markdown links, so any generic OKF consumer sees every edge.
 
-**Required Markdown Features:**
+**Markdown conventions:**
 
-- **YAML Frontmatter**: Structured metadata at the top of files, enclosed in `---` delimiters. Obsidian's Properties panel reads and writes this data, supporting typed fields (text, number, date, checkbox, list).
+- **YAML Frontmatter**: Structured metadata at the top of files, enclosed in `---` delimiters, supporting typed fields (text, number, date, list).
 
 - **Standard Markdown Links**: Concept-graph edges use bundle-relative markdown links, `[text](/path/to/target.md)`, in a `## Relationships` section — the OKF-legible representation of relationships.
 
-- **Block References**: Unique identifiers (`^block-id`) attached to paragraphs, list items, or other blocks enable granular linking and transclusion within a file.
-
-- **Aliases**: The `aliases` frontmatter property allows notes to be found and linked using alternative names, improving discoverability.
+- **Aliases**: The `aliases` frontmatter property lets a concept be referred to by alternative names.
 
 - **Tags**: Both inline `#tags` and frontmatter `tags: [a, b]` are supported, with hierarchical tags using forward slashes (`#category/subcategory`).
 
-- **Standard Markdown**: All content uses CommonMark-compatible Markdown, ensuring portability to other tools and platforms.
-
-**Optional Obsidian Extensions:**
-
-- **Callouts**: Admonition blocks using `> [!type]` syntax for notes, warnings, tips, etc.
-- **Embeds**: Transclusion using `![[Note]]` to embed content from other files
-- **Dataview Queries**: Compatible with Dataview plugin for vault-as-database queries
+- **Standard Markdown**: All content uses CommonMark-compatible Markdown, ensuring portability across tools and platforms.
 
 ### Semantic Web Compatibility
 

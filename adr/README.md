@@ -16,7 +16,7 @@ ADRs follow the **Structured MADR** format — an extension of [MADR](https://ad
 |-----|-------|--------|-------------|
 | [ADR-001](ADR-001-cognitive-triad-taxonomy.md) | Cognitive Triad Taxonomy | Accepted | Adopts the cognitive triad (semantic, episodic, procedural) as the foundational concept taxonomy — MIF's answer to OKF's absent concept-type system |
 | [ADR-002](ADR-002-dual-format-design.md) | Dual-Format Design (Markdown + JSON-LD) | Accepted | Supports both Markdown and JSON-LD as first-class formats (refined by ADR-011: Markdown is canonical) |
-| [ADR-003](ADR-003-obsidian-compatibility.md) | Obsidian Compatibility | Accepted | Ensures Markdown memories are fully compatible with Obsidian vaults and conventions |
+| [ADR-003](ADR-003-obsidian-compatibility.md) | Obsidian Compatibility | Superseded (by ADR-017) | Originally adopted Obsidian-specific conventions (wiki-links, `@[[]]`, block references); reverted by ADR-017 for vendor neutrality |
 | [ADR-004](ADR-004-three-tier-trait-inheritance.md) | Three-Tier Trait Inheritance | Accepted | Defines a three-level trait inheritance model: mif-base, shared-traits, domain ontologies |
 | [ADR-005](ADR-005-underscore-namespace-prefix.md) | Underscore Namespace Prefix Convention | Accepted | Uses underscore prefix for base-type namespace directories to distinguish from domain content |
 | [ADR-006](ADR-006-entitydata-vs-entityreference.md) | EntityData vs EntityReference | Accepted | Distinguishes inline structured entity data from lightweight entity references |
@@ -30,6 +30,7 @@ ADRs follow the **Structured MADR** format — an extension of [MADR](https://ad
 | [ADR-014](ADR-014-document-reference-not-embed.md) | Document References, Not Embedded Vendor Schema | Accepted | Source documents travel by vendor-neutral `DocumentReference` (pointer + integrity metadata), not by embedding a vendor model like DoclingDocument (reframes issue #77) |
 | [ADR-015](ADR-015-attested-release-orchestration.md) | Attested Release Orchestration | Accepted | Every release is SLSA-attested (provenance + CycloneDX SBOM, fail-closed verify), with the full SAST/DAST/SCA/posture gate suite wired by SHA pin to the org's central reusable workflows |
 | [ADR-016](ADR-016-versioned-schema-mirror-publication.md) | Per-Version Schema Mirror Publication | Accepted | Each release publishes an immutable versioned schema mirror (`/schema/X.Y.Z/`, `latest/`, `vMAJOR/`) served by the doc site, keeping canonical `$id` values unversioned per ADR-007 |
+| [ADR-017](ADR-017-revert-obsidian-compatibility.md) | Revert Obsidian Compatibility | Accepted | Supersedes ADR-003: drops Obsidian-specific notation (wiki-links, `@[[]]`, block references, embeds) for vendor-neutral CommonMark with markdown-link relationships and frontmatter `EntityReference`s |
 
 ## Creating New ADRs
 

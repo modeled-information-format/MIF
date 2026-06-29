@@ -2,8 +2,6 @@
 # https://github.com/artempyanykh/marksman
 
 [core]
-# Wiki-links in example files reference non-existent documents intentionally
-# They demonstrate the MIF relationship and entity reference syntax
-
-# Exclude example directories from wiki-link validation
-# These contain illustrative references, not real documents
+# Relationship markdown links in example files reference illustrative,
+# non-existent documents intentionally — they demonstrate MIF's relationship
+# syntax, not real targets, so unresolved-link findings there are expected.

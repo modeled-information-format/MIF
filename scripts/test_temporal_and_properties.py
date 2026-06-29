@@ -270,7 +270,6 @@ FULL_FRONTMATTER = {
     "entities": [{"name": "Alice"}],
     "ontology": {"id": "mif-base", "version": "1.0.0"},
     "entity": {"name": "Alice Chen", "entity_type": "person"},
-    "blocks": {"b1": "block text"},
     "extensions": {"vendor": {"k": "v"}},
 }
 

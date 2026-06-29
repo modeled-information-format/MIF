@@ -137,11 +137,6 @@
       "format": "date-time",
       "description": "When compression was applied (Level 3)"
     },
-    "blocks": {
-      "type": "object",
-      "additionalProperties": { "type": "string" },
-      "description": "Named block references (^block-id) with their text content for granular linking"
-    },
     "extensions": {
       "type": "object",
       "additionalProperties": true,

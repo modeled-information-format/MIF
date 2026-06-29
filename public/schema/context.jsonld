@@ -48,10 +48,6 @@
       "@id": "mif:aliases",
       "@container": "@set"
     },
-    "blocks": {
-      "@id": "mif:blocks",
-      "@container": "@index"
-    },
 
     "created": {
       "@id": "dc:created",

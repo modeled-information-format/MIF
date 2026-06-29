@@ -28,12 +28,9 @@ Concept content in Markdown format.
 
 - relates-to [Other Concept](/semantic/other-concept.md)
 - derived-from [Source Incident](/episodic/source-incident.md)
-
-## Entities (optional section)
-
-- mentions @[[Person Name]]
-- uses @[[Technology Name]]
 ```
+
+Entity references are declared in the frontmatter `entities[]` array (see [Entity Types](/specification/entity-types/)).
 
 ### Frontmatter Schema
 
@@ -124,17 +121,7 @@ relationships:
     target: /semantic/old-policy.md
 ```
 
-Every frontmatter `relationships` entry MUST have a corresponding body markdown link in the `## Relationships` section, and every such body link maps back to a frontmatter entry. Entity references use `@[[Name|Type]]` syntax (see Entity Types).
-
-### Block References
-
-Blocks can be referenced for granular linking within a file:
-
-```markdown
-This is an important statement. ^important-point
-
-- Key insight about the system ^insight-1
-```
+Every frontmatter `relationships` entry MUST have a corresponding body markdown link in the `## Relationships` section, and every such body link maps back to a frontmatter entry. Entity references are declared in the frontmatter `entities[]` array (see [Entity Types](/specification/entity-types/)).
 
 ### Citations (Level 3)
 
@@ -145,11 +132,12 @@ Citations provide structured references to external sources that inform, support
 ```yaml
 # === OPTIONAL: Citations (Level 3) ===
 citations:
-  - type: article                          # REQUIRED: Source category
+  - "@type": Citation                      # REQUIRED: object type
+    citationType: article                  # REQUIRED: Source category
     title: "Memory Systems in AI Agents"   # REQUIRED: Citation title
     url: https://arxiv.org/abs/2024.12345  # REQUIRED: Valid URL
-    role: supports                         # REQUIRED: Relationship to memory
-    author: "@[[Jane Smith|Person]]"       # OPTIONAL: Entity ref or text
+    citationRole: supports                 # REQUIRED: Relationship to memory
+    author: "Jane Smith"                   # OPTIONAL: string, EntityReference, or array
     date: 2024-06-15                       # OPTIONAL: Publication date
     accessed: 2026-01-20                   # OPTIONAL: Access date
     relevance: 0.95                        # OPTIONAL: Relevance score (0-1)
@@ -160,11 +148,12 @@ citations:
 
 | Field | Required | Type | Description |
 |-------|----------|------|-------------|
-| `type` | REQUIRED | Enum | Source category (see Citation Types) |
+| `@type` | REQUIRED | Const | Always `Citation` |
+| `citationType` | REQUIRED | Enum | Source category (see Citation Types) |
 | `title` | REQUIRED | String | Citation title |
 | `url` | REQUIRED | URI | Valid URL or URI |
-| `role` | REQUIRED | Enum | Relationship to memory (see Citation Roles) |
-| `author` | OPTIONAL | String | Entity reference or plain text |
+| `citationRole` | REQUIRED | Enum | Relationship to memory (see Citation Roles) |
+| `author` | OPTIONAL | EntityReference, array of EntityReference, or String | One or more entity references, or plain text |
 | `date` | OPTIONAL | Date | Publication date (ISO 8601) |
 | `accessed` | OPTIONAL | Date | Access date (ISO 8601) |
 | `relevance` | OPTIONAL | Decimal | Relevance score (0.0-1.0) |
@@ -213,36 +202,34 @@ An optional `## Citations` section MAY appear in the memory body for detailed an
 ```markdown
 ## Citations
 
-- [Memory Systems in AI Agents](https://arxiv.org/abs/2024.12345) by @[[Jane Smith|Person]] (2024)
+- [Memory Systems in AI Agents](https://arxiv.org/abs/2024.12345) by Jane Smith (2024)
   - **Type**: article
   - **Role**: supports
   - **Relevance**: 0.95
   - Foundational paper on semantic memory structures. Introduces bi-temporal
     model that informed MIF's temporal design.
 
-- [Obsidian Help](https://help.obsidian.md/) by @[[Obsidian Team|Organization]]
+- [JSON-LD 1.1](https://www.w3.org/TR/json-ld11/) by W3C
   - **Type**: documentation
   - **Role**: background
   - **Accessed**: 2026-01-18
-  - Reference for wiki-link syntax and block references.
+  - Reference for the JSON-LD projection format.
 ```
 
 #### Author Entity References
 
-Authors MAY use wiki-link syntax to reference MIF entities:
+A citation `author` MAY be plain text or one or more `EntityReference` objects (see [Entity Types](/specification/entity-types/)):
 
 ```yaml
-# Single author entity
-author: "@[[Jane Smith|Person]]"
-
-# Multiple authors (comma-separated)
-author: "@[[Jane Smith|Person]], @[[John Doe|Person]]"
-
-# Organization author
-author: "@[[Anthropic|Organization]]"
-
-# Plain text (no entity reference)
+# Plain text
 author: "Jane Smith et al."
+
+# Single author as an entity reference
+author:
+  "@type": EntityReference
+  entity: { "@id": urn:mif:entity:person:jane-smith }
+  entityType: Person
+  name: Jane Smith
 ```
 
 #### Citation Validation
@@ -253,16 +240,17 @@ Implementations SHOULD validate citations according to these rules:
 
 | Field | Constraint |
 |-------|------------|
-| `type` | MUST be a value from Citation Types or a custom namespaced type (e.g., `acme:memo`) |
+| `@type` | MUST be `Citation` |
+| `citationType` | MUST be a value from Citation Types or a custom namespaced type (e.g., `acme:memo`) |
 | `title` | MUST be a non-empty string |
 | `url` | MUST be a valid URI (http, https, or custom schemes) |
-| `role` | MUST be a value from Citation Roles or a custom namespaced role (e.g., `legal:precedent`) |
+| `citationRole` | MUST be a value from Citation Roles or a custom namespaced role (e.g., `legal:precedent`) |
 
 **Optional Field Constraints:**
 
 | Field | Constraint |
 |-------|------------|
-| `author` | SHOULD be entity reference(s) `@[[Name\|Type]]` or plain text; multiple authors comma-separated |
+| `author` | SHOULD be an `EntityReference` (or array of them) or plain text |
 | `date` | MUST be ISO 8601 date format (`YYYY-MM-DD`) |
 | `accessed` | MUST be ISO 8601 date format (`YYYY-MM-DD`) |
 | `relevance` | MUST be decimal between 0.0 and 1.0 inclusive |

@@ -10,6 +10,13 @@ tags:
 - texas
 - mathematics
 - k-8
+relationships:
+- type: submitted-to
+  target: /into-math-k8-program.md
+- type: relates-to
+  target: /teks-math-standards.md
+- type: relates-to
+  target: /adoption-ca-math-2025.md
 temporal:
   '@type': TemporalMetadata
   validFrom: '2026-01-01T00:00:00Z'
@@ -129,6 +136,6 @@ Based on previous cycles, focus preparation on:
 
 ## Relationships
 
-- submitted-to [[into-math-k8-program]]
-- relates-to [[teks-math-standards]]
-- relates-to [[adoption-ca-math-2025]]
+- submitted-to [Into Math K8 Program](/into-math-k8-program.md)
+- relates-to [TEKS Math Standards](/teks-math-standards.md)
+- relates-to [Adoption CA Math 2025](/adoption-ca-math-2025.md)

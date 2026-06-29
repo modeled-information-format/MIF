@@ -20,6 +20,8 @@ relationships:
   target: /project-aim3-preclinical.md
 - type: produces
   target: /dataset-metabolomics-2025.md
+- type: funded-by
+  target: /nih-nci.md
 temporal:
   '@type': TemporalMetadata
   validFrom: '2025-07-01T00:00:00Z'
@@ -151,5 +153,5 @@ Test lead compounds in PDX mouse models of PDAC.
 - leads [Project Aim1 Metabolomics](/project-aim1-metabolomics.md)
 - leads [Project Aim2 Targets](/project-aim2-targets.md)
 - leads [Project Aim3 Preclinical](/project-aim3-preclinical.md)
-- funded-by [[nih-nci]]
+- funded-by [NIH NCI](/nih-nci.md)
 - produces [Dataset Metabolomics 2025](/dataset-metabolomics-2025.md)

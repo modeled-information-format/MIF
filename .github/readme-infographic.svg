@@ -69,7 +69,7 @@
     <text x="0" y="25" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5c4a32" text-anchor="middle">Portable</text>
     <text x="0" y="42" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5c4a32" text-anchor="middle">Destinations</text>
 
-    <text x="0" y="70" font-family="Georgia, serif" font-size="12" fill="#7a6548" text-anchor="middle">Obsidian</text>
+    <text x="0" y="70" font-family="Georgia, serif" font-size="12" fill="#7a6548" text-anchor="middle">Markdown</text>
     <text x="0" y="88" font-family="Georgia, serif" font-size="12" fill="#7a6548" text-anchor="middle">Local Files</text>
     <text x="0" y="106" font-family="Georgia, serif" font-size="12" fill="#7a6548" text-anchor="middle">New Provider</text>
     <text x="0" y="124" font-family="Georgia, serif" font-size="12" fill="#7a6548" text-anchor="middle">Archives</text>
@@ -90,7 +90,7 @@
       <rect x="-70" y="0" width="140" height="80" fill="#fff" stroke="#e8d5b7" stroke-width="1" rx="6"/>
       <text x="0" y="25" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5c4a32" text-anchor="middle">Human Readable</text>
       <text x="0" y="45" font-family="Georgia, serif" font-size="10" fill="#8b7355" text-anchor="middle">Markdown format.</text>
-      <text x="0" y="60" font-family="Georgia, serif" font-size="10" fill="#8b7355" text-anchor="middle">Works in Obsidian.</text>
+      <text x="0" y="60" font-family="Georgia, serif" font-size="10" fill="#8b7355" text-anchor="middle">Works in any editor.</text>
     </g>
 
     <!-- Box 3 -->

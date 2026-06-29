@@ -10,6 +10,13 @@ tags:
 - western-blot
 - protein
 - molecular-biology
+relationships:
+- type: uses-equipment
+  target: /equipment-chemidoc.md
+- type: uses-equipment
+  target: /equipment-transblot.md
+- type: used-by
+  target: /experiment-metabolic-screen-001.md
 temporal:
   '@type': TemporalMetadata
   validFrom: '2026-01-01T00:00:00Z'
@@ -196,6 +203,6 @@ expression. Version 2.1 updated January 2026.
 
 ## Relationships
 
-- uses-equipment [[equipment-chemidoc]]
-- uses-equipment [[equipment-transblot]]
-- used-by [[experiment-metabolic-screen-001]]
+- uses-equipment [Equipment Chemidoc](/equipment-chemidoc.md)
+- uses-equipment [Equipment Transblot](/equipment-transblot.md)
+- used-by [Experiment Metabolic Screen 001](/experiment-metabolic-screen-001.md)

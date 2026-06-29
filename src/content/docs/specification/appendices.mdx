@@ -78,12 +78,24 @@ Relationships appear in a `## Relationships` body section as `- <type> [Text](/p
 
 ## Appendix C: Entity Reference Syntax
 
-| Markdown | Meaning |
-|----------|---------|
-| `@[[Name]]` | Reference entity by name |
-| `@[[Name\|Person]]` | Reference with explicit type |
-| `@[[Name\|uses]]` | Reference with relationship |
-| `@[[Name\|Technology\|uses]]` | Type and relationship |
+Entity references are declared in the frontmatter `entities[]` array as `EntityReference` objects:
+
+| Field | Required | Meaning |
+|-------|----------|---------|
+| `@type` | REQUIRED | Always `EntityReference` |
+| `entity.@id` | REQUIRED | Entity URN (`urn:mif:entity:<type>:<slug>`) |
+| `entityType` | OPTIONAL | `Person`, `Organization`, `Technology`, `Concept`, `File`, or a custom ontology type |
+| `name` | OPTIONAL | Display name |
+| `role` | OPTIONAL | Role in the memory (e.g. `author`, `mentions`, `uses`) |
+
+```yaml
+entities:
+  - "@type": EntityReference
+    entity: { "@id": urn:mif:entity:person:jane-doe }
+    entityType: Person
+    name: Jane Doe
+    role: mentions
+```
 
 ---
 
@@ -125,11 +137,12 @@ Relationships appear in a `## Relationships` body section as `- <type> [Text](/p
 
 ```yaml
 citations:
-  - type: article              # REQUIRED
+  - "@type": Citation          # REQUIRED
+    citationType: article      # REQUIRED
     title: "Citation Title"    # REQUIRED
     url: https://example.com   # REQUIRED
-    role: supports             # REQUIRED
-    author: "@[[Name|Person]]" # OPTIONAL
+    citationRole: supports     # REQUIRED
+    author: "Author Name"      # OPTIONAL (string, EntityReference, or array of EntityReference)
     date: 2024-06-15           # OPTIONAL
     accessed: 2026-01-20       # OPTIONAL
     relevance: 0.95            # OPTIONAL (0-1)
@@ -141,7 +154,7 @@ citations:
 ```markdown
 ## Citations
 
-- [Title](url) by @[[Author|Person]] (date)
+- [Title](url) by Author Name (date)
   - **Type**: article
   - **Role**: supports
   - **Relevance**: 0.95
@@ -157,4 +170,4 @@ citations:
 - [Dublin Core Metadata Terms](https://www.dublincore.org/specifications/dublin-core/dcmi-terms/)
 - [W3C PROV-DM](https://www.w3.org/TR/prov-dm/)
 - [ISO 8601: Date and Time Format](https://www.iso.org/iso-8601-date-and-time-format.html)
-- [Obsidian Help](https://help.obsidian.md/)
+- [CommonMark Specification](https://spec.commonmark.org/)
