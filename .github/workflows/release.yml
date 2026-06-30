@@ -39,8 +39,17 @@ permissions:
   contents: read
 
 jobs:
+  # Fail-closed: a published release must carry a non-empty CHANGELOG entry for
+  # its version. On a workflow_dispatch re-attest, gate the supplied tag; with no
+  # tag it skips cleanly.
+  changelog-check:
+    uses: modeled-information-format/.github/.github/workflows/reusable-changelog-check.yml@824b7ba80c0f798bf1be1d4b776e3688b89152fc
+    with:
+      version: ${{ github.event.release.tag_name || inputs.tag }}
+
   attest-release:
     name: attest-release
+    needs: changelog-check
     runs-on: ubuntu-latest
     permissions:
       id-token: write       # OIDC token for keyless Sigstore signing

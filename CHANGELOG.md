@@ -7,10 +7,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-The in-progress 1.0.0 release. Major, breaking. Repositions MIF as **MIF —
-Modeled Information Format**, the opinionated, OKF-compliant content model that
-fills OKF's deliberately empty envelope. AI memory becomes the first domain
-*profile* of MIF, not its identity.
+## [1.1.0] - 2026-06-30
+
+### Breaking Changes
+
+- **[Format]**: Removed all Obsidian-specific conventions for vendor neutrality
+  (ADR-017, superseding ADR-003) — wiki-link relationships (`[[...]]`),
+  `@[[Name|Type]]` entity references, block references, and embeds, plus the
+  Obsidian-compatibility positioning. Relationships use markdown links; entity
+  references use frontmatter `EntityReference` objects. The `blocks` field is
+  removed from the schema and converter; existing data still carrying a `blocks`
+  object continues to validate (the concept object permits additional
+  properties).
+
+### Added
+
+- **Serve the canonical ontology corpus at `mif-spec.dev/ontologies/`** (#186) —
+  the org's domain ontologies are published and resolvable at the custom domain.
+- **Serve the object+SHA vendoring index and the layered v0.2.0 corpus** (#193,
+  ADR-0002) — the registry `index.json` is reconciled to object+`sha` entries so
+  downstream consumers fail-closed vendor pinned ontology packs.
+
+### Changed
+
+- Reconcile base-type namespace prefixes with §10.2 of the specification (#182).
+- Mark v1.0.0 Released and bring `SPECIFICATION.md` to lint-clean (#173).
+
+### Fixed
+
+- **Serve the JSON-LD namespace IRI at `mif-spec.dev/ns/`** (#166) — the
+  namespace IRI used by the published context now resolves at the custom domain.
+
+## [1.0.0] - 2026-06-28
 
 ### Breaking Changes
 
@@ -24,14 +52,6 @@ fills OKF's deliberately empty envelope. AI memory becomes the first domain
   `relationships` array **and** mirrored as OKF-legible body markdown links in a
   `## Relationships` section (`- <type> [Text](/path/target.md)`). Obsidian
   wiki-links are no longer the canonical edge representation.
-- **[Format]**: Removed all Obsidian-specific conventions for vendor neutrality
-  (ADR-017, superseding ADR-003) — wiki-link relationships (`[[...]]`),
-  `@[[Name|Type]]` entity references, block references, and embeds, plus the
-  Obsidian-compatibility positioning. Relationships use markdown links; entity
-  references use frontmatter `EntityReference` objects. The `blocks` field is
-  removed from the schema and converter; existing data still carrying a `blocks`
-  object continues to validate (the concept object permits additional
-  properties).
 - **[Identity]**: `id` MUST be a UUID (OKF concept ID is the path; the UUID is
   MIF's stable, location-independent identity). Legacy slug ids migrate to a
   deterministic UUIDv5 with the slug preserved as an `alias`.
@@ -248,5 +268,7 @@ See [MIGRATION.md](MIGRATION.md) and run
 - MIF specification draft v0.1
 - Market research framework
 
-[Unreleased]: https://github.com/modeled-information-format/MIF/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/modeled-information-format/MIF/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/modeled-information-format/MIF/compare/v1.0.0...v1.1.0
+[1.0.0]: https://github.com/modeled-information-format/MIF/compare/v0.1.0...v1.0.0
 [0.1.0]: https://github.com/modeled-information-format/MIF/releases/tag/v0.1.0
