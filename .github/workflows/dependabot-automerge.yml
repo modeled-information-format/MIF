@@ -2,7 +2,7 @@
 name: Dependabot auto-merge
 
 # Thin caller of the org reusable (pinned to .github main). Approves + auto-merges
-# patch Dependabot updates via the org CI App; minor/major stay manual. Repo
+# patch Dependabot updates via the org automerge App; minor/major stay manual. Repo
 # settings (allow_auto_merge + branch protection) are applied out-of-band by
 # docs/onboarding/org/dependabot-automerge-settings.sh in the .github repo.
 

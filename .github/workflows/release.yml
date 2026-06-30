@@ -54,7 +54,7 @@ jobs:
     permissions:
       id-token: write       # OIDC token for keyless Sigstore signing
       attestations: write   # persist the provenance + SBOM attestations
-      contents: write       # upload assets to the release (tag runs only)
+      contents: read        # checkout + gh attestation verify; the release upload now uses the release App token
     steps:
       - name: Resolve checkout ref
         id: ref
