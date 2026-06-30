@@ -861,6 +861,129 @@
           }
         }
       }
+    },
+    "cited": {
+      "@id": "mif:trait/cited",
+      "@type": "mif:Trait",
+      "name": "cited",
+      "description": "Requires citations/sources",
+      "requires": [
+        "citations"
+      ]
+    },
+    "dated": {
+      "@id": "mif:trait/dated",
+      "@type": "mif:Trait",
+      "name": "dated",
+      "description": "Adds decision/event date",
+      "fields": {
+        "decision_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "review_date": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "versioned": {
+      "@id": "mif:trait/versioned",
+      "@type": "mif:Trait",
+      "name": "versioned",
+      "description": "Adds version tracking fields",
+      "fields": {
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+.*$"
+        },
+        "changelog": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "documented": {
+      "@id": "mif:trait/documented",
+      "@type": "mif:Trait",
+      "name": "documented",
+      "description": "Adds documentation reference",
+      "fields": {
+        "documentation_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "readme_path": {
+          "type": "string"
+        }
+      }
+    },
+    "timeline": {
+      "@id": "mif:trait/timeline",
+      "@type": "mif:Trait",
+      "name": "timeline",
+      "description": "Adds an event timeline",
+      "fields": {
+        "timeline": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "timestamp": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "event": {
+                "type": "string"
+              },
+              "actor": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "stakeholders": {
+      "@id": "mif:trait/stakeholders",
+      "@type": "mif:Trait",
+      "name": "stakeholders",
+      "description": "Adds stakeholder tracking",
+      "fields": {
+        "stakeholders": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "role": {
+                "type": "string"
+              },
+              "contact": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "attributed": {
+      "@id": "mif:trait/attributed",
+      "@type": "mif:Trait",
+      "name": "attributed",
+      "description": "Adds attribution to an agent or source",
+      "fields": {
+        "attributed_to": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
     }
   }
 }

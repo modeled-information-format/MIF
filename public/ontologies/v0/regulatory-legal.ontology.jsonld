@@ -126,7 +126,7 @@
   "@id": "mif:ontology/regulatory-legal",
   "@type": "mif:Ontology",
   "identifier": "regulatory-legal",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Regulatory and legal domain ontology \u2014 acts, obligations, authorities, jurisdictions, contracts, sanctions",
   "namespaces": {
     "semantic": {
@@ -257,10 +257,9 @@
       "base": "semantic",
       "description": "An abstract legislative work (act, regulation, directive, statute)",
       "traits": [
-        "mif:trait/lifecycle",
-        "mif:trait/renewable",
-        "mif:trait/auditable",
-        "mif:trait/categorized"
+        "mif:trait/cited",
+        "mif:trait/dated",
+        "mif:trait/versioned"
       ],
       "schema": {
         "required": [
@@ -315,10 +314,9 @@
       "base": "semantic",
       "description": "An international agreement between sovereign states or bodies",
       "traits": [
-        "mif:trait/lifecycle",
-        "mif:trait/renewable",
-        "mif:trait/auditable",
-        "mif:trait/categorized"
+        "mif:trait/cited",
+        "mif:trait/dated",
+        "mif:trait/versioned"
       ],
       "schema": {
         "required": [
@@ -365,10 +363,7 @@
       "base": "semantic",
       "description": "A legal obligation, norm, or deontic qualification",
       "traits": [
-        "mif:trait/lifecycle",
-        "mif:trait/auditable",
-        "mif:trait/categorized",
-        "mif:trait/owned"
+        "mif:trait/cited"
       ],
       "schema": {
         "required": [
@@ -408,9 +403,7 @@
       "base": "semantic",
       "description": "A legal right conferred on a holder (distinct from an obligation)",
       "traits": [
-        "mif:trait/lifecycle",
-        "mif:trait/owned",
-        "mif:trait/categorized"
+        "mif:trait/cited"
       ],
       "schema": {
         "required": [
@@ -446,10 +439,7 @@
       "base": "semantic",
       "description": "A legal capacity or competence conferred on a legal person",
       "traits": [
-        "mif:trait/lifecycle",
-        "mif:trait/owned",
-        "mif:trait/categorized",
-        "mif:trait/auditable"
+        "mif:trait/cited"
       ],
       "schema": {
         "required": [
@@ -488,10 +478,7 @@
       "base": "semantic",
       "description": "A jurisdiction within which legal acts apply",
       "traits": [
-        "mif:trait/located",
-        "mif:trait/bounded",
-        "mif:trait/categorized",
-        "mif:trait/tagged"
+        "mif:trait/cited"
       ],
       "schema": {
         "required": [
@@ -530,11 +517,8 @@
       "base": "semantic",
       "description": "A regulator, supervisor, court, or standards body",
       "traits": [
-        "mif:trait/regulated",
-        "mif:trait/located",
-        "mif:trait/owned",
-        "mif:trait/contactable",
-        "mif:trait/auditable"
+        "mif:trait/cited",
+        "mif:trait/documented"
       ],
       "schema": {
         "required": [
@@ -575,12 +559,8 @@
       "base": "semantic",
       "description": "A natural or juridical person with legal standing",
       "traits": [
-        "mif:trait/located",
-        "mif:trait/owned",
-        "mif:trait/contactable",
-        "mif:trait/lifecycle",
-        "mif:trait/regulated",
-        "mif:trait/categorized"
+        "mif:trait/cited",
+        "mif:trait/documented"
       ],
       "schema": {
         "required": [
@@ -616,10 +596,7 @@
       "base": "semantic",
       "description": "A role played within a legal relationship (not the person itself)",
       "traits": [
-        "mif:trait/lifecycle",
-        "mif:trait/owned",
-        "mif:trait/categorized",
-        "mif:trait/auditable"
+        "mif:trait/cited"
       ],
       "schema": {
         "required": [
@@ -664,11 +641,9 @@
       "base": "semantic",
       "description": "A legally enforceable agreement between parties",
       "traits": [
-        "mif:trait/lifecycle",
-        "mif:trait/renewable",
-        "mif:trait/owned",
-        "mif:trait/auditable",
-        "mif:trait/categorized"
+        "mif:trait/cited",
+        "mif:trait/dated",
+        "mif:trait/documented"
       ],
       "schema": {
         "required": [
@@ -723,11 +698,8 @@
       "base": "semantic",
       "description": "A license, permit, or authorization granted to a holder",
       "traits": [
-        "mif:trait/lifecycle",
-        "mif:trait/renewable",
-        "mif:trait/auditable",
-        "mif:trait/owned",
-        "mif:trait/categorized"
+        "mif:trait/cited",
+        "mif:trait/dated"
       ],
       "schema": {
         "required": [
@@ -771,10 +743,8 @@
       "base": "semantic",
       "description": "A crosswalk asserting that a control satisfies an obligation",
       "traits": [
-        "mif:trait/auditable",
-        "mif:trait/reviewed",
-        "mif:trait/categorized",
-        "mif:trait/tagged"
+        "mif:trait/cited",
+        "mif:trait/dated"
       ],
       "schema": {
         "required": [
@@ -819,10 +789,9 @@
       "base": "episodic",
       "description": "A court decision or item of case law",
       "traits": [
-        "mif:trait/lifecycle",
-        "mif:trait/auditable",
-        "mif:trait/reviewed",
-        "mif:trait/categorized"
+        "mif:trait/cited",
+        "mif:trait/dated",
+        "mif:trait/documented"
       ],
       "schema": {
         "required": [
@@ -863,11 +832,8 @@
       "base": "episodic",
       "description": "A regulatory sanction or enforcement action imposed on a party",
       "traits": [
-        "mif:trait/lifecycle",
-        "mif:trait/auditable",
-        "mif:trait/owned",
-        "mif:trait/categorized",
-        "mif:trait/scheduled"
+        "mif:trait/cited",
+        "mif:trait/dated"
       ],
       "schema": {
         "required": [
@@ -911,10 +877,8 @@
       "base": "procedural",
       "description": "A formal legal or administrative procedure",
       "traits": [
-        "mif:trait/lifecycle",
-        "mif:trait/scheduled",
-        "mif:trait/auditable",
-        "mif:trait/reviewed"
+        "mif:trait/cited",
+        "mif:trait/timeline"
       ],
       "schema": {
         "required": [
@@ -961,11 +925,9 @@
       "base": "procedural",
       "description": "A compliance assessment of a system against requirements",
       "traits": [
-        "mif:trait/auditable",
-        "mif:trait/reviewed",
-        "mif:trait/scheduled",
-        "mif:trait/lifecycle",
-        "mif:trait/scored"
+        "mif:trait/cited",
+        "mif:trait/dated",
+        "mif:trait/documented"
       ],
       "schema": {
         "required": [
@@ -1011,10 +973,9 @@
       "base": "procedural",
       "description": "A regulatory compliance report or plan of action and milestones",
       "traits": [
-        "mif:trait/auditable",
-        "mif:trait/reviewed",
-        "mif:trait/scheduled",
-        "mif:trait/lifecycle"
+        "mif:trait/cited",
+        "mif:trait/dated",
+        "mif:trait/documented"
       ],
       "schema": {
         "required": [
@@ -1044,6 +1005,51 @@
           "submission_date": {
             "type": "string",
             "format": "date"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/compliance-regulation",
+      "@type": "mif:EntityType",
+      "name": "compliance-regulation",
+      "base": "semantic",
+      "description": "A regulation imposing compliance obligations within a jurisdiction (the obligation-bearing instrument)",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/dated",
+        "mif:trait/versioned"
+      ],
+      "schema": {
+        "required": [
+          "regulation_name",
+          "jurisdiction"
+        ],
+        "properties": {
+          "regulation_name": {
+            "type": "string"
+          },
+          "jurisdiction": {
+            "type": "string"
+          },
+          "key_obligations": {
+            "type": "string"
+          },
+          "effective_dates": {
+            "type": "string"
+          },
+          "legal_source_type": {
+            "type": "string",
+            "enum": [
+              "statute",
+              "regulation",
+              "directive",
+              "customary-law",
+              "case-law"
+            ]
+          },
+          "citation_ref": {
+            "type": "string"
           }
         }
       }

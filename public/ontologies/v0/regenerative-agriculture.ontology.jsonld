@@ -126,7 +126,7 @@
   "@id": "mif:ontology/regenerative-agriculture",
   "@type": "mif:Ontology",
   "identifier": "regenerative-agriculture",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Regenerative agriculture ontology with ecosystem coverage",
   "schema_url": "https://mif-spec.dev/schema/ontology/ontology.schema.json",
   "namespaces": {
@@ -285,6 +285,9 @@
         "mif:trait/certified",
         "mif:trait/auditable"
       ],
+      "subtype_of": [
+        "mif:entityType/agricultural-holding"
+      ],
       "schema": {
         "required": [
           "name",
@@ -334,6 +337,9 @@
         "mif:trait/bounded",
         "mif:trait/measured",
         "mif:trait/seasonal"
+      ],
+      "subtype_of": [
+        "mif:entityType/land-parcel"
       ],
       "schema": {
         "required": [
@@ -391,6 +397,9 @@
       "traits": [
         "mif:trait/measured",
         "mif:trait/timestamped"
+      ],
+      "subtype_of": [
+        "mif:entityType/soil-unit"
       ],
       "schema": {
         "required": [
@@ -454,6 +463,9 @@
       "description": "A crop type with agronomic information",
       "traits": [
         "mif:trait/categorized"
+      ],
+      "subtype_of": [
+        "mif:entityType/cultivar"
       ],
       "schema": {
         "required": [
@@ -622,6 +634,9 @@
         "mif:trait/inventoried",
         "mif:trait/owned"
       ],
+      "subtype_of": [
+        "mif:entityType/managed-animal"
+      ],
       "schema": {
         "required": [
           "name",
@@ -677,6 +692,9 @@
       "traits": [
         "mif:trait/lifecycle",
         "mif:trait/tagged"
+      ],
+      "subtype_of": [
+        "mif:entityType/managed-animal"
       ],
       "schema": {
         "required": [
@@ -803,6 +821,9 @@
         "mif:trait/maintainable",
         "mif:trait/owned"
       ],
+      "subtype_of": [
+        "mif:entityType/agricultural-equipment"
+      ],
       "schema": {
         "required": [
           "name",
@@ -854,6 +875,9 @@
       "traits": [
         "mif:trait/inventoried",
         "mif:trait/certified"
+      ],
+      "subtype_of": [
+        "mif:entityType/agricultural-input"
       ],
       "schema": {
         "required": [
@@ -1263,6 +1287,9 @@
         "mif:trait/measured",
         "mif:trait/quality_controlled"
       ],
+      "subtype_of": [
+        "mif:entityType/harvest-event"
+      ],
       "schema": {
         "required": [
           "field_id",
@@ -1309,6 +1336,9 @@
       "description": "Significant weather event affecting operations",
       "traits": [
         "mif:trait/located"
+      ],
+      "subtype_of": [
+        "mif:entityType/climate-event"
       ],
       "schema": {
         "required": [

@@ -1,0 +1,285 @@
+---
+# Research Base Ontology — shared research-methodology supertypes (Tier 1)
+#
+# A MIF-compliant intermediate layer between the domain-neutral generic core
+# (mif-base / shared-traits) and the research DOMAIN packs (scientific,
+# regenerative-agriculture-research, and future *-research packs). It owns the
+# ABSTRACT supertypes that recur across every research domain — an inquiry, a
+# procedure, an observation, a proposition, a produced artifact, a scholarly
+# output, a funding instrument, an apparatus, a finding — so research domains
+# inherit them via `extends` and specialize them with `subtype_of`.
+#
+# Supertype names are deliberately ABSTRACT and distinct from any leaf pack's
+# concrete type names (e.g. `observation`, not `measurement`; `inquiry`, not
+# `study`): a base a leaf `extends` must not share entity-type NAMES with that
+# leaf, or `subtype_of` resolution across the chain is ambiguous.
+#
+# Cataloged present-but-NOT-core (core=false): never bound to a topic directly.
+#
+# See docs/decisions/0003-research-and-agriculture-base-layers.md.
+#
+# Version: 0.1.0
+# Last Updated: 2026-06-30
+
+ontology:
+  id: research
+  version: "0.1.0"
+  description: "Shared research-methodology supertypes — the MIF-compliant intermediate layer the research domains extend"
+  extends:
+    - mif-base
+    - shared-traits
+namespaces:
+  semantic:
+    children:
+      research:
+        description: "Research artifacts, propositions, outputs, instruments, findings"
+        type_hint: semantic
+  episodic:
+    children:
+      inquiries:
+        description: "Research inquiries as episodic records"
+        type_hint: episodic
+  procedural:
+    children:
+      procedures:
+        description: "Research procedures and protocols"
+        type_hint: procedural
+# Abstract supertypes shared across research domains. Leaf packs specialize these
+# via `subtype_of` (e.g. scientific `study` subtype_of `inquiry`, `measurement`
+# subtype_of `observation`); subsumption is enforced across the extends chain.
+entity_types:
+  - name: inquiry
+    description: "A unit of research inquiry — the episodic container for a study, investigation, or cohort"
+    base: episodic
+    traits:
+      - cited
+      - dated
+    schema:
+      required:
+        - title
+      properties:
+        title:
+          type: string
+        design:
+          type: string
+          description: "Inquiry design (observational, experimental, computational, …)"
+        objective:
+          type: string
+        status:
+          type: string
+          description: "planned / active / completed / retracted"
+  - name: research-procedure
+    description: "A method, protocol, or procedure applied in research (and its executions)"
+    base: procedural
+    traits:
+      - cited
+      - versioned
+    schema:
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        procedure:
+          type: string
+          description: "What the procedure does, step-wise"
+        instrument:
+          type: string
+          description: "Instrument or platform the procedure uses"
+  - name: observation
+    description: "A measured or observed datum produced by a procedure"
+    base: semantic
+    traits:
+      - cited
+      - dated
+    schema:
+      required:
+        - variable
+        - value
+      properties:
+        variable:
+          type: string
+        value:
+          type: string
+        unit:
+          type: string
+        method_ref:
+          type: string
+          description: "The procedure that produced this observation"
+  - name: proposition
+    description: "A falsifiable proposition or hypothesis under test"
+    base: semantic
+    traits:
+      - cited
+    schema:
+      required:
+        - statement
+      properties:
+        statement:
+          type: string
+          description: "The falsifiable claim"
+        status:
+          type: string
+          description: "untested / supported / refuted / inconclusive"
+  - name: research-artifact
+    description: "A produced research data artifact (dataset, distribution, service, catalog, series)"
+    base: semantic
+    traits:
+      - cited
+      - versioned
+    schema:
+      required:
+        - title
+      properties:
+        title:
+          type: string
+        artifact_kind:
+          type: string
+          description: "dataset / distribution / service / catalog / series"
+        license:
+          type: string
+  - name: scholarly-output
+    description: "A published research output (article, preprint, report, dataset descriptor)"
+    base: semantic
+    traits:
+      - cited
+      - documented
+    schema:
+      required:
+        - title
+      properties:
+        title:
+          type: string
+        output_type:
+          type: string
+          description: "journal-article / preprint / report / dataset-descriptor"
+        doi:
+          type: string
+  - name: funding-instrument
+    description: "A grant or funding instrument supporting research"
+    base: semantic
+    traits:
+      - cited
+      - dated
+    schema:
+      required:
+        - funder
+      properties:
+        funder:
+          type: string
+        grant_id:
+          type: string
+        amount:
+          type: string
+  - name: apparatus
+    description: "A device, platform, or instrument used to produce research data"
+    base: semantic
+    traits:
+      - cited
+      - versioned
+    schema:
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        apparatus_type:
+          type: string
+        manufacturer:
+          type: string
+  - name: research-finding
+    description: "A finding or observation-level conclusion — the unit of recorded research knowledge a domain observation specializes"
+    base: semantic
+    traits:
+      - cited
+    schema:
+      required:
+        - statement
+      properties:
+        statement:
+          type: string
+          description: "The finding or conclusion"
+        evidence:
+          type: string
+        confidence:
+          type: string
+          description: "Qualitative confidence in the finding"
+traits:
+  cited:
+    description: "Requires citations/sources"
+    requires:
+      - citations
+  dated:
+    description: "Adds an event/observation date"
+    fields:
+      observed_date:
+        type: string
+        format: date
+  versioned:
+    description: "Adds version tracking"
+    fields:
+      version:
+        type: string
+        pattern: "^\\d+\\.\\d+\\.\\d+.*$"
+  documented:
+    description: "Adds a documentation reference"
+    fields:
+      documentation_url:
+        type: string
+        format: uri
+relationships:
+  conducts:
+    description: "An inquiry conducts a procedure"
+    from:
+      - inquiry
+    to:
+      - research-procedure
+    symmetric: false
+  produces:
+    description: "A procedure produces an observation"
+    from:
+      - research-procedure
+    to:
+      - observation
+    symmetric: false
+  tests:
+    description: "An inquiry tests a proposition"
+    from:
+      - inquiry
+    to:
+      - proposition
+    symmetric: false
+  yields:
+    description: "An inquiry yields a research artifact"
+    from:
+      - inquiry
+    to:
+      - research-artifact
+    symmetric: false
+  reports-in:
+    description: "An inquiry is reported in a scholarly output"
+    from:
+      - inquiry
+    to:
+      - scholarly-output
+    symmetric: false
+  funded-by:
+    description: "An inquiry is funded by a funding instrument"
+    from:
+      - inquiry
+    to:
+      - funding-instrument
+    symmetric: false
+discovery:
+  enabled: false
+  confidence_threshold: 0.8
+  patterns:
+    - content_pattern: "\\b(study|trial|investigation|experiment)\\b"
+      suggest_entity: inquiry
+      suggest_namespace: _episodic/inquiries
+    - content_pattern: "\\b(hypothesis|we hypothesi[sz]e|proposition)\\b"
+      suggest_entity: proposition
+      suggest_namespace: _semantic/research
+    - content_pattern: "\\b(dataset|data set|data catalog|distribution)\\b"
+      suggest_entity: research-artifact
+      suggest_namespace: _semantic/research

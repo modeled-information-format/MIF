@@ -1,0 +1,587 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "@vocab": "https://mif-spec.dev/ns/ontology#",
+    "mif": "https://mif-spec.dev/ns/",
+    "schema": "https://schema.org/",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "ontology": {
+      "@id": "mif:Ontology",
+      "@type": "@id"
+    },
+    "id": {
+      "@id": "@id"
+    },
+    "version": {
+      "@id": "schema:version",
+      "@type": "xsd:string"
+    },
+    "description": {
+      "@id": "schema:description",
+      "@type": "xsd:string"
+    },
+    "schema_url": {
+      "@id": "rdfs:isDefinedBy",
+      "@type": "@id"
+    },
+    "namespaces": {
+      "@id": "mif:hasNamespace",
+      "@container": "@id"
+    },
+    "type_hint": {
+      "@id": "mif:typeHint",
+      "@type": "xsd:string"
+    },
+    "replaces": {
+      "@id": "mif:replaces",
+      "@type": "@id"
+    },
+    "children": {
+      "@id": "mif:hasChildNamespace",
+      "@container": "@id"
+    },
+    "entity_types": {
+      "@id": "mif:definesEntityType",
+      "@container": "@list"
+    },
+    "name": {
+      "@id": "schema:name",
+      "@type": "xsd:string"
+    },
+    "base": {
+      "@id": "mif:baseType",
+      "@type": "@vocab"
+    },
+    "semantic": "mif:SemanticMemory",
+    "episodic": "mif:EpisodicMemory",
+    "procedural": "mif:ProceduralMemory",
+    "traits": {
+      "@id": "mif:definesTrait",
+      "@container": "@id"
+    },
+    "subtype_of": {
+      "@id": "mif:subtypeOf",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "fields": {
+      "@id": "mif:hasField",
+      "@container": "@id"
+    },
+    "requires": {
+      "@id": "mif:requiresField",
+      "@container": "@list"
+    },
+    "relationships": {
+      "@id": "mif:definesRelationship",
+      "@container": "@id"
+    },
+    "from": {
+      "@id": "rdfs:domain",
+      "@container": "@set"
+    },
+    "to": {
+      "@id": "rdfs:range",
+      "@container": "@set"
+    },
+    "symmetric": {
+      "@id": "owl:SymmetricProperty",
+      "@type": "xsd:boolean"
+    },
+    "discovery": {
+      "@id": "mif:discoveryConfig"
+    },
+    "enabled": {
+      "@id": "mif:discoveryEnabled",
+      "@type": "xsd:boolean"
+    },
+    "patterns": {
+      "@id": "mif:hasDiscoveryPattern",
+      "@container": "@list"
+    },
+    "confidence_threshold": {
+      "@id": "mif:confidenceThreshold",
+      "@type": "xsd:decimal"
+    },
+    "content_pattern": {
+      "@id": "mif:contentPattern",
+      "@type": "xsd:string"
+    },
+    "file_pattern": {
+      "@id": "mif:filePattern",
+      "@type": "xsd:string"
+    },
+    "suggest_entity": {
+      "@id": "mif:suggestsEntityType",
+      "@type": "@id"
+    },
+    "suggest_namespace": {
+      "@id": "mif:suggestsNamespace",
+      "@type": "xsd:string"
+    }
+  },
+  "@id": "mif:ontology/research",
+  "@type": "mif:Ontology",
+  "identifier": "research",
+  "version": "0.1.0",
+  "description": "Shared research-methodology supertypes \u2014 the MIF-compliant intermediate layer the research domains extend",
+  "namespaces": {
+    "semantic": {
+      "@id": "mif:namespace/semantic",
+      "@type": "mif:Namespace",
+      "name": "semantic",
+      "children": {
+        "research": {
+          "@id": "mif:namespace/semantic/research",
+          "@type": "mif:Namespace",
+          "name": "research",
+          "description": "Research artifacts, propositions, outputs, instruments, findings",
+          "type_hint": "semantic"
+        }
+      }
+    },
+    "episodic": {
+      "@id": "mif:namespace/episodic",
+      "@type": "mif:Namespace",
+      "name": "episodic",
+      "children": {
+        "inquiries": {
+          "@id": "mif:namespace/episodic/inquiries",
+          "@type": "mif:Namespace",
+          "name": "inquiries",
+          "description": "Research inquiries as episodic records",
+          "type_hint": "episodic"
+        }
+      }
+    },
+    "procedural": {
+      "@id": "mif:namespace/procedural",
+      "@type": "mif:Namespace",
+      "name": "procedural",
+      "children": {
+        "procedures": {
+          "@id": "mif:namespace/procedural/procedures",
+          "@type": "mif:Namespace",
+          "name": "procedures",
+          "description": "Research procedures and protocols",
+          "type_hint": "procedural"
+        }
+      }
+    }
+  },
+  "entity_types": [
+    {
+      "@id": "mif:entityType/inquiry",
+      "@type": "mif:EntityType",
+      "name": "inquiry",
+      "base": "episodic",
+      "description": "A unit of research inquiry \u2014 the episodic container for a study, investigation, or cohort",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/dated"
+      ],
+      "schema": {
+        "required": [
+          "title"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "design": {
+            "type": "string",
+            "description": "Inquiry design (observational, experimental, computational, \u2026)"
+          },
+          "objective": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "description": "planned / active / completed / retracted"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/research-procedure",
+      "@type": "mif:EntityType",
+      "name": "research-procedure",
+      "base": "procedural",
+      "description": "A method, protocol, or procedure applied in research (and its executions)",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/versioned"
+      ],
+      "schema": {
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "procedure": {
+            "type": "string",
+            "description": "What the procedure does, step-wise"
+          },
+          "instrument": {
+            "type": "string",
+            "description": "Instrument or platform the procedure uses"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/observation",
+      "@type": "mif:EntityType",
+      "name": "observation",
+      "base": "semantic",
+      "description": "A measured or observed datum produced by a procedure",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/dated"
+      ],
+      "schema": {
+        "required": [
+          "variable",
+          "value"
+        ],
+        "properties": {
+          "variable": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "unit": {
+            "type": "string"
+          },
+          "method_ref": {
+            "type": "string",
+            "description": "The procedure that produced this observation"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/proposition",
+      "@type": "mif:EntityType",
+      "name": "proposition",
+      "base": "semantic",
+      "description": "A falsifiable proposition or hypothesis under test",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "schema": {
+        "required": [
+          "statement"
+        ],
+        "properties": {
+          "statement": {
+            "type": "string",
+            "description": "The falsifiable claim"
+          },
+          "status": {
+            "type": "string",
+            "description": "untested / supported / refuted / inconclusive"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/research-artifact",
+      "@type": "mif:EntityType",
+      "name": "research-artifact",
+      "base": "semantic",
+      "description": "A produced research data artifact (dataset, distribution, service, catalog, series)",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/versioned"
+      ],
+      "schema": {
+        "required": [
+          "title"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "artifact_kind": {
+            "type": "string",
+            "description": "dataset / distribution / service / catalog / series"
+          },
+          "license": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/scholarly-output",
+      "@type": "mif:EntityType",
+      "name": "scholarly-output",
+      "base": "semantic",
+      "description": "A published research output (article, preprint, report, dataset descriptor)",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/documented"
+      ],
+      "schema": {
+        "required": [
+          "title"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "output_type": {
+            "type": "string",
+            "description": "journal-article / preprint / report / dataset-descriptor"
+          },
+          "doi": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/funding-instrument",
+      "@type": "mif:EntityType",
+      "name": "funding-instrument",
+      "base": "semantic",
+      "description": "A grant or funding instrument supporting research",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/dated"
+      ],
+      "schema": {
+        "required": [
+          "funder"
+        ],
+        "properties": {
+          "funder": {
+            "type": "string"
+          },
+          "grant_id": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/apparatus",
+      "@type": "mif:EntityType",
+      "name": "apparatus",
+      "base": "semantic",
+      "description": "A device, platform, or instrument used to produce research data",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/versioned"
+      ],
+      "schema": {
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "apparatus_type": {
+            "type": "string"
+          },
+          "manufacturer": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/research-finding",
+      "@type": "mif:EntityType",
+      "name": "research-finding",
+      "base": "semantic",
+      "description": "A finding or observation-level conclusion \u2014 the unit of recorded research knowledge a domain observation specializes",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "schema": {
+        "required": [
+          "statement"
+        ],
+        "properties": {
+          "statement": {
+            "type": "string",
+            "description": "The finding or conclusion"
+          },
+          "evidence": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "string",
+            "description": "Qualitative confidence in the finding"
+          }
+        }
+      }
+    }
+  ],
+  "traits": {
+    "cited": {
+      "@id": "mif:trait/cited",
+      "@type": "mif:Trait",
+      "name": "cited",
+      "description": "Requires citations/sources",
+      "requires": [
+        "citations"
+      ]
+    },
+    "dated": {
+      "@id": "mif:trait/dated",
+      "@type": "mif:Trait",
+      "name": "dated",
+      "description": "Adds an event/observation date",
+      "fields": {
+        "observed_date": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "versioned": {
+      "@id": "mif:trait/versioned",
+      "@type": "mif:Trait",
+      "name": "versioned",
+      "description": "Adds version tracking",
+      "fields": {
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+.*$"
+        }
+      }
+    },
+    "documented": {
+      "@id": "mif:trait/documented",
+      "@type": "mif:Trait",
+      "name": "documented",
+      "description": "Adds a documentation reference",
+      "fields": {
+        "documentation_url": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    }
+  },
+  "relationships": {
+    "conducts": {
+      "@id": "mif:relationship/conducts",
+      "@type": "mif:Relationship",
+      "name": "conducts",
+      "description": "An inquiry conducts a procedure",
+      "from": [
+        "mif:entityType/inquiry"
+      ],
+      "to": [
+        "mif:entityType/research-procedure"
+      ],
+      "symmetric": false
+    },
+    "produces": {
+      "@id": "mif:relationship/produces",
+      "@type": "mif:Relationship",
+      "name": "produces",
+      "description": "A procedure produces an observation",
+      "from": [
+        "mif:entityType/research-procedure"
+      ],
+      "to": [
+        "mif:entityType/observation"
+      ],
+      "symmetric": false
+    },
+    "tests": {
+      "@id": "mif:relationship/tests",
+      "@type": "mif:Relationship",
+      "name": "tests",
+      "description": "An inquiry tests a proposition",
+      "from": [
+        "mif:entityType/inquiry"
+      ],
+      "to": [
+        "mif:entityType/proposition"
+      ],
+      "symmetric": false
+    },
+    "yields": {
+      "@id": "mif:relationship/yields",
+      "@type": "mif:Relationship",
+      "name": "yields",
+      "description": "An inquiry yields a research artifact",
+      "from": [
+        "mif:entityType/inquiry"
+      ],
+      "to": [
+        "mif:entityType/research-artifact"
+      ],
+      "symmetric": false
+    },
+    "reports-in": {
+      "@id": "mif:relationship/reports-in",
+      "@type": "mif:Relationship",
+      "name": "reports-in",
+      "description": "An inquiry is reported in a scholarly output",
+      "from": [
+        "mif:entityType/inquiry"
+      ],
+      "to": [
+        "mif:entityType/scholarly-output"
+      ],
+      "symmetric": false
+    },
+    "funded-by": {
+      "@id": "mif:relationship/funded-by",
+      "@type": "mif:Relationship",
+      "name": "funded-by",
+      "description": "An inquiry is funded by a funding instrument",
+      "from": [
+        "mif:entityType/inquiry"
+      ],
+      "to": [
+        "mif:entityType/funding-instrument"
+      ],
+      "symmetric": false
+    }
+  },
+  "discovery": {
+    "enabled": false,
+    "confidence_threshold": 0.8,
+    "patterns": [
+      {
+        "@id": "mif:pattern/0",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(study|trial|investigation|experiment)\\b",
+        "suggest_entity": "mif:entityType/inquiry",
+        "suggest_namespace": "_episodic/inquiries"
+      },
+      {
+        "@id": "mif:pattern/1",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(hypothesis|we hypothesi[sz]e|proposition)\\b",
+        "suggest_entity": "mif:entityType/proposition",
+        "suggest_namespace": "_semantic/research"
+      },
+      {
+        "@id": "mif:pattern/2",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(dataset|data set|data catalog|distribution)\\b",
+        "suggest_entity": "mif:entityType/research-artifact",
+        "suggest_namespace": "_semantic/research"
+      }
+    ]
+  }
+}

@@ -1,162 +1,59 @@
 ---
-# Scientific Research Ontology
-#
-# A MIF entity ontology for scientific research: studies and investigations,
-# methods and protocol applications, samples and measurements, datasets,
-# catalogs and their provenance, instruments, publications, and funding.
-# Extends the MIF base cognitive triad plus shared-traits with domain-specific
-# entity types grounded in actively-maintained, standards-body and community
-# ontologies.
-#
-# Compatible with: mif-base v1.0.0, shared-traits v1.0.0
-#
-# Version: 0.1.0
-#
-# Provenance: authored from the `domain-ontology-pack-expansion` research session
-# (inventory-scientific.json, 14 scientific rows; relationship-inventory.json,
-# scientific edges; ontology-build-spec.md §2.3, §2.3.1, §3.1). Every entity type
-# traces to a named top-level class in a cited source vocabulary; OBO IRIs are
-# OLS4/Ontobee-confirmed and ship the gate-corrected v5 values
-# (IAO:0000415 hypothesis textual entity, OBI:0000747 material sample,
-# COB:0001300 device).
-#
-# Sources:
-# - OBO Foundry / OBI (Ontology for Biomedical Investigations)  https://obofoundry.org/ontology/obi.html
-# - IAO (Information Artifact Ontology)                          https://obofoundry.org/ontology/iao.html
-# - COB (Core Ontology for Biology and Biomedicine)             https://obofoundry.org/ontology/cob.html
-# - OBO Relations Ontology (RO)                                 https://obofoundry.org/ontology/ro.html
-# - W3C DCAT 3 (Data Catalog Vocabulary)                        https://www.w3.org/TR/vocab-dcat-3/
-# - W3C PROV-O (Provenance Ontology)                            https://www.w3.org/TR/prov-o/
-# - schema.org                                                  https://schema.org/
-
 ontology:
   id: scientific
-  version: "0.1.0"
-  description: "Scientific research domain ontology — studies, methods, data, provenance"
+  version: 0.2.1
+  description: Scientific research domain ontology — studies, methods, data, provenance
   extends:
-    - mif-base
-    - shared-traits
-
-# ===========================================================================
-# LOCAL TRAITS
-#
-# The spec (§2.3) names cited, dated, versioned, documented, stakeholders as the
-# reused traits. They are declared pack-locally here (the precedent set by the
-# psycholinguistics pack, which declares `cited` the same way) so every trait
-# referenced below resolves within the pack's extends chain.
-# ===========================================================================
-
-traits:
-  cited:
-    description: "Requires citations/sources backing the entity"
-    requires:
-      - citations
-  dated:
-    description: "Adds an event/record date"
-    fields:
-      date:
-        type: string
-        format: date
-      as_of:
-        type: string
-        format: date
-  versioned:
-    description: "Adds version tracking fields"
-    fields:
-      version:
-        type: string
-        pattern: "^\\d+\\.\\d+\\.\\d+.*$"
-      changelog:
-        type: array
-        items:
-          type: object
-  documented:
-    description: "Adds documentation/description linkage"
-    fields:
-      documentation_url:
-        type: string
-        format: uri
-      notes:
-        type: string
-  stakeholders:
-    description: "Adds stakeholder tracking"
-    fields:
-      stakeholders:
-        type: array
-        items:
-          type: object
-          properties:
-            name:
-              type: string
-            role:
-              type: string
-            contact:
-              type: string
-
-# ===========================================================================
-# CUSTOM NAMESPACES (nested under the mif-base cognitive triad)
-# ===========================================================================
-
+    - research
 namespaces:
   semantic:
     children:
       science:
-        description: "Hypotheses, methods, measurements, samples"
+        description: Hypotheses, methods, measurements, samples
         type_hint: semantic
       instruments:
-        description: "Research instruments and devices"
+        description: Research instruments and devices
         type_hint: semantic
       catalogs:
-        description: "Datasets and data catalogs"
+        description: Datasets, catalogs, distributions, services
         type_hint: semantic
       publications:
-        description: "Research publications and scholarly outputs"
+        description: Research publications and scholarly outputs
         type_hint: semantic
       funding:
-        description: "Grants and research funding"
+        description: Grants and research funding
         type_hint: semantic
   episodic:
     children:
       studies:
-        description: "Studies, investigations, cohorts"
+        description: Studies, investigations, cohorts
         type_hint: episodic
       provenance:
-        description: "Data provenance and derivation events"
+        description: Data provenance and derivation events
         type_hint: episodic
   procedural:
     children:
       protocols:
-        description: "Methods and protocol applications"
+        description: Methods and protocol applications
         type_hint: procedural
-
-# ===========================================================================
-# ENTITY TYPES
-#
-# Each type carries grounding fields (source_vocab, source_class, prior_art,
-# disposition) per inventory-scientific.json and the gate-corrected §2.3.1 IRIs.
-# ===========================================================================
-
 entity_types:
-  # ----- Studies & investigations -----------------------------------------
   - name: study
-    description: "A scientific study with a defined design"
+    description: A scientific study with a defined design
     base: episodic
-    source_vocab: "OBI"
-    source_class: "study design (OBI:0500000)"
-    prior_art: "obi:StudyDesign / IAO investigation"
-    disposition: mint
     traits:
       - cited
       - dated
       - stakeholders
     schema:
       required:
+        - study_id
         - title
-        - design
       properties:
+        study_id:
+          type: string
         title:
           type: string
-        design:
+        study_type:
           type: string
           enum:
             - observational
@@ -166,10 +63,12 @@ entity_types:
             - case-control
             - cross-sectional
             - computational
-        objective:
+        start_date:
           type: string
-        population:
+          format: date
+        end_date:
           type: string
+          format: date
         status:
           type: string
           enum:
@@ -177,41 +76,33 @@ entity_types:
             - in-progress
             - completed
             - retracted
-        registration_id:
+        objective:
           type: string
-
-  - name: research-investigation
-    description: "A research investigation spanning planning, execution and reporting"
-    base: episodic
-    source_vocab: "OBI"
-    source_class: "investigation (OBI:0000066)"
-    prior_art: "obi:Investigation / schema.org MedicalStudy"
+        principal_investigator:
+          type: string
+    source_vocab: OBI
+    source_class: study design
+    prior_art: obi:StudyDesign / IAO investigation
     disposition: mint
+    subtype_of:
+      - inquiry
+  - name: research-investigation
+    description: A research investigation spanning planning, execution and reporting
+    base: episodic
     traits:
       - cited
       - dated
       - stakeholders
     schema:
       required:
+        - investigation_id
         - title
-        - investigation_type
       properties:
+        investigation_id:
+          type: string
         title:
           type: string
-        investigation_type:
-          type: string
-          enum:
-            - genomics
-            - clinical-trial
-            - observational
-            - computational
-            - environmental
-            - epidemiological
-            - multi-omics
-            - survey-based
-        objective:
-          type: string
-        hypothesis_ref:
+        description:
           type: string
         start_date:
           type: string
@@ -227,184 +118,180 @@ entity_types:
             - completed
             - published
             - retracted
-        registration_id:
+        ethical_approval_id:
           type: string
         funding_ref:
           type: string
-
-  - name: cohort
-    description: "A study population — the material entities constituting the subject of an investigation"
-    base: episodic
-    source_vocab: "OBI"
-    source_class: "study population"
-    prior_art: "obi:StudyPopulation / NCIt cohort"
+        publication_refs:
+          type: array
+          items:
+            type: string
+    source_vocab: OBI
+    source_class: investigation
+    prior_art: obi:Investigation / schema.org MedicalStudy
     disposition: mint
+    subtype_of:
+      - inquiry
+  - name: cohort
+    description: A defined study population (subjects of an investigation)
+    base: episodic
     traits:
       - cited
       - dated
     schema:
       required:
-        - name
-        - population_definition
+        - cohort_id
       properties:
-        name:
+        cohort_id:
           type: string
-        population_definition:
-          type: string
-        size:
+        cohort_size:
           type: integer
-        follow_up_years:
-          type: number
-        baseline_year:
-          type: integer
-        study_design_type:
+        inclusion_criteria:
           type: string
-          enum:
-            - prospective
-            - retrospective
-            - cross-sectional
-            - case-control
-        stratification:
+        exclusion_criteria:
           type: string
-        investigation_ref:
+        study_ref:
           type: string
-
-  # ----- Methods & protocols ----------------------------------------------
-  - name: method
-    description: "A scientific method or assay (a planned-process specification)"
-    base: procedural
-    source_vocab: "OBI"
-    source_class: "assay (OBI:0000272 protocol, rdfs:label \"protocol\")"
-    prior_art: "obi:Assay / IAO:0000104 plan specification"
+        follow_up_duration:
+          type: string
+        demographics_summary:
+          type: string
+    source_vocab: OBI
+    source_class: study population
+    prior_art: obi:StudyPopulation / NCIt cohort
     disposition: mint
+    subtype_of:
+      - inquiry
+  - name: method
+    description: A scientific method or assay
+    base: procedural
     traits:
       - cited
       - versioned
     schema:
       required:
-        - name
-        - procedure
+        - method_name
+        - method_type
       properties:
-        name:
+        method_name:
           type: string
-        procedure:
+        method_type:
           type: string
-        instrument:
+        description:
           type: string
-        inputs:
+        instrument_ref:
+          type: string
+        reagents:
           type: array
           items:
             type: string
         output_type:
           type: string
-        protocol_url:
-          type: string
-          format: uri
-
-  - name: protocol-application
-    description: "The execution of a protocol — distinct from the method/protocol specification"
-    base: procedural
-    source_vocab: "OBI"
-    source_class: "OBI:0000070 protocol application"
-    prior_art: "obi:ProtocolApplication / schema.org StudyAction"
+    source_vocab: OBI
+    source_class: assay
+    prior_art: obi:Assay / IAO plan specification
     disposition: mint
+    subtype_of:
+      - research-procedure
+  - name: protocol-application
+    description: The execution of a protocol (distinct from the method specification)
+    base: procedural
     traits:
       - cited
       - versioned
       - dated
     schema:
       required:
-        - protocol_ref
-        - performer
+        - protocol_name
       properties:
-        protocol_ref:
+        protocol_name:
           type: string
-        performer:
+        version:
           type: string
-        date_performed:
+        procedure_steps:
+          type: array
+          items:
+            type: string
+        protocol_type:
           type: string
-          format: date
-        batch_id:
+        ethics_approval_id:
           type: string
-        deviations:
+        doi:
           type: string
-        instrument_used:
+          format: uri
+        instrument_requirements:
           type: string
-        output_data_ref:
-          type: string
-
-  # ----- Samples & measurements -------------------------------------------
-  - name: sample-organism
-    description: "A material sample (organism, tissue, or specimen)"
-    base: semantic
-    source_vocab: "OBI"
-    source_class: "OBI:0000747 material sample (corrected from \"specimen\" per v5)"
-    prior_art: "obi:material-sample / obi:Organism"
+    source_vocab: OBI
+    source_class: OBI:0000070 protocol application
+    prior_art: obi:ProtocolApplication / schema.org StudyAction
     disposition: mint
+    subtype_of:
+      - research-procedure
+  - name: sample-organism
+    description: A material sample (organism, tissue, or specimen)
+    base: semantic
     traits:
       - cited
       - dated
     schema:
       required:
-        - name
-        - material_type
+        - sample_id
+        - organism_name
       properties:
-        name:
+        sample_id:
           type: string
-        material_type:
+        taxon_id:
           type: string
-          enum:
-            - organism
-            - tissue
-            - cell-line
-            - environmental
-            - chemical
-            - other
-        taxon:
+        organism_name:
+          type: string
+        tissue_type:
           type: string
         collection_date:
           type: string
           format: date
-        provenance:
+        preservation_method:
           type: string
-        quantity:
+        collection_site:
           type: string
-
-  - name: measurement
-    description: "A measurement datum (a value specification produced by an assay)"
-    base: semantic
-    source_vocab: "OBI"
-    source_class: "measurement datum (IAO:0000109)"
-    prior_art: "obi:MeasurementDatum / schema.org Observation"
+    source_vocab: OBI
+    source_class: specimen
+    prior_art: obi:Specimen / obi:Organism
     disposition: mint
+  - name: measurement
+    description: A measurement datum (a value specification)
+    base: semantic
     traits:
       - cited
       - dated
     schema:
       required:
-        - variable
+        - measurement_id
         - value
       properties:
-        variable:
+        measurement_id:
+          type: string
+        measured_property:
           type: string
         value:
           type: string
         unit:
           type: string
-        method_ref:
+        measurement_method:
           type: string
-        measured_on:
+        instrument_ref:
           type: string
-        uncertainty:
+        timestamp:
           type: string
-
-  - name: hypothesis
-    description: "A falsifiable scientific hypothesis (hypothesis textual entity)"
-    base: semantic
-    source_vocab: "IAO"
-    source_class: "IAO:0000415 hypothesis textual entity (corrected from IAO:0000015 per v5)"
-    prior_art: "https://purl.obolibrary.org/obo/IAO_0000415"
+          format: date-time
+    source_vocab: OBI
+    source_class: measurement datum
+    prior_art: obi:MeasurementDatum / schema.org Observation
     disposition: mint
+    subtype_of:
+      - observation
+  - name: hypothesis
+    description: A falsifiable scientific hypothesis
+    base: semantic
     traits:
       - cited
     schema:
@@ -419,7 +306,7 @@ entity_types:
         hypothesis_type:
           type: string
           enum:
-            - "null"
+            - 'null'
             - directional
             - mechanistic
             - predictive
@@ -435,24 +322,24 @@ entity_types:
             - inconclusive
         derived_from:
           type: string
-
-  # ----- Instruments ------------------------------------------------------
-  - name: research-instrument
-    description: "A research instrument or device"
-    base: semantic
-    source_vocab: "OBI / COB"
-    source_class: "COB:0001300 device (OBI:0000968 obsolete, replaced per v5)"
-    prior_art: "COB:0001300"
+    source_vocab: IAO
+    source_class: IAO:0000415 hypothesis
+    prior_art: obi:ObjectiveSpecification / IAO hypothesis
     disposition: mint
+    subtype_of:
+      - proposition
+  - name: research-instrument
+    description: A research instrument or device
+    base: semantic
     traits:
       - cited
       - versioned
     schema:
       required:
-        - name
+        - instrument_id
         - instrument_type
       properties:
-        name:
+        instrument_id:
           type: string
         instrument_type:
           type: string
@@ -469,22 +356,22 @@ entity_types:
           type: string
         model:
           type: string
-        version_or_firmware:
+        serial_number:
           type: string
         calibration_date:
           type: string
           format: date
-        produces_data_type:
+        location:
           type: string
-
-  # ----- Publications & funding -------------------------------------------
-  - name: research-publication
-    description: "A research publication or scholarly output"
-    base: semantic
-    source_vocab: "IAO"
-    source_class: "IAO:0000311 publication"
-    prior_art: "IAO publication / schema.org ScholarlyArticle"
+    source_vocab: OBI
+    source_class: device
+    prior_art: obi:Device / IAO:0000070 device
     disposition: mint
+    subtype_of:
+      - apparatus
+  - name: research-publication
+    description: A research publication or scholarly output
+    base: semantic
     traits:
       - cited
       - versioned
@@ -507,6 +394,7 @@ entity_types:
             - technical-report
         doi:
           type: string
+          format: uri
         authors:
           type: array
           items:
@@ -519,27 +407,26 @@ entity_types:
           type: string
         open_access:
           type: boolean
-
+    source_vocab: IAO
+    source_class: IAO:0000311 publication
+    prior_art: IAO publication / schema.org ScholarlyArticle
+    disposition: mint
+    subtype_of:
+      - scholarly-output
   - name: research-funding
-    description: "A grant providing monetary support for research"
+    description: A grant providing monetary support for research
     base: semantic
-    source_vocab: "schema.org"
-    source_class: "MonetaryGrant"
-    prior_art: "schema.org/MonetaryGrant"
-    disposition: extend
     traits:
       - cited
       - dated
     schema:
       required:
-        - grant_title
-        - funder
+        - grant_id
+        - funder_name
       properties:
-        grant_title:
-          type: string
-        funder:
-          type: string
         grant_id:
+          type: string
+        funder_name:
           type: string
         amount:
           type: string
@@ -551,17 +438,19 @@ entity_types:
         end_date:
           type: string
           format: date
-        funded_investigation:
+        funding_scheme:
           type: string
-
-  # ----- Datasets, catalogs & provenance (DCAT 3 / PROV-O) ----------------
+        investigation_ref:
+          type: string
+    source_vocab: schema.org
+    source_class: MonetaryGrant
+    prior_art: schema.org/MonetaryGrant
+    disposition: extend
+    subtype_of:
+      - funding-instrument
   - name: dataset
-    description: "A published dataset"
+    description: A published dataset
     base: semantic
-    source_vocab: "W3C DCAT 3"
-    source_class: "dcat:Dataset"
-    prior_art: "dcat:Dataset / schema.org Dataset"
-    disposition: reuse
     traits:
       - cited
       - versioned
@@ -569,34 +458,144 @@ entity_types:
     schema:
       required:
         - title
-        - distribution
+        - identifier
       properties:
         title:
           type: string
         description:
           type: string
-        distribution:
-          type: array
-          items:
-            type: string
-        theme:
+        identifier:
           type: string
-        keyword:
-          type: array
-          items:
-            type: string
-        produced_by_study:
+        theme:
           type: string
         license:
           type: string
-
-  - name: data-catalog
-    description: "A curated catalog of datasets"
-    base: semantic
-    source_vocab: "W3C DCAT 3"
-    source_class: "dcat:Catalog"
-    prior_art: "dcat:Catalog / schema.org DataCatalog"
+        temporal_coverage:
+          type: string
+        spatial_coverage:
+          type: string
+        creator:
+          type: string
+        distribution_ref:
+          type: array
+          items:
+            type: string
+    source_vocab: W3C DCAT 3
+    source_class: dcat:Dataset
+    prior_art: dcat:Dataset / schema.org Dataset
     disposition: reuse
+    subtype_of:
+      - research-artifact
+  - name: data-distribution
+    description: A specific representation of a dataset (a downloadable/accessible form)
+    base: semantic
+    traits:
+      - cited
+      - versioned
+      - documented
+    schema:
+      required:
+        - access_url
+        - dataset_ref
+      properties:
+        access_url:
+          type: string
+          format: uri
+        download_url:
+          type: string
+          format: uri
+        media_type:
+          type: string
+        byte_size:
+          type: integer
+        format:
+          type: string
+        checksum:
+          type: string
+        license:
+          type: string
+        dataset_ref:
+          type: string
+    source_vocab: W3C DCAT 3
+    source_class: dcat:Distribution
+    prior_art: https://www.w3.org/TR/vocab-dcat-3/
+    disposition: reuse
+    subtype_of:
+      - research-artifact
+  - name: data-service
+    description: A data access service (an endpoint serving datasets)
+    base: semantic
+    traits:
+      - cited
+      - versioned
+      - documented
+    schema:
+      required:
+        - endpoint_url
+      properties:
+        endpoint_url:
+          type: string
+          format: uri
+        endpoint_description:
+          type: string
+        serves_dataset:
+          type: array
+          items:
+            type: string
+        contact_point:
+          type: string
+        license:
+          type: string
+        access_rights:
+          type: string
+          enum:
+            - open
+            - restricted
+            - embargoed
+        service_type:
+          type: string
+    source_vocab: W3C DCAT 3
+    source_class: dcat:DataService
+    prior_art: https://www.w3.org/TR/vocab-dcat-3/
+    disposition: reuse
+    subtype_of:
+      - research-artifact
+  - name: dataset-series
+    description: A collection of datasets published as a series
+    base: semantic
+    traits:
+      - cited
+      - versioned
+      - documented
+    schema:
+      required:
+        - title
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        temporal_coverage:
+          type: string
+        frequency:
+          type: string
+        first_member_ref:
+          type: string
+        last_member_ref:
+          type: string
+        theme:
+          type: string
+        license:
+          type: string
+    source_vocab: W3C DCAT 3
+    source_class: dcat:DatasetSeries
+    prior_art: https://www.w3.org/TR/vocab-dcat-3/
+    disposition: reuse
+    subtype_of:
+      - research-artifact
+  - name: data-catalog
+    description: A curated catalog of datasets and services
+    base: semantic
     traits:
       - cited
       - versioned
@@ -627,16 +626,15 @@ entity_types:
             - open
             - restricted
             - embargoed
-        contains_services:
-          type: boolean
-
+    source_vocab: W3C DCAT 3
+    source_class: dcat:Catalog
+    prior_art: dcat:Catalog / schema.org DataCatalog
+    disposition: reuse
+    subtype_of:
+      - research-artifact
   - name: data-provenance
-    description: "A provenance record tracing how a data artifact was generated and derived"
+    description: A provenance record tracing how a data artifact was generated and derived
     base: episodic
-    source_vocab: "W3C PROV-O"
-    source_class: "prov:Entity + prov:Activity"
-    prior_art: "prov:Entity / prov:Activity / prov:wasDerivedFrom"
-    disposition: mint
     traits:
       - cited
       - dated
@@ -660,48 +658,41 @@ entity_types:
           type: string
         revision_of:
           type: string
-
-# ===========================================================================
-# RELATIONSHIPS  (authored from relationship-inventory.json scientific rows;
-# grounded in OBO RO, IAO, W3C DCAT 3, W3C PROV-O, schema.org)
-#
-# The inventory's `distribution-of` (-> data-distribution) and `serves-dataset`
-# (-> data-service) rows are omitted: their range types are deliberately not
-# shipped by this pack, so authoring them would leave an unresolvable endpoint.
-# The two `is-about` rows are merged into one relationship key (multi from/to).
-# ===========================================================================
-
+    source_vocab: W3C PROV-O
+    source_class: prov:Entity + prov:Activity
+    prior_art: prov:Entity / prov:Activity / prov:wasDerivedFrom
+    disposition: mint
 relationships:
   catalogs:
-    description: "A data-catalog catalogs a dataset (dcat:dataset)"
+    description: A data-catalog catalogs a dataset (dcat:dataset)
     from:
       - data-catalog
     to:
       - dataset
     symmetric: false
   funded-by:
-    description: "A research-investigation is funded by a research-funding grant (schema:funding)"
+    description: A research-investigation is funded by a research-funding grant (schema:funding)
     from:
       - research-investigation
     to:
       - research-funding
     symmetric: false
   has-input:
-    description: "A protocol-application has a sample-organism as input (RO:0002233 has input)"
+    description: A protocol-application has a sample-organism as input (RO:0002233 has input)
     from:
       - protocol-application
     to:
       - sample-organism
     symmetric: false
   has-output:
-    description: "A protocol-application has a measurement as output (RO:0002234 has output)"
+    description: A protocol-application has a measurement as output (RO:0002234 has output)
     from:
       - protocol-application
     to:
       - measurement
     symmetric: false
   is-about:
-    description: "An information artifact is about another entity (IAO:0000136 is about) — a hypothesis about a measurement, a publication about an investigation"
+    description: An information artifact is about another entity (IAO:0000136 is about) — a hypothesis about a measurement, a publication about an investigation
     from:
       - hypothesis
       - research-publication
@@ -710,68 +701,133 @@ relationships:
       - research-investigation
     symmetric: false
   participates-in:
-    description: "A sample-organism participates in a research-investigation (RO:0000056 participates in)"
+    description: A sample-organism participates in a research-investigation (RO:0000056 participates in)
     from:
       - sample-organism
     to:
       - research-investigation
     symmetric: false
   was-derived-from:
-    description: "A data-provenance record traces a dataset derived from another (prov:wasDerivedFrom)"
+    description: A data-provenance record traces a dataset derived from another (prov:wasDerivedFrom)
     from:
       - data-provenance
     to:
       - dataset
     symmetric: false
   was-generated-by:
-    description: "A dataset was generated by a protocol-application (prov:wasGeneratedBy)"
+    description: A dataset was generated by a protocol-application (prov:wasGeneratedBy)
     from:
       - dataset
     to:
       - protocol-application
     symmetric: false
-
-# ===========================================================================
-# DISCOVERY PATTERNS (ontology-build-spec.md §3.1)
-# ===========================================================================
-
+  uses_method:
+    description: A study uses a method (RO:0000056 participates-in)
+    from:
+      - study
+    to:
+      - method
+    symmetric: false
+  has_sample:
+    description: A study has a sample (RO:0002233 has-input)
+    from:
+      - study
+    to:
+      - sample-organism
+    symmetric: false
+  produces:
+    description: A method produces a measurement (RO:0002234 has-output)
+    from:
+      - method
+    to:
+      - measurement
+    symmetric: false
+  measured_on:
+    description: A measurement is taken on a sample
+    from:
+      - measurement
+    to:
+      - sample-organism
+    symmetric: false
+  tests:
+    description: An investigation tests a hypothesis
+    from:
+      - research-investigation
+    to:
+      - hypothesis
+    symmetric: false
+  applies:
+    description: An investigation applies a protocol-application
+    from:
+      - research-investigation
+    to:
+      - protocol-application
+    symmetric: false
+  uses_instrument:
+    description: A protocol-application uses a research-instrument
+    from:
+      - protocol-application
+    to:
+      - research-instrument
+    symmetric: false
+  reports_in:
+    description: An investigation is reported in a publication (IAO:0000136 is-about)
+    from:
+      - research-investigation
+    to:
+      - research-publication
+    symmetric: false
+  funded_by:
+    description: An investigation is funded by a grant (schema:funder)
+    from:
+      - research-investigation
+    to:
+      - research-funding
+    symmetric: false
+  enrolls:
+    description: An investigation enrolls a cohort
+    from:
+      - research-investigation
+    to:
+      - cohort
+    symmetric: false
 discovery:
   enabled: true
   confidence_threshold: 0.8
   patterns:
-    - content_pattern: "\\b(study|trial|investigation|cohort|randomi[sz]ed controlled)\\b"
+    - content_pattern: \b(study|trial|investigation|cohort|randomi[sz]ed controlled)\b
       suggest_entity: study
       suggest_namespace: _episodic/studies
-    - content_pattern: "\\b(assay|protocol|method|procedure|RNA-seq|ChIP-seq)\\b"
+    - content_pattern: \b(assay|protocol|method|procedure|RNA-seq|ChIP-seq)\b
       suggest_entity: method
       suggest_namespace: _semantic/science
-    - content_pattern: "\\b(specimen|material sample|organism|cell line|tissue|taxon)\\b"
+    - content_pattern: \b(specimen|material sample|organism|cell line|tissue|taxon)\b
       suggest_entity: sample-organism
       suggest_namespace: _semantic/science
-    - content_pattern: "\\b(measurement|measured value|reading|datum)\\b"
+    - content_pattern: \b(measurement|measured value|reading|datum)\b
       suggest_entity: measurement
       suggest_namespace: _semantic/science
-    - content_pattern: "\\b(dataset|data catalog|DCAT|distribution|data download)\\b"
-      suggest_entity: dataset
-      suggest_namespace: _semantic/science
-    - content_pattern: "\\b(hypothesis|we hypothesi[sz]e|null hypothesis)\\b"
+    - content_pattern: \b(hypothesis|we hypothesi[sz]e|null hypothesis)\b
       suggest_entity: hypothesis
       suggest_namespace: _semantic/science
-    - content_pattern: "\\b(protocol application|batch|run performed|executed protocol)\\b"
+    - content_pattern: \b(protocol application|batch|run performed|executed protocol)\b
       suggest_entity: protocol-application
       suggest_namespace: _procedural/protocols
-    - content_pattern: "\\b(ClinicalTrials\\.gov|OSF|PROSPERO|multi-omics)\\b"
+    - content_pattern: \b(ClinicalTrials\.gov|OSF|PROSPERO|multi-omics)\b
       suggest_entity: research-investigation
       suggest_namespace: _episodic/studies
-    - content_pattern: "\\b(sequencer|mass spectrometer|microscope|flow cytometer|instrument)\\b"
+    - content_pattern: \b(sequencer|mass spectrometer|microscope|flow cytometer|instrument)\b
       suggest_entity: research-instrument
       suggest_namespace: _semantic/instruments
-    - content_pattern: "\\b(DOI|preprint|journal article|ScholarlyArticle)\\b"
+    - content_pattern: \b(DOI|preprint|journal article|ScholarlyArticle)\b
       suggest_entity: research-publication
       suggest_namespace: _semantic/publications
-    - content_pattern: "\\b(MonetaryGrant|grant number|funded by|award)\\b"
+    - content_pattern: \b(MonetaryGrant|grant number|funded by|award)\b
       suggest_entity: research-funding
       suggest_namespace: _semantic/funding
-    - content_pattern: "\\b(prov:wasDerivedFrom|provenance|lineage|wasGeneratedBy)\\b"
+    - content_pattern: \b(dataset|data catalog|DCAT|distribution|data download)\b
+      suggest_entity: dataset
+      suggest_namespace: _semantic/catalogs
+    - content_pattern: \b(prov:wasDerivedFrom|provenance|lineage|wasGeneratedBy)\b
       suggest_entity: data-provenance
       suggest_namespace: _episodic/provenance

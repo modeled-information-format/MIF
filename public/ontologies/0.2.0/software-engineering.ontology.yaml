@@ -1,0 +1,299 @@
+---
+# Software Engineering Ontology
+#
+# The SDLC-operational domain pack. Architecture vocabulary shared across engineering
+# domains (component, design-pattern, architectural-decision, delivery-metric,
+# engineering-practice, process-discipline) now lives in the engineering-base layer
+# this pack EXTENDS; the generic `technology` lives in mif-generic. Security types
+# (security-threat, security-framework, security-incident) moved to the software-security
+# pack; regulation moved to regulatory-legal. What remains here is genuinely
+# software-engineering-specific: incidents and operational procedures.
+#
+# Version: 0.5.0
+# Last Updated: 2026-06-24
+#
+# 0.5.0 (ontology-spine-relayering): re-parented onto engineering-base; shed the shared
+# engineering supertypes (now inherited), the generic `technology` (mif-generic), the
+# security types (-> software-security), `compliance-regulation` (-> regulatory-legal,
+# subsumed by legal-act/obligation), and the deprecated `adoption-trend`
+# (-> trend-analysis `trend`). Clean break — no back-compat aliases (pre-stable).
+
+ontology:
+  id: software-engineering
+  version: "0.5.0"
+  description: "Software engineering domain ontology — incidents and SDLC operational procedures"
+  extends:
+    - engineering-base
+# Custom Namespaces
+namespaces:
+  procedural:
+    children:
+      deployments:
+        description: "Deployment procedures, release processes"
+        type_hint: procedural
+# Entity Types — software-engineering-specific (shared supertypes are inherited from engineering-base).
+entity_types:
+  - name: incident-report
+    description: "A production incident or outage report"
+    base: episodic
+    traits:
+      - timeline
+      - stakeholders
+    schema:
+      required:
+        - severity
+        - impact
+        - resolution
+      properties:
+        severity:
+          type: string
+          description: "Incident severity level"
+          enum:
+            - critical
+            - high
+            - medium
+            - low
+        impact:
+          type: string
+          description: "Business/user impact description"
+        resolution:
+          type: string
+          description: "How the incident was resolved"
+        root_cause:
+          type: string
+          description: "Root cause analysis"
+        prevention:
+          type: array
+          description: "Prevention measures"
+          items:
+            type: string
+        duration_minutes:
+          type: integer
+          description: "Incident duration in minutes"
+  - name: runbook
+    description: "Operational runbook for handling scenarios"
+    base: procedural
+    traits:
+      - versioned
+      - stakeholders
+    schema:
+      required:
+        - title
+        - trigger
+        - procedure
+      properties:
+        title:
+          type: string
+        trigger:
+          type: string
+          description: "What triggers this runbook"
+        severity:
+          type: string
+          enum:
+            - critical
+            - high
+            - medium
+            - low
+        procedure:
+          type: array
+          description: "Step-by-step procedure"
+          items:
+            type: object
+            properties:
+              step:
+                type: integer
+              action:
+                type: string
+              expected_outcome:
+                type: string
+        escalation:
+          type: object
+          description: "Escalation path"
+  - name: deployment-procedure
+    description: "Step-by-step deployment or release procedure"
+    base: procedural
+    traits:
+      - versioned
+      - stakeholders
+    schema:
+      required:
+        - name
+        - steps
+        - target_environment
+      properties:
+        name:
+          type: string
+        steps:
+          type: array
+          items:
+            type: object
+            properties:
+              order:
+                type: integer
+              action:
+                type: string
+              verification:
+                type: string
+              rollback:
+                type: string
+        target_environment:
+          type: string
+          enum:
+            - development
+            - staging
+            - production
+        prerequisites:
+          type: array
+          items:
+            type: string
+  - name: migration-guide
+    description: "Database or system migration procedure"
+    base: procedural
+    traits:
+      - versioned
+      - dated
+    schema:
+      required:
+        - title
+        - from_state
+        - to_state
+        - steps
+      properties:
+        title:
+          type: string
+        from_state:
+          type: string
+        to_state:
+          type: string
+        steps:
+          type: array
+          items:
+            type: object
+        rollback_procedure:
+          type: array
+          items:
+            type: object
+        downtime_required:
+          type: boolean
+# Traits (Mixins) used by the operational types.
+traits:
+  versioned:
+    description: "Adds version tracking fields"
+    fields:
+      version:
+        type: string
+        pattern: "^\\d+\\.\\d+\\.\\d+.*$"
+      changelog:
+        type: array
+        items:
+          type: object
+  dated:
+    description: "Adds decision/event date"
+    fields:
+      decision_date:
+        type: string
+        format: date
+      review_date:
+        type: string
+        format: date
+  timeline:
+    description: "Adds incident timeline"
+    fields:
+      timeline:
+        type: array
+        items:
+          type: object
+          properties:
+            timestamp:
+              type: string
+              format: date-time
+            event:
+              type: string
+            actor:
+              type: string
+  stakeholders:
+    description: "Adds stakeholder tracking"
+    fields:
+      stakeholders:
+        type: array
+        items:
+          type: object
+          properties:
+            name:
+              type: string
+            role:
+              type: string
+            contact:
+              type: string
+# Relationships — software-engineering edges. Endpoints that name an inherited supertype
+# (component, architectural-decision) or the generic `technology` resolve across the
+# registry (gate_m20) and via the extends chain at concordance time.
+relationships:
+  caused_by:
+    description: "Incident causality"
+    from:
+      - incident-report
+    to:
+      - component
+      - technology
+    symmetric: false
+  resolves:
+    description: "Decision resolves an issue"
+    from:
+      - architectural-decision
+    to:
+      - incident-report
+    symmetric: false
+  supersedes:
+    description: "Newer version supersedes older"
+    from:
+      - architectural-decision
+      - component
+      - runbook
+      - deployment-procedure
+    to:
+      - architectural-decision
+      - component
+      - runbook
+      - deployment-procedure
+    symmetric: false
+  documents:
+    description: "Procedure documents how to work with entity"
+    from:
+      - runbook
+      - deployment-procedure
+      - migration-guide
+    to:
+      - component
+      - technology
+    symmetric: false
+  triggers:
+    description: "Incident triggers runbook execution"
+    from:
+      - incident-report
+    to:
+      - runbook
+    symmetric: false
+# Discovery Configuration — software-engineering-specific types only.
+discovery:
+  enabled: true
+  confidence_threshold: 0.8
+  patterns:
+    - content_pattern: "\\b(outage|incident|postmortem|RCA)\\b"
+      suggest_entity: incident-report
+      suggest_namespace: _episodic/incidents
+    - content_pattern: "\\b(runbook|playbook|SOP|procedure)\\b"
+      suggest_entity: runbook
+      suggest_namespace: _procedural/runbooks
+    - content_pattern: "\\b(deploy|release|rollout)\\s+(steps|procedure)\\b"
+      suggest_entity: deployment-procedure
+      suggest_namespace: _procedural/deployments
+    - content_pattern: "\\b(migration|migrate|upgrade)\\s+(guide|plan)\\b"
+      suggest_entity: migration-guide
+      suggest_namespace: _procedural/migrations
+    - file_pattern: "**/runbooks/**/*.md"
+      suggest_entity: runbook
+      suggest_namespace: _procedural/runbooks
+    - file_pattern: "**/docs/procedures/**/*.md"
+      suggest_entity: deployment-procedure
+      suggest_namespace: _procedural/deployments

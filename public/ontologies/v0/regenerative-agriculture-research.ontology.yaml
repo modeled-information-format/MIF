@@ -31,12 +31,14 @@
 
 ontology:
   id: regenerative-agriculture-research
-  version: "0.3.1"
+  version: "0.4.0"
   description: >-
     Agriculture / farm research ontology — research-oriented entity types for husbandry, agronomy, farm infrastructure, grants, and equipment, organized as an IS-A tree rooted in the inherited generic/engineering supertypes.
   schema_url: >-
     https://mif-spec.dev/schema/ontology/ontology.schema.json
   extends:
+    - research
+    - agriculture
     - engineering-base
     - mif-generic
 # Namespace Hierarchy (Cognitive Triad)

@@ -126,7 +126,7 @@
   "@id": "mif:ontology/regenerative-agriculture-research",
   "@type": "mif:Ontology",
   "identifier": "regenerative-agriculture-research",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Agriculture / farm research ontology \u2014 research-oriented entity types for husbandry, agronomy, farm infrastructure, grants, and equipment, organized as an IS-A tree rooted in the inherited generic/engineering supertypes.",
   "schema_url": "https://mif-spec.dev/schema/ontology/ontology.schema.json",
   "namespaces": {

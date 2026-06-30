@@ -1,0 +1,574 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "@vocab": "https://mif-spec.dev/ns/ontology#",
+    "mif": "https://mif-spec.dev/ns/",
+    "schema": "https://schema.org/",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "ontology": {
+      "@id": "mif:Ontology",
+      "@type": "@id"
+    },
+    "id": {
+      "@id": "@id"
+    },
+    "version": {
+      "@id": "schema:version",
+      "@type": "xsd:string"
+    },
+    "description": {
+      "@id": "schema:description",
+      "@type": "xsd:string"
+    },
+    "schema_url": {
+      "@id": "rdfs:isDefinedBy",
+      "@type": "@id"
+    },
+    "namespaces": {
+      "@id": "mif:hasNamespace",
+      "@container": "@id"
+    },
+    "type_hint": {
+      "@id": "mif:typeHint",
+      "@type": "xsd:string"
+    },
+    "replaces": {
+      "@id": "mif:replaces",
+      "@type": "@id"
+    },
+    "children": {
+      "@id": "mif:hasChildNamespace",
+      "@container": "@id"
+    },
+    "entity_types": {
+      "@id": "mif:definesEntityType",
+      "@container": "@list"
+    },
+    "name": {
+      "@id": "schema:name",
+      "@type": "xsd:string"
+    },
+    "base": {
+      "@id": "mif:baseType",
+      "@type": "@vocab"
+    },
+    "semantic": "mif:SemanticMemory",
+    "episodic": "mif:EpisodicMemory",
+    "procedural": "mif:ProceduralMemory",
+    "traits": {
+      "@id": "mif:definesTrait",
+      "@container": "@id"
+    },
+    "subtype_of": {
+      "@id": "mif:subtypeOf",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "fields": {
+      "@id": "mif:hasField",
+      "@container": "@id"
+    },
+    "requires": {
+      "@id": "mif:requiresField",
+      "@container": "@list"
+    },
+    "relationships": {
+      "@id": "mif:definesRelationship",
+      "@container": "@id"
+    },
+    "from": {
+      "@id": "rdfs:domain",
+      "@container": "@set"
+    },
+    "to": {
+      "@id": "rdfs:range",
+      "@container": "@set"
+    },
+    "symmetric": {
+      "@id": "owl:SymmetricProperty",
+      "@type": "xsd:boolean"
+    },
+    "discovery": {
+      "@id": "mif:discoveryConfig"
+    },
+    "enabled": {
+      "@id": "mif:discoveryEnabled",
+      "@type": "xsd:boolean"
+    },
+    "patterns": {
+      "@id": "mif:hasDiscoveryPattern",
+      "@container": "@list"
+    },
+    "confidence_threshold": {
+      "@id": "mif:confidenceThreshold",
+      "@type": "xsd:decimal"
+    },
+    "content_pattern": {
+      "@id": "mif:contentPattern",
+      "@type": "xsd:string"
+    },
+    "file_pattern": {
+      "@id": "mif:filePattern",
+      "@type": "xsd:string"
+    },
+    "suggest_entity": {
+      "@id": "mif:suggestsEntityType",
+      "@type": "@id"
+    },
+    "suggest_namespace": {
+      "@id": "mif:suggestsNamespace",
+      "@type": "xsd:string"
+    }
+  },
+  "@id": "mif:ontology/software-engineering",
+  "@type": "mif:Ontology",
+  "identifier": "software-engineering",
+  "version": "0.5.0",
+  "description": "Software engineering domain ontology \u2014 incidents and SDLC operational procedures",
+  "namespaces": {
+    "procedural": {
+      "@id": "mif:namespace/procedural",
+      "@type": "mif:Namespace",
+      "name": "procedural",
+      "children": {
+        "deployments": {
+          "@id": "mif:namespace/procedural/deployments",
+          "@type": "mif:Namespace",
+          "name": "deployments",
+          "description": "Deployment procedures, release processes",
+          "type_hint": "procedural"
+        }
+      }
+    }
+  },
+  "entity_types": [
+    {
+      "@id": "mif:entityType/incident-report",
+      "@type": "mif:EntityType",
+      "name": "incident-report",
+      "base": "episodic",
+      "description": "A production incident or outage report",
+      "traits": [
+        "mif:trait/timeline",
+        "mif:trait/stakeholders"
+      ],
+      "schema": {
+        "required": [
+          "severity",
+          "impact",
+          "resolution"
+        ],
+        "properties": {
+          "severity": {
+            "type": "string",
+            "description": "Incident severity level",
+            "enum": [
+              "critical",
+              "high",
+              "medium",
+              "low"
+            ]
+          },
+          "impact": {
+            "type": "string",
+            "description": "Business/user impact description"
+          },
+          "resolution": {
+            "type": "string",
+            "description": "How the incident was resolved"
+          },
+          "root_cause": {
+            "type": "string",
+            "description": "Root cause analysis"
+          },
+          "prevention": {
+            "type": "array",
+            "description": "Prevention measures",
+            "items": {
+              "type": "string"
+            }
+          },
+          "duration_minutes": {
+            "type": "integer",
+            "description": "Incident duration in minutes"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/runbook",
+      "@type": "mif:EntityType",
+      "name": "runbook",
+      "base": "procedural",
+      "description": "Operational runbook for handling scenarios",
+      "traits": [
+        "mif:trait/versioned",
+        "mif:trait/stakeholders"
+      ],
+      "schema": {
+        "required": [
+          "title",
+          "trigger",
+          "procedure"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "trigger": {
+            "type": "string",
+            "description": "What triggers this runbook"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "critical",
+              "high",
+              "medium",
+              "low"
+            ]
+          },
+          "procedure": {
+            "type": "array",
+            "description": "Step-by-step procedure",
+            "items": {
+              "type": "object",
+              "properties": {
+                "step": {
+                  "type": "integer"
+                },
+                "action": {
+                  "type": "string"
+                },
+                "expected_outcome": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "escalation": {
+            "type": "object",
+            "description": "Escalation path"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/deployment-procedure",
+      "@type": "mif:EntityType",
+      "name": "deployment-procedure",
+      "base": "procedural",
+      "description": "Step-by-step deployment or release procedure",
+      "traits": [
+        "mif:trait/versioned",
+        "mif:trait/stakeholders"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "steps",
+          "target_environment"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "steps": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "order": {
+                  "type": "integer"
+                },
+                "action": {
+                  "type": "string"
+                },
+                "verification": {
+                  "type": "string"
+                },
+                "rollback": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "target_environment": {
+            "type": "string",
+            "enum": [
+              "development",
+              "staging",
+              "production"
+            ]
+          },
+          "prerequisites": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/migration-guide",
+      "@type": "mif:EntityType",
+      "name": "migration-guide",
+      "base": "procedural",
+      "description": "Database or system migration procedure",
+      "traits": [
+        "mif:trait/versioned",
+        "mif:trait/dated"
+      ],
+      "schema": {
+        "required": [
+          "title",
+          "from_state",
+          "to_state",
+          "steps"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "from_state": {
+            "type": "string"
+          },
+          "to_state": {
+            "type": "string"
+          },
+          "steps": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "rollback_procedure": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "downtime_required": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  ],
+  "traits": {
+    "versioned": {
+      "@id": "mif:trait/versioned",
+      "@type": "mif:Trait",
+      "name": "versioned",
+      "description": "Adds version tracking fields",
+      "fields": {
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+.*$"
+        },
+        "changelog": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "dated": {
+      "@id": "mif:trait/dated",
+      "@type": "mif:Trait",
+      "name": "dated",
+      "description": "Adds decision/event date",
+      "fields": {
+        "decision_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "review_date": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "timeline": {
+      "@id": "mif:trait/timeline",
+      "@type": "mif:Trait",
+      "name": "timeline",
+      "description": "Adds incident timeline",
+      "fields": {
+        "timeline": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "timestamp": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "event": {
+                "type": "string"
+              },
+              "actor": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "stakeholders": {
+      "@id": "mif:trait/stakeholders",
+      "@type": "mif:Trait",
+      "name": "stakeholders",
+      "description": "Adds stakeholder tracking",
+      "fields": {
+        "stakeholders": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "role": {
+                "type": "string"
+              },
+              "contact": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "relationships": {
+    "caused_by": {
+      "@id": "mif:relationship/caused_by",
+      "@type": "mif:Relationship",
+      "name": "caused_by",
+      "description": "Incident causality",
+      "from": [
+        "mif:entityType/incident-report"
+      ],
+      "to": [
+        "mif:entityType/component",
+        "mif:entityType/technology"
+      ],
+      "symmetric": false
+    },
+    "resolves": {
+      "@id": "mif:relationship/resolves",
+      "@type": "mif:Relationship",
+      "name": "resolves",
+      "description": "Decision resolves an issue",
+      "from": [
+        "mif:entityType/architectural-decision"
+      ],
+      "to": [
+        "mif:entityType/incident-report"
+      ],
+      "symmetric": false
+    },
+    "supersedes": {
+      "@id": "mif:relationship/supersedes",
+      "@type": "mif:Relationship",
+      "name": "supersedes",
+      "description": "Newer version supersedes older",
+      "from": [
+        "mif:entityType/architectural-decision",
+        "mif:entityType/component",
+        "mif:entityType/runbook",
+        "mif:entityType/deployment-procedure"
+      ],
+      "to": [
+        "mif:entityType/architectural-decision",
+        "mif:entityType/component",
+        "mif:entityType/runbook",
+        "mif:entityType/deployment-procedure"
+      ],
+      "symmetric": false
+    },
+    "documents": {
+      "@id": "mif:relationship/documents",
+      "@type": "mif:Relationship",
+      "name": "documents",
+      "description": "Procedure documents how to work with entity",
+      "from": [
+        "mif:entityType/runbook",
+        "mif:entityType/deployment-procedure",
+        "mif:entityType/migration-guide"
+      ],
+      "to": [
+        "mif:entityType/component",
+        "mif:entityType/technology"
+      ],
+      "symmetric": false
+    },
+    "triggers": {
+      "@id": "mif:relationship/triggers",
+      "@type": "mif:Relationship",
+      "name": "triggers",
+      "description": "Incident triggers runbook execution",
+      "from": [
+        "mif:entityType/incident-report"
+      ],
+      "to": [
+        "mif:entityType/runbook"
+      ],
+      "symmetric": false
+    }
+  },
+  "discovery": {
+    "enabled": true,
+    "confidence_threshold": 0.8,
+    "patterns": [
+      {
+        "@id": "mif:pattern/0",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(outage|incident|postmortem|RCA)\\b",
+        "suggest_entity": "mif:entityType/incident-report",
+        "suggest_namespace": "_episodic/incidents"
+      },
+      {
+        "@id": "mif:pattern/1",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(runbook|playbook|SOP|procedure)\\b",
+        "suggest_entity": "mif:entityType/runbook",
+        "suggest_namespace": "_procedural/runbooks"
+      },
+      {
+        "@id": "mif:pattern/2",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(deploy|release|rollout)\\s+(steps|procedure)\\b",
+        "suggest_entity": "mif:entityType/deployment-procedure",
+        "suggest_namespace": "_procedural/deployments"
+      },
+      {
+        "@id": "mif:pattern/3",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(migration|migrate|upgrade)\\s+(guide|plan)\\b",
+        "suggest_entity": "mif:entityType/migration-guide",
+        "suggest_namespace": "_procedural/migrations"
+      },
+      {
+        "@id": "mif:pattern/4",
+        "@type": "mif:DiscoveryPattern",
+        "file_pattern": "**/runbooks/**/*.md",
+        "suggest_entity": "mif:entityType/runbook",
+        "suggest_namespace": "_procedural/runbooks"
+      },
+      {
+        "@id": "mif:pattern/5",
+        "@type": "mif:DiscoveryPattern",
+        "file_pattern": "**/docs/procedures/**/*.md",
+        "suggest_entity": "mif:entityType/deployment-procedure",
+        "suggest_namespace": "_procedural/deployments"
+      }
+    ]
+  }
+}

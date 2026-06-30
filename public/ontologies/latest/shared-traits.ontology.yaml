@@ -514,3 +514,78 @@ traits:
               type: array
               items:
                 type: string
+  # ---------------------------------------------------------------------------
+  # PROVENANCE / METADATA TRAITS
+  # Promoted here so domain packs that extend [mif-base, shared-traits] carry the
+  # generic provenance traits the ontology build-spec assigns. Definitions match
+  # engineering-base (cited/dated/versioned/documented) and the software-engineering
+  # pack (timeline/stakeholders) verbatim, so a trait name means the same thing
+  # everywhere it resolves.
+  # ---------------------------------------------------------------------------
+  cited:
+    description: "Requires citations/sources"
+    requires:
+      - citations
+  dated:
+    description: "Adds decision/event date"
+    fields:
+      decision_date:
+        type: string
+        format: date
+      review_date:
+        type: string
+        format: date
+  versioned:
+    description: "Adds version tracking fields"
+    fields:
+      version:
+        type: string
+        pattern: "^\\d+\\.\\d+\\.\\d+.*$"
+      changelog:
+        type: array
+        items:
+          type: object
+  documented:
+    description: "Adds documentation reference"
+    fields:
+      documentation_url:
+        type: string
+        format: uri
+      readme_path:
+        type: string
+  timeline:
+    description: "Adds an event timeline"
+    fields:
+      timeline:
+        type: array
+        items:
+          type: object
+          properties:
+            timestamp:
+              type: string
+              format: date-time
+            event:
+              type: string
+            actor:
+              type: string
+  stakeholders:
+    description: "Adds stakeholder tracking"
+    fields:
+      stakeholders:
+        type: array
+        items:
+          type: object
+          properties:
+            name:
+              type: string
+            role:
+              type: string
+            contact:
+              type: string
+  attributed:
+    description: "Adds attribution to an agent or source"
+    fields:
+      attributed_to:
+        type: array
+        items:
+          type: string

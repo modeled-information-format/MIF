@@ -26,19 +26,16 @@
 
 ontology:
   id: regenerative-agriculture
-  version: "0.1.0"
+  version: "0.2.0"
   description: "Regenerative agriculture ontology with ecosystem coverage"
   schema_url: >-
     https://mif-spec.dev/schema/ontology/ontology.schema.json
   extends:
-    - mif-base
-    - shared-traits
-
+    - agriculture
 # ==============================================================================
 # CUSTOM NAMESPACES
 # ==============================================================================
 # These extend the base cognitive triad hierarchy with domain-specific paths.
-
 namespaces:
   semantic:
     children:
@@ -58,7 +55,6 @@ namespaces:
       inputs:
         description: "Seeds, amendments, biological inputs"
         type_hint: semantic
-
       # Supply Chain
       supply-chain:
         description: "Buyers, processors, distributors"
@@ -66,7 +62,6 @@ namespaces:
       markets:
         description: "Market channels, pricing, contracts"
         type_hint: semantic
-
       # Certifications & Carbon
       certifications:
         description: "Organic, ROC, and other certifications"
@@ -74,7 +69,6 @@ namespaces:
       carbon:
         description: "Carbon credits, soil carbon measurements"
         type_hint: semantic
-
   episodic:
     children:
       seasons:
@@ -89,7 +83,6 @@ namespaces:
       transactions:
         description: "Sales, purchases, market events"
         type_hint: episodic
-
   procedural:
     children:
       soil-health:
@@ -104,11 +97,9 @@ namespaces:
       compliance:
         description: "Certification audit preparation"
         type_hint: procedural
-
 # ==============================================================================
 # ENTITY TYPES
 # ==============================================================================
-
 entity_types:
   # ---------------------------------------------------------------------------
   # LAND & SOIL ENTITIES
@@ -151,7 +142,8 @@ entity_types:
         regenerative_transition_year:
           type: integer
           description: "Year regenerative practices began"
-
+    subtype_of:
+      - agricultural-holding
   - name: field
     description: "A distinct agricultural field or parcel"
     base: semantic
@@ -194,7 +186,8 @@ entity_types:
             - pivot
             - flood
             - sprinkler
-
+    subtype_of:
+      - land-parcel
   - name: soil-profile
     description: "Soil health profile with testing data"
     base: semantic
@@ -239,7 +232,8 @@ entity_types:
         lab:
           type: string
           description: "Testing laboratory"
-
+    subtype_of:
+      - soil-unit
   # ---------------------------------------------------------------------------
   # CROP ENTITIES
   # ---------------------------------------------------------------------------
@@ -277,7 +271,8 @@ entity_types:
             - medium
             - deep
             - tap_root
-
+    subtype_of:
+      - cultivar
   - name: crop-rotation
     description: "Multi-year crop rotation plan"
     base: procedural
@@ -316,7 +311,6 @@ entity_types:
           description: "Rotation objectives"
           items:
             type: string
-
   - name: planting
     description: "A specific crop planting event"
     base: episodic
@@ -356,7 +350,6 @@ entity_types:
         expected_harvest_date:
           type: string
           format: date
-
   # ---------------------------------------------------------------------------
   # LIVESTOCK ENTITIES
   # ---------------------------------------------------------------------------
@@ -400,7 +393,8 @@ entity_types:
         grazing_unit:
           type: string
           description: "Current grazing paddock/field"
-
+    subtype_of:
+      - managed-animal
   - name: animal
     description: "Individual animal record"
     base: semantic
@@ -445,7 +439,8 @@ entity_types:
                 format: date
               weight_lbs:
                 type: number
-
+    subtype_of:
+      - managed-animal
   - name: grazing-plan
     description: "Rotational grazing plan"
     base: procedural
@@ -484,7 +479,6 @@ entity_types:
         rest_period_days:
           type: integer
           description: "Minimum recovery days"
-
   # ---------------------------------------------------------------------------
   # EQUIPMENT & INPUTS
   # ---------------------------------------------------------------------------
@@ -524,7 +518,8 @@ entity_types:
           type: number
         hours_meter:
           type: number
-
+    subtype_of:
+      - agricultural-equipment
   - name: input
     description: "Farm input product (seeds, amendments, etc.)"
     base: semantic
@@ -559,7 +554,8 @@ entity_types:
           type: number
         quantity_on_hand:
           type: number
-
+    subtype_of:
+      - agricultural-input
   # ---------------------------------------------------------------------------
   # CERTIFICATION ENTITIES
   # ---------------------------------------------------------------------------
@@ -613,7 +609,6 @@ entity_types:
           format: date
         certificate_number:
           type: string
-
   - name: inspection
     description: "Certification inspection or audit event"
     base: episodic
@@ -668,7 +663,6 @@ entity_types:
             - conditional
             - failed
             - pending
-
   # ---------------------------------------------------------------------------
   # CARBON & CLIMATE ENTITIES
   # ---------------------------------------------------------------------------
@@ -700,7 +694,6 @@ entity_types:
           type: integer
         bulk_density:
           type: number
-
   - name: carbon-credit
     description: "Verified carbon credit or offset"
     base: semantic
@@ -748,7 +741,6 @@ entity_types:
           type: number
         buyer:
           type: string
-
   # ---------------------------------------------------------------------------
   # SUPPLY CHAIN ENTITIES
   # ---------------------------------------------------------------------------
@@ -786,7 +778,6 @@ entity_types:
           type: array
           items:
             type: string
-
   - name: contract
     description: "Sales or supply contract"
     base: semantic
@@ -822,7 +813,6 @@ entity_types:
           type: array
           items:
             type: string
-
   - name: harvest-record
     description: "Harvest event with yield data"
     base: episodic
@@ -854,7 +844,8 @@ entity_types:
           type: string
         lot_number:
           type: string
-
+    subtype_of:
+      - harvest-event
   # ---------------------------------------------------------------------------
   # WEATHER & EVENTS
   # ---------------------------------------------------------------------------
@@ -898,11 +889,11 @@ entity_types:
           description: "Estimated loss percentage"
         insurance_claim:
           type: boolean
-
+    subtype_of:
+      - climate-event
 # ==============================================================================
 # RELATIONSHIPS
 # ==============================================================================
-
 relationships:
   located_on:
     description: "Entity is located on a field or farm"
@@ -914,7 +905,6 @@ relationships:
       - field
       - farm
     symmetric: false
-
   part_of:
     description: "Entity is part of a larger entity"
     from:
@@ -924,7 +914,6 @@ relationships:
       - farm
       - herd
     symmetric: false
-
   certified_by:
     description: "Entity holds certification"
     from:
@@ -934,7 +923,6 @@ relationships:
     to:
       - certification
     symmetric: false
-
   supplies_to:
     description: "Farm supplies products to buyer"
     from:
@@ -944,7 +932,6 @@ relationships:
       - buyer
       - contract
     symmetric: false
-
   generates:
     description: "Practice generates carbon credits"
     from:
@@ -954,7 +941,6 @@ relationships:
     to:
       - carbon-credit
     symmetric: false
-
   affects:
     description: "Weather event affects entity"
     from:
@@ -964,7 +950,6 @@ relationships:
       - herd
       - planting
     symmetric: false
-
   follows:
     description: "Crop follows previous crop in rotation"
     from:
@@ -972,7 +957,6 @@ relationships:
     to:
       - planting
     symmetric: false
-
   documents:
     description: "Procedure documents how to manage entity"
     from:
@@ -982,15 +966,12 @@ relationships:
       - herd
       - field
     symmetric: false
-
 # ==============================================================================
 # DISCOVERY PATTERNS
 # ==============================================================================
-
 discovery:
   enabled: true
   confidence_threshold: 0.8
-
   patterns:
     # Soil and land patterns
     - content_pattern: "\\b(soil|organic matter|carbon|SOM|SOC)\\b"
@@ -999,7 +980,6 @@ discovery:
     - content_pattern: "\\b(field|parcel|paddock|pasture|acreage)\\b"
       suggest_entity: field
       suggest_namespace: _semantic/land
-
     # Crop patterns
     - content_pattern: "\\b(cover crop|rotation|cash crop|planting)\\b"
       suggest_entity: crop-rotation
@@ -1007,7 +987,6 @@ discovery:
     - content_pattern: "\\b(no-till|no till|minimum till|tillage)\\b"
       suggest_entity: crop-rotation
       suggest_namespace: _procedural/soil-health
-
     # Livestock patterns
     - content_pattern: "\\b(herd|cattle|sheep|goats|livestock)\\b"
       suggest_entity: herd
@@ -1015,7 +994,6 @@ discovery:
     - content_pattern: "\\b(rotational grazing|mob grazing|AMP)\\b"
       suggest_entity: grazing-plan
       suggest_namespace: _procedural/animal-welfare
-
     # Certification patterns
     - content_pattern: "\\b(organic|ROC|regenerative organic|certified)\\b"
       suggest_entity: certification
@@ -1023,7 +1001,6 @@ discovery:
     - content_pattern: "\\b(audit|inspection|certifier|compliance)\\b"
       suggest_entity: inspection
       suggest_namespace: _episodic/inspections
-
     # Carbon patterns
     - content_pattern: "\\b(carbon credit|carbon offset|sequestration|CO2e)\\b"
       suggest_entity: carbon-credit
@@ -1031,7 +1008,6 @@ discovery:
     - content_pattern: "\\b(baseline|soil carbon measurement|MRV)\\b"
       suggest_entity: carbon-baseline
       suggest_namespace: _semantic/carbon
-
     # Supply chain patterns
     - content_pattern: "\\b(buyer|customer|market|contract|sale)\\b"
       suggest_entity: buyer
@@ -1039,7 +1015,6 @@ discovery:
     - content_pattern: "\\b(harvest|yield|bushel|pounds|ton)\\b"
       suggest_entity: harvest-record
       suggest_namespace: _episodic/transactions
-
     # Weather patterns
     - content_pattern: "\\b(frost|freeze|drought|flood|hail|storm)\\b"
       suggest_entity: weather-event

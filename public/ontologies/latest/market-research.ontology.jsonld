@@ -126,8 +126,8 @@
   "@id": "mif:ontology/market-research",
   "@type": "mif:Ontology",
   "identifier": "market-research",
-  "version": "0.1.0",
-  "description": "Market-research domain ontology \u2014 segments, competitors, sizing, forces, intelligence",
+  "version": "0.2.0",
+  "description": "Market-research domain ontology \u2014 segments, competitors, sizing, demand, intelligence",
   "namespaces": {
     "semantic": {
       "@id": "mif:namespace/semantic",
@@ -138,7 +138,7 @@
           "@id": "mif:namespace/semantic/market",
           "@type": "mif:Namespace",
           "name": "market",
-          "description": "Segments, competitors, personas, sizing, forces, value propositions, data sources",
+          "description": "Segments, competitors, brands, personas, sizing, forces, demand, data sources",
           "type_hint": "semantic"
         },
         "reports": {
@@ -191,32 +191,22 @@
       ],
       "schema": {
         "required": [
-          "name",
-          "segmentation_axis"
+          "name"
         ],
         "properties": {
           "name": {
             "type": "string"
           },
-          "segmentation_axis": {
-            "type": "string",
-            "enum": [
-              "use-case",
-              "vertical",
-              "buyer-size",
-              "geography",
-              "channel",
-              "business-model",
-              "price-band"
-            ]
-          },
-          "definition": {
+          "description": {
             "type": "string"
           },
-          "size_indicator": {
+          "geographic_area": {
             "type": "string"
           },
-          "parent_segment": {
+          "audience_type": {
+            "type": "string"
+          },
+          "identifier": {
             "type": "string"
           }
         }
@@ -234,32 +224,69 @@
       ],
       "schema": {
         "required": [
-          "name",
-          "positioning"
+          "legal_name"
+        ],
+        "properties": {
+          "legal_name": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "area_served": {
+            "type": "string"
+          },
+          "number_of_employees": {
+            "type": "integer"
+          },
+          "founding_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "makes_offer": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/brand",
+      "@type": "mif:EntityType",
+      "name": "brand",
+      "base": "semantic",
+      "description": "A brand maintained by a competitor (REUSES schema:Brand)",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "schema": {
+        "required": [
+          "name"
         ],
         "properties": {
           "name": {
             "type": "string"
           },
-          "positioning": {
+          "logo": {
+            "type": "string",
+            "format": "uri"
+          },
+          "slogan": {
             "type": "string"
           },
-          "funding_stage": {
+          "aggregate_rating": {
             "type": "string"
           },
-          "scale": {
-            "type": "string"
-          },
-          "growth_signal": {
-            "type": "string"
-          },
-          "segments_served": {
+          "review": {
             "type": "array",
             "items": {
               "type": "string"
             }
           },
-          "website": {
+          "url": {
             "type": "string",
             "format": "uri"
           }
@@ -277,8 +304,39 @@
       ],
       "schema": {
         "required": [
-          "name",
           "audience_type"
+        ],
+        "properties": {
+          "audience_type": {
+            "type": "string"
+          },
+          "geographic_area": {
+            "type": "string"
+          },
+          "required_gender": {
+            "type": "string"
+          },
+          "required_min_age": {
+            "type": "integer"
+          },
+          "required_max_age": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/respondent-segment",
+      "@type": "mif:EntityType",
+      "name": "respondent-segment",
+      "base": "semantic",
+      "description": "A survey-respondent cohort defined by screening criteria",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "schema": {
+        "required": [
+          "name"
         ],
         "properties": {
           "name": {
@@ -290,50 +348,11 @@
           "geographic_area": {
             "type": "string"
           },
-          "jobs_to_be_done": {
-            "type": "string"
-          },
-          "motivations": {
-            "type": "string"
-          },
-          "willingness_to_pay": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    {
-      "@id": "mif:entityType/respondent-segment",
-      "@type": "mif:EntityType",
-      "name": "respondent-segment",
-      "base": "semantic",
-      "description": "A survey-respondent cohort defined by screening criteria (distinct from market segment)",
-      "traits": [
-        "mif:trait/cited"
-      ],
-      "schema": {
-        "required": [
-          "name",
-          "screening_criteria"
-        ],
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "screening_criteria": {
-            "type": "string"
-          },
-          "n_size": {
+          "required_min_age": {
             "type": "integer"
           },
-          "demographic_profile": {
-            "type": "string"
-          },
-          "behavioral_criteria": {
-            "type": "string"
-          },
-          "survey_instrument_ref": {
-            "type": "string"
+          "required_max_age": {
+            "type": "integer"
           }
         }
       }
@@ -350,36 +369,23 @@
       ],
       "schema": {
         "required": [
-          "tier",
-          "value",
-          "method"
+          "name"
         ],
         "properties": {
-          "tier": {
+          "name": {
+            "type": "string"
+          },
+          "estimated_value": {
+            "type": "string"
+          },
+          "valid_through": {
             "type": "string",
-            "enum": [
-              "TAM",
-              "SAM",
-              "SOM"
-            ]
+            "format": "date"
           },
-          "value": {
+          "eligible_region": {
             "type": "string"
           },
-          "method": {
-            "type": "string",
-            "enum": [
-              "top-down",
-              "bottom-up"
-            ]
-          },
-          "assumptions": {
-            "type": "string"
-          },
-          "time_basis": {
-            "type": "string"
-          },
-          "for_segment": {
+          "description": {
             "type": "string"
           }
         }
@@ -411,9 +417,6 @@
               "competitive-rivalry"
             ]
           },
-          "industry_scope": {
-            "type": "string"
-          },
           "intensity": {
             "type": "string",
             "enum": [
@@ -422,6 +425,9 @@
               "low",
               "indeterminate"
             ]
+          },
+          "industry_scope": {
+            "type": "string"
           },
           "key_drivers": {
             "type": "string"
@@ -433,9 +439,85 @@
               "stable",
               "decreasing"
             ]
-          },
-          "segment_ref": {
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/service-offering",
+      "@type": "mif:EntityType",
+      "name": "service-offering",
+      "base": "semantic",
+      "description": "A service offering provided into a market (EXTENDS schema:Service)",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "schema": {
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
             "type": "string"
+          },
+          "provider": {
+            "type": "string"
+          },
+          "audience": {
+            "type": "string"
+          },
+          "brand": {
+            "type": "string"
+          },
+          "area_served": {
+            "type": "string"
+          },
+          "service_type": {
+            "type": "string"
+          },
+          "offers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/market-demand",
+      "@type": "mif:EntityType",
+      "name": "market-demand",
+      "base": "semantic",
+      "description": "Market demand for an offered item (REUSES schema:Demand)",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/dated"
+      ],
+      "schema": {
+        "required": [
+          "item_offered"
+        ],
+        "properties": {
+          "item_offered": {
+            "type": "string"
+          },
+          "eligible_region": {
+            "type": "string"
+          },
+          "seller": {
+            "type": "string"
+          },
+          "business_function": {
+            "type": "string"
+          },
+          "valid_from": {
+            "type": "string",
+            "format": "date"
+          },
+          "valid_through": {
+            "type": "string",
+            "format": "date"
           }
         }
       }
@@ -451,29 +533,22 @@
       ],
       "schema": {
         "required": [
-          "name",
-          "customer_segment_ref"
+          "name"
         ],
         "properties": {
           "name": {
             "type": "string"
           },
-          "customer_segment_ref": {
+          "description": {
             "type": "string"
           },
-          "jobs_addressed": {
+          "audience": {
             "type": "string"
           },
-          "pains_relieved": {
+          "service_type": {
             "type": "string"
           },
-          "gains_created": {
-            "type": "string"
-          },
-          "key_differentiator": {
-            "type": "string"
-          },
-          "evidence_base": {
+          "slogan": {
             "type": "string"
           }
         }
@@ -492,49 +567,33 @@
       ],
       "schema": {
         "required": [
-          "title",
-          "report_type"
+          "name"
         ],
         "properties": {
-          "title": {
+          "name": {
             "type": "string"
           },
-          "report_type": {
+          "date_published": {
             "type": "string",
-            "enum": [
-              "landscape-analysis",
-              "competitive-intelligence",
-              "market-sizing",
-              "customer-segmentation",
-              "win-loss",
-              "trend-report",
-              "primary-research"
-            ]
+            "format": "date"
           },
           "publisher": {
             "type": "string"
           },
-          "publication_date": {
-            "type": "string",
-            "format": "date"
+          "about": {
+            "type": "string"
           },
-          "markets_covered": {
+          "mentions": {
             "type": "array",
             "items": {
               "type": "string"
             }
           },
-          "methodology_ref": {
-            "type": "string"
-          },
-          "data_sources": {
+          "is_based_on": {
             "type": "array",
             "items": {
               "type": "string"
             }
-          },
-          "key_findings": {
-            "type": "string"
           }
         }
       }
@@ -551,54 +610,31 @@
       ],
       "schema": {
         "required": [
-          "name",
-          "source_type"
+          "name"
         ],
         "properties": {
           "name": {
             "type": "string"
           },
-          "source_type": {
+          "url": {
             "type": "string",
-            "enum": [
-              "syndicated-research",
-              "panel-data",
-              "transaction-data",
-              "government-statistics",
-              "web-scrape",
-              "primary-survey",
-              "social-listening",
-              "industry-association"
-            ]
+            "format": "uri"
           },
           "provider": {
             "type": "string"
           },
-          "coverage": {
+          "dataset": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "measurement_technique": {
             "type": "string"
           },
-          "refresh_cadence": {
+          "date_modified": {
             "type": "string",
-            "enum": [
-              "real-time",
-              "daily",
-              "weekly",
-              "monthly",
-              "quarterly",
-              "annual"
-            ]
-          },
-          "access_model": {
-            "type": "string",
-            "enum": [
-              "subscription",
-              "purchase",
-              "open",
-              "licensed"
-            ]
-          },
-          "data_format": {
-            "type": "string"
+            "format": "date"
           }
         }
       }
@@ -615,49 +651,23 @@
       ],
       "schema": {
         "required": [
-          "name",
-          "survey_type"
+          "name"
         ],
         "properties": {
           "name": {
             "type": "string"
           },
-          "survey_type": {
-            "type": "string",
-            "enum": [
-              "online-questionnaire",
-              "phone-interview",
-              "focus-group-guide",
-              "conjoint-survey",
-              "maxdiff-survey",
-              "NPS-survey",
-              "in-depth-interview"
-            ]
-          },
-          "target_population": {
+          "description": {
             "type": "string"
           },
-          "question_count": {
-            "type": "integer"
-          },
-          "modality": {
-            "type": "string",
-            "enum": [
-              "self-administered",
-              "interviewer-administered",
-              "hybrid"
-            ]
-          },
-          "screener_criteria": {
+          "measurement_technique": {
             "type": "string"
           },
-          "methodology_basis": {
-            "type": "string",
-            "enum": [
-              "quantitative",
-              "qualitative",
-              "mixed-methods"
-            ]
+          "about": {
+            "type": "string"
+          },
+          "audience": {
+            "type": "string"
           }
         }
       }
@@ -674,124 +684,32 @@
       ],
       "schema": {
         "required": [
-          "scope",
-          "time_period"
+          "name"
         ],
         "properties": {
-          "scope": {
+          "name": {
             "type": "string"
           },
-          "time_period": {
+          "about": {
             "type": "string"
           },
-          "win_rate": {
-            "type": "number"
-          },
-          "top_win_reasons": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "top_loss_reasons": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "competitors_analyzed": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "n_interviews": {
-            "type": "integer"
-          },
-          "methodology": {
+          "date_created": {
             "type": "string",
-            "enum": [
-              "buyer-interview",
-              "deal-review",
-              "survey-based",
-              "mixed"
-            ]
+            "format": "date"
+          },
+          "mentions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "description": {
+            "type": "string"
           }
         }
       }
     }
   ],
-  "traits": {
-    "cited": {
-      "@id": "mif:trait/cited",
-      "@type": "mif:Trait",
-      "name": "cited",
-      "description": "Adds source citations / references",
-      "fields": {
-        "citations": {
-          "type": "array",
-          "items": {
-            "type": "object"
-          }
-        },
-        "references": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    "dated": {
-      "@id": "mif:trait/dated",
-      "@type": "mif:Trait",
-      "name": "dated",
-      "description": "Adds event / decision / review dates",
-      "fields": {
-        "decision_date": {
-          "type": "string",
-          "format": "date"
-        },
-        "review_date": {
-          "type": "string",
-          "format": "date"
-        }
-      }
-    },
-    "versioned": {
-      "@id": "mif:trait/versioned",
-      "@type": "mif:Trait",
-      "name": "versioned",
-      "description": "Adds version tracking fields",
-      "fields": {
-        "version": {
-          "type": "string",
-          "pattern": "^\\d+\\.\\d+\\.\\d+.*$"
-        },
-        "changelog": {
-          "type": "array",
-          "items": {
-            "type": "object"
-          }
-        }
-      }
-    },
-    "documented": {
-      "@id": "mif:trait/documented",
-      "@type": "mif:Trait",
-      "name": "documented",
-      "description": "Adds supporting documentation references",
-      "fields": {
-        "documentation_url": {
-          "type": "string",
-          "format": "uri"
-        },
-        "documentation_notes": {
-          "type": "string"
-        }
-      }
-    }
-  },
   "relationships": {
     "analyzes-competitor": {
       "@id": "mif:relationship/analyzes-competitor",
@@ -857,6 +775,58 @@
         "mif:entityType/competitive-force"
       ],
       "symmetric": false
+    },
+    "item-offered": {
+      "@id": "mif:relationship/item-offered",
+      "@type": "mif:Relationship",
+      "name": "item-offered",
+      "description": "Market-demand is for an offered service-offering (schema:itemOffered)",
+      "from": [
+        "mif:entityType/market-demand"
+      ],
+      "to": [
+        "mif:entityType/service-offering"
+      ],
+      "symmetric": false
+    },
+    "maintains-brand": {
+      "@id": "mif:relationship/maintains-brand",
+      "@type": "mif:Relationship",
+      "name": "maintains-brand",
+      "description": "A competitor maintains a brand (schema:brand / gr:hasBrand)",
+      "from": [
+        "mif:entityType/competitor"
+      ],
+      "to": [
+        "mif:entityType/brand"
+      ],
+      "symmetric": false
+    },
+    "operates-in": {
+      "@id": "mif:relationship/operates-in",
+      "@type": "mif:Relationship",
+      "name": "operates-in",
+      "description": "A service-offering operates in a segment (schema:areaServed, extended to segment)",
+      "from": [
+        "mif:entityType/service-offering"
+      ],
+      "to": [
+        "mif:entityType/segment"
+      ],
+      "symmetric": false
+    },
+    "provides-service": {
+      "@id": "mif:relationship/provides-service",
+      "@type": "mif:Relationship",
+      "name": "provides-service",
+      "description": "A competitor provides a service-offering (inverse of schema:provider)",
+      "from": [
+        "mif:entityType/competitor"
+      ],
+      "to": [
+        "mif:entityType/service-offering"
+      ],
+      "symmetric": false
     }
   },
   "discovery": {
@@ -887,58 +857,58 @@
       {
         "@id": "mif:pattern/3",
         "@type": "mif:DiscoveryPattern",
-        "content_pattern": "\\b(respondent|screener|n=\\d+|qualified respondents)\\b",
-        "suggest_entity": "mif:entityType/respondent-segment",
-        "suggest_namespace": "_semantic/market"
-      },
-      {
-        "@id": "mif:pattern/4",
-        "@type": "mif:DiscoveryPattern",
         "content_pattern": "\\b(TAM|SAM|SOM|total addressable market|market siz(e|ing))\\b",
         "suggest_entity": "mif:entityType/sizing-estimate",
         "suggest_namespace": "_semantic/market"
       },
       {
-        "@id": "mif:pattern/5",
+        "@id": "mif:pattern/4",
         "@type": "mif:DiscoveryPattern",
         "content_pattern": "\\b(five forces|bargaining power|threat of substitutes|new entrants)\\b",
         "suggest_entity": "mif:entityType/competitive-force",
         "suggest_namespace": "_semantic/market"
       },
       {
-        "@id": "mif:pattern/6",
-        "@type": "mif:DiscoveryPattern",
-        "content_pattern": "\\b(value proposition|jobs addressed|pains relieved|gains created)\\b",
-        "suggest_entity": "mif:entityType/value-proposition",
-        "suggest_namespace": "_semantic/market"
-      },
-      {
-        "@id": "mif:pattern/7",
+        "@id": "mif:pattern/5",
         "@type": "mif:DiscoveryPattern",
         "content_pattern": "\\b(market report|landscape analysis|competitive intelligence report)\\b",
         "suggest_entity": "mif:entityType/market-intelligence-report",
         "suggest_namespace": "_semantic/reports"
       },
       {
-        "@id": "mif:pattern/8",
-        "@type": "mif:DiscoveryPattern",
-        "content_pattern": "\\b(syndicated|panel data|transaction data|data provider)\\b",
-        "suggest_entity": "mif:entityType/market-data-source",
-        "suggest_namespace": "_semantic/market"
-      },
-      {
-        "@id": "mif:pattern/9",
+        "@id": "mif:pattern/6",
         "@type": "mif:DiscoveryPattern",
         "content_pattern": "\\b(questionnaire|survey instrument|conjoint|MaxDiff|NPS survey)\\b",
         "suggest_entity": "mif:entityType/survey-instrument",
         "suggest_namespace": "_procedural/research"
       },
       {
-        "@id": "mif:pattern/10",
+        "@id": "mif:pattern/7",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(respondent|screener|n=\\d+|qualified respondents)\\b",
+        "suggest_entity": "mif:entityType/respondent-segment",
+        "suggest_namespace": "_semantic/market"
+      },
+      {
+        "@id": "mif:pattern/8",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(value proposition|jobs addressed|pains relieved|gains created)\\b",
+        "suggest_entity": "mif:entityType/value-proposition",
+        "suggest_namespace": "_semantic/market"
+      },
+      {
+        "@id": "mif:pattern/9",
         "@type": "mif:DiscoveryPattern",
         "content_pattern": "\\b(win[- ]loss|win rate|deal review|loss reasons)\\b",
         "suggest_entity": "mif:entityType/win-loss-analysis",
         "suggest_namespace": "_episodic/research"
+      },
+      {
+        "@id": "mif:pattern/10",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(syndicated|panel data|transaction data|data provider)\\b",
+        "suggest_entity": "mif:entityType/market-data-source",
+        "suggest_namespace": "_semantic/market"
       }
     ]
   }
