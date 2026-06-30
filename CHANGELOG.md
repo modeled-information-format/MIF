@@ -20,6 +20,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   object continues to validate (the concept object permits additional
   properties).
 
+### Added
+
+- **Serve the canonical ontology corpus at `mif-spec.dev/ontologies/`** (#186) —
+  the org's domain ontologies are published and resolvable at the custom domain.
+- **Serve the object+SHA vendoring index and the layered v0.2.0 corpus** (#193,
+  ADR-0002) — the registry `index.json` is reconciled to object+`sha` entries so
+  downstream consumers fail-closed vendor pinned ontology packs.
+
+### Changed
+
+- Reconcile base-type namespace prefixes with §10.2 of the specification (#182).
+- Mark v1.0.0 Released and bring `SPECIFICATION.md` to lint-clean (#173).
+
+### Fixed
+
+- **Serve the JSON-LD namespace IRI at `mif-spec.dev/ns/`** (#166) — the
+  namespace IRI used by the published context now resolves at the custom domain.
+
 ## [1.0.0] - 2026-06-28
 
 ### Breaking Changes
