@@ -1,0 +1,945 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "@vocab": "https://mif-spec.dev/ns/ontology#",
+    "mif": "https://mif-spec.dev/ns/",
+    "schema": "https://schema.org/",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "ontology": {
+      "@id": "mif:Ontology",
+      "@type": "@id"
+    },
+    "id": {
+      "@id": "@id"
+    },
+    "version": {
+      "@id": "schema:version",
+      "@type": "xsd:string"
+    },
+    "description": {
+      "@id": "schema:description",
+      "@type": "xsd:string"
+    },
+    "schema_url": {
+      "@id": "rdfs:isDefinedBy",
+      "@type": "@id"
+    },
+    "namespaces": {
+      "@id": "mif:hasNamespace",
+      "@container": "@id"
+    },
+    "type_hint": {
+      "@id": "mif:typeHint",
+      "@type": "xsd:string"
+    },
+    "replaces": {
+      "@id": "mif:replaces",
+      "@type": "@id"
+    },
+    "children": {
+      "@id": "mif:hasChildNamespace",
+      "@container": "@id"
+    },
+    "entity_types": {
+      "@id": "mif:definesEntityType",
+      "@container": "@list"
+    },
+    "name": {
+      "@id": "schema:name",
+      "@type": "xsd:string"
+    },
+    "base": {
+      "@id": "mif:baseType",
+      "@type": "@vocab"
+    },
+    "semantic": "mif:SemanticMemory",
+    "episodic": "mif:EpisodicMemory",
+    "procedural": "mif:ProceduralMemory",
+    "traits": {
+      "@id": "mif:definesTrait",
+      "@container": "@id"
+    },
+    "subtype_of": {
+      "@id": "mif:subtypeOf",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "fields": {
+      "@id": "mif:hasField",
+      "@container": "@id"
+    },
+    "requires": {
+      "@id": "mif:requiresField",
+      "@container": "@list"
+    },
+    "relationships": {
+      "@id": "mif:definesRelationship",
+      "@container": "@id"
+    },
+    "from": {
+      "@id": "rdfs:domain",
+      "@container": "@set"
+    },
+    "to": {
+      "@id": "rdfs:range",
+      "@container": "@set"
+    },
+    "symmetric": {
+      "@id": "owl:SymmetricProperty",
+      "@type": "xsd:boolean"
+    },
+    "discovery": {
+      "@id": "mif:discoveryConfig"
+    },
+    "enabled": {
+      "@id": "mif:discoveryEnabled",
+      "@type": "xsd:boolean"
+    },
+    "patterns": {
+      "@id": "mif:hasDiscoveryPattern",
+      "@container": "@list"
+    },
+    "confidence_threshold": {
+      "@id": "mif:confidenceThreshold",
+      "@type": "xsd:decimal"
+    },
+    "content_pattern": {
+      "@id": "mif:contentPattern",
+      "@type": "xsd:string"
+    },
+    "file_pattern": {
+      "@id": "mif:filePattern",
+      "@type": "xsd:string"
+    },
+    "suggest_entity": {
+      "@id": "mif:suggestsEntityType",
+      "@type": "@id"
+    },
+    "suggest_namespace": {
+      "@id": "mif:suggestsNamespace",
+      "@type": "xsd:string"
+    }
+  },
+  "@id": "mif:ontology/market-research",
+  "@type": "mif:Ontology",
+  "identifier": "market-research",
+  "version": "0.1.0",
+  "description": "Market-research domain ontology \u2014 segments, competitors, sizing, forces, intelligence",
+  "namespaces": {
+    "semantic": {
+      "@id": "mif:namespace/semantic",
+      "@type": "mif:Namespace",
+      "name": "semantic",
+      "children": {
+        "market": {
+          "@id": "mif:namespace/semantic/market",
+          "@type": "mif:Namespace",
+          "name": "market",
+          "description": "Segments, competitors, personas, sizing, forces, value propositions, data sources",
+          "type_hint": "semantic"
+        },
+        "reports": {
+          "@id": "mif:namespace/semantic/reports",
+          "@type": "mif:Namespace",
+          "name": "reports",
+          "description": "Market-intelligence reports and analyses",
+          "type_hint": "semantic"
+        }
+      }
+    },
+    "procedural": {
+      "@id": "mif:namespace/procedural",
+      "@type": "mif:Namespace",
+      "name": "procedural",
+      "children": {
+        "research": {
+          "@id": "mif:namespace/procedural/research",
+          "@type": "mif:Namespace",
+          "name": "research",
+          "description": "Survey instruments and research plan specifications",
+          "type_hint": "procedural"
+        }
+      }
+    },
+    "episodic": {
+      "@id": "mif:namespace/episodic",
+      "@type": "mif:Namespace",
+      "name": "episodic",
+      "children": {
+        "research": {
+          "@id": "mif:namespace/episodic/research",
+          "@type": "mif:Namespace",
+          "name": "research",
+          "description": "Win-loss analyses and research episodes",
+          "type_hint": "episodic"
+        }
+      }
+    }
+  },
+  "entity_types": [
+    {
+      "@id": "mif:entityType/segment",
+      "@type": "mif:EntityType",
+      "name": "segment",
+      "base": "semantic",
+      "description": "A market segment \u2014 a defined slice of a market",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "segmentation_axis"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "segmentation_axis": {
+            "type": "string",
+            "enum": [
+              "use-case",
+              "vertical",
+              "buyer-size",
+              "geography",
+              "channel",
+              "business-model",
+              "price-band"
+            ]
+          },
+          "definition": {
+            "type": "string"
+          },
+          "size_indicator": {
+            "type": "string"
+          },
+          "parent_segment": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/competitor",
+      "@type": "mif:EntityType",
+      "name": "competitor",
+      "base": "semantic",
+      "description": "A competing organization in a market (EXTENDS schema:Organization)",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/dated"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "positioning"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "positioning": {
+            "type": "string"
+          },
+          "funding_stage": {
+            "type": "string"
+          },
+          "scale": {
+            "type": "string"
+          },
+          "growth_signal": {
+            "type": "string"
+          },
+          "segments_served": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "website": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/buyer-persona",
+      "@type": "mif:EntityType",
+      "name": "buyer-persona",
+      "base": "semantic",
+      "description": "A target buyer audience or ideal-customer profile (REUSES schema:Audience)",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "audience_type"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "audience_type": {
+            "type": "string"
+          },
+          "geographic_area": {
+            "type": "string"
+          },
+          "jobs_to_be_done": {
+            "type": "string"
+          },
+          "motivations": {
+            "type": "string"
+          },
+          "willingness_to_pay": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/respondent-segment",
+      "@type": "mif:EntityType",
+      "name": "respondent-segment",
+      "base": "semantic",
+      "description": "A survey-respondent cohort defined by screening criteria (distinct from market segment)",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "screening_criteria"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "screening_criteria": {
+            "type": "string"
+          },
+          "n_size": {
+            "type": "integer"
+          },
+          "demographic_profile": {
+            "type": "string"
+          },
+          "behavioral_criteria": {
+            "type": "string"
+          },
+          "survey_instrument_ref": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/sizing-estimate",
+      "@type": "mif:EntityType",
+      "name": "sizing-estimate",
+      "base": "semantic",
+      "description": "A market-sizing estimate (TAM/SAM/SOM)",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/dated"
+      ],
+      "schema": {
+        "required": [
+          "tier",
+          "value",
+          "method"
+        ],
+        "properties": {
+          "tier": {
+            "type": "string",
+            "enum": [
+              "TAM",
+              "SAM",
+              "SOM"
+            ]
+          },
+          "value": {
+            "type": "string"
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "top-down",
+              "bottom-up"
+            ]
+          },
+          "assumptions": {
+            "type": "string"
+          },
+          "time_basis": {
+            "type": "string"
+          },
+          "for_segment": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/competitive-force",
+      "@type": "mif:EntityType",
+      "name": "competitive-force",
+      "base": "semantic",
+      "description": "A Porter competitive force shaping competitive intensity",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/dated"
+      ],
+      "schema": {
+        "required": [
+          "force_type",
+          "industry_scope"
+        ],
+        "properties": {
+          "force_type": {
+            "type": "string",
+            "enum": [
+              "new-entrants",
+              "buyer-power",
+              "supplier-power",
+              "substitutes",
+              "competitive-rivalry"
+            ]
+          },
+          "industry_scope": {
+            "type": "string"
+          },
+          "intensity": {
+            "type": "string",
+            "enum": [
+              "high",
+              "medium",
+              "low",
+              "indeterminate"
+            ]
+          },
+          "key_drivers": {
+            "type": "string"
+          },
+          "trend_direction": {
+            "type": "string",
+            "enum": [
+              "increasing",
+              "stable",
+              "decreasing"
+            ]
+          },
+          "segment_ref": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/value-proposition",
+      "@type": "mif:EntityType",
+      "name": "value-proposition",
+      "base": "semantic",
+      "description": "A value proposition mapping offerings to customer jobs, pains and gains",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "customer_segment_ref"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "customer_segment_ref": {
+            "type": "string"
+          },
+          "jobs_addressed": {
+            "type": "string"
+          },
+          "pains_relieved": {
+            "type": "string"
+          },
+          "gains_created": {
+            "type": "string"
+          },
+          "key_differentiator": {
+            "type": "string"
+          },
+          "evidence_base": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/market-intelligence-report",
+      "@type": "mif:EntityType",
+      "name": "market-intelligence-report",
+      "base": "semantic",
+      "description": "A market-intelligence report or analysis",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/versioned",
+        "mif:trait/documented"
+      ],
+      "schema": {
+        "required": [
+          "title",
+          "report_type"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "report_type": {
+            "type": "string",
+            "enum": [
+              "landscape-analysis",
+              "competitive-intelligence",
+              "market-sizing",
+              "customer-segmentation",
+              "win-loss",
+              "trend-report",
+              "primary-research"
+            ]
+          },
+          "publisher": {
+            "type": "string"
+          },
+          "publication_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "markets_covered": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "methodology_ref": {
+            "type": "string"
+          },
+          "data_sources": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "key_findings": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/market-data-source",
+      "@type": "mif:EntityType",
+      "name": "market-data-source",
+      "base": "semantic",
+      "description": "A catalog of market-intelligence data (REUSES schema:DataCatalog)",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/versioned"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "source_type"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "source_type": {
+            "type": "string",
+            "enum": [
+              "syndicated-research",
+              "panel-data",
+              "transaction-data",
+              "government-statistics",
+              "web-scrape",
+              "primary-survey",
+              "social-listening",
+              "industry-association"
+            ]
+          },
+          "provider": {
+            "type": "string"
+          },
+          "coverage": {
+            "type": "string"
+          },
+          "refresh_cadence": {
+            "type": "string",
+            "enum": [
+              "real-time",
+              "daily",
+              "weekly",
+              "monthly",
+              "quarterly",
+              "annual"
+            ]
+          },
+          "access_model": {
+            "type": "string",
+            "enum": [
+              "subscription",
+              "purchase",
+              "open",
+              "licensed"
+            ]
+          },
+          "data_format": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/survey-instrument",
+      "@type": "mif:EntityType",
+      "name": "survey-instrument",
+      "base": "procedural",
+      "description": "A survey instrument \u2014 a research plan specification",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/versioned"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "survey_type"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "survey_type": {
+            "type": "string",
+            "enum": [
+              "online-questionnaire",
+              "phone-interview",
+              "focus-group-guide",
+              "conjoint-survey",
+              "maxdiff-survey",
+              "NPS-survey",
+              "in-depth-interview"
+            ]
+          },
+          "target_population": {
+            "type": "string"
+          },
+          "question_count": {
+            "type": "integer"
+          },
+          "modality": {
+            "type": "string",
+            "enum": [
+              "self-administered",
+              "interviewer-administered",
+              "hybrid"
+            ]
+          },
+          "screener_criteria": {
+            "type": "string"
+          },
+          "methodology_basis": {
+            "type": "string",
+            "enum": [
+              "quantitative",
+              "qualitative",
+              "mixed-methods"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/win-loss-analysis",
+      "@type": "mif:EntityType",
+      "name": "win-loss-analysis",
+      "base": "episodic",
+      "description": "A win-loss analysis episode \u2014 post-decision interviews with won/lost prospects",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/dated"
+      ],
+      "schema": {
+        "required": [
+          "scope",
+          "time_period"
+        ],
+        "properties": {
+          "scope": {
+            "type": "string"
+          },
+          "time_period": {
+            "type": "string"
+          },
+          "win_rate": {
+            "type": "number"
+          },
+          "top_win_reasons": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "top_loss_reasons": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "competitors_analyzed": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "n_interviews": {
+            "type": "integer"
+          },
+          "methodology": {
+            "type": "string",
+            "enum": [
+              "buyer-interview",
+              "deal-review",
+              "survey-based",
+              "mixed"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "traits": {
+    "cited": {
+      "@id": "mif:trait/cited",
+      "@type": "mif:Trait",
+      "name": "cited",
+      "description": "Adds source citations / references",
+      "fields": {
+        "citations": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "references": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "dated": {
+      "@id": "mif:trait/dated",
+      "@type": "mif:Trait",
+      "name": "dated",
+      "description": "Adds event / decision / review dates",
+      "fields": {
+        "decision_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "review_date": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "versioned": {
+      "@id": "mif:trait/versioned",
+      "@type": "mif:Trait",
+      "name": "versioned",
+      "description": "Adds version tracking fields",
+      "fields": {
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+.*$"
+        },
+        "changelog": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "documented": {
+      "@id": "mif:trait/documented",
+      "@type": "mif:Trait",
+      "name": "documented",
+      "description": "Adds supporting documentation references",
+      "fields": {
+        "documentation_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "documentation_notes": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "relationships": {
+    "analyzes-competitor": {
+      "@id": "mif:relationship/analyzes-competitor",
+      "@type": "mif:Relationship",
+      "name": "analyzes-competitor",
+      "description": "A win-loss-analysis analyzes a competitor (schema:about)",
+      "from": [
+        "mif:entityType/win-loss-analysis"
+      ],
+      "to": [
+        "mif:entityType/competitor"
+      ],
+      "symmetric": false
+    },
+    "based-on-source": {
+      "@id": "mif:relationship/based-on-source",
+      "@type": "mif:Relationship",
+      "name": "based-on-source",
+      "description": "A market-intelligence-report is based on a market-data-source (schema:isBasedOn)",
+      "from": [
+        "mif:entityType/market-intelligence-report"
+      ],
+      "to": [
+        "mif:entityType/market-data-source"
+      ],
+      "symmetric": false
+    },
+    "covers-segment": {
+      "@id": "mif:relationship/covers-segment",
+      "@type": "mif:Relationship",
+      "name": "covers-segment",
+      "description": "A market-intelligence-report covers a segment (schema:about)",
+      "from": [
+        "mif:entityType/market-intelligence-report"
+      ],
+      "to": [
+        "mif:entityType/segment"
+      ],
+      "symmetric": false
+    },
+    "targets-audience": {
+      "@id": "mif:relationship/targets-audience",
+      "@type": "mif:Relationship",
+      "name": "targets-audience",
+      "description": "A value-proposition targets a buyer-persona (schema:audience)",
+      "from": [
+        "mif:entityType/value-proposition"
+      ],
+      "to": [
+        "mif:entityType/buyer-persona"
+      ],
+      "symmetric": false
+    },
+    "tracks-competitive-force": {
+      "@id": "mif:relationship/tracks-competitive-force",
+      "@type": "mif:Relationship",
+      "name": "tracks-competitive-force",
+      "description": "A competitor tracks a competitive-force (schema:knowsAbout)",
+      "from": [
+        "mif:entityType/competitor"
+      ],
+      "to": [
+        "mif:entityType/competitive-force"
+      ],
+      "symmetric": false
+    }
+  },
+  "discovery": {
+    "enabled": true,
+    "confidence_threshold": 0.8,
+    "patterns": [
+      {
+        "@id": "mif:pattern/0",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(segment|vertical|buyer size|price band|market segment)\\b",
+        "suggest_entity": "mif:entityType/segment",
+        "suggest_namespace": "_semantic/market"
+      },
+      {
+        "@id": "mif:pattern/1",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(competitor|incumbent|rival vendor|market player)\\b",
+        "suggest_entity": "mif:entityType/competitor",
+        "suggest_namespace": "_semantic/market"
+      },
+      {
+        "@id": "mif:pattern/2",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(buyer persona|target audience|ICP|jobs[- ]to[- ]be[- ]done)\\b",
+        "suggest_entity": "mif:entityType/buyer-persona",
+        "suggest_namespace": "_semantic/market"
+      },
+      {
+        "@id": "mif:pattern/3",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(respondent|screener|n=\\d+|qualified respondents)\\b",
+        "suggest_entity": "mif:entityType/respondent-segment",
+        "suggest_namespace": "_semantic/market"
+      },
+      {
+        "@id": "mif:pattern/4",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(TAM|SAM|SOM|total addressable market|market siz(e|ing))\\b",
+        "suggest_entity": "mif:entityType/sizing-estimate",
+        "suggest_namespace": "_semantic/market"
+      },
+      {
+        "@id": "mif:pattern/5",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(five forces|bargaining power|threat of substitutes|new entrants)\\b",
+        "suggest_entity": "mif:entityType/competitive-force",
+        "suggest_namespace": "_semantic/market"
+      },
+      {
+        "@id": "mif:pattern/6",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(value proposition|jobs addressed|pains relieved|gains created)\\b",
+        "suggest_entity": "mif:entityType/value-proposition",
+        "suggest_namespace": "_semantic/market"
+      },
+      {
+        "@id": "mif:pattern/7",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(market report|landscape analysis|competitive intelligence report)\\b",
+        "suggest_entity": "mif:entityType/market-intelligence-report",
+        "suggest_namespace": "_semantic/reports"
+      },
+      {
+        "@id": "mif:pattern/8",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(syndicated|panel data|transaction data|data provider)\\b",
+        "suggest_entity": "mif:entityType/market-data-source",
+        "suggest_namespace": "_semantic/market"
+      },
+      {
+        "@id": "mif:pattern/9",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(questionnaire|survey instrument|conjoint|MaxDiff|NPS survey)\\b",
+        "suggest_entity": "mif:entityType/survey-instrument",
+        "suggest_namespace": "_procedural/research"
+      },
+      {
+        "@id": "mif:pattern/10",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(win[- ]loss|win rate|deal review|loss reasons)\\b",
+        "suggest_entity": "mif:entityType/win-loss-analysis",
+        "suggest_namespace": "_episodic/research"
+      }
+    ]
+  }
+}

@@ -1,0 +1,866 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "@vocab": "https://mif-spec.dev/ns/ontology#",
+    "mif": "https://mif-spec.dev/ns/",
+    "schema": "https://schema.org/",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "ontology": {
+      "@id": "mif:Ontology",
+      "@type": "@id"
+    },
+    "id": {
+      "@id": "@id"
+    },
+    "version": {
+      "@id": "schema:version",
+      "@type": "xsd:string"
+    },
+    "description": {
+      "@id": "schema:description",
+      "@type": "xsd:string"
+    },
+    "schema_url": {
+      "@id": "rdfs:isDefinedBy",
+      "@type": "@id"
+    },
+    "namespaces": {
+      "@id": "mif:hasNamespace",
+      "@container": "@id"
+    },
+    "type_hint": {
+      "@id": "mif:typeHint",
+      "@type": "xsd:string"
+    },
+    "replaces": {
+      "@id": "mif:replaces",
+      "@type": "@id"
+    },
+    "children": {
+      "@id": "mif:hasChildNamespace",
+      "@container": "@id"
+    },
+    "entity_types": {
+      "@id": "mif:definesEntityType",
+      "@container": "@list"
+    },
+    "name": {
+      "@id": "schema:name",
+      "@type": "xsd:string"
+    },
+    "base": {
+      "@id": "mif:baseType",
+      "@type": "@vocab"
+    },
+    "semantic": "mif:SemanticMemory",
+    "episodic": "mif:EpisodicMemory",
+    "procedural": "mif:ProceduralMemory",
+    "traits": {
+      "@id": "mif:definesTrait",
+      "@container": "@id"
+    },
+    "subtype_of": {
+      "@id": "mif:subtypeOf",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "fields": {
+      "@id": "mif:hasField",
+      "@container": "@id"
+    },
+    "requires": {
+      "@id": "mif:requiresField",
+      "@container": "@list"
+    },
+    "relationships": {
+      "@id": "mif:definesRelationship",
+      "@container": "@id"
+    },
+    "from": {
+      "@id": "rdfs:domain",
+      "@container": "@set"
+    },
+    "to": {
+      "@id": "rdfs:range",
+      "@container": "@set"
+    },
+    "symmetric": {
+      "@id": "owl:SymmetricProperty",
+      "@type": "xsd:boolean"
+    },
+    "discovery": {
+      "@id": "mif:discoveryConfig"
+    },
+    "enabled": {
+      "@id": "mif:discoveryEnabled",
+      "@type": "xsd:boolean"
+    },
+    "patterns": {
+      "@id": "mif:hasDiscoveryPattern",
+      "@container": "@list"
+    },
+    "confidence_threshold": {
+      "@id": "mif:confidenceThreshold",
+      "@type": "xsd:decimal"
+    },
+    "content_pattern": {
+      "@id": "mif:contentPattern",
+      "@type": "xsd:string"
+    },
+    "file_pattern": {
+      "@id": "mif:filePattern",
+      "@type": "xsd:string"
+    },
+    "suggest_entity": {
+      "@id": "mif:suggestsEntityType",
+      "@type": "@id"
+    },
+    "suggest_namespace": {
+      "@id": "mif:suggestsNamespace",
+      "@type": "xsd:string"
+    }
+  },
+  "@id": "mif:ontology/shared-traits",
+  "@type": "mif:Ontology",
+  "identifier": "shared-traits",
+  "version": "1.0.0",
+  "description": "Cross-domain reusable traits for industry ontologies",
+  "traits": {
+    "lifecycle": {
+      "@id": "mif:trait/lifecycle",
+      "@type": "mif:Trait",
+      "name": "lifecycle",
+      "description": "Adds lifecycle state tracking with transitions",
+      "fields": {
+        "status": {
+          "type": "string",
+          "description": "Current lifecycle state"
+        },
+        "status_history": {
+          "type": "array",
+          "description": "History of status transitions",
+          "items": {
+            "type": "object",
+            "properties": {
+              "from_status": {
+                "type": "string"
+              },
+              "to_status": {
+                "type": "string"
+              },
+              "changed_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "changed_by": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "renewable": {
+      "@id": "mif:trait/renewable",
+      "@type": "mif:Trait",
+      "name": "renewable",
+      "description": "Adds renewal/expiration tracking for time-limited entities",
+      "fields": {
+        "effective_date": {
+          "type": "string",
+          "format": "date",
+          "description": "When this becomes effective"
+        },
+        "expiration_date": {
+          "type": "string",
+          "format": "date",
+          "description": "When this expires"
+        },
+        "renewal_date": {
+          "type": "string",
+          "format": "date",
+          "description": "When renewal is required"
+        },
+        "auto_renew": {
+          "type": "boolean",
+          "description": "Whether this auto-renews"
+        }
+      }
+    },
+    "auditable": {
+      "@id": "mif:trait/auditable",
+      "@type": "mif:Trait",
+      "name": "auditable",
+      "description": "Adds audit trail and compliance tracking",
+      "fields": {
+        "audit_log": {
+          "type": "array",
+          "description": "Audit trail entries",
+          "items": {
+            "type": "object",
+            "properties": {
+              "action": {
+                "type": "string"
+              },
+              "actor": {
+                "type": "string"
+              },
+              "timestamp": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "details": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "last_audit_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "next_audit_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "audit_status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "in_progress",
+            "passed",
+            "failed",
+            "requires_remediation"
+          ]
+        }
+      }
+    },
+    "certified": {
+      "@id": "mif:trait/certified",
+      "@type": "mif:Trait",
+      "name": "certified",
+      "description": "Adds certification and accreditation tracking",
+      "fields": {
+        "certifications": {
+          "type": "array",
+          "description": "List of certifications held",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "issuer": {
+                "type": "string"
+              },
+              "issued_date": {
+                "type": "string",
+                "format": "date"
+              },
+              "expiry_date": {
+                "type": "string",
+                "format": "date"
+              },
+              "certificate_id": {
+                "type": "string"
+              },
+              "scope": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "regulated": {
+      "@id": "mif:trait/regulated",
+      "@type": "mif:Trait",
+      "name": "regulated",
+      "description": "Adds regulatory compliance tracking",
+      "fields": {
+        "regulations": {
+          "type": "array",
+          "description": "Applicable regulations",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "authority": {
+                "type": "string"
+              },
+              "jurisdiction": {
+                "type": "string"
+              },
+              "compliance_status": {
+                "type": "string",
+                "enum": [
+                  "compliant",
+                  "non_compliant",
+                  "pending_review",
+                  "exempt"
+                ]
+              },
+              "last_verified": {
+                "type": "string",
+                "format": "date"
+              }
+            }
+          }
+        }
+      }
+    },
+    "located": {
+      "@id": "mif:trait/located",
+      "@type": "mif:Trait",
+      "name": "located",
+      "description": "Adds physical location data",
+      "fields": {
+        "location": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            },
+            "postal_code": {
+              "type": "string"
+            },
+            "coordinates": {
+              "type": "object",
+              "properties": {
+                "latitude": {
+                  "type": "number"
+                },
+                "longitude": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "bounded": {
+      "@id": "mif:trait/bounded",
+      "@type": "mif:Trait",
+      "name": "bounded",
+      "description": "Adds geographic boundary/area data",
+      "fields": {
+        "boundary": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "polygon",
+                "circle",
+                "rectangle"
+              ]
+            },
+            "coordinates": {
+              "type": "array",
+              "description": "GeoJSON-style coordinates"
+            },
+            "area_unit": {
+              "type": "string",
+              "enum": [
+                "acres",
+                "hectares",
+                "square_meters",
+                "square_feet"
+              ]
+            },
+            "area_value": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    "owned": {
+      "@id": "mif:trait/owned",
+      "@type": "mif:Trait",
+      "name": "owned",
+      "description": "Adds ownership and responsibility tracking",
+      "fields": {
+        "owner": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "role": {
+              "type": "string"
+            },
+            "contact": {
+              "type": "string"
+            },
+            "department": {
+              "type": "string"
+            }
+          }
+        },
+        "steward": {
+          "type": "object",
+          "description": "Day-to-day responsible party",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "role": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "contactable": {
+      "@id": "mif:trait/contactable",
+      "@type": "mif:Trait",
+      "name": "contactable",
+      "description": "Adds contact information",
+      "fields": {
+        "contacts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "role": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string",
+                "format": "email"
+              },
+              "phone": {
+                "type": "string"
+              },
+              "primary": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "budgeted": {
+      "@id": "mif:trait/budgeted",
+      "@type": "mif:Trait",
+      "name": "budgeted",
+      "description": "Adds budget and financial tracking",
+      "fields": {
+        "budget": {
+          "type": "object",
+          "properties": {
+            "allocated": {
+              "type": "number"
+            },
+            "spent": {
+              "type": "number"
+            },
+            "remaining": {
+              "type": "number"
+            },
+            "currency": {
+              "type": "string"
+            },
+            "fiscal_year": {
+              "type": "string"
+            }
+          }
+        },
+        "cost_center": {
+          "type": "string"
+        }
+      }
+    },
+    "transactional": {
+      "@id": "mif:trait/transactional",
+      "@type": "mif:Trait",
+      "name": "transactional",
+      "description": "Adds transaction/payment tracking",
+      "fields": {
+        "transactions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "date": {
+                "type": "string",
+                "format": "date"
+              },
+              "amount": {
+                "type": "number"
+              },
+              "currency": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "payment",
+                  "refund",
+                  "credit",
+                  "debit"
+                ]
+              },
+              "reference": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "scheduled": {
+      "@id": "mif:trait/scheduled",
+      "@type": "mif:Trait",
+      "name": "scheduled",
+      "description": "Adds scheduling and calendar integration",
+      "fields": {
+        "schedule": {
+          "type": "object",
+          "properties": {
+            "start_date": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "end_date": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "recurrence": {
+              "type": "string",
+              "description": "RRULE format recurrence pattern"
+            },
+            "timezone": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "seasonal": {
+      "@id": "mif:trait/seasonal",
+      "@type": "mif:Trait",
+      "name": "seasonal",
+      "description": "Adds seasonal/cyclical timing",
+      "fields": {
+        "season": {
+          "type": "string",
+          "description": "Applicable season"
+        },
+        "cycle_start": {
+          "type": "string",
+          "format": "date"
+        },
+        "cycle_end": {
+          "type": "string",
+          "format": "date"
+        },
+        "cycle_type": {
+          "type": "string",
+          "enum": [
+            "annual",
+            "quarterly",
+            "monthly",
+            "weekly"
+          ]
+        }
+      }
+    },
+    "measured": {
+      "@id": "mif:trait/measured",
+      "@type": "mif:Trait",
+      "name": "measured",
+      "description": "Adds quantitative measurement data",
+      "fields": {
+        "measurements": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "metric": {
+                "type": "string"
+              },
+              "value": {
+                "type": "number"
+              },
+              "unit": {
+                "type": "string"
+              },
+              "measured_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "measured_by": {
+                "type": "string"
+              },
+              "method": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "scored": {
+      "@id": "mif:trait/scored",
+      "@type": "mif:Trait",
+      "name": "scored",
+      "description": "Adds scoring/rating data",
+      "fields": {
+        "scores": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "category": {
+                "type": "string"
+              },
+              "score": {
+                "type": "number"
+              },
+              "max_score": {
+                "type": "number"
+              },
+              "scored_at": {
+                "type": "string",
+                "format": "date"
+              },
+              "scorer": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "categorized": {
+      "@id": "mif:trait/categorized",
+      "@type": "mif:Trait",
+      "name": "categorized",
+      "description": "Adds hierarchical categorization",
+      "fields": {
+        "category": {
+          "type": "string",
+          "description": "Primary category"
+        },
+        "subcategory": {
+          "type": "string",
+          "description": "Secondary category"
+        },
+        "taxonomy": {
+          "type": "array",
+          "description": "Full taxonomy path",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "tagged": {
+      "@id": "mif:trait/tagged",
+      "@type": "mif:Trait",
+      "name": "tagged",
+      "description": "Adds flexible tagging",
+      "fields": {
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "labels": {
+          "type": "object",
+          "description": "Key-value labels"
+        }
+      }
+    },
+    "inventoried": {
+      "@id": "mif:trait/inventoried",
+      "@type": "mif:Trait",
+      "name": "inventoried",
+      "description": "Adds inventory tracking",
+      "fields": {
+        "inventory_id": {
+          "type": "string"
+        },
+        "serial_number": {
+          "type": "string"
+        },
+        "quantity": {
+          "type": "number"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "location_code": {
+          "type": "string"
+        },
+        "last_inventory_date": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "maintainable": {
+      "@id": "mif:trait/maintainable",
+      "@type": "mif:Trait",
+      "name": "maintainable",
+      "description": "Adds maintenance scheduling",
+      "fields": {
+        "maintenance_schedule": {
+          "type": "string",
+          "description": "Maintenance frequency"
+        },
+        "last_maintenance": {
+          "type": "string",
+          "format": "date"
+        },
+        "next_maintenance": {
+          "type": "string",
+          "format": "date"
+        },
+        "maintenance_log": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "date": {
+                "type": "string",
+                "format": "date"
+              },
+              "type": {
+                "type": "string"
+              },
+              "technician": {
+                "type": "string"
+              },
+              "notes": {
+                "type": "string"
+              },
+              "cost": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      }
+    },
+    "reviewed": {
+      "@id": "mif:trait/reviewed",
+      "@type": "mif:Trait",
+      "name": "reviewed",
+      "description": "Adds review/approval workflow",
+      "fields": {
+        "review_status": {
+          "type": "string",
+          "enum": [
+            "draft",
+            "pending_review",
+            "in_review",
+            "approved",
+            "rejected",
+            "revision_required"
+          ]
+        },
+        "reviewer": {
+          "type": "string"
+        },
+        "review_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "review_notes": {
+          "type": "string"
+        },
+        "approval_chain": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "role": {
+                "type": "string"
+              },
+              "approver": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string"
+              },
+              "date": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        }
+      }
+    },
+    "quality_controlled": {
+      "@id": "mif:trait/quality_controlled",
+      "@type": "mif:Trait",
+      "name": "quality_controlled",
+      "description": "Adds quality control checkpoints",
+      "fields": {
+        "qc_status": {
+          "type": "string",
+          "enum": [
+            "not_started",
+            "in_progress",
+            "passed",
+            "failed",
+            "waived"
+          ]
+        },
+        "qc_checkpoints": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "checkpoint": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string"
+              },
+              "checked_by": {
+                "type": "string"
+              },
+              "checked_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "issues": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

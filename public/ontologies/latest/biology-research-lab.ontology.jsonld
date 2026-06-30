@@ -1,0 +1,1882 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "@vocab": "https://mif-spec.dev/ns/ontology#",
+    "mif": "https://mif-spec.dev/ns/",
+    "schema": "https://schema.org/",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "ontology": {
+      "@id": "mif:Ontology",
+      "@type": "@id"
+    },
+    "id": {
+      "@id": "@id"
+    },
+    "version": {
+      "@id": "schema:version",
+      "@type": "xsd:string"
+    },
+    "description": {
+      "@id": "schema:description",
+      "@type": "xsd:string"
+    },
+    "schema_url": {
+      "@id": "rdfs:isDefinedBy",
+      "@type": "@id"
+    },
+    "namespaces": {
+      "@id": "mif:hasNamespace",
+      "@container": "@id"
+    },
+    "type_hint": {
+      "@id": "mif:typeHint",
+      "@type": "xsd:string"
+    },
+    "replaces": {
+      "@id": "mif:replaces",
+      "@type": "@id"
+    },
+    "children": {
+      "@id": "mif:hasChildNamespace",
+      "@container": "@id"
+    },
+    "entity_types": {
+      "@id": "mif:definesEntityType",
+      "@container": "@list"
+    },
+    "name": {
+      "@id": "schema:name",
+      "@type": "xsd:string"
+    },
+    "base": {
+      "@id": "mif:baseType",
+      "@type": "@vocab"
+    },
+    "semantic": "mif:SemanticMemory",
+    "episodic": "mif:EpisodicMemory",
+    "procedural": "mif:ProceduralMemory",
+    "traits": {
+      "@id": "mif:definesTrait",
+      "@container": "@id"
+    },
+    "subtype_of": {
+      "@id": "mif:subtypeOf",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "fields": {
+      "@id": "mif:hasField",
+      "@container": "@id"
+    },
+    "requires": {
+      "@id": "mif:requiresField",
+      "@container": "@list"
+    },
+    "relationships": {
+      "@id": "mif:definesRelationship",
+      "@container": "@id"
+    },
+    "from": {
+      "@id": "rdfs:domain",
+      "@container": "@set"
+    },
+    "to": {
+      "@id": "rdfs:range",
+      "@container": "@set"
+    },
+    "symmetric": {
+      "@id": "owl:SymmetricProperty",
+      "@type": "xsd:boolean"
+    },
+    "discovery": {
+      "@id": "mif:discoveryConfig"
+    },
+    "enabled": {
+      "@id": "mif:discoveryEnabled",
+      "@type": "xsd:boolean"
+    },
+    "patterns": {
+      "@id": "mif:hasDiscoveryPattern",
+      "@container": "@list"
+    },
+    "confidence_threshold": {
+      "@id": "mif:confidenceThreshold",
+      "@type": "xsd:decimal"
+    },
+    "content_pattern": {
+      "@id": "mif:contentPattern",
+      "@type": "xsd:string"
+    },
+    "file_pattern": {
+      "@id": "mif:filePattern",
+      "@type": "xsd:string"
+    },
+    "suggest_entity": {
+      "@id": "mif:suggestsEntityType",
+      "@type": "@id"
+    },
+    "suggest_namespace": {
+      "@id": "mif:suggestsNamespace",
+      "@type": "xsd:string"
+    }
+  },
+  "@id": "mif:ontology/biology-research-lab",
+  "@type": "mif:Ontology",
+  "identifier": "biology-research-lab",
+  "version": "0.1.0",
+  "description": "Biology research lab ontology with full lifecycle",
+  "schema_url": "https://mif-spec.dev/schema/ontology/ontology.schema.json",
+  "namespaces": {
+    "semantic": {
+      "@id": "mif:namespace/semantic",
+      "@type": "mif:Namespace",
+      "name": "semantic",
+      "children": {
+        "personnel": {
+          "@id": "mif:namespace/semantic/personnel",
+          "@type": "mif:Namespace",
+          "name": "personnel",
+          "description": "PIs, researchers, staff, students",
+          "type_hint": "semantic"
+        },
+        "collaborations": {
+          "@id": "mif:namespace/semantic/collaborations",
+          "@type": "mif:Namespace",
+          "name": "collaborations",
+          "description": "External collaborators, consortia",
+          "type_hint": "semantic"
+        },
+        "grants": {
+          "@id": "mif:namespace/semantic/grants",
+          "@type": "mif:Namespace",
+          "name": "grants",
+          "description": "Grants, awards, funding sources",
+          "type_hint": "semantic"
+        },
+        "budgets": {
+          "@id": "mif:namespace/semantic/budgets",
+          "@type": "mif:Namespace",
+          "name": "budgets",
+          "description": "Budget allocations, expenditures",
+          "type_hint": "semantic"
+        },
+        "projects": {
+          "@id": "mif:namespace/semantic/projects",
+          "@type": "mif:Namespace",
+          "name": "projects",
+          "description": "Research projects and aims",
+          "type_hint": "semantic"
+        },
+        "protocols": {
+          "@id": "mif:namespace/semantic/protocols",
+          "@type": "mif:Namespace",
+          "name": "protocols",
+          "description": "Experimental protocols, methods",
+          "type_hint": "semantic"
+        },
+        "samples": {
+          "@id": "mif:namespace/semantic/samples",
+          "@type": "mif:Namespace",
+          "name": "samples",
+          "description": "Biological samples, specimens",
+          "type_hint": "semantic"
+        },
+        "equipment": {
+          "@id": "mif:namespace/semantic/equipment",
+          "@type": "mif:Namespace",
+          "name": "equipment",
+          "description": "Lab equipment, instruments",
+          "type_hint": "semantic"
+        },
+        "reagents": {
+          "@id": "mif:namespace/semantic/reagents",
+          "@type": "mif:Namespace",
+          "name": "reagents",
+          "description": "Reagents, consumables, inventory",
+          "type_hint": "semantic"
+        },
+        "datasets": {
+          "@id": "mif:namespace/semantic/datasets",
+          "@type": "mif:Namespace",
+          "name": "datasets",
+          "description": "Research data, repositories",
+          "type_hint": "semantic"
+        },
+        "publications": {
+          "@id": "mif:namespace/semantic/publications",
+          "@type": "mif:Namespace",
+          "name": "publications",
+          "description": "Papers, preprints, patents",
+          "type_hint": "semantic"
+        },
+        "compliance": {
+          "@id": "mif:namespace/semantic/compliance",
+          "@type": "mif:Namespace",
+          "name": "compliance",
+          "description": "IRB, IACUC, IBC protocols",
+          "type_hint": "semantic"
+        }
+      }
+    },
+    "episodic": {
+      "@id": "mif:namespace/episodic",
+      "@type": "mif:Namespace",
+      "name": "episodic",
+      "children": {
+        "experiments": {
+          "@id": "mif:namespace/episodic/experiments",
+          "@type": "mif:Namespace",
+          "name": "experiments",
+          "description": "Experiment runs, data collection",
+          "type_hint": "episodic"
+        },
+        "grant-events": {
+          "@id": "mif:namespace/episodic/grant-events",
+          "@type": "mif:Namespace",
+          "name": "grant-events",
+          "description": "Submissions, reviews, renewals",
+          "type_hint": "episodic"
+        },
+        "pub-events": {
+          "@id": "mif:namespace/episodic/pub-events",
+          "@type": "mif:Namespace",
+          "name": "pub-events",
+          "description": "Submissions, peer reviews",
+          "type_hint": "episodic"
+        },
+        "training": {
+          "@id": "mif:namespace/episodic/training",
+          "@type": "mif:Namespace",
+          "name": "training",
+          "description": "Training completions, certifications",
+          "type_hint": "episodic"
+        }
+      }
+    },
+    "procedural": {
+      "@id": "mif:namespace/procedural",
+      "@type": "mif:Namespace",
+      "name": "procedural",
+      "children": {
+        "lab-protocols": {
+          "@id": "mif:namespace/procedural/lab-protocols",
+          "@type": "mif:Namespace",
+          "name": "lab-protocols",
+          "description": "SOPs, experimental procedures",
+          "type_hint": "procedural"
+        },
+        "grant-procedures": {
+          "@id": "mif:namespace/procedural/grant-procedures",
+          "@type": "mif:Namespace",
+          "name": "grant-procedures",
+          "description": "Proposal preparation, reporting",
+          "type_hint": "procedural"
+        },
+        "safety": {
+          "@id": "mif:namespace/procedural/safety",
+          "@type": "mif:Namespace",
+          "name": "safety",
+          "description": "Safety procedures, EHS protocols",
+          "type_hint": "procedural"
+        }
+      }
+    }
+  },
+  "entity_types": [
+    {
+      "@id": "mif:entityType/principal-investigator",
+      "@type": "mif:EntityType",
+      "name": "principal-investigator",
+      "base": "semantic",
+      "description": "Lab PI - primary grant holder and lab leader",
+      "traits": [
+        "mif:trait/contactable",
+        "mif:trait/certified"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "institution",
+          "department"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string",
+            "enum": [
+              "assistant_professor",
+              "associate_professor",
+              "professor",
+              "research_professor",
+              "senior_scientist"
+            ]
+          },
+          "institution": {
+            "type": "string"
+          },
+          "department": {
+            "type": "string"
+          },
+          "orcid": {
+            "type": "string",
+            "description": "ORCID identifier",
+            "pattern": "^\\d{4}-\\d{4}-\\d{4}-\\d{3}[\\dX]$"
+          },
+          "era_commons_id": {
+            "type": "string"
+          },
+          "research_focus": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "h_index": {
+            "type": "integer"
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/lab-member",
+      "@type": "mif:EntityType",
+      "name": "lab-member",
+      "base": "semantic",
+      "description": "Lab personnel (postdocs, students, staff)",
+      "traits": [
+        "mif:trait/lifecycle",
+        "mif:trait/certified",
+        "mif:trait/contactable"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "role",
+          "pi_id"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "postdoc",
+              "graduate_student",
+              "undergraduate",
+              "research_scientist",
+              "lab_manager",
+              "technician",
+              "visiting_scholar"
+            ]
+          },
+          "pi_id": {
+            "type": "string",
+            "description": "Supervising PI"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "orcid": {
+            "type": "string"
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "funding_source": {
+            "type": "string"
+          },
+          "projects": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/collaborator",
+      "@type": "mif:EntityType",
+      "name": "collaborator",
+      "base": "semantic",
+      "description": "External research collaborator",
+      "traits": [
+        "mif:trait/contactable"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "institution"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "institution": {
+            "type": "string"
+          },
+          "department": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "co_investigator",
+              "consultant",
+              "core_facility",
+              "data_provider",
+              "clinical_partner"
+            ]
+          },
+          "expertise": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "shared_projects": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/grant",
+      "@type": "mif:EntityType",
+      "name": "grant",
+      "base": "semantic",
+      "description": "Research grant or funding award",
+      "traits": [
+        "mif:trait/lifecycle",
+        "mif:trait/budgeted",
+        "mif:trait/renewable"
+      ],
+      "schema": {
+        "required": [
+          "title",
+          "agency",
+          "grant_number",
+          "pi_id"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "agency": {
+            "type": "string",
+            "enum": [
+              "nih",
+              "nsf",
+              "doe",
+              "dod",
+              "hhmi",
+              "foundation",
+              "industry",
+              "internal"
+            ]
+          },
+          "grant_number": {
+            "type": "string"
+          },
+          "mechanism": {
+            "type": "string",
+            "description": "Grant mechanism (R01, R21, etc.)"
+          },
+          "pi_id": {
+            "type": "string"
+          },
+          "co_pis": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "planning",
+              "submitted",
+              "under_review",
+              "funded",
+              "active",
+              "no_cost_extension",
+              "closed",
+              "not_funded"
+            ]
+          },
+          "total_budget": {
+            "type": "number"
+          },
+          "direct_costs": {
+            "type": "number"
+          },
+          "indirect_rate": {
+            "type": "number"
+          },
+          "project_period": {
+            "type": "object",
+            "properties": {
+              "start": {
+                "type": "string",
+                "format": "date"
+              },
+              "end": {
+                "type": "string",
+                "format": "date"
+              }
+            }
+          },
+          "specific_aims": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/grant-submission",
+      "@type": "mif:EntityType",
+      "name": "grant-submission",
+      "base": "episodic",
+      "description": "Grant proposal submission event",
+      "traits": [
+        "mif:trait/scheduled",
+        "mif:trait/reviewed"
+      ],
+      "schema": {
+        "required": [
+          "grant_id",
+          "submission_type",
+          "submission_date"
+        ],
+        "properties": {
+          "grant_id": {
+            "type": "string"
+          },
+          "submission_type": {
+            "type": "string",
+            "enum": [
+              "new",
+              "renewal",
+              "revision",
+              "resubmission",
+              "supplement"
+            ]
+          },
+          "submission_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "deadline": {
+            "type": "string",
+            "format": "date"
+          },
+          "study_section": {
+            "type": "string"
+          },
+          "review_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "priority_score": {
+            "type": "number"
+          },
+          "percentile": {
+            "type": "number"
+          },
+          "summary_statement": {
+            "type": "string"
+          },
+          "reviewer_critiques": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "criterion": {
+                  "type": "string"
+                },
+                "score": {
+                  "type": "integer"
+                },
+                "comments": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/grant-report",
+      "@type": "mif:EntityType",
+      "name": "grant-report",
+      "base": "procedural",
+      "description": "Progress or final report to funding agency",
+      "traits": [
+        "mif:trait/scheduled",
+        "mif:trait/reviewed"
+      ],
+      "schema": {
+        "required": [
+          "grant_id",
+          "report_type",
+          "due_date"
+        ],
+        "properties": {
+          "grant_id": {
+            "type": "string"
+          },
+          "report_type": {
+            "type": "string",
+            "enum": [
+              "annual_progress",
+              "final",
+              "financial",
+              "invention",
+              "no_cost_extension"
+            ]
+          },
+          "due_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "submitted_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "not_started",
+              "in_progress",
+              "submitted",
+              "accepted",
+              "revision_required"
+            ]
+          },
+          "key_accomplishments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "publications_reported": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/project",
+      "@type": "mif:EntityType",
+      "name": "project",
+      "base": "semantic",
+      "description": "Research project or specific aim",
+      "traits": [
+        "mif:trait/lifecycle",
+        "mif:trait/owned"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "pi_id"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "pi_id": {
+            "type": "string"
+          },
+          "grant_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "planning",
+              "active",
+              "on_hold",
+              "completed",
+              "archived"
+            ]
+          },
+          "hypothesis": {
+            "type": "string"
+          },
+          "objectives": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "team_members": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/protocol",
+      "@type": "mif:EntityType",
+      "name": "protocol",
+      "base": "procedural",
+      "description": "Experimental protocol or method",
+      "traits": [
+        "mif:trait/versioned",
+        "mif:trait/reviewed"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "protocol_type"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "protocol_type": {
+            "type": "string",
+            "enum": [
+              "cell_culture",
+              "molecular_biology",
+              "biochemistry",
+              "imaging",
+              "animal",
+              "computational",
+              "clinical",
+              "field_collection"
+            ]
+          },
+          "version": {
+            "type": "string"
+          },
+          "author": {
+            "type": "string"
+          },
+          "steps": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "step_number": {
+                  "type": "integer"
+                },
+                "action": {
+                  "type": "string"
+                },
+                "duration": {
+                  "type": "string"
+                },
+                "notes": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "reagents_required": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "equipment_required": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "safety_notes": {
+            "type": "string"
+          },
+          "troubleshooting": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "problem": {
+                  "type": "string"
+                },
+                "solution": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/experiment",
+      "@type": "mif:EntityType",
+      "name": "experiment",
+      "base": "episodic",
+      "description": "Individual experiment run",
+      "traits": [
+        "mif:trait/scheduled",
+        "mif:trait/measured"
+      ],
+      "schema": {
+        "required": [
+          "experiment_id",
+          "protocol_id",
+          "project_id",
+          "date"
+        ],
+        "properties": {
+          "experiment_id": {
+            "type": "string"
+          },
+          "protocol_id": {
+            "type": "string"
+          },
+          "project_id": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "researcher": {
+            "type": "string"
+          },
+          "hypothesis": {
+            "type": "string"
+          },
+          "conditions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "samples_used": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "data_files": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "success",
+              "partial",
+              "failed",
+              "inconclusive"
+            ]
+          },
+          "observations": {
+            "type": "string"
+          },
+          "next_steps": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/sample",
+      "@type": "mif:EntityType",
+      "name": "sample",
+      "base": "semantic",
+      "description": "Biological sample or specimen",
+      "traits": [
+        "mif:trait/inventoried",
+        "mif:trait/lifecycle"
+      ],
+      "schema": {
+        "required": [
+          "sample_id",
+          "sample_type"
+        ],
+        "properties": {
+          "sample_id": {
+            "type": "string"
+          },
+          "sample_type": {
+            "type": "string",
+            "enum": [
+              "cell_line",
+              "primary_cells",
+              "tissue",
+              "blood",
+              "serum",
+              "dna",
+              "rna",
+              "protein",
+              "plasmid",
+              "virus",
+              "bacteria",
+              "organism",
+              "environmental"
+            ]
+          },
+          "organism": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "collection_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "storage_location": {
+            "type": "string"
+          },
+          "storage_temp": {
+            "type": "string",
+            "enum": [
+              "room_temp",
+              "4C",
+              "minus20",
+              "minus80",
+              "liquid_nitrogen"
+            ]
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "unit": {
+            "type": "string"
+          },
+          "passage_number": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "available",
+              "in_use",
+              "depleted",
+              "contaminated",
+              "discarded"
+            ]
+          },
+          "irb_protocol": {
+            "type": "string"
+          },
+          "iacuc_protocol": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/reagent",
+      "@type": "mif:EntityType",
+      "name": "reagent",
+      "base": "semantic",
+      "description": "Lab reagent or consumable",
+      "traits": [
+        "mif:trait/inventoried"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "catalog_number"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "catalog_number": {
+            "type": "string"
+          },
+          "vendor": {
+            "type": "string"
+          },
+          "lot_number": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "unit": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "storage_conditions": {
+            "type": "string"
+          },
+          "expiration_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "hazard_class": {
+            "type": "string"
+          },
+          "msds_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "reorder_threshold": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/equipment",
+      "@type": "mif:EntityType",
+      "name": "equipment",
+      "base": "semantic",
+      "description": "Lab equipment or instrument",
+      "traits": [
+        "mif:trait/inventoried",
+        "mif:trait/maintainable",
+        "mif:trait/owned"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "equipment_type"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "equipment_type": {
+            "type": "string",
+            "enum": [
+              "microscope",
+              "centrifuge",
+              "pcr_thermocycler",
+              "sequencer",
+              "flow_cytometer",
+              "spectrophotometer",
+              "incubator",
+              "freezer",
+              "biosafety_cabinet",
+              "fume_hood",
+              "mass_spec",
+              "hplc",
+              "other"
+            ]
+          },
+          "manufacturer": {
+            "type": "string"
+          },
+          "model": {
+            "type": "string"
+          },
+          "serial_number": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "purchase_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "service_contract": {
+            "type": "boolean"
+          },
+          "training_required": {
+            "type": "boolean"
+          },
+          "core_facility": {
+            "type": "boolean"
+          },
+          "hourly_rate": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/dataset",
+      "@type": "mif:EntityType",
+      "name": "dataset",
+      "base": "semantic",
+      "description": "Research dataset",
+      "traits": [
+        "mif:trait/versioned",
+        "mif:trait/owned"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "data_type"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "data_type": {
+            "type": "string",
+            "enum": [
+              "sequencing",
+              "imaging",
+              "proteomics",
+              "metabolomics",
+              "clinical",
+              "behavioral",
+              "computational",
+              "survey"
+            ]
+          },
+          "format": {
+            "type": "string"
+          },
+          "size_gb": {
+            "type": "number"
+          },
+          "location": {
+            "type": "string"
+          },
+          "repository": {
+            "type": "string",
+            "enum": [
+              "geo",
+              "sra",
+              "dbgap",
+              "zenodo",
+              "figshare",
+              "dryad",
+              "local"
+            ]
+          },
+          "accession": {
+            "type": "string"
+          },
+          "license": {
+            "type": "string"
+          },
+          "fair_compliant": {
+            "type": "boolean"
+          },
+          "associated_publication": {
+            "type": "string"
+          },
+          "embargo_until": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/publication",
+      "@type": "mif:EntityType",
+      "name": "publication",
+      "base": "semantic",
+      "description": "Research publication",
+      "traits": [
+        "mif:trait/lifecycle",
+        "mif:trait/reviewed"
+      ],
+      "schema": {
+        "required": [
+          "title",
+          "publication_type"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "publication_type": {
+            "type": "string",
+            "enum": [
+              "journal_article",
+              "preprint",
+              "review",
+              "book_chapter",
+              "conference",
+              "thesis",
+              "patent"
+            ]
+          },
+          "authors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "orcid": {
+                  "type": "string"
+                },
+                "credit_roles": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "journal": {
+            "type": "string"
+          },
+          "doi": {
+            "type": "string"
+          },
+          "pmid": {
+            "type": "string"
+          },
+          "preprint_doi": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "in_preparation",
+              "submitted",
+              "in_review",
+              "revision",
+              "accepted",
+              "published",
+              "preprint"
+            ]
+          },
+          "publication_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "grant_citations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "open_access": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/manuscript-submission",
+      "@type": "mif:EntityType",
+      "name": "manuscript-submission",
+      "base": "episodic",
+      "description": "Manuscript submission to journal",
+      "traits": [
+        "mif:trait/scheduled"
+      ],
+      "schema": {
+        "required": [
+          "publication_id",
+          "journal",
+          "submission_date"
+        ],
+        "properties": {
+          "publication_id": {
+            "type": "string"
+          },
+          "journal": {
+            "type": "string"
+          },
+          "submission_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "submission_number": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "submitted",
+              "with_editor",
+              "in_review",
+              "decision_pending",
+              "revision_requested",
+              "accepted",
+              "rejected"
+            ]
+          },
+          "decision_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "reviewer_comments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "reviewer": {
+                  "type": "string"
+                },
+                "recommendation": {
+                  "type": "string"
+                },
+                "comments": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "response_due": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/irb-protocol",
+      "@type": "mif:EntityType",
+      "name": "irb-protocol",
+      "base": "semantic",
+      "description": "Institutional Review Board protocol",
+      "traits": [
+        "mif:trait/renewable",
+        "mif:trait/auditable",
+        "mif:trait/lifecycle"
+      ],
+      "schema": {
+        "required": [
+          "protocol_number",
+          "title",
+          "pi_id"
+        ],
+        "properties": {
+          "protocol_number": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "pi_id": {
+            "type": "string"
+          },
+          "review_type": {
+            "type": "string",
+            "enum": [
+              "exempt",
+              "expedited",
+              "full_board"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "submitted",
+              "approved",
+              "expired",
+              "suspended",
+              "closed"
+            ]
+          },
+          "approval_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "expiration_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "subjects_enrolled": {
+            "type": "integer"
+          },
+          "subjects_approved": {
+            "type": "integer"
+          },
+          "risk_level": {
+            "type": "string",
+            "enum": [
+              "minimal",
+              "greater_than_minimal"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/iacuc-protocol",
+      "@type": "mif:EntityType",
+      "name": "iacuc-protocol",
+      "base": "semantic",
+      "description": "Animal use protocol",
+      "traits": [
+        "mif:trait/renewable",
+        "mif:trait/auditable",
+        "mif:trait/lifecycle"
+      ],
+      "schema": {
+        "required": [
+          "protocol_number",
+          "title",
+          "pi_id"
+        ],
+        "properties": {
+          "protocol_number": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "pi_id": {
+            "type": "string"
+          },
+          "species": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "animal_count": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "submitted",
+              "approved",
+              "expired",
+              "suspended",
+              "closed"
+            ]
+          },
+          "approval_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "expiration_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "pain_category": {
+            "type": "string",
+            "enum": [
+              "B",
+              "C",
+              "D",
+              "E"
+            ]
+          },
+          "housing_location": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/ibc-protocol",
+      "@type": "mif:EntityType",
+      "name": "ibc-protocol",
+      "base": "semantic",
+      "description": "Institutional Biosafety Committee protocol",
+      "traits": [
+        "mif:trait/renewable",
+        "mif:trait/auditable",
+        "mif:trait/lifecycle"
+      ],
+      "schema": {
+        "required": [
+          "protocol_number",
+          "title",
+          "pi_id"
+        ],
+        "properties": {
+          "protocol_number": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "pi_id": {
+            "type": "string"
+          },
+          "biosafety_level": {
+            "type": "string",
+            "enum": [
+              "BSL1",
+              "BSL2",
+              "BSL3"
+            ]
+          },
+          "agents": {
+            "type": "array",
+            "description": "Biological agents used",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "risk_group": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "recombinant_dna": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "submitted",
+              "approved",
+              "expired",
+              "suspended"
+            ]
+          },
+          "approval_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "expiration_date": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/training-record",
+      "@type": "mif:EntityType",
+      "name": "training-record",
+      "base": "episodic",
+      "description": "Required training completion record",
+      "traits": [
+        "mif:trait/renewable",
+        "mif:trait/certified"
+      ],
+      "schema": {
+        "required": [
+          "person_id",
+          "training_type",
+          "completion_date"
+        ],
+        "properties": {
+          "person_id": {
+            "type": "string"
+          },
+          "training_type": {
+            "type": "string",
+            "enum": [
+              "lab_safety",
+              "bloodborne_pathogen",
+              "radiation_safety",
+              "animal_handling",
+              "biosafety",
+              "chemical_hygiene",
+              "rcr",
+              "hipaa",
+              "human_subjects"
+            ]
+          },
+          "completion_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "expiration_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "certificate_id": {
+            "type": "string"
+          },
+          "provider": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  ],
+  "relationships": {
+    "leads": {
+      "@id": "mif:relationship/leads",
+      "@type": "mif:Relationship",
+      "name": "leads",
+      "description": "PI leads lab member or project",
+      "from": [
+        "mif:entityType/principal-investigator"
+      ],
+      "to": [
+        "mif:entityType/lab-member",
+        "mif:entityType/project",
+        "mif:entityType/grant"
+      ],
+      "symmetric": false
+    },
+    "funded_by": {
+      "@id": "mif:relationship/funded_by",
+      "@type": "mif:Relationship",
+      "name": "funded_by",
+      "description": "Project funded by grant",
+      "from": [
+        "mif:entityType/project",
+        "mif:entityType/lab-member"
+      ],
+      "to": [
+        "mif:entityType/grant"
+      ],
+      "symmetric": false
+    },
+    "uses_protocol": {
+      "@id": "mif:relationship/uses_protocol",
+      "@type": "mif:Relationship",
+      "name": "uses_protocol",
+      "description": "Experiment uses protocol",
+      "from": [
+        "mif:entityType/experiment"
+      ],
+      "to": [
+        "mif:entityType/protocol"
+      ],
+      "symmetric": false
+    },
+    "produces": {
+      "@id": "mif:relationship/produces",
+      "@type": "mif:Relationship",
+      "name": "produces",
+      "description": "Experiment produces dataset",
+      "from": [
+        "mif:entityType/experiment",
+        "mif:entityType/project"
+      ],
+      "to": [
+        "mif:entityType/dataset",
+        "mif:entityType/publication"
+      ],
+      "symmetric": false
+    },
+    "covered_by": {
+      "@id": "mif:relationship/covered_by",
+      "@type": "mif:Relationship",
+      "name": "covered_by",
+      "description": "Sample/experiment covered by compliance protocol",
+      "from": [
+        "mif:entityType/sample",
+        "mif:entityType/experiment"
+      ],
+      "to": [
+        "mif:entityType/irb-protocol",
+        "mif:entityType/iacuc-protocol",
+        "mif:entityType/ibc-protocol"
+      ],
+      "symmetric": false
+    },
+    "collaborates_with": {
+      "@id": "mif:relationship/collaborates_with",
+      "@type": "mif:Relationship",
+      "name": "collaborates_with",
+      "description": "PI collaborates with external party",
+      "from": [
+        "mif:entityType/principal-investigator",
+        "mif:entityType/project"
+      ],
+      "to": [
+        "mif:entityType/collaborator"
+      ],
+      "symmetric": true
+    },
+    "cites_grant": {
+      "@id": "mif:relationship/cites_grant",
+      "@type": "mif:Relationship",
+      "name": "cites_grant",
+      "description": "Publication cites grant funding",
+      "from": [
+        "mif:entityType/publication"
+      ],
+      "to": [
+        "mif:entityType/grant"
+      ],
+      "symmetric": false
+    },
+    "uses_sample": {
+      "@id": "mif:relationship/uses_sample",
+      "@type": "mif:Relationship",
+      "name": "uses_sample",
+      "description": "Experiment uses sample",
+      "from": [
+        "mif:entityType/experiment"
+      ],
+      "to": [
+        "mif:entityType/sample"
+      ],
+      "symmetric": false
+    },
+    "uses_equipment": {
+      "@id": "mif:relationship/uses_equipment",
+      "@type": "mif:Relationship",
+      "name": "uses_equipment",
+      "description": "Protocol uses equipment",
+      "from": [
+        "mif:entityType/protocol",
+        "mif:entityType/experiment"
+      ],
+      "to": [
+        "mif:entityType/equipment"
+      ],
+      "symmetric": false
+    }
+  },
+  "discovery": {
+    "enabled": true,
+    "confidence_threshold": 0.8,
+    "patterns": [
+      {
+        "@id": "mif:pattern/0",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(R01|R21|R03|K99|F31|T32|U01)\\b",
+        "suggest_entity": "mif:entityType/grant",
+        "suggest_namespace": "_semantic/grants"
+      },
+      {
+        "@id": "mif:pattern/1",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(NIH|NSF|grant|funding|award)\\b",
+        "suggest_entity": "mif:entityType/grant",
+        "suggest_namespace": "_semantic/grants"
+      },
+      {
+        "@id": "mif:pattern/2",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(specific aim|proposal|study section)\\b",
+        "suggest_entity": "mif:entityType/grant-submission",
+        "suggest_namespace": "_episodic/grant-events"
+      },
+      {
+        "@id": "mif:pattern/3",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(postdoc|graduate student|lab manager)\\b",
+        "suggest_entity": "mif:entityType/lab-member",
+        "suggest_namespace": "_semantic/personnel"
+      },
+      {
+        "@id": "mif:pattern/4",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(PI|principal investigator|ORCID)\\b",
+        "suggest_entity": "mif:entityType/principal-investigator",
+        "suggest_namespace": "_semantic/personnel"
+      },
+      {
+        "@id": "mif:pattern/5",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(protocol|SOP|procedure)\\b",
+        "suggest_entity": "mif:entityType/protocol",
+        "suggest_namespace": "_procedural/lab-protocols"
+      },
+      {
+        "@id": "mif:pattern/6",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(experiment|assay|Western|PCR|qPCR)\\b",
+        "suggest_entity": "mif:entityType/experiment",
+        "suggest_namespace": "_episodic/experiments"
+      },
+      {
+        "@id": "mif:pattern/7",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(sample|specimen|cell line|tissue)\\b",
+        "suggest_entity": "mif:entityType/sample",
+        "suggest_namespace": "_semantic/samples"
+      },
+      {
+        "@id": "mif:pattern/8",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(reagent|antibody|primer|enzyme)\\b",
+        "suggest_entity": "mif:entityType/reagent",
+        "suggest_namespace": "_semantic/reagents"
+      },
+      {
+        "@id": "mif:pattern/9",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(manuscript|paper|publication|preprint)\\b",
+        "suggest_entity": "mif:entityType/publication",
+        "suggest_namespace": "_semantic/publications"
+      },
+      {
+        "@id": "mif:pattern/10",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(DOI|PMID|journal|submitted)\\b",
+        "suggest_entity": "mif:entityType/manuscript-submission",
+        "suggest_namespace": "_episodic/pub-events"
+      },
+      {
+        "@id": "mif:pattern/11",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(IRB|human subjects|consent)\\b",
+        "suggest_entity": "mif:entityType/irb-protocol",
+        "suggest_namespace": "_semantic/compliance"
+      },
+      {
+        "@id": "mif:pattern/12",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(IACUC|animal protocol|animal use)\\b",
+        "suggest_entity": "mif:entityType/iacuc-protocol",
+        "suggest_namespace": "_semantic/compliance"
+      },
+      {
+        "@id": "mif:pattern/13",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(IBC|biosafety|BSL)\\b",
+        "suggest_entity": "mif:entityType/ibc-protocol",
+        "suggest_namespace": "_semantic/compliance"
+      },
+      {
+        "@id": "mif:pattern/14",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(dataset|GEO|SRA|repository)\\b",
+        "suggest_entity": "mif:entityType/dataset",
+        "suggest_namespace": "_semantic/datasets"
+      }
+    ]
+  }
+}

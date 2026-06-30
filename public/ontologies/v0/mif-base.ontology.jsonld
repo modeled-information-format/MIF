@@ -1,0 +1,312 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "@vocab": "https://mif-spec.dev/ns/ontology#",
+    "mif": "https://mif-spec.dev/ns/",
+    "schema": "https://schema.org/",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "ontology": {
+      "@id": "mif:Ontology",
+      "@type": "@id"
+    },
+    "id": {
+      "@id": "@id"
+    },
+    "version": {
+      "@id": "schema:version",
+      "@type": "xsd:string"
+    },
+    "description": {
+      "@id": "schema:description",
+      "@type": "xsd:string"
+    },
+    "schema_url": {
+      "@id": "rdfs:isDefinedBy",
+      "@type": "@id"
+    },
+    "namespaces": {
+      "@id": "mif:hasNamespace",
+      "@container": "@id"
+    },
+    "type_hint": {
+      "@id": "mif:typeHint",
+      "@type": "xsd:string"
+    },
+    "replaces": {
+      "@id": "mif:replaces",
+      "@type": "@id"
+    },
+    "children": {
+      "@id": "mif:hasChildNamespace",
+      "@container": "@id"
+    },
+    "entity_types": {
+      "@id": "mif:definesEntityType",
+      "@container": "@list"
+    },
+    "name": {
+      "@id": "schema:name",
+      "@type": "xsd:string"
+    },
+    "base": {
+      "@id": "mif:baseType",
+      "@type": "@vocab"
+    },
+    "semantic": "mif:SemanticMemory",
+    "episodic": "mif:EpisodicMemory",
+    "procedural": "mif:ProceduralMemory",
+    "traits": {
+      "@id": "mif:definesTrait",
+      "@container": "@id"
+    },
+    "subtype_of": {
+      "@id": "mif:subtypeOf",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "fields": {
+      "@id": "mif:hasField",
+      "@container": "@id"
+    },
+    "requires": {
+      "@id": "mif:requiresField",
+      "@container": "@list"
+    },
+    "relationships": {
+      "@id": "mif:definesRelationship",
+      "@container": "@id"
+    },
+    "from": {
+      "@id": "rdfs:domain",
+      "@container": "@set"
+    },
+    "to": {
+      "@id": "rdfs:range",
+      "@container": "@set"
+    },
+    "symmetric": {
+      "@id": "owl:SymmetricProperty",
+      "@type": "xsd:boolean"
+    },
+    "discovery": {
+      "@id": "mif:discoveryConfig"
+    },
+    "enabled": {
+      "@id": "mif:discoveryEnabled",
+      "@type": "xsd:boolean"
+    },
+    "patterns": {
+      "@id": "mif:hasDiscoveryPattern",
+      "@container": "@list"
+    },
+    "confidence_threshold": {
+      "@id": "mif:confidenceThreshold",
+      "@type": "xsd:decimal"
+    },
+    "content_pattern": {
+      "@id": "mif:contentPattern",
+      "@type": "xsd:string"
+    },
+    "file_pattern": {
+      "@id": "mif:filePattern",
+      "@type": "xsd:string"
+    },
+    "suggest_entity": {
+      "@id": "mif:suggestsEntityType",
+      "@type": "@id"
+    },
+    "suggest_namespace": {
+      "@id": "mif:suggestsNamespace",
+      "@type": "xsd:string"
+    }
+  },
+  "@id": "mif:ontology/mif-base",
+  "@type": "mif:Ontology",
+  "identifier": "mif-base",
+  "version": "1.0.0",
+  "description": "MIF base ontology with the general knowledge triad namespace hierarchy",
+  "schema_url": "https://mif-spec.dev/schema/ontology/ontology.schema.json",
+  "namespaces": {
+    "_semantic": {
+      "@id": "mif:namespace/_semantic",
+      "@type": "mif:Namespace",
+      "name": "_semantic",
+      "description": "Facts, concepts, relationships - declarative knowledge",
+      "type_hint": "semantic",
+      "children": {
+        "decisions": {
+          "@id": "mif:namespace/_semantic/decisions",
+          "@type": "mif:Namespace",
+          "name": "decisions",
+          "description": "Architectural choices with rationale",
+          "type_hint": "semantic"
+        },
+        "knowledge": {
+          "@id": "mif:namespace/_semantic/knowledge",
+          "@type": "mif:Namespace",
+          "name": "knowledge",
+          "description": "APIs, context, learnings, security - factual knowledge",
+          "type_hint": "semantic"
+        },
+        "entities": {
+          "@id": "mif:namespace/_semantic/entities",
+          "@type": "mif:Namespace",
+          "name": "entities",
+          "description": "Entity definitions - technologies, components, systems",
+          "type_hint": "semantic"
+        },
+        "preferences": {
+          "@id": "mif:namespace/_semantic/preferences",
+          "@type": "mif:Namespace",
+          "name": "preferences",
+          "description": "User preferences, settings, configuration choices",
+          "type_hint": "semantic"
+        }
+      }
+    },
+    "_episodic": {
+      "@id": "mif:namespace/_episodic",
+      "@type": "mif:Namespace",
+      "name": "_episodic",
+      "description": "Events, experiences, timelines - time-bound records",
+      "type_hint": "episodic",
+      "children": {
+        "incidents": {
+          "@id": "mif:namespace/_episodic/incidents",
+          "@type": "mif:Namespace",
+          "name": "incidents",
+          "description": "Production issues, outages, postmortems",
+          "type_hint": "episodic"
+        },
+        "sessions": {
+          "@id": "mif:namespace/_episodic/sessions",
+          "@type": "mif:Namespace",
+          "name": "sessions",
+          "description": "Debug sessions, work sessions, meeting notes",
+          "type_hint": "episodic"
+        },
+        "blockers": {
+          "@id": "mif:namespace/_episodic/blockers",
+          "@type": "mif:Namespace",
+          "name": "blockers",
+          "description": "Impediments, issues preventing progress",
+          "type_hint": "episodic"
+        }
+      }
+    },
+    "_procedural": {
+      "@id": "mif:namespace/_procedural",
+      "@type": "mif:Namespace",
+      "name": "_procedural",
+      "description": "Step-by-step processes - how-to knowledge",
+      "type_hint": "procedural",
+      "children": {
+        "runbooks": {
+          "@id": "mif:namespace/_procedural/runbooks",
+          "@type": "mif:Namespace",
+          "name": "runbooks",
+          "description": "Operational procedures, SOPs, playbooks",
+          "type_hint": "procedural"
+        },
+        "patterns": {
+          "@id": "mif:namespace/_procedural/patterns",
+          "@type": "mif:Namespace",
+          "name": "patterns",
+          "description": "Code conventions, best practices, testing strategies",
+          "type_hint": "procedural"
+        },
+        "migrations": {
+          "@id": "mif:namespace/_procedural/migrations",
+          "@type": "mif:Namespace",
+          "name": "migrations",
+          "description": "Migration steps, upgrade procedures, data transformations",
+          "type_hint": "procedural"
+        }
+      }
+    }
+  },
+  "traits": {
+    "timestamped": {
+      "@id": "mif:trait/timestamped",
+      "@type": "mif:Trait",
+      "name": "timestamped",
+      "description": "Adds creation and update timestamps",
+      "fields": {
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the record was created"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the record was last updated"
+        }
+      }
+    },
+    "confidence": {
+      "@id": "mif:trait/confidence",
+      "@type": "mif:Trait",
+      "name": "confidence",
+      "description": "Adds confidence score for freshness and validity tracking",
+      "fields": {
+        "confidence": {
+          "type": "number",
+          "description": "Confidence score (0.0-1.0)"
+        }
+      }
+    },
+    "provenance": {
+      "@id": "mif:trait/provenance",
+      "@type": "mif:Trait",
+      "name": "provenance",
+      "description": "Adds source tracking",
+      "fields": {
+        "source": {
+          "type": "string",
+          "description": "Where this knowledge came from"
+        },
+        "author": {
+          "type": "string",
+          "description": "Who captured this record"
+        }
+      }
+    }
+  },
+  "relationships": {
+    "relates_to": {
+      "@id": "mif:relationship/relates_to",
+      "@type": "mif:Relationship",
+      "name": "relates_to",
+      "description": "General association between records",
+      "from": [],
+      "to": [],
+      "symmetric": true
+    },
+    "supersedes": {
+      "@id": "mif:relationship/supersedes",
+      "@type": "mif:Relationship",
+      "name": "supersedes",
+      "description": "Newer record replaces older one",
+      "from": [],
+      "to": [],
+      "symmetric": false
+    },
+    "derived_from": {
+      "@id": "mif:relationship/derived_from",
+      "@type": "mif:Relationship",
+      "name": "derived_from",
+      "description": "Record was derived from another",
+      "from": [],
+      "to": [],
+      "symmetric": false
+    }
+  },
+  "discovery": {
+    "enabled": true,
+    "confidence_threshold": 0.8
+  }
+}

@@ -1,0 +1,374 @@
+---
+# Observability Ontology
+#
+# Domain pack for observability-platform research. Types form an explicit IS-A tree
+# (subtype_of) rooted in the inherited generic/engineering supertypes, so the hierarchy
+# is generic -> intermediate -> leaf, e.g.:
+#
+#   technology (mif-generic)      -> observability-resource   -> observability-service
+#   technology (mif-generic)      -> observability-resource   -> service-ownership-registry
+#   concept    (mif-generic)      -> observability-assessment -> capability-comparison
+#   concept    (mif-generic)      -> observability-assessment -> market-position
+#   concept    (mif-generic)      -> observability-assessment -> roadmap-signal
+#   delivery-metric (engineering-base)                        -> telemetry-signal
+#   design-pattern  (engineering-base)                        -> migration-pattern
+#
+# Extends BOTH engineering-base (component, delivery-metric, design-pattern, …) and
+# mif-generic (technology, concept, organization) so every subtype_of / relationship
+# endpoint resolves through the extends chain at concordance time.
+#
+# Version: 0.1.0
+# Last Updated: 2026-06-26
+
+ontology:
+  id: observability
+  version: "0.1.0"
+  description: "Observability-platform domain ontology — services, telemetry signals, capability comparisons, service-ownership registries, migration patterns, market positioning, and roadmap signals, organized as an IS-A tree rooted in generic types"
+  schema_url: >-
+    https://mif-spec.dev/schema/ontology/ontology.schema.json
+  extends:
+    - engineering-base
+    - mif-generic
+
+# Namespace Hierarchy (Cognitive Triad)
+namespaces:
+  _semantic:
+    description: "Facts, concepts, comparisons"
+    type_hint: semantic
+    children:
+      services:
+        description: "Observability services and the signals/registries they provide"
+        type_hint: semantic
+      analysis:
+        description: "Capability comparisons and market positioning"
+        type_hint: semantic
+  _episodic:
+    description: "Time-stamped product and roadmap signals"
+    type_hint: episodic
+    children:
+      roadmap:
+        description: "GA dates, launches, deprecations, predictions"
+        type_hint: episodic
+  _procedural:
+    description: "Migration approaches and patterns"
+    type_hint: procedural
+    children:
+      migrations:
+        description: "Datadog-to-AWS-native migration patterns and case studies"
+        type_hint: procedural
+
+# Entity Types — abstract intermediate supertypes first, then concrete leaves.
+entity_types:
+  # ----- Abstract intermediate supertypes (the "x" layer; not stamped on findings) -----
+  - name: observability-resource
+    description: "Abstract supertype: a deployable observability capability/system (specializes the generic technology)"
+    base: semantic
+    abstract: true
+    subtype_of:
+      - technology
+    schema:
+      required:
+        - name
+      properties:
+        name:
+          type: string
+  - name: observability-assessment
+    description: "Abstract supertype: an analytical judgment about observability (specializes the generic concept)"
+    base: semantic
+    abstract: true
+    subtype_of:
+      - concept
+    schema:
+      required:
+        - name
+      properties:
+        name:
+          type: string
+
+  # ----- Concrete leaf types -----
+  - name: observability-service
+    description: "An observability service or product (CloudWatch, X-Ray, ADOT, Amazon Managed Prometheus/Grafana, Datadog) and the pillars it serves"
+    base: semantic
+    subtype_of:
+      - observability-resource
+    schema:
+      required:
+        - name
+        - provider
+        - pillars
+      properties:
+        name:
+          type: string
+        provider:
+          type: string
+          description: "Vendor/platform that ships the service"
+          enum:
+            - aws
+            - datadog
+            - grafana
+            - other
+        pillars:
+          type: array
+          description: "Observability pillars the service serves"
+          items:
+            type: string
+            enum:
+              - metrics
+              - logs
+              - traces
+              - apm
+              - rum
+              - synthetics
+              - dashboards
+              - profiling
+              - aiops
+        maturity:
+          type: string
+          enum:
+            - ga
+            - preview
+            - maintenance
+            - end-of-support
+        aws_service_name:
+          type: string
+          description: "Canonical AWS service name when provider is aws"
+  - name: service-ownership-registry
+    description: "A service catalog, resource registry, service map, or internal developer portal that tracks service ownership/topology"
+    base: semantic
+    subtype_of:
+      - observability-resource
+    schema:
+      required:
+        - name
+        - registry_kind
+      properties:
+        name:
+          type: string
+        registry_kind:
+          type: string
+          enum:
+            - telemetry-catalog
+            - resource-registry
+            - service-map
+            - idp
+        provider:
+          type: string
+        features:
+          type: array
+          items:
+            type: string
+  - name: telemetry-signal
+    description: "A class of telemetry data (a signal/pillar) produced and consumed across observability services"
+    base: semantic
+    subtype_of:
+      - delivery-metric
+    schema:
+      required:
+        - name
+        - signal_type
+      properties:
+        name:
+          type: string
+        signal_type:
+          type: string
+          enum:
+            - metric
+            - log
+            - trace
+            - rum
+            - synthetic
+            - profile
+            - event
+        producers:
+          type: array
+          items:
+            type: string
+        backends:
+          type: array
+          items:
+            type: string
+  - name: capability-comparison
+    description: "A capability or gap comparison between an observability subject and a baseline (e.g. AWS-native vs Datadog for a pillar)"
+    base: semantic
+    subtype_of:
+      - observability-assessment
+    schema:
+      required:
+        - name
+        - subject
+        - baseline
+        - parity
+      properties:
+        name:
+          type: string
+        subject:
+          type: string
+          description: "The capability under evaluation (e.g. AWS-native APM)"
+        baseline:
+          type: string
+          description: "The comparator it is measured against (e.g. Datadog APM)"
+        parity:
+          type: string
+          enum:
+            - parity
+            - partial
+            - gap
+            - superior
+        gaps:
+          type: array
+          items:
+            type: string
+  - name: market-position
+    description: "A vendor's positioning in the observability market per an analyst or market source"
+    base: semantic
+    subtype_of:
+      - observability-assessment
+    schema:
+      required:
+        - name
+        - vendor
+      properties:
+        name:
+          type: string
+        vendor:
+          type: string
+        source:
+          type: string
+          description: "The market/analyst source (e.g. Gartner Magic Quadrant 2025)"
+        placement:
+          type: string
+          enum:
+            - leader
+            - challenger
+            - visionary
+            - niche
+            - unranked
+  - name: roadmap-signal
+    description: "A time-stamped product or roadmap signal: a GA date, launch, deprecation/maintenance move, or near-term prediction"
+    base: episodic
+    subtype_of:
+      - observability-assessment
+    schema:
+      required:
+        - name
+        - signal_kind
+      properties:
+        name:
+          type: string
+        signal_kind:
+          type: string
+          enum:
+            - ga
+            - preview
+            - launch
+            - maintenance
+            - end-of-support
+            - prediction
+        date:
+          type: string
+          description: "Signal date (ISO date or month/quarter as published)"
+        capability_area:
+          type: string
+          description: "The pillar/capability the signal advances"
+  - name: migration-pattern
+    description: "An approach, case study, or community pattern for migrating between observability platforms"
+    base: procedural
+    subtype_of:
+      - design-pattern
+    schema:
+      required:
+        - name
+        - from_platform
+        - to_platform
+      properties:
+        name:
+          type: string
+        from_platform:
+          type: string
+        to_platform:
+          type: string
+        approach:
+          type: string
+        evidence_type:
+          type: string
+          enum:
+            - case-study
+            - community-pattern
+            - vendor-report
+            - reference-architecture
+
+# Traits (reusable mixins) — available for future enrichment.
+traits:
+  sourced:
+    description: "Adds a primary-source reference"
+    fields:
+      source_url:
+        type: string
+        format: uri
+      source_title:
+        type: string
+
+# Relationships — observability edges beyond the subtype_of IS-A tree. Endpoints naming
+# inherited supertypes (technology, component) resolve via the extends chain.
+relationships:
+  emits:
+    description: "A service produces a telemetry signal"
+    from:
+      - observability-service
+    to:
+      - telemetry-signal
+    symmetric: false
+  compares:
+    description: "A comparison evaluates a service/technology against a baseline"
+    from:
+      - capability-comparison
+    to:
+      - observability-service
+      - technology
+    symmetric: false
+  positions:
+    description: "A market position situates a vendor/technology"
+    from:
+      - market-position
+    to:
+      - technology
+    symmetric: false
+  advances:
+    description: "A roadmap signal advances a service's capability"
+    from:
+      - roadmap-signal
+    to:
+      - observability-service
+    symmetric: false
+  catalogs:
+    description: "A registry catalogs services/components"
+    from:
+      - service-ownership-registry
+    to:
+      - observability-service
+      - component
+    symmetric: false
+
+# Discovery Patterns
+discovery:
+  enabled: true
+  confidence_threshold: 0.8
+  patterns:
+    - content_pattern: "\\b(CloudWatch|X-Ray|ADOT|OpenTelemetry|Managed Prometheus|Managed Grafana|Application Signals)\\b"
+      suggest_entity: observability-service
+      suggest_namespace: _semantic/services
+    - content_pattern: "\\b(service catalog|service ownership|AppRegistry|myApplications|developer portal|IDP|service map)\\b"
+      suggest_entity: service-ownership-registry
+      suggest_namespace: _semantic/services
+    - content_pattern: "\\b(parity|capability gap|pillar-by-pillar|vs\\.?\\s+Datadog)\\b"
+      suggest_entity: capability-comparison
+      suggest_namespace: _semantic/analysis
+    - content_pattern: "\\b(migration|migrate)\\b.*\\b(case study|pattern|Datadog)\\b"
+      suggest_entity: migration-pattern
+      suggest_namespace: _procedural/migrations
+    - content_pattern: "\\b(Gartner|Magic Quadrant|market (leader|position)|challenger)\\b"
+      suggest_entity: market-position
+      suggest_namespace: _semantic/analysis
+    - content_pattern: "\\b(GA|generally available|re:Invent|end-of-support|maintenance mode|roadmap)\\b"
+      suggest_entity: roadmap-signal
+      suggest_namespace: _episodic/roadmap

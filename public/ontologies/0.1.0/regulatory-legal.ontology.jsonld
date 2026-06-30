@@ -1,0 +1,1253 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "@vocab": "https://mif-spec.dev/ns/ontology#",
+    "mif": "https://mif-spec.dev/ns/",
+    "schema": "https://schema.org/",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "ontology": {
+      "@id": "mif:Ontology",
+      "@type": "@id"
+    },
+    "id": {
+      "@id": "@id"
+    },
+    "version": {
+      "@id": "schema:version",
+      "@type": "xsd:string"
+    },
+    "description": {
+      "@id": "schema:description",
+      "@type": "xsd:string"
+    },
+    "schema_url": {
+      "@id": "rdfs:isDefinedBy",
+      "@type": "@id"
+    },
+    "namespaces": {
+      "@id": "mif:hasNamespace",
+      "@container": "@id"
+    },
+    "type_hint": {
+      "@id": "mif:typeHint",
+      "@type": "xsd:string"
+    },
+    "replaces": {
+      "@id": "mif:replaces",
+      "@type": "@id"
+    },
+    "children": {
+      "@id": "mif:hasChildNamespace",
+      "@container": "@id"
+    },
+    "entity_types": {
+      "@id": "mif:definesEntityType",
+      "@container": "@list"
+    },
+    "name": {
+      "@id": "schema:name",
+      "@type": "xsd:string"
+    },
+    "base": {
+      "@id": "mif:baseType",
+      "@type": "@vocab"
+    },
+    "semantic": "mif:SemanticMemory",
+    "episodic": "mif:EpisodicMemory",
+    "procedural": "mif:ProceduralMemory",
+    "traits": {
+      "@id": "mif:definesTrait",
+      "@container": "@id"
+    },
+    "subtype_of": {
+      "@id": "mif:subtypeOf",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "fields": {
+      "@id": "mif:hasField",
+      "@container": "@id"
+    },
+    "requires": {
+      "@id": "mif:requiresField",
+      "@container": "@list"
+    },
+    "relationships": {
+      "@id": "mif:definesRelationship",
+      "@container": "@id"
+    },
+    "from": {
+      "@id": "rdfs:domain",
+      "@container": "@set"
+    },
+    "to": {
+      "@id": "rdfs:range",
+      "@container": "@set"
+    },
+    "symmetric": {
+      "@id": "owl:SymmetricProperty",
+      "@type": "xsd:boolean"
+    },
+    "discovery": {
+      "@id": "mif:discoveryConfig"
+    },
+    "enabled": {
+      "@id": "mif:discoveryEnabled",
+      "@type": "xsd:boolean"
+    },
+    "patterns": {
+      "@id": "mif:hasDiscoveryPattern",
+      "@container": "@list"
+    },
+    "confidence_threshold": {
+      "@id": "mif:confidenceThreshold",
+      "@type": "xsd:decimal"
+    },
+    "content_pattern": {
+      "@id": "mif:contentPattern",
+      "@type": "xsd:string"
+    },
+    "file_pattern": {
+      "@id": "mif:filePattern",
+      "@type": "xsd:string"
+    },
+    "suggest_entity": {
+      "@id": "mif:suggestsEntityType",
+      "@type": "@id"
+    },
+    "suggest_namespace": {
+      "@id": "mif:suggestsNamespace",
+      "@type": "xsd:string"
+    }
+  },
+  "@id": "mif:ontology/regulatory-legal",
+  "@type": "mif:Ontology",
+  "identifier": "regulatory-legal",
+  "version": "0.1.0",
+  "description": "Regulatory and legal domain ontology \u2014 acts, obligations, authorities, jurisdictions, contracts, sanctions",
+  "namespaces": {
+    "semantic": {
+      "@id": "mif:namespace/semantic",
+      "@type": "mif:Namespace",
+      "name": "semantic",
+      "children": {
+        "obligations": {
+          "@id": "mif:namespace/semantic/obligations",
+          "@type": "mif:Namespace",
+          "name": "obligations",
+          "description": "Legal obligations, norms, and deontic duties",
+          "type_hint": "semantic"
+        },
+        "rights": {
+          "@id": "mif:namespace/semantic/rights",
+          "@type": "mif:Namespace",
+          "name": "rights",
+          "description": "Legal rights and conferred legal capacities",
+          "type_hint": "semantic"
+        },
+        "jurisdictions": {
+          "@id": "mif:namespace/semantic/jurisdictions",
+          "@type": "mif:Namespace",
+          "name": "jurisdictions",
+          "description": "Jurisdictions and their legal systems",
+          "type_hint": "semantic"
+        },
+        "authorities": {
+          "@id": "mif:namespace/semantic/authorities",
+          "@type": "mif:Namespace",
+          "name": "authorities",
+          "description": "Regulators, supervisors, courts, and standards bodies",
+          "type_hint": "semantic"
+        },
+        "roles": {
+          "@id": "mif:namespace/semantic/roles",
+          "@type": "mif:Namespace",
+          "name": "roles",
+          "description": "Legal roles played within a legal relationship",
+          "type_hint": "semantic"
+        },
+        "persons": {
+          "@id": "mif:namespace/semantic/persons",
+          "@type": "mif:Namespace",
+          "name": "persons",
+          "description": "Natural and juridical legal persons",
+          "type_hint": "semantic"
+        },
+        "contracts": {
+          "@id": "mif:namespace/semantic/contracts",
+          "@type": "mif:Namespace",
+          "name": "contracts",
+          "description": "Contracts and legally enforceable agreements",
+          "type_hint": "semantic"
+        },
+        "licenses": {
+          "@id": "mif:namespace/semantic/licenses",
+          "@type": "mif:Namespace",
+          "name": "licenses",
+          "description": "Licenses, permits, and authorizations",
+          "type_hint": "semantic"
+        },
+        "legal-acts": {
+          "@id": "mif:namespace/semantic/legal-acts",
+          "@type": "mif:Namespace",
+          "name": "legal-acts",
+          "description": "Legislative acts, treaties, and legal resources",
+          "type_hint": "semantic"
+        },
+        "control-mappings": {
+          "@id": "mif:namespace/semantic/control-mappings",
+          "@type": "mif:Namespace",
+          "name": "control-mappings",
+          "description": "Obligation-to-control crosswalks and mappings",
+          "type_hint": "semantic"
+        }
+      }
+    },
+    "episodic": {
+      "@id": "mif:namespace/episodic",
+      "@type": "mif:Namespace",
+      "name": "episodic",
+      "children": {
+        "court-decisions": {
+          "@id": "mif:namespace/episodic/court-decisions",
+          "@type": "mif:Namespace",
+          "name": "court-decisions",
+          "description": "Court decisions and case law",
+          "type_hint": "episodic"
+        },
+        "sanctions": {
+          "@id": "mif:namespace/episodic/sanctions",
+          "@type": "mif:Namespace",
+          "name": "sanctions",
+          "description": "Regulatory sanctions and enforcement actions",
+          "type_hint": "episodic"
+        }
+      }
+    },
+    "procedural": {
+      "@id": "mif:namespace/procedural",
+      "@type": "mif:Namespace",
+      "name": "procedural",
+      "children": {
+        "procedures": {
+          "@id": "mif:namespace/procedural/procedures",
+          "@type": "mif:Namespace",
+          "name": "procedures",
+          "description": "Legal and administrative procedures",
+          "type_hint": "procedural"
+        },
+        "reports": {
+          "@id": "mif:namespace/procedural/reports",
+          "@type": "mif:Namespace",
+          "name": "reports",
+          "description": "Compliance assessments and regulatory reports",
+          "type_hint": "procedural"
+        }
+      }
+    }
+  },
+  "entity_types": [
+    {
+      "@id": "mif:entityType/legal-act",
+      "@type": "mif:EntityType",
+      "name": "legal-act",
+      "base": "semantic",
+      "description": "An abstract legislative work (act, regulation, directive, statute)",
+      "traits": [
+        "mif:trait/lifecycle",
+        "mif:trait/renewable",
+        "mif:trait/auditable",
+        "mif:trait/categorized"
+      ],
+      "schema": {
+        "required": [
+          "act_name",
+          "act_type"
+        ],
+        "properties": {
+          "act_name": {
+            "type": "string"
+          },
+          "act_type": {
+            "type": "string",
+            "enum": [
+              "regulation",
+              "directive",
+              "statute",
+              "executive-order",
+              "treaty",
+              "constitutional-provision",
+              "other"
+            ]
+          },
+          "issuing_body": {
+            "type": "string"
+          },
+          "date_publication": {
+            "type": "string",
+            "format": "date"
+          },
+          "first_date_entry_in_force": {
+            "type": "string",
+            "format": "date"
+          },
+          "date_no_longer_in_force": {
+            "type": "string",
+            "format": "date"
+          },
+          "in_force": {
+            "type": "boolean"
+          },
+          "eli_uri": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/treaty",
+      "@type": "mif:EntityType",
+      "name": "treaty",
+      "base": "semantic",
+      "description": "An international agreement between sovereign states or bodies",
+      "traits": [
+        "mif:trait/lifecycle",
+        "mif:trait/renewable",
+        "mif:trait/auditable",
+        "mif:trait/categorized"
+      ],
+      "schema": {
+        "required": [
+          "treaty_name",
+          "treaty_type"
+        ],
+        "properties": {
+          "treaty_name": {
+            "type": "string"
+          },
+          "treaty_type": {
+            "type": "string"
+          },
+          "parties_states": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "date_signed": {
+            "type": "string",
+            "format": "date"
+          },
+          "date_in_force": {
+            "type": "string",
+            "format": "date"
+          },
+          "depository": {
+            "type": "string"
+          },
+          "subject_matter": {
+            "type": "string"
+          },
+          "un_registration_number": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/obligation",
+      "@type": "mif:EntityType",
+      "name": "obligation",
+      "base": "semantic",
+      "description": "A legal obligation, norm, or deontic qualification",
+      "traits": [
+        "mif:trait/lifecycle",
+        "mif:trait/auditable",
+        "mif:trait/categorized",
+        "mif:trait/owned"
+      ],
+      "schema": {
+        "required": [
+          "obligation_statement",
+          "obligation_type"
+        ],
+        "properties": {
+          "obligation_statement": {
+            "type": "string"
+          },
+          "obligation_type": {
+            "type": "string",
+            "enum": [
+              "duty",
+              "prohibition",
+              "permission",
+              "power",
+              "right"
+            ]
+          },
+          "bearer": {
+            "type": "string"
+          },
+          "condition": {
+            "type": "string"
+          },
+          "enforcement_mechanism": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/legal-right",
+      "@type": "mif:EntityType",
+      "name": "legal-right",
+      "base": "semantic",
+      "description": "A legal right conferred on a holder (distinct from an obligation)",
+      "traits": [
+        "mif:trait/lifecycle",
+        "mif:trait/owned",
+        "mif:trait/categorized"
+      ],
+      "schema": {
+        "required": [
+          "right_name",
+          "right_type"
+        ],
+        "properties": {
+          "right_name": {
+            "type": "string"
+          },
+          "right_type": {
+            "type": "string"
+          },
+          "right_holder": {
+            "type": "string"
+          },
+          "right_bearer_type": {
+            "type": "string"
+          },
+          "right_source": {
+            "type": "string"
+          },
+          "conditions": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/legal-capacity",
+      "@type": "mif:EntityType",
+      "name": "legal-capacity",
+      "base": "semantic",
+      "description": "A legal capacity or competence conferred on a legal person",
+      "traits": [
+        "mif:trait/lifecycle",
+        "mif:trait/owned",
+        "mif:trait/categorized",
+        "mif:trait/auditable"
+      ],
+      "schema": {
+        "required": [
+          "capacity_name",
+          "capacity_type"
+        ],
+        "properties": {
+          "capacity_name": {
+            "type": "string"
+          },
+          "capacity_type": {
+            "type": "string"
+          },
+          "conferred_on": {
+            "type": "string"
+          },
+          "conferred_by": {
+            "type": "string"
+          },
+          "scope_of_capacity": {
+            "type": "string"
+          },
+          "legal_basis": {
+            "type": "string"
+          },
+          "limitations": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/jurisdiction",
+      "@type": "mif:EntityType",
+      "name": "jurisdiction",
+      "base": "semantic",
+      "description": "A jurisdiction within which legal acts apply",
+      "traits": [
+        "mif:trait/located",
+        "mif:trait/bounded",
+        "mif:trait/categorized",
+        "mif:trait/tagged"
+      ],
+      "schema": {
+        "required": [
+          "jurisdiction_name",
+          "jurisdiction_type"
+        ],
+        "properties": {
+          "jurisdiction_name": {
+            "type": "string"
+          },
+          "jurisdiction_type": {
+            "type": "string",
+            "enum": [
+              "supranational",
+              "national",
+              "subnational",
+              "sectoral"
+            ]
+          },
+          "geographic_scope": {
+            "type": "string"
+          },
+          "legal_system": {
+            "type": "string"
+          },
+          "iso_code": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/authority",
+      "@type": "mif:EntityType",
+      "name": "authority",
+      "base": "semantic",
+      "description": "A regulator, supervisor, court, or standards body",
+      "traits": [
+        "mif:trait/regulated",
+        "mif:trait/located",
+        "mif:trait/owned",
+        "mif:trait/contactable",
+        "mif:trait/auditable"
+      ],
+      "schema": {
+        "required": [
+          "authority_name"
+        ],
+        "properties": {
+          "authority_name": {
+            "type": "string"
+          },
+          "authority_type": {
+            "type": "string",
+            "enum": [
+              "regulator",
+              "supervisor",
+              "court",
+              "standards-body"
+            ]
+          },
+          "mandate": {
+            "type": "string"
+          },
+          "parent_body": {
+            "type": "string"
+          },
+          "jurisdiction_ref": {
+            "type": "string"
+          },
+          "regulatory_capacity": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/legal-person",
+      "@type": "mif:EntityType",
+      "name": "legal-person",
+      "base": "semantic",
+      "description": "A natural or juridical person with legal standing",
+      "traits": [
+        "mif:trait/located",
+        "mif:trait/owned",
+        "mif:trait/contactable",
+        "mif:trait/lifecycle",
+        "mif:trait/regulated",
+        "mif:trait/categorized"
+      ],
+      "schema": {
+        "required": [
+          "person_name",
+          "person_type"
+        ],
+        "properties": {
+          "person_name": {
+            "type": "string"
+          },
+          "person_type": {
+            "type": "string"
+          },
+          "jurisdiction_of_incorporation": {
+            "type": "string"
+          },
+          "legal_capacity_status": {
+            "type": "string"
+          },
+          "identifier": {
+            "type": "string"
+          },
+          "registered_address": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/legal-role",
+      "@type": "mif:EntityType",
+      "name": "legal-role",
+      "base": "semantic",
+      "description": "A role played within a legal relationship (not the person itself)",
+      "traits": [
+        "mif:trait/lifecycle",
+        "mif:trait/owned",
+        "mif:trait/categorized",
+        "mif:trait/auditable"
+      ],
+      "schema": {
+        "required": [
+          "role_name",
+          "role_bearer_type"
+        ],
+        "properties": {
+          "role_name": {
+            "type": "string"
+          },
+          "role_bearer_type": {
+            "type": "string",
+            "enum": [
+              "natural-person",
+              "legal-entity",
+              "government-body",
+              "unincorporated-association"
+            ]
+          },
+          "role_source": {
+            "type": "string"
+          },
+          "rights_conferred": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "duties_imposed": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/contract",
+      "@type": "mif:EntityType",
+      "name": "contract",
+      "base": "semantic",
+      "description": "A legally enforceable agreement between parties",
+      "traits": [
+        "mif:trait/lifecycle",
+        "mif:trait/renewable",
+        "mif:trait/owned",
+        "mif:trait/auditable",
+        "mif:trait/categorized"
+      ],
+      "schema": {
+        "required": [
+          "contract_name",
+          "parties"
+        ],
+        "properties": {
+          "contract_name": {
+            "type": "string"
+          },
+          "parties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 2
+          },
+          "contract_type": {
+            "type": "string",
+            "enum": [
+              "service-agreement",
+              "license",
+              "employment",
+              "nda",
+              "data-processing-agreement",
+              "supply-chain",
+              "merger-agreement",
+              "loan"
+            ]
+          },
+          "effective_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "governing_law": {
+            "type": "string"
+          },
+          "obligations_summary": {
+            "type": "string"
+          },
+          "term_expiry": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/license-permit",
+      "@type": "mif:EntityType",
+      "name": "license-permit",
+      "base": "semantic",
+      "description": "A license, permit, or authorization granted to a holder",
+      "traits": [
+        "mif:trait/lifecycle",
+        "mif:trait/renewable",
+        "mif:trait/auditable",
+        "mif:trait/owned",
+        "mif:trait/categorized"
+      ],
+      "schema": {
+        "required": [
+          "license_name",
+          "license_type"
+        ],
+        "properties": {
+          "license_name": {
+            "type": "string"
+          },
+          "license_type": {
+            "type": "string"
+          },
+          "issuing_authority": {
+            "type": "string"
+          },
+          "holder": {
+            "type": "string"
+          },
+          "effective_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "expiration_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "conditions": {
+            "type": "string"
+          },
+          "jurisdiction_ref": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/control-mapping",
+      "@type": "mif:EntityType",
+      "name": "control-mapping",
+      "base": "semantic",
+      "description": "A crosswalk asserting that a control satisfies an obligation",
+      "traits": [
+        "mif:trait/auditable",
+        "mif:trait/reviewed",
+        "mif:trait/categorized",
+        "mif:trait/tagged"
+      ],
+      "schema": {
+        "required": [
+          "obligation_ref",
+          "control_ref",
+          "mapping_relation"
+        ],
+        "properties": {
+          "obligation_ref": {
+            "type": "string"
+          },
+          "control_ref": {
+            "type": "string"
+          },
+          "mapping_relation": {
+            "type": "string",
+            "enum": [
+              "equivalent-to",
+              "subset-of",
+              "superset-of",
+              "intersects-with",
+              "no-relationship"
+            ]
+          },
+          "source": {
+            "type": "string"
+          },
+          "coverage_note": {
+            "type": "string"
+          },
+          "mapping_date": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/court-decision",
+      "@type": "mif:EntityType",
+      "name": "court-decision",
+      "base": "episodic",
+      "description": "A court decision or item of case law",
+      "traits": [
+        "mif:trait/lifecycle",
+        "mif:trait/auditable",
+        "mif:trait/reviewed",
+        "mif:trait/categorized"
+      ],
+      "schema": {
+        "required": [
+          "case_name",
+          "court"
+        ],
+        "properties": {
+          "case_name": {
+            "type": "string"
+          },
+          "court": {
+            "type": "string"
+          },
+          "decision_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "citation": {
+            "type": "string"
+          },
+          "jurisdiction_ref": {
+            "type": "string"
+          },
+          "legal_effect": {
+            "type": "string"
+          },
+          "akn_uri": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/regulatory-sanction",
+      "@type": "mif:EntityType",
+      "name": "regulatory-sanction",
+      "base": "episodic",
+      "description": "A regulatory sanction or enforcement action imposed on a party",
+      "traits": [
+        "mif:trait/lifecycle",
+        "mif:trait/auditable",
+        "mif:trait/owned",
+        "mif:trait/categorized",
+        "mif:trait/scheduled"
+      ],
+      "schema": {
+        "required": [
+          "sanction_name",
+          "sanction_type"
+        ],
+        "properties": {
+          "sanction_name": {
+            "type": "string"
+          },
+          "sanction_type": {
+            "type": "string"
+          },
+          "imposing_authority": {
+            "type": "string"
+          },
+          "sanctioned_party": {
+            "type": "string"
+          },
+          "basis_regulation": {
+            "type": "string"
+          },
+          "penalty_amount": {
+            "type": "string"
+          },
+          "effective_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "appeal_deadline": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/legal-procedure",
+      "@type": "mif:EntityType",
+      "name": "legal-procedure",
+      "base": "procedural",
+      "description": "A formal legal or administrative procedure",
+      "traits": [
+        "mif:trait/lifecycle",
+        "mif:trait/scheduled",
+        "mif:trait/auditable",
+        "mif:trait/reviewed"
+      ],
+      "schema": {
+        "required": [
+          "procedure_name",
+          "procedure_type"
+        ],
+        "properties": {
+          "procedure_name": {
+            "type": "string"
+          },
+          "procedure_type": {
+            "type": "string",
+            "enum": [
+              "rulemaking",
+              "enforcement",
+              "adjudication",
+              "legislative",
+              "administrative",
+              "dispute-resolution"
+            ]
+          },
+          "initiator": {
+            "type": "string"
+          },
+          "jurisdiction_ref": {
+            "type": "string"
+          },
+          "procedural_steps": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "legal_basis": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/assessment",
+      "@type": "mif:EntityType",
+      "name": "assessment",
+      "base": "procedural",
+      "description": "A compliance assessment of a system against requirements",
+      "traits": [
+        "mif:trait/auditable",
+        "mif:trait/reviewed",
+        "mif:trait/scheduled",
+        "mif:trait/lifecycle",
+        "mif:trait/scored"
+      ],
+      "schema": {
+        "required": [
+          "assessment_title",
+          "assessment_type"
+        ],
+        "properties": {
+          "assessment_title": {
+            "type": "string"
+          },
+          "assessment_type": {
+            "type": "string"
+          },
+          "system_ref": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          },
+          "assessment_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "assessor": {
+            "type": "string"
+          },
+          "findings_count": {
+            "type": "integer"
+          },
+          "overall_result": {
+            "type": "string"
+          },
+          "associated_plan_ref": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/compliance-report",
+      "@type": "mif:EntityType",
+      "name": "compliance-report",
+      "base": "procedural",
+      "description": "A regulatory compliance report or plan of action and milestones",
+      "traits": [
+        "mif:trait/auditable",
+        "mif:trait/reviewed",
+        "mif:trait/scheduled",
+        "mif:trait/lifecycle"
+      ],
+      "schema": {
+        "required": [
+          "report_title",
+          "reporting_period"
+        ],
+        "properties": {
+          "report_title": {
+            "type": "string"
+          },
+          "reporting_period": {
+            "type": "string"
+          },
+          "issuing_authority": {
+            "type": "string"
+          },
+          "system_ref": {
+            "type": "string"
+          },
+          "findings_count": {
+            "type": "integer"
+          },
+          "remediation_deadline": {
+            "type": "string",
+            "format": "date"
+          },
+          "submission_date": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      }
+    }
+  ],
+  "relationships": {
+    "amends": {
+      "@id": "mif:relationship/amends",
+      "@type": "mif:Relationship",
+      "name": "amends",
+      "description": "A legal act amends another legal act (eli:amends)",
+      "from": [
+        "mif:entityType/legal-act"
+      ],
+      "to": [
+        "mif:entityType/legal-act"
+      ],
+      "symmetric": false
+    },
+    "applies_in": {
+      "@id": "mif:relationship/applies_in",
+      "@type": "mif:Relationship",
+      "name": "applies_in",
+      "description": "A legal act applies in a jurisdiction (fibo-fnd-law-jur:hasJurisdiction)",
+      "from": [
+        "mif:entityType/legal-act"
+      ],
+      "to": [
+        "mif:entityType/jurisdiction"
+      ],
+      "symmetric": false
+    },
+    "cites": {
+      "@id": "mif:relationship/cites",
+      "@type": "mif:Relationship",
+      "name": "cites",
+      "description": "A court decision cites a legal act (eli:cites)",
+      "from": [
+        "mif:entityType/court-decision"
+      ],
+      "to": [
+        "mif:entityType/legal-act"
+      ],
+      "symmetric": false
+    },
+    "confers": {
+      "@id": "mif:relationship/confers",
+      "@type": "mif:Relationship",
+      "name": "confers",
+      "description": "A legal act confers a legal capacity (fibo-fnd-law-lcap:hasCapacity)",
+      "from": [
+        "mif:entityType/legal-act"
+      ],
+      "to": [
+        "mif:entityType/legal-capacity"
+      ],
+      "symmetric": false
+    },
+    "governed_by": {
+      "@id": "mif:relationship/governed_by",
+      "@type": "mif:Relationship",
+      "name": "governed_by",
+      "description": "A contract is governed by a jurisdiction (fibo-fnd-agr-ctr:hasGoverningJurisdiction)",
+      "from": [
+        "mif:entityType/contract"
+      ],
+      "to": [
+        "mif:entityType/jurisdiction"
+      ],
+      "symmetric": false
+    },
+    "has_jurisdiction_in": {
+      "@id": "mif:relationship/has_jurisdiction_in",
+      "@type": "mif:Relationship",
+      "name": "has_jurisdiction_in",
+      "description": "An authority has jurisdiction in a jurisdiction (fibo-fbc-fct-rga:hasJurisdiction)",
+      "from": [
+        "mif:entityType/authority"
+      ],
+      "to": [
+        "mif:entityType/jurisdiction"
+      ],
+      "symmetric": false
+    },
+    "imposes": {
+      "@id": "mif:relationship/imposes",
+      "@type": "mif:Relationship",
+      "name": "imposes",
+      "description": "A legal act imposes an obligation (lkif-norm: norm bears/creates obligations)",
+      "from": [
+        "mif:entityType/legal-act"
+      ],
+      "to": [
+        "mif:entityType/obligation"
+      ],
+      "symmetric": false
+    },
+    "regulates": {
+      "@id": "mif:relationship/regulates",
+      "@type": "mif:Relationship",
+      "name": "regulates",
+      "description": "An authority regulates a legal act (fibo-fbc-fct-rga:regulates)",
+      "from": [
+        "mif:entityType/authority"
+      ],
+      "to": [
+        "mif:entityType/legal-act"
+      ],
+      "symmetric": false
+    },
+    "satisfies": {
+      "@id": "mif:relationship/satisfies",
+      "@type": "mif:Relationship",
+      "name": "satisfies",
+      "description": "A control-mapping shows a control satisfies an obligation (oscal-mapping:equivalent-to / subset-of)",
+      "from": [
+        "mif:entityType/control-mapping"
+      ],
+      "to": [
+        "mif:entityType/obligation"
+      ],
+      "symmetric": false
+    },
+    "transposes": {
+      "@id": "mif:relationship/transposes",
+      "@type": "mif:Relationship",
+      "name": "transposes",
+      "description": "A legal act transposes a treaty into domestic law (eli:transposes)",
+      "from": [
+        "mif:entityType/legal-act"
+      ],
+      "to": [
+        "mif:entityType/treaty"
+      ],
+      "symmetric": false
+    }
+  },
+  "discovery": {
+    "enabled": true,
+    "confidence_threshold": 0.8,
+    "patterns": [
+      {
+        "@id": "mif:pattern/0",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(shall|must|is required to|obligated to|prohibited from)\\b",
+        "suggest_entity": "mif:entityType/obligation",
+        "suggest_namespace": "_semantic/obligations"
+      },
+      {
+        "@id": "mif:pattern/1",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(European Union|EU|US Federal|federal law|jurisdiction of)\\b",
+        "suggest_entity": "mif:entityType/jurisdiction",
+        "suggest_namespace": "_semantic/jurisdictions"
+      },
+      {
+        "@id": "mif:pattern/2",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(SEC|FINRA|FDIC|EDPB|supervisory authority|regulator)\\b",
+        "suggest_entity": "mif:entityType/authority",
+        "suggest_namespace": "_semantic/authorities"
+      },
+      {
+        "@id": "mif:pattern/3",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(maps to|crosswalk|control mapping|satisfies control|OLIR)\\b",
+        "suggest_entity": "mif:entityType/control-mapping",
+        "suggest_namespace": "_semantic/control-mappings"
+      },
+      {
+        "@id": "mif:pattern/4",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(OJ [A-Z] \\d+|eli\\.europa\\.eu|Akoma Ntoso)\\b",
+        "suggest_entity": "mif:entityType/legal-act",
+        "suggest_namespace": "_semantic/legal-acts"
+      },
+      {
+        "@id": "mif:pattern/5",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(ECLI:[A-Z]{2}:[A-Z:]+:\\d{4}:\\d+|C-\\d+/\\d+|[A-Z][a-z]+ v\\.? [A-Z][a-z]+)\\b",
+        "suggest_entity": "mif:entityType/court-decision",
+        "suggest_namespace": "_episodic/court-decisions"
+      },
+      {
+        "@id": "mif:pattern/6",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(data processing agreement|DPA|MSA|NDA|license agreement)\\b",
+        "suggest_entity": "mif:entityType/contract",
+        "suggest_namespace": "_semantic/contracts"
+      },
+      {
+        "@id": "mif:pattern/7",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(data controller|data processor|trustee|licensor|licensee|plaintiff|defendant)\\b",
+        "suggest_entity": "mif:entityType/legal-role",
+        "suggest_namespace": "_semantic/roles"
+      },
+      {
+        "@id": "mif:pattern/8",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(rulemaking|notice and comment|enforcement proceeding|judicial review)\\b",
+        "suggest_entity": "mif:entityType/legal-procedure",
+        "suggest_namespace": "_procedural/procedures"
+      }
+    ]
+  }
+}

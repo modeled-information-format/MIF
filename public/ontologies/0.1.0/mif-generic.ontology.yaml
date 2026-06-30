@@ -1,0 +1,49 @@
+# mif-generic — the basic generic ontology, ALWAYS enabled for every topic.
+# Harness-authored from MIF's built-in entity types (the mif.schema entity-reference
+# enum: Concept, Person, Organization, Technology, File), expressed as ontology
+# entity_types so any finding in any topic can be classified to a generic type even
+# with no domain ontology bound. Domain ontologies (packs/ontologies/) add more
+# specific types on top; where a name collides, the finding must name ontology.id.
+ontology:
+  id: mif-generic
+  version: 1.0.0
+  description: Basic generic ontology (MIF built-in entity types); always enabled for all topics.
+  extends:
+    - mif-base
+entity_types:
+  - name: concept
+    base: semantic
+    description: An abstract idea, theme, method, or topic.
+    schema:
+      required: [name]
+      properties:
+        name: { type: string, description: Concept name }
+  - name: person
+    base: semantic
+    description: An individual human actor.
+    schema:
+      required: [name]
+      properties:
+        name: { type: string, description: Person name }
+  - name: organization
+    base: semantic
+    description: A company, institution, agency, or group.
+    schema:
+      required: [name]
+      properties:
+        name: { type: string, description: Organization name }
+  - name: technology
+    base: semantic
+    description: A tool, system, framework, standard, or product.
+    schema:
+      required: [name]
+      properties:
+        name: { type: string, description: Technology name }
+  - name: file
+    base: semantic
+    description: A document, dataset, or artifact.
+    schema:
+      required: [name]
+      properties:
+        name: { type: string, description: File name or path }
+relationships: {}

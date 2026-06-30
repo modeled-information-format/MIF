@@ -1,0 +1,561 @@
+---
+# Trend-Analysis (Foresight) Ontology
+#
+# A MIF entity ontology for strategic foresight and trend analysis: weak signals,
+# drivers of change, trends and megatrends, adoption curves, forecasts, scenarios,
+# and wild cards. Extends the MIF base cognitive triad with foresight entity types
+# grounded in named, actively-used practitioner foresight methodologies.
+#
+# Compatible with: mif-base v1.0.0, shared-traits v1.0.0
+#
+# Version: 0.1.0
+# Last Updated: 2026-06-29
+#
+# Provenance: authored from the `domain-ontology-pack-expansion` research session
+# (ontology-build-spec.md §2.5; inventory-trend-analysis.json, 8 rows;
+# relationship-inventory.json). Exactly the 8 inventory types ship — no padding.
+# `trend` is the canonical generic minted here; it is the extraction target for the
+# software-engineering `adoption-trend` type (that pack's deprecation is applied
+# separately and is NOT referenced from here).
+#
+# Base-value note (§6 B0): the inventory assigns base `analytical` to
+# `adoption-curve`, `forecast`, and `scenario`. The mif-base cognitive triad is
+# CLOSED — only semantic / episodic / procedural roots exist (docs/explanation/
+# cognitive-triad.md), and there is no `_analytical` root. Those three types are
+# therefore set to base `semantic` and grouped under the `_semantic/foresight`
+# tree; each carries an inline remap comment recording the inventory's value.
+#
+# Trait note: the spec's reused traits (cited, dated, timeline, versioned) are
+# declared LOCALLY in this pack (see the `traits:` block below). mif-base and
+# shared-traits do not define them in this worktree, so — mirroring the
+# software-engineering / software-security / market-research packs — they are
+# copied locally verbatim from engineering-base / software-security. No new
+# domain traits are minted (ontology-build-spec.md §2.5).
+#
+# Sources (prior art):
+# - IFTF (Institute for the Future) Foresight       https://www.iftf.org/foresight-tools/
+# - EU JRC Knowledge4Policy Foresight Glossary       https://knowledge4policy.ec.europa.eu/foresight/glossary_en
+# - EU JRC Global Trends                             https://joint-research-centre.ec.europa.eu/scientific-activities-z/foresight/jrc-global-trends_en
+# - Shell Scenario Planning                          https://www.shell.com/what-we-do/scenarios.html
+# - Rogers, Diffusion of Innovations                 https://en.wikipedia.org/wiki/Diffusion_of_innovations
+# - Gartner Hype Cycle                               https://www.gartner.com/en/research/methodologies/gartner-hype-cycle
+
+ontology:
+  id: trend-analysis
+  version: "0.1.0"
+  description: "Strategic foresight and trend-analysis domain ontology — signals, drivers, trends, scenarios, forecasts"
+  extends:
+    - mif-base
+    - shared-traits
+
+# ===========================================================================
+# CUSTOM NAMESPACES (nested under the mif-base cognitive triad)
+# All 8 types are base `semantic`, so the tree is semantic-only.
+# ===========================================================================
+
+namespaces:
+  semantic:
+    children:
+      foresight:
+        description: "Signals, drivers, trends, megatrends, and wild cards"
+        type_hint: semantic
+        children:
+          curves:
+            description: "Adoption / maturity curves (S-curve, hype cycle)"
+            type_hint: semantic
+          forecasts:
+            description: "Forecasts and projected future outcomes"
+            type_hint: semantic
+          scenarios:
+            description: "Plausible future narratives and scenario sets"
+            type_hint: semantic
+
+# ===========================================================================
+# ENTITY TYPES — exactly the 8 inventory types (no padding).
+# Each carries grounding fields (source_vocab / source_class / prior_art /
+# disposition) drawn from inventory-trend-analysis.json.
+# ===========================================================================
+
+entity_types:
+  # ----- Signals, drivers, trends (IFTF / EU JRC K4P) ---------------------
+  - name: signal
+    description: "A weak signal: a concrete local artifact or event hinting at change"
+    base: semantic
+    source_vocab: "IFTF Foresight / EU JRC K4P"
+    source_class: "Signal / Weak Signal"
+    prior_art: "https://www.iftf.org/foresight-tools/"
+    disposition: mint
+    traits:
+      - cited
+      - dated
+    schema:
+      required:
+        - name
+        - observation
+      properties:
+        name:
+          type: string
+        observation:
+          type: string
+          description: "The concrete local artifact/event"
+        steep_category:
+          type: string
+          enum:
+            - social
+            - technological
+            - environmental
+            - economic
+            - political
+        observed_date:
+          type: string
+          format: date
+        novelty:
+          type: string
+          enum:
+            - weak
+            - emerging
+            - strengthening
+        source_url:
+          type: string
+          format: uri
+
+  - name: driver
+    description: "A driver of change: a broad long-term force shaping the future"
+    base: semantic
+    source_vocab: "IFTF / EU JRC"
+    source_class: "Driver of Change"
+    prior_art: "https://knowledge4policy.ec.europa.eu/foresight/glossary_en"
+    disposition: mint
+    traits:
+      - cited
+    schema:
+      required:
+        - name
+        - description
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+          description: "The broad long-term force"
+        steep_category:
+          type: string
+          enum:
+            - social
+            - technological
+            - environmental
+            - economic
+            - political
+        time_horizon:
+          type: string
+        impact:
+          type: string
+
+  - name: trend
+    description: "A trend: a currently visible direction of change (the canonical generic)"
+    base: semantic
+    source_vocab: "IFTF / Gartner / EU JRC"
+    source_class: "Trend"
+    prior_art: "https://www.iftf.org/foresight-tools/"
+    disposition: mint
+    traits:
+      - cited
+      - dated
+    schema:
+      required:
+        - name
+        - direction
+      properties:
+        name:
+          type: string
+        direction:
+          type: string
+        evidence:
+          type: string
+        maturity:
+          type: string
+          enum:
+            - emerging
+            - mainstream
+            - mature
+            - declining
+        scope:
+          type: string
+
+  # ----- Adoption curve (Rogers DOI / Gartner Hype Cycle) -----------------
+  - name: adoption-curve
+    # inventory base 'analytical' remapped to semantic (no _analytical triad root)
+    description: "An adoption / maturity curve positioning a subject on an S-curve or hype cycle"
+    base: semantic
+    source_vocab: "Rogers Diffusion of Innovations / Gartner Hype Cycle"
+    source_class: "S-Curve / Technology Maturity Level"
+    prior_art: "https://en.wikipedia.org/wiki/Diffusion_of_innovations"
+    disposition: mint
+    traits:
+      - cited
+      - dated
+    schema:
+      required:
+        - name
+        - stage
+      properties:
+        name:
+          type: string
+          description: "The technology/practice profiled"
+        stage:
+          type: string
+          enum:
+            - innovators
+            - early-adopters
+            - early-majority
+            - late-majority
+            - laggards
+        s_curve_position:
+          type: string
+          enum:
+            - early-exponential
+            - inflection
+            - linear-growth
+            - saturation
+            - decline
+        hype_phase:
+          type: string
+          enum:
+            - technology-trigger
+            - peak-inflated-expectations
+            - trough-disillusionment
+            - slope-enlightenment
+            - plateau-productivity
+        time_to_mainstream:
+          type: string
+        adoption_barriers:
+          type: string
+        enabling_factors:
+          type: string
+        related_trend_ref:
+          type: string
+
+  # ----- Forecast (IFTF) --------------------------------------------------
+  - name: forecast
+    # inventory base 'analytical' remapped to semantic (no _analytical triad root)
+    description: "A forecast: a probabilistic single-variable projection of a future outcome"
+    base: semantic
+    source_vocab: "IFTF Foresight"
+    source_class: "Forecast"
+    prior_art: "https://www.iftf.org/foresight-tools/"
+    disposition: mint
+    traits:
+      - cited
+      - dated
+      - timeline
+    schema:
+      required:
+        - statement
+        - horizon
+      properties:
+        statement:
+          type: string
+          description: "The projected future outcome"
+        horizon:
+          type: string
+          description: "Target timeframe"
+        confidence:
+          type: string
+          enum:
+            - low
+            - medium
+            - high
+        basis:
+          type: string
+          description: "Grounding signals/drivers/trends"
+        scenario_type:
+          type: string
+          description: "baseline / alternative / wildcard"
+
+  # ----- Megatrend (EU JRC Global Trends / IFTF) --------------------------
+  - name: megatrend
+    description: "A megatrend: a long-term structural transformation operating over a decade or more"
+    base: semantic
+    source_vocab: "EU JRC Global Trends / IFTF"
+    source_class: "Megatrend (long-term structural driver >10yr)"
+    prior_art: "https://joint-research-centre.ec.europa.eu/scientific-activities-z/foresight/jrc-global-trends_en"
+    disposition: mint
+    traits:
+      - cited
+      - dated
+    schema:
+      required:
+        - megatrend_name
+        - time_horizon_years
+      properties:
+        megatrend_name:
+          type: string
+          description: "e.g. Demographic Shift, Climate Change, Digitalization"
+        time_horizon_years:
+          type: integer
+          minimum: 10
+          description: "Typically 10–30 years"
+        structural_dimensions:
+          type: array
+          items:
+            type: string
+            enum:
+              - demographic
+              - technological
+              - environmental
+              - geopolitical
+              - economic
+        source_publication:
+          type: string
+          description: "e.g. EU JRC Global Trends 2040"
+        certainty_level:
+          type: string
+          enum:
+            - high
+            - medium
+            - low
+
+  # ----- Scenario (Shell Scenario Planning / EU JRC) ----------------------
+  - name: scenario
+    # inventory base 'analytical' remapped to semantic (no _analytical triad root)
+    description: "A scenario: a plausible, internally consistent future narrative"
+    base: semantic
+    source_vocab: "Shell Scenario Planning / EU JRC"
+    source_class: "Scenario (plausible future narrative)"
+    prior_art: "https://www.shell.com/what-we-do/scenarios.html"
+    disposition: mint
+    traits:
+      - cited
+      - versioned
+    schema:
+      required:
+        - scenario_name
+        - time_horizon
+      properties:
+        scenario_name:
+          type: string
+          description: "e.g. Mountains, Oceans"
+        time_horizon:
+          type: string
+          description: "e.g. 2035, 2050"
+        key_uncertainties:
+          type: array
+          description: "The axes of the scenario space"
+          items:
+            type: string
+        narrative_summary:
+          type: string
+        driving_forces:
+          type: array
+          description: "Drivers / megatrends"
+          items:
+            type: string
+        probability_assessment:
+          type: string
+          enum:
+            - plausible
+            - unlikely
+            - aspirational
+
+  # ----- Wild card (EU JRC K4P Foresight / IFTF) --------------------------
+  - name: wild-card
+    description: "A wild card: a surprising low-probability, very-high-impact rupture event"
+    base: semantic
+    source_vocab: "EU JRC K4P Foresight / IFTF"
+    source_class: "Wild Card (low-probability, high-impact event)"
+    prior_art: "https://knowledge4policy.ec.europa.eu/foresight/glossary_en"
+    disposition: mint
+    traits:
+      - cited
+      - dated
+    schema:
+      required:
+        - wildcard_name
+        - impact_domain
+      properties:
+        wildcard_name:
+          type: string
+          description: "e.g. AGI breakthrough, Pandemic X, Solar superstorm"
+        impact_domain:
+          type: array
+          items:
+            type: string
+        probability_assessment:
+          type: string
+          enum:
+            - very-low
+            - low
+        impact_magnitude:
+          type: string
+          enum:
+            - extreme
+            - very-high
+        timeframe:
+          type: string
+        affected_megatrends:
+          type: array
+          items:
+            type: string
+
+# ===========================================================================
+# LOCAL TRAITS
+# ===========================================================================
+# The spec's reused traits (cited, dated, timeline, versioned). mif-base and
+# shared-traits do not define these in this worktree, so they are declared here
+# verbatim from engineering-base (cited / dated / versioned) and software-security
+# (timeline) — the same local-declaration pattern used by the software-engineering,
+# software-security, and market-research packs. No new domain traits are minted.
+
+traits:
+  cited:
+    description: "Requires citations/sources"
+    requires:
+      - citations
+  dated:
+    description: "Adds decision/event date"
+    fields:
+      decision_date:
+        type: string
+        format: date
+      review_date:
+        type: string
+        format: date
+  timeline:
+    description: "Adds an event timeline"
+    fields:
+      timeline:
+        type: array
+        items:
+          type: object
+          properties:
+            timestamp:
+              type: string
+              format: date-time
+            event:
+              type: string
+            actor:
+              type: string
+  versioned:
+    description: "Adds version tracking fields"
+    fields:
+      version:
+        type: string
+        pattern: "^\\d+\\.\\d+\\.\\d+.*$"
+      changelog:
+        type: array
+        items:
+          type: object
+
+# ===========================================================================
+# RELATIONSHIPS (ontology-build-spec.md §2.5 — 10 edges, all endpoints in-pack)
+# Hyphenated spec names normalized to snake_case to mirror software-engineering.
+# ===========================================================================
+
+relationships:
+  causes:
+    description: "A driver causes a trend (IFTF: drivers produce trends/signals)"
+    from:
+      - driver
+    to:
+      - trend
+    symmetric: false
+  matures_into:
+    description: "A signal matures into a trend (a weak signal strengthens into a visible trend)"
+    from:
+      - signal
+    to:
+      - trend
+    symmetric: false
+  indicates:
+    description: "A signal indicates a driver (signals are symptoms of drivers)"
+    from:
+      - signal
+    to:
+      - driver
+    symmetric: false
+  placed_on:
+    description: "A trend is placed on an adoption-curve (positioned on a maturity curve)"
+    from:
+      - trend
+    to:
+      - adoption-curve
+    symmetric: false
+  projected_as:
+    description: "A trend is projected as a forecast"
+    from:
+      - trend
+    to:
+      - forecast
+    symmetric: false
+  shaped_by:
+    description: "A megatrend is shaped by a driver (a megatrend aggregates structural drivers)"
+    from:
+      - megatrend
+    to:
+      - driver
+    symmetric: false
+  contains:
+    description: "A megatrend contains a trend (near-term trends express a megatrend)"
+    from:
+      - megatrend
+    to:
+      - trend
+    symmetric: false
+  synthesizes:
+    description: "A scenario synthesizes its driving forces (built from drivers and megatrends)"
+    from:
+      - scenario
+    to:
+      - driver
+      - megatrend
+    symmetric: false
+  incorporated_in:
+    description: "A wild-card is incorporated in a scenario (wild-card scenarios are a planning technique)"
+    from:
+      - wild-card
+    to:
+      - scenario
+    symmetric: false
+  disrupts:
+    description: "A wild-card disrupts a trend or megatrend (it ruptures established trajectories)"
+    from:
+      - wild-card
+    to:
+      - trend
+      - megatrend
+    symmetric: false
+
+# ===========================================================================
+# DISCOVERY PATTERNS (ontology-build-spec.md §3.1)
+# The inventory's `_analytical/*` suggest_namespaces are remapped onto the
+# semantic foresight tree (curves / forecasts / scenarios) per the base remap.
+# ===========================================================================
+
+discovery:
+  enabled: true
+  confidence_threshold: 0.8
+  patterns:
+    - content_pattern: "\\b(weak signal|signal of change|early indicator)\\b"
+      suggest_entity: signal
+      suggest_namespace: _semantic/foresight
+    - content_pattern: "\\b(driver of change|STEEP|long-term force)\\b"
+      suggest_entity: driver
+      suggest_namespace: _semantic/foresight
+    - content_pattern: "\\b(trend|direction of change|trend radar)\\b"
+      suggest_entity: trend
+      suggest_namespace: _semantic/foresight
+    - content_pattern: "\\b(hype cycle|trough of disillusionment|crossing the chasm|S-curve|early adopter)\\b"
+      suggest_entity: adoption-curve
+      suggest_namespace: _semantic/foresight/curves
+    - content_pattern: "\\b(forecast|projected (future|to)|expected to reach)\\b"
+      suggest_entity: forecast
+      suggest_namespace: _semantic/foresight/forecasts
+    - content_pattern: "\\b(megatrend|mega[- ]trend|structural transformation|decade[- ]long trend)\\b"
+      suggest_entity: megatrend
+      suggest_namespace: _semantic/foresight
+    - content_pattern: "\\b(scenario|plausible future|strategic uncertainty|world in 20\\d\\d)\\b"
+      suggest_entity: scenario
+      suggest_namespace: _semantic/foresight/scenarios
+    - content_pattern: "\\b(wild[- ]?card|black swan|low[- ]probability.*high[- ]impact|rupture event)\\b"
+      suggest_entity: wild-card
+      suggest_namespace: _semantic/foresight

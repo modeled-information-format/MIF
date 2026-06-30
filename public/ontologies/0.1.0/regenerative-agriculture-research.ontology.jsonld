@@ -1,0 +1,1086 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "@vocab": "https://mif-spec.dev/ns/ontology#",
+    "mif": "https://mif-spec.dev/ns/",
+    "schema": "https://schema.org/",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "ontology": {
+      "@id": "mif:Ontology",
+      "@type": "@id"
+    },
+    "id": {
+      "@id": "@id"
+    },
+    "version": {
+      "@id": "schema:version",
+      "@type": "xsd:string"
+    },
+    "description": {
+      "@id": "schema:description",
+      "@type": "xsd:string"
+    },
+    "schema_url": {
+      "@id": "rdfs:isDefinedBy",
+      "@type": "@id"
+    },
+    "namespaces": {
+      "@id": "mif:hasNamespace",
+      "@container": "@id"
+    },
+    "type_hint": {
+      "@id": "mif:typeHint",
+      "@type": "xsd:string"
+    },
+    "replaces": {
+      "@id": "mif:replaces",
+      "@type": "@id"
+    },
+    "children": {
+      "@id": "mif:hasChildNamespace",
+      "@container": "@id"
+    },
+    "entity_types": {
+      "@id": "mif:definesEntityType",
+      "@container": "@list"
+    },
+    "name": {
+      "@id": "schema:name",
+      "@type": "xsd:string"
+    },
+    "base": {
+      "@id": "mif:baseType",
+      "@type": "@vocab"
+    },
+    "semantic": "mif:SemanticMemory",
+    "episodic": "mif:EpisodicMemory",
+    "procedural": "mif:ProceduralMemory",
+    "traits": {
+      "@id": "mif:definesTrait",
+      "@container": "@id"
+    },
+    "subtype_of": {
+      "@id": "mif:subtypeOf",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "fields": {
+      "@id": "mif:hasField",
+      "@container": "@id"
+    },
+    "requires": {
+      "@id": "mif:requiresField",
+      "@container": "@list"
+    },
+    "relationships": {
+      "@id": "mif:definesRelationship",
+      "@container": "@id"
+    },
+    "from": {
+      "@id": "rdfs:domain",
+      "@container": "@set"
+    },
+    "to": {
+      "@id": "rdfs:range",
+      "@container": "@set"
+    },
+    "symmetric": {
+      "@id": "owl:SymmetricProperty",
+      "@type": "xsd:boolean"
+    },
+    "discovery": {
+      "@id": "mif:discoveryConfig"
+    },
+    "enabled": {
+      "@id": "mif:discoveryEnabled",
+      "@type": "xsd:boolean"
+    },
+    "patterns": {
+      "@id": "mif:hasDiscoveryPattern",
+      "@container": "@list"
+    },
+    "confidence_threshold": {
+      "@id": "mif:confidenceThreshold",
+      "@type": "xsd:decimal"
+    },
+    "content_pattern": {
+      "@id": "mif:contentPattern",
+      "@type": "xsd:string"
+    },
+    "file_pattern": {
+      "@id": "mif:filePattern",
+      "@type": "xsd:string"
+    },
+    "suggest_entity": {
+      "@id": "mif:suggestsEntityType",
+      "@type": "@id"
+    },
+    "suggest_namespace": {
+      "@id": "mif:suggestsNamespace",
+      "@type": "xsd:string"
+    }
+  },
+  "@id": "mif:ontology/regenerative-agriculture-research",
+  "@type": "mif:Ontology",
+  "identifier": "regenerative-agriculture-research",
+  "version": "0.3.1",
+  "description": "Agriculture / farm research ontology \u2014 research-oriented entity types for husbandry, agronomy, farm infrastructure, grants, and equipment, organized as an IS-A tree rooted in the inherited generic/engineering supertypes.",
+  "schema_url": "https://mif-spec.dev/schema/ontology/ontology.schema.json",
+  "namespaces": {
+    "semantic": {
+      "@id": "mif:namespace/semantic",
+      "@type": "mif:Namespace",
+      "name": "semantic",
+      "children": {
+        "husbandry": {
+          "@id": "mif:namespace/semantic/husbandry",
+          "@type": "mif:Namespace",
+          "name": "husbandry",
+          "description": "Animal husbandry and livestock care knowledge",
+          "type_hint": "semantic"
+        },
+        "agronomy": {
+          "@id": "mif:namespace/semantic/agronomy",
+          "@type": "mif:Namespace",
+          "name": "agronomy",
+          "description": "Grazing, soil, crop, and pasture practices",
+          "type_hint": "semantic"
+        },
+        "infrastructure": {
+          "@id": "mif:namespace/semantic/infrastructure",
+          "@type": "mif:Namespace",
+          "name": "infrastructure",
+          "description": "Farm infrastructure: fencing, irrigation, IoT, networks",
+          "type_hint": "semantic"
+        },
+        "funding": {
+          "@id": "mif:namespace/semantic/funding",
+          "@type": "mif:Namespace",
+          "name": "funding",
+          "description": "Grants, cost-share, and funding programs",
+          "type_hint": "semantic"
+        }
+      }
+    }
+  },
+  "entity_types": [
+    {
+      "@id": "mif:entityType/husbandry-practice",
+      "@type": "mif:EntityType",
+      "name": "husbandry-practice",
+      "base": "semantic",
+      "description": "An animal-husbandry or livestock-care practice (lambing, newborn care, health management)",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "subtype_of": [
+        "mif:entityType/engineering-practice"
+      ],
+      "schema": {
+        "required": [
+          "practice_name"
+        ],
+        "properties": {
+          "practice_name": {
+            "type": "string",
+            "description": "Name of the husbandry practice"
+          },
+          "species": {
+            "type": "string",
+            "description": "Target species (e.g. sheep, goat, cattle)"
+          },
+          "stage": {
+            "type": "string",
+            "description": "Life or production stage (e.g. lambing, weaning, gestation)"
+          },
+          "guidance": {
+            "type": "string",
+            "description": "Recommended action or protocol"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/agronomic-practice",
+      "@type": "mif:EntityType",
+      "name": "agronomic-practice",
+      "base": "semantic",
+      "description": "A grazing, soil, pasture, or crop-management practice",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "subtype_of": [
+        "mif:entityType/engineering-practice"
+      ],
+      "schema": {
+        "required": [
+          "practice_name"
+        ],
+        "properties": {
+          "practice_name": {
+            "type": "string",
+            "description": "Name of the agronomic practice"
+          },
+          "context": {
+            "type": "string",
+            "description": "When or where the practice applies"
+          },
+          "method": {
+            "type": "string",
+            "description": "How the practice is carried out"
+          },
+          "outcome": {
+            "type": "string",
+            "description": "Expected agronomic outcome"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/farm-infrastructure",
+      "@type": "mif:EntityType",
+      "name": "farm-infrastructure",
+      "base": "semantic",
+      "description": "A farm infrastructure system or component: fencing, irrigation, IoT, networks, towers, power",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "subtype_of": [
+        "mif:entityType/component"
+      ],
+      "schema": {
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Infrastructure system or component name"
+          },
+          "purpose": {
+            "type": "string",
+            "description": "What the infrastructure does"
+          },
+          "components": {
+            "type": "string",
+            "description": "Constituent parts or subsystems"
+          },
+          "considerations": {
+            "type": "string",
+            "description": "Design, siting, or operational considerations"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/grant-program",
+      "@type": "mif:EntityType",
+      "name": "grant-program",
+      "base": "semantic",
+      "description": "An agricultural grant, cost-share, or funding program",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "subtype_of": [
+        "mif:entityType/policy"
+      ],
+      "schema": {
+        "required": [
+          "program_name"
+        ],
+        "properties": {
+          "program_name": {
+            "type": "string",
+            "description": "Name of the grant or funding program"
+          },
+          "funder": {
+            "type": "string",
+            "description": "Funding organization or agency"
+          },
+          "eligibility": {
+            "type": "string",
+            "description": "Who is eligible"
+          },
+          "scope": {
+            "type": "string",
+            "description": "What the program funds and at what level"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/equipment-or-input",
+      "@type": "mif:EntityType",
+      "name": "equipment-or-input",
+      "base": "semantic",
+      "description": "A piece of farm equipment, hardware, device, or production input",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "subtype_of": [
+        "mif:entityType/technology"
+      ],
+      "schema": {
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Equipment, device, or input name"
+          },
+          "use_case": {
+            "type": "string",
+            "description": "Where or why it is used"
+          },
+          "vendor": {
+            "type": "string",
+            "description": "Manufacturer or supplier"
+          },
+          "specifications": {
+            "type": "string",
+            "description": "Notable specifications, ratings, or pricing"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/parturition-protocol",
+      "@type": "mif:EntityType",
+      "name": "parturition-protocol",
+      "base": "semantic",
+      "description": "Birth-management protocol specifying care before, during, and immediately after parturition",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "subtype_of": [
+        "mif:entityType/husbandry-practice"
+      ],
+      "schema": {
+        "required": [
+          "practice_name"
+        ],
+        "properties": {
+          "practice_name": {
+            "type": "string",
+            "description": "Name of the parturition protocol"
+          },
+          "labor_stage": {
+            "type": "string",
+            "description": "Stage of labor addressed (e.g. early, active, delivery, stage-3)"
+          },
+          "species": {
+            "type": "string",
+            "description": "Target species (e.g. sheep, goat, cattle)"
+          },
+          "timing_guidance": {
+            "type": "string",
+            "description": "Timing cues and intervention windows"
+          },
+          "breed_notes": {
+            "type": "string",
+            "description": "Breed-specific considerations affecting protocol"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/neonatal-care",
+      "@type": "mif:EntityType",
+      "name": "neonatal-care",
+      "base": "semantic",
+      "description": "Newborn care protocol covering colostrum management, bonding, and rejection prevention",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "subtype_of": [
+        "mif:entityType/husbandry-practice"
+      ],
+      "schema": {
+        "required": [
+          "practice_name"
+        ],
+        "properties": {
+          "practice_name": {
+            "type": "string",
+            "description": "Name of the neonatal-care protocol"
+          },
+          "species": {
+            "type": "string",
+            "description": "Target species"
+          },
+          "time_window": {
+            "type": "string",
+            "description": "Critical time window for intervention (e.g. first 2\u20134 hours)"
+          },
+          "intervention_type": {
+            "type": "string",
+            "description": "Type of intervention (colostrum, fostering, tube-feed, heat lamp)"
+          },
+          "outcome_target": {
+            "type": "string",
+            "description": "Expected outcome or survival metric"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/periparturient-nutrition",
+      "@type": "mif:EntityType",
+      "name": "periparturient-nutrition",
+      "base": "semantic",
+      "description": "Pre- and post-parturition and creep nutrition protocol targeting dam and neonatal needs",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "subtype_of": [
+        "mif:entityType/husbandry-practice"
+      ],
+      "schema": {
+        "required": [
+          "practice_name"
+        ],
+        "properties": {
+          "practice_name": {
+            "type": "string",
+            "description": "Name of the periparturient nutrition protocol"
+          },
+          "species": {
+            "type": "string",
+            "description": "Target species"
+          },
+          "production_stage": {
+            "type": "string",
+            "description": "Stage of production (late gestation, early lactation, creep)"
+          },
+          "nutrient_target": {
+            "type": "string",
+            "description": "Key nutrients or BCS targets (e.g. CP, ME, Ca:P ratio)"
+          },
+          "ration_notes": {
+            "type": "string",
+            "description": "Feed type, supplementation notes, or ration formulation guidance"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/livestock-health-condition",
+      "@type": "mif:EntityType",
+      "name": "livestock-health-condition",
+      "base": "semantic",
+      "description": "A diagnosed condition or complication in livestock with associated management protocol",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "subtype_of": [
+        "mif:entityType/husbandry-practice"
+      ],
+      "schema": {
+        "required": [
+          "practice_name",
+          "condition_name"
+        ],
+        "properties": {
+          "practice_name": {
+            "type": "string",
+            "description": "Name of the health management protocol"
+          },
+          "condition_name": {
+            "type": "string",
+            "description": "Name of the diagnosed condition or complication"
+          },
+          "species": {
+            "type": "string",
+            "description": "Species affected"
+          },
+          "risk_period": {
+            "type": "string",
+            "description": "Production period of highest risk"
+          },
+          "clinical_signs": {
+            "type": "string",
+            "description": "Observable clinical signs or diagnostic indicators"
+          },
+          "management_response": {
+            "type": "string",
+            "description": "Recommended treatment or management response"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/breed-characteristic",
+      "@type": "mif:EntityType",
+      "name": "breed-characteristic",
+      "base": "semantic",
+      "description": "A breed-specific trait or characteristic that influences husbandry decisions",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "subtype_of": [
+        "mif:entityType/husbandry-practice"
+      ],
+      "schema": {
+        "required": [
+          "practice_name",
+          "breed"
+        ],
+        "properties": {
+          "practice_name": {
+            "type": "string",
+            "description": "Name of the husbandry practice context"
+          },
+          "breed": {
+            "type": "string",
+            "description": "Breed or genetic line"
+          },
+          "trait_type": {
+            "type": "string",
+            "description": "Category of trait (e.g. reproductive, growth, parasite-resistance)"
+          },
+          "quantified_value": {
+            "type": "string",
+            "description": "Quantified expression of the trait (e.g. mean litter size, ADG)"
+          },
+          "management_implication": {
+            "type": "string",
+            "description": "How this trait modifies management decisions"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/fencing-system",
+      "@type": "mif:EntityType",
+      "name": "fencing-system",
+      "base": "semantic",
+      "description": "A farm fencing system including type, energizer, grounding, and special conditions",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "subtype_of": [
+        "mif:entityType/farm-infrastructure"
+      ],
+      "schema": {
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name or designation of the fencing system"
+          },
+          "fence_type": {
+            "type": "string",
+            "description": "Fencing type (e.g. high-tensile, woven-wire, polytape, netting)"
+          },
+          "energizer_spec": {
+            "type": "string",
+            "description": "Energizer specifications (joule output, power source)"
+          },
+          "grounding_config": {
+            "type": "string",
+            "description": "Grounding rod count, spacing, and soil conductivity notes"
+          },
+          "special_conditions": {
+            "type": "string",
+            "description": "Predator pressure, terrain, or soil-specific considerations"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/irrigation-system",
+      "@type": "mif:EntityType",
+      "name": "irrigation-system",
+      "base": "semantic",
+      "description": "A farm irrigation system with source, capacity, and automation details",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "subtype_of": [
+        "mif:entityType/farm-infrastructure"
+      ],
+      "schema": {
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name or designation of the irrigation system"
+          },
+          "system_type": {
+            "type": "string",
+            "description": "System type (e.g. drip, pivot, flood, micro-spray)"
+          },
+          "source": {
+            "type": "string",
+            "description": "Water source (well, pond, municipal, rainwater harvest)"
+          },
+          "capacity": {
+            "type": "string",
+            "description": "Flow rate or storage capacity"
+          },
+          "automation": {
+            "type": "string",
+            "description": "Automation level and control technology"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/connectivity-link",
+      "@type": "mif:EntityType",
+      "name": "connectivity-link",
+      "base": "semantic",
+      "description": "A wireless or wired network link providing farm connectivity",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "subtype_of": [
+        "mif:entityType/farm-infrastructure"
+      ],
+      "schema": {
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name or designation of the connectivity link"
+          },
+          "link_technology": {
+            "type": "string",
+            "description": "Link technology (e.g. LoRaWAN, LTE-M, Wi-Fi, fiber, VSAT)"
+          },
+          "range_km": {
+            "type": "string",
+            "description": "Effective range in kilometers"
+          },
+          "backhaul": {
+            "type": "string",
+            "description": "Backhaul technology or upstream provider"
+          },
+          "coverage_type": {
+            "type": "string",
+            "description": "Coverage topology (point-to-point, mesh, star, cellular)"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/sensor-or-edge-node",
+      "@type": "mif:EntityType",
+      "name": "sensor-or-edge-node",
+      "base": "semantic",
+      "description": "A field sensor or edge computing node deployed for farm data collection",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "subtype_of": [
+        "mif:entityType/farm-infrastructure"
+      ],
+      "schema": {
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name or designation of the sensor or edge node"
+          },
+          "sensor_type": {
+            "type": "string",
+            "description": "Sensor category (e.g. soil moisture, weather station, livestock tag)"
+          },
+          "protocol": {
+            "type": "string",
+            "description": "Communication protocol (e.g. MQTT, LoRa, Zigbee, Modbus)"
+          },
+          "power_source": {
+            "type": "string",
+            "description": "Power source (solar, battery, mains, PoE)"
+          },
+          "deployment_context": {
+            "type": "string",
+            "description": "Where and how the node is deployed in the field"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/power-system",
+      "@type": "mif:EntityType",
+      "name": "power-system",
+      "base": "semantic",
+      "description": "A farm power generation or storage system",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "subtype_of": [
+        "mif:entityType/farm-infrastructure"
+      ],
+      "schema": {
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name or designation of the power system"
+          },
+          "power_source": {
+            "type": "string",
+            "description": "Energy source (solar PV, wind, grid, generator, propane)"
+          },
+          "capacity": {
+            "type": "string",
+            "description": "Generation or storage capacity (kW / kWh)"
+          },
+          "supported_loads": {
+            "type": "string",
+            "description": "Farm loads supported (pumps, sensors, buildings, EVs)"
+          },
+          "autonomy_days": {
+            "type": "string",
+            "description": "Days of off-grid autonomy at typical load"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/network-segment",
+      "@type": "mif:EntityType",
+      "name": "network-segment",
+      "base": "semantic",
+      "description": "A logical network segment on the farm with defined trust and isolation",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "subtype_of": [
+        "mif:entityType/farm-infrastructure"
+      ],
+      "schema": {
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name or designation of the network segment"
+          },
+          "segment_type": {
+            "type": "string",
+            "description": "Segment type (e.g. VLAN, SSID, subnet, VPN tunnel)"
+          },
+          "trust_level": {
+            "type": "string",
+            "description": "Trust level (e.g. trusted, IoT-isolated, guest, management)"
+          },
+          "isolation_mechanism": {
+            "type": "string",
+            "description": "Isolation method (firewall rules, VLAN tagging, air gap)"
+          },
+          "connected_assets": {
+            "type": "string",
+            "description": "Asset types connected to this segment"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/iot-device",
+      "@type": "mif:EntityType",
+      "name": "iot-device",
+      "base": "semantic",
+      "description": "An IoT device deployed on the farm for sensing, actuation, or automation",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "subtype_of": [
+        "mif:entityType/equipment-or-input"
+      ],
+      "schema": {
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Device name or model"
+          },
+          "device_category": {
+            "type": "string",
+            "description": "Device category (e.g. livestock tag, water sensor, gate controller)"
+          },
+          "connectivity_protocol": {
+            "type": "string",
+            "description": "Primary connectivity protocol (e.g. LoRaWAN, BLE, NB-IoT)"
+          },
+          "vendor": {
+            "type": "string",
+            "description": "Manufacturer or supplier"
+          },
+          "specifications": {
+            "type": "string",
+            "description": "Notable technical specifications, power draw, or certifications"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/fencing-component",
+      "@type": "mif:EntityType",
+      "name": "fencing-component",
+      "base": "semantic",
+      "description": "A discrete fencing component (post, wire, insulator, gate, clip)",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "subtype_of": [
+        "mif:entityType/equipment-or-input"
+      ],
+      "schema": {
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Component name"
+          },
+          "component_type": {
+            "type": "string",
+            "description": "Component type (e.g. post, wire, insulator, gate, earth stake)"
+          },
+          "vendor": {
+            "type": "string",
+            "description": "Manufacturer or supplier"
+          },
+          "specifications": {
+            "type": "string",
+            "description": "Material, gauge, load rating, or other specifications"
+          },
+          "use_case": {
+            "type": "string",
+            "description": "Application context within a fencing system"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/conservation-cost-share",
+      "@type": "mif:EntityType",
+      "name": "conservation-cost-share",
+      "base": "semantic",
+      "description": "A conservation cost-share program offering agency-funded incentives for approved practice standards",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "subtype_of": [
+        "mif:entityType/grant-program"
+      ],
+      "schema": {
+        "required": [
+          "program_name"
+        ],
+        "properties": {
+          "program_name": {
+            "type": "string",
+            "description": "Program name (e.g. EQIP, RCPP, CSP)"
+          },
+          "agency": {
+            "type": "string",
+            "description": "Administering agency (e.g. USDA-NRCS, FSA)"
+          },
+          "practice_standards": {
+            "type": "string",
+            "description": "NRCS or other practice codes covered (e.g. 393, 528)"
+          },
+          "cost_share_rate": {
+            "type": "string",
+            "description": "Percentage or dollar-cap of cost share offered"
+          },
+          "signup_window": {
+            "type": "string",
+            "description": "Signup period or ranking deadline"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/adoption-trend",
+      "@type": "mif:EntityType",
+      "name": "adoption-trend",
+      "base": "semantic",
+      "description": "A momentum, maturation, or standardization signal in the direction of travel",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "subtype_of": [
+        "mif:entityType/concept"
+      ],
+      "schema": {
+        "required": [
+          "trend_name",
+          "direction"
+        ],
+        "properties": {
+          "trend_name": {
+            "type": "string"
+          },
+          "direction": {
+            "type": "string",
+            "description": "Where the trend is heading"
+          },
+          "evidence": {
+            "type": "string",
+            "description": "Signals supporting the trend"
+          },
+          "maturity": {
+            "type": "string",
+            "description": "How established the trend is (e.g. emerging, mainstream)"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/compliance-regulation",
+      "@type": "mif:EntityType",
+      "name": "compliance-regulation",
+      "base": "semantic",
+      "description": "A law, regulation, code, or government mandate",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "subtype_of": [
+        "mif:entityType/policy"
+      ],
+      "schema": {
+        "required": [
+          "regulation_name",
+          "jurisdiction"
+        ],
+        "properties": {
+          "regulation_name": {
+            "type": "string"
+          },
+          "jurisdiction": {
+            "type": "string",
+            "description": "Governing jurisdiction (e.g. US federal, FCC, FAA)"
+          },
+          "key_obligations": {
+            "type": "string",
+            "description": "Core obligations the regulation imposes"
+          },
+          "effective_dates": {
+            "type": "string",
+            "description": "Relevant entry-into-force or compliance deadlines"
+          }
+        }
+      }
+    }
+  ],
+  "traits": {
+    "cited": {
+      "@id": "mif:trait/cited",
+      "@type": "mif:Trait",
+      "name": "cited",
+      "description": "Requires citations/sources",
+      "requires": [
+        "citations"
+      ]
+    }
+  },
+  "relationships": {
+    "relates_to": {
+      "@id": "mif:relationship/relates_to",
+      "@type": "mif:Relationship",
+      "name": "relates_to",
+      "description": "General association",
+      "from": [],
+      "to": [],
+      "symmetric": true
+    },
+    "supports": {
+      "@id": "mif:relationship/supports",
+      "@type": "mif:Relationship",
+      "name": "supports",
+      "description": "Infrastructure or practice supports an operation",
+      "from": [
+        "mif:entityType/farm-infrastructure",
+        "mif:entityType/equipment-or-input"
+      ],
+      "to": [
+        "mif:entityType/agronomic-practice",
+        "mif:entityType/husbandry-practice"
+      ],
+      "symmetric": false
+    },
+    "has_part": {
+      "@id": "mif:relationship/has_part",
+      "@type": "mif:Relationship",
+      "name": "has_part",
+      "description": "A fencing system has a fencing component as a constituent part (RO:0001019 has-part)",
+      "from": [
+        "mif:entityType/fencing-system"
+      ],
+      "to": [
+        "mif:entityType/fencing-component"
+      ],
+      "symmetric": false
+    },
+    "connects": {
+      "@id": "mif:relationship/connects",
+      "@type": "mif:Relationship",
+      "name": "connects",
+      "description": "A connectivity link connects network segments, bridging coverage zones (RO:0002418 connects)",
+      "from": [
+        "mif:entityType/connectivity-link"
+      ],
+      "to": [
+        "mif:entityType/network-segment"
+      ],
+      "symmetric": false
+    }
+  },
+  "discovery": {
+    "enabled": true,
+    "confidence_threshold": 0.8,
+    "patterns": [
+      {
+        "@id": "mif:pattern/0",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(lambing|ewe|newborn|colostrum|dystocia)\\b",
+        "suggest_entity": "mif:entityType/husbandry-practice",
+        "suggest_namespace": "_semantic/husbandry"
+      },
+      {
+        "@id": "mif:pattern/1",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(grazing|pasture|soil|forage|rotational)\\b",
+        "suggest_entity": "mif:entityType/agronomic-practice",
+        "suggest_namespace": "_semantic/agronomy"
+      },
+      {
+        "@id": "mif:pattern/2",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(fence|fencing|irrigation|tower|PoE|LoRaWAN|mesh)\\b",
+        "suggest_entity": "mif:entityType/farm-infrastructure",
+        "suggest_namespace": "_semantic/infrastructure"
+      },
+      {
+        "@id": "mif:pattern/3",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(grant|cost-share|EQIP|NRCS|funding|program)\\b",
+        "suggest_entity": "mif:entityType/grant-program",
+        "suggest_namespace": "_semantic/funding"
+      }
+    ]
+  }
+}

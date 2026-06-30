@@ -1,5 +1,30 @@
 ---
-diataxis_type: reference
+id: reference-mif-adr-index
+type: semantic
+created: '2026-06-30T12:00:00Z'
+modified: '2026-06-30T12:00:00Z'
+namespace: reference/adr
+title: Architecture Decision Records
+tags:
+  - reference
+  - adr
+  - index
+temporal:
+  '@type': TemporalMetadata
+  validFrom: '2026-06-30T00:00:00Z'
+  recordedAt: '2026-06-30T12:00:00Z'
+  ttl: P1Y
+relationships:
+  - type: relates-to
+    target: ADR-018-ontology-corpus-dedicated-repository-and-serving.md
+ontology:
+  '@type': OntologyReference
+  id: mif-docs
+  version: 1.0.0
+  uri: https://mif-spec.dev/ontologies/mif-docs
+entity:
+  name: Architecture Decision Records
+  entity_type: reference-document
 ---
 
 # Architecture Decision Records
@@ -31,6 +56,7 @@ ADRs follow the **Structured MADR** format — an extension of [MADR](https://ad
 | [ADR-015](ADR-015-attested-release-orchestration.md) | Attested Release Orchestration | Accepted | Every release is SLSA-attested (provenance + CycloneDX SBOM, fail-closed verify), with the full SAST/DAST/SCA/posture gate suite wired by SHA pin to the org's central reusable workflows |
 | [ADR-016](ADR-016-versioned-schema-mirror-publication.md) | Per-Version Schema Mirror Publication | Accepted | Each release publishes an immutable versioned schema mirror (`/schema/X.Y.Z/`, `latest/`, `vMAJOR/`) served by the doc site, keeping canonical `$id` values unversioned per ADR-007 |
 | [ADR-017](ADR-017-revert-obsidian-compatibility.md) | Revert Obsidian Compatibility | Accepted | Supersedes ADR-003: drops Obsidian-specific notation (wiki-links, `@[[]]`, block references, embeds) for vendor-neutral CommonMark with markdown-link relationships and frontmatter `EntityReference`s |
+| [ADR-018](ADR-018-ontology-corpus-dedicated-repository-and-serving.md) | Ontology Corpus: Dedicated Repository, Flat Layout, and Versioned Serving | Accepted | Resolves discussion #168: ontologies live in the dedicated `ontologies` repo (source of record) while the schema/context stay in MIF; served at `mif-spec.dev/ontologies/` with immutable corpus-release mirrors per the ADR-016 model |
 
 ## Creating New ADRs
 

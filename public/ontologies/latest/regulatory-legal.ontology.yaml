@@ -1,0 +1,785 @@
+---
+# Regulatory / Legal Ontology
+#
+# A MIF entity ontology for the regulatory and legal domain: legislative acts and
+# treaties, obligations and rights, jurisdictions and the authorities that govern
+# them, legal persons, roles and capacities, contracts, licenses and permits,
+# court decisions, regulatory sanctions, compliance assessments and reports, and
+# the control mappings that bridge legal obligations to security controls. Extends
+# the MIF base cognitive triad with domain-specific entity types grounded in
+# actively-maintained, standards-body legal vocabularies.
+#
+# Compatible with: mif-base v1.0.0, shared-traits v1.0.0
+#
+# Version: 0.1.0
+#
+# Provenance: authored from the `domain-ontology-pack-expansion` research session
+# (entity-inventory.json, 17 minted regulatory-legal rows; relationship-inventory.json,
+# 10 regulatory-legal edges; ontology-build-spec.md §2.2, §9.1 expansion, §3.1
+# discovery). The `compliance-regulation` row (disposition=extend) is authored in
+# the software-engineering pack and is intentionally absent here. Every entity type
+# traces to a named top-level class in a cited source vocabulary.
+#
+# Sources:
+# - LKIF-Core (Legal Knowledge Interchange Format)            http://www.estrellaproject.org/lkif-core/
+# - FIBO FBC / FND (Financial Industry Business Ontology)     https://spec.edmcouncil.org/fibo/
+# - ELI v1.5 (European Legislation Identifier)                https://op.europa.eu/en/web/eu-vocabularies/eli
+# - Akoma Ntoso (legal document XML standard)                 https://www.oasis-open.org/committees/legaldocml/
+# - NIST OSCAL (Open Security Controls Assessment Language)   https://pages.nist.gov/OSCAL/
+
+ontology:
+  id: regulatory-legal
+  version: "0.1.0"
+  description: "Regulatory and legal domain ontology — acts, obligations, authorities, jurisdictions, contracts, sanctions"
+  extends:
+    - mif-base
+    - shared-traits
+
+# ===========================================================================
+# CUSTOM NAMESPACES (nested under the mif-base cognitive triad)
+# ===========================================================================
+
+namespaces:
+  semantic:
+    children:
+      obligations:
+        description: "Legal obligations, norms, and deontic duties"
+        type_hint: semantic
+      rights:
+        description: "Legal rights and conferred legal capacities"
+        type_hint: semantic
+      jurisdictions:
+        description: "Jurisdictions and their legal systems"
+        type_hint: semantic
+      authorities:
+        description: "Regulators, supervisors, courts, and standards bodies"
+        type_hint: semantic
+      roles:
+        description: "Legal roles played within a legal relationship"
+        type_hint: semantic
+      persons:
+        description: "Natural and juridical legal persons"
+        type_hint: semantic
+      contracts:
+        description: "Contracts and legally enforceable agreements"
+        type_hint: semantic
+      licenses:
+        description: "Licenses, permits, and authorizations"
+        type_hint: semantic
+      legal-acts:
+        description: "Legislative acts, treaties, and legal resources"
+        type_hint: semantic
+      control-mappings:
+        description: "Obligation-to-control crosswalks and mappings"
+        type_hint: semantic
+  episodic:
+    children:
+      court-decisions:
+        description: "Court decisions and case law"
+        type_hint: episodic
+      sanctions:
+        description: "Regulatory sanctions and enforcement actions"
+        type_hint: episodic
+  procedural:
+    children:
+      procedures:
+        description: "Legal and administrative procedures"
+        type_hint: procedural
+      reports:
+        description: "Compliance assessments and regulatory reports"
+        type_hint: procedural
+
+# ===========================================================================
+# ENTITY TYPES
+# ===========================================================================
+
+entity_types:
+  # ----- Legislative acts & treaties --------------------------------------
+  - name: legal-act
+    description: "An abstract legislative work (act, regulation, directive, statute)"
+    base: semantic
+    # ELI LegalResource / LKIF-Core Act (sub-class of PublicAct)
+    traits:
+      - lifecycle
+      - renewable
+      - auditable
+      - categorized
+    schema:
+      required:
+        - act_name
+        - act_type
+      properties:
+        act_name:
+          type: string
+        act_type:
+          type: string
+          enum:
+            - regulation
+            - directive
+            - statute
+            - executive-order
+            - treaty
+            - constitutional-provision
+            - other
+        issuing_body:
+          type: string
+        date_publication:
+          type: string
+          format: date
+        first_date_entry_in_force:
+          type: string
+          format: date
+        date_no_longer_in_force:
+          type: string
+          format: date
+        in_force:
+          type: boolean
+        eli_uri:
+          type: string
+          format: uri
+
+  - name: treaty
+    description: "An international agreement between sovereign states or bodies"
+    base: semantic
+    # LKIF-Core norm module: Treaty
+    traits:
+      - lifecycle
+      - renewable
+      - auditable
+      - categorized
+    schema:
+      required:
+        - treaty_name
+        - treaty_type
+      properties:
+        treaty_name:
+          type: string
+        treaty_type:
+          type: string
+        parties_states:
+          type: array
+          items:
+            type: string
+        date_signed:
+          type: string
+          format: date
+        date_in_force:
+          type: string
+          format: date
+        depository:
+          type: string
+        subject_matter:
+          type: string
+        un_registration_number:
+          type: string
+
+  # ----- Obligations, rights & capacities ---------------------------------
+  - name: obligation
+    description: "A legal obligation, norm, or deontic qualification"
+    base: semantic
+    # LKIF-Core norm module: Norm / Obligation (deontic qualifications)
+    traits:
+      - lifecycle
+      - auditable
+      - categorized
+      - owned
+    schema:
+      required:
+        - obligation_statement
+        - obligation_type
+      properties:
+        obligation_statement:
+          type: string
+        obligation_type:
+          type: string
+          enum:
+            - duty
+            - prohibition
+            - permission
+            - power
+            - right
+        bearer:
+          type: string
+        condition:
+          type: string
+        enforcement_mechanism:
+          type: string
+
+  - name: legal-right
+    description: "A legal right conferred on a holder (distinct from an obligation)"
+    base: semantic
+    # LKIF-Core norm/deontic module: Right
+    traits:
+      - lifecycle
+      - owned
+      - categorized
+    schema:
+      required:
+        - right_name
+        - right_type
+      properties:
+        right_name:
+          type: string
+        right_type:
+          type: string
+        right_holder:
+          type: string
+        right_bearer_type:
+          type: string
+        right_source:
+          type: string
+        conditions:
+          type: string
+
+  - name: legal-capacity
+    description: "A legal capacity or competence conferred on a legal person"
+    base: semantic
+    # FIBO FND LegalCapacity: LegalCapacity
+    traits:
+      - lifecycle
+      - owned
+      - categorized
+      - auditable
+    schema:
+      required:
+        - capacity_name
+        - capacity_type
+      properties:
+        capacity_name:
+          type: string
+        capacity_type:
+          type: string
+        conferred_on:
+          type: string
+        conferred_by:
+          type: string
+        scope_of_capacity:
+          type: string
+        legal_basis:
+          type: string
+        limitations:
+          type: string
+
+  # ----- Jurisdictions & authorities --------------------------------------
+  - name: jurisdiction
+    description: "A jurisdiction within which legal acts apply"
+    base: semantic
+    # LKIF-Core / FIBO FND Law Jurisdiction: Jurisdiction
+    traits:
+      - located
+      - bounded
+      - categorized
+      - tagged
+    schema:
+      required:
+        - jurisdiction_name
+        - jurisdiction_type
+      properties:
+        jurisdiction_name:
+          type: string
+        jurisdiction_type:
+          type: string
+          enum:
+            - supranational
+            - national
+            - subnational
+            - sectoral
+        geographic_scope:
+          type: string
+        legal_system:
+          type: string
+        iso_code:
+          type: string
+
+  - name: authority
+    description: "A regulator, supervisor, court, or standards body"
+    base: semantic
+    # FIBO FBC RegulatoryAgencies: RegulatoryAgency
+    traits:
+      - regulated
+      - located
+      - owned
+      - contactable
+      - auditable
+    schema:
+      required:
+        - authority_name
+      properties:
+        authority_name:
+          type: string
+        authority_type:
+          type: string
+          enum:
+            - regulator
+            - supervisor
+            - court
+            - standards-body
+        mandate:
+          type: string
+        parent_body:
+          type: string
+        jurisdiction_ref:
+          type: string
+        regulatory_capacity:
+          type: string
+
+  # ----- Legal persons, roles ---------------------------------------------
+  - name: legal-person
+    description: "A natural or juridical person with legal standing"
+    base: semantic
+    # LKIF-Core legal-action module: Legal_Person
+    traits:
+      - located
+      - owned
+      - contactable
+      - lifecycle
+      - regulated
+      - categorized
+    schema:
+      required:
+        - person_name
+        - person_type
+      properties:
+        person_name:
+          type: string
+        person_type:
+          type: string
+        jurisdiction_of_incorporation:
+          type: string
+        legal_capacity_status:
+          type: string
+        identifier:
+          type: string
+        registered_address:
+          type: string
+
+  - name: legal-role
+    description: "A role played within a legal relationship (not the person itself)"
+    base: semantic
+    # LKIF-Core role module: LegalRole
+    traits:
+      - lifecycle
+      - owned
+      - categorized
+      - auditable
+    schema:
+      required:
+        - role_name
+        - role_bearer_type
+      properties:
+        role_name:
+          type: string
+        role_bearer_type:
+          type: string
+          enum:
+            - natural-person
+            - legal-entity
+            - government-body
+            - unincorporated-association
+        role_source:
+          type: string
+        rights_conferred:
+          type: array
+          items:
+            type: string
+        duties_imposed:
+          type: array
+          items:
+            type: string
+
+  # ----- Contracts, licenses ----------------------------------------------
+  - name: contract
+    description: "A legally enforceable agreement between parties"
+    base: semantic
+    # FIBO FND Agreements Contracts / LKIF-Core: Contract
+    traits:
+      - lifecycle
+      - renewable
+      - owned
+      - auditable
+      - categorized
+    schema:
+      required:
+        - contract_name
+        - parties
+      properties:
+        contract_name:
+          type: string
+        parties:
+          type: array
+          items:
+            type: string
+          minItems: 2
+        contract_type:
+          type: string
+          enum:
+            - service-agreement
+            - license
+            - employment
+            - nda
+            - data-processing-agreement
+            - supply-chain
+            - merger-agreement
+            - loan
+        effective_date:
+          type: string
+          format: date
+        governing_law:
+          type: string
+        obligations_summary:
+          type: string
+        term_expiry:
+          type: string
+          format: date
+
+  - name: license-permit
+    description: "A license, permit, or authorization granted to a holder"
+    base: semantic
+    # LKIF-Core Permission / FIBO License-Authorization
+    traits:
+      - lifecycle
+      - renewable
+      - auditable
+      - owned
+      - categorized
+    schema:
+      required:
+        - license_name
+        - license_type
+      properties:
+        license_name:
+          type: string
+        license_type:
+          type: string
+        issuing_authority:
+          type: string
+        holder:
+          type: string
+        effective_date:
+          type: string
+          format: date
+        expiration_date:
+          type: string
+          format: date
+        conditions:
+          type: string
+        jurisdiction_ref:
+          type: string
+
+  # ----- Control mappings (legal ↔ security bridge) -----------------------
+  - name: control-mapping
+    description: "A crosswalk asserting that a control satisfies an obligation"
+    base: semantic
+    # NIST OSCAL OLIR: Control Mapping / Crosswalk
+    traits:
+      - auditable
+      - reviewed
+      - categorized
+      - tagged
+    schema:
+      required:
+        - obligation_ref
+        - control_ref
+        - mapping_relation
+      properties:
+        obligation_ref:
+          type: string
+        # free-text ref: control lives in software-security; regulation modeled here as legal-act/obligation
+        control_ref:
+          type: string
+        mapping_relation:
+          type: string
+          enum:
+            - equivalent-to
+            - subset-of
+            - superset-of
+            - intersects-with
+            - no-relationship
+        source:
+          type: string
+        coverage_note:
+          type: string
+        mapping_date:
+          type: string
+          format: date
+
+  # ----- Court decisions & sanctions (episodic) ---------------------------
+  - name: court-decision
+    description: "A court decision or item of case law"
+    base: episodic
+    # ELI LegalExpression (case law) / Akoma Ntoso Judgment / LKIF-Core CaseLaw
+    traits:
+      - lifecycle
+      - auditable
+      - reviewed
+      - categorized
+    schema:
+      required:
+        - case_name
+        - court
+      properties:
+        case_name:
+          type: string
+        court:
+          type: string
+        decision_date:
+          type: string
+          format: date
+        citation:
+          type: string
+        jurisdiction_ref:
+          type: string
+        legal_effect:
+          type: string
+        akn_uri:
+          type: string
+          format: uri
+
+  - name: regulatory-sanction
+    description: "A regulatory sanction or enforcement action imposed on a party"
+    base: episodic
+    # FIBO FBC EnforcementAction / EU Publications Office Sanction
+    traits:
+      - lifecycle
+      - auditable
+      - owned
+      - categorized
+      - scheduled
+    schema:
+      required:
+        - sanction_name
+        - sanction_type
+      properties:
+        sanction_name:
+          type: string
+        sanction_type:
+          type: string
+        imposing_authority:
+          type: string
+        sanctioned_party:
+          type: string
+        basis_regulation:
+          type: string
+        penalty_amount:
+          type: string
+        effective_date:
+          type: string
+          format: date
+        appeal_deadline:
+          type: string
+          format: date
+
+  # ----- Procedures & reports (procedural) --------------------------------
+  - name: legal-procedure
+    description: "A formal legal or administrative procedure"
+    base: procedural
+    # LKIF-Core process / legal-action module: LegalAction / PublicAct
+    traits:
+      - lifecycle
+      - scheduled
+      - auditable
+      - reviewed
+    schema:
+      required:
+        - procedure_name
+        - procedure_type
+      properties:
+        procedure_name:
+          type: string
+        procedure_type:
+          type: string
+          enum:
+            - rulemaking
+            - enforcement
+            - adjudication
+            - legislative
+            - administrative
+            - dispute-resolution
+        initiator:
+          type: string
+        jurisdiction_ref:
+          type: string
+        procedural_steps:
+          type: array
+          items:
+            type: string
+        legal_basis:
+          type: string
+
+  - name: assessment
+    description: "A compliance assessment of a system against requirements"
+    base: procedural
+    # NIST OSCAL: AssessmentPlan / AssessmentResults
+    traits:
+      - auditable
+      - reviewed
+      - scheduled
+      - lifecycle
+      - scored
+    schema:
+      required:
+        - assessment_title
+        - assessment_type
+      properties:
+        assessment_title:
+          type: string
+        assessment_type:
+          type: string
+        system_ref:
+          type: string
+        scope:
+          type: string
+        assessment_date:
+          type: string
+          format: date
+        assessor:
+          type: string
+        findings_count:
+          type: integer
+        overall_result:
+          type: string
+        associated_plan_ref:
+          type: string
+
+  - name: compliance-report
+    description: "A regulatory compliance report or plan of action and milestones"
+    base: procedural
+    # NIST OSCAL POA&M / FIBO RegulatoryReport
+    traits:
+      - auditable
+      - reviewed
+      - scheduled
+      - lifecycle
+    schema:
+      required:
+        - report_title
+        - reporting_period
+      properties:
+        report_title:
+          type: string
+        reporting_period:
+          type: string
+        issuing_authority:
+          type: string
+        system_ref:
+          type: string
+        findings_count:
+          type: integer
+        remediation_deadline:
+          type: string
+          format: date
+        submission_date:
+          type: string
+          format: date
+
+# ===========================================================================
+# RELATIONSHIPS  (grounded in ELI, FIBO FND/FBC, LKIF-Core norm, NIST OSCAL)
+# ===========================================================================
+
+relationships:
+  amends:
+    description: "A legal act amends another legal act (eli:amends)"
+    from:
+      - legal-act
+    to:
+      - legal-act
+    symmetric: false
+  applies_in:
+    description: "A legal act applies in a jurisdiction (fibo-fnd-law-jur:hasJurisdiction)"
+    from:
+      - legal-act
+    to:
+      - jurisdiction
+    symmetric: false
+  cites:
+    description: "A court decision cites a legal act (eli:cites)"
+    from:
+      - court-decision
+    to:
+      - legal-act
+    symmetric: false
+  confers:
+    description: "A legal act confers a legal capacity (fibo-fnd-law-lcap:hasCapacity)"
+    from:
+      - legal-act
+    to:
+      - legal-capacity
+    symmetric: false
+  governed_by:
+    description: "A contract is governed by a jurisdiction (fibo-fnd-agr-ctr:hasGoverningJurisdiction)"
+    from:
+      - contract
+    to:
+      - jurisdiction
+    symmetric: false
+  has_jurisdiction_in:
+    description: "An authority has jurisdiction in a jurisdiction (fibo-fbc-fct-rga:hasJurisdiction)"
+    from:
+      - authority
+    to:
+      - jurisdiction
+    symmetric: false
+  imposes:
+    description: "A legal act imposes an obligation (lkif-norm: norm bears/creates obligations)"
+    from:
+      - legal-act
+    to:
+      - obligation
+    symmetric: false
+  regulates:
+    description: "An authority regulates a legal act (fibo-fbc-fct-rga:regulates)"
+    from:
+      - authority
+    to:
+      - legal-act
+    symmetric: false
+  satisfies:
+    description: "A control-mapping shows a control satisfies an obligation (oscal-mapping:equivalent-to / subset-of)"
+    from:
+      - control-mapping
+    to:
+      - obligation
+    symmetric: false
+  transposes:
+    description: "A legal act transposes a treaty into domestic law (eli:transposes)"
+    from:
+      - legal-act
+    to:
+      - treaty
+    symmetric: false
+
+# ===========================================================================
+# DISCOVERY PATTERNS
+# ===========================================================================
+
+discovery:
+  enabled: true
+  confidence_threshold: 0.8
+  patterns:
+    - content_pattern: "\\b(shall|must|is required to|obligated to|prohibited from)\\b"
+      suggest_entity: obligation
+      suggest_namespace: _semantic/obligations
+    - content_pattern: "\\b(European Union|EU|US Federal|federal law|jurisdiction of)\\b"
+      suggest_entity: jurisdiction
+      suggest_namespace: _semantic/jurisdictions
+    - content_pattern: "\\b(SEC|FINRA|FDIC|EDPB|supervisory authority|regulator)\\b"
+      suggest_entity: authority
+      suggest_namespace: _semantic/authorities
+    - content_pattern: "\\b(maps to|crosswalk|control mapping|satisfies control|OLIR)\\b"
+      suggest_entity: control-mapping
+      suggest_namespace: _semantic/control-mappings
+    - content_pattern: "\\b(OJ [A-Z] \\d+|eli\\.europa\\.eu|Akoma Ntoso)\\b"
+      suggest_entity: legal-act
+      suggest_namespace: _semantic/legal-acts
+    - content_pattern: "\\b(ECLI:[A-Z]{2}:[A-Z:]+:\\d{4}:\\d+|C-\\d+/\\d+|[A-Z][a-z]+ v\\.? [A-Z][a-z]+)\\b"
+      suggest_entity: court-decision
+      suggest_namespace: _episodic/court-decisions
+    - content_pattern: "\\b(data processing agreement|DPA|MSA|NDA|license agreement)\\b"
+      suggest_entity: contract
+      suggest_namespace: _semantic/contracts
+    - content_pattern: "\\b(data controller|data processor|trustee|licensor|licensee|plaintiff|defendant)\\b"
+      suggest_entity: legal-role
+      suggest_namespace: _semantic/roles
+    - content_pattern: "\\b(rulemaking|notice and comment|enforcement proceeding|judicial review)\\b"
+      suggest_entity: legal-procedure
+      suggest_namespace: _procedural/procedures

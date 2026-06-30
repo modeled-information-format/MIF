@@ -1,0 +1,117 @@
+---
+# mif-docs Documentation Ontology
+#
+# The discovery layer for the suite: it types every document the genres emit and
+# declares how those documents connect, so an agent can traverse from one MIF doc
+# to related knowledge (the decision a spec realizes, the runbook a playbook
+# coordinates, the requirements a design derives from) rather than re-reading prose.
+#
+# Compatible with: mif-base (cognitive triad: semantic | episodic | procedural)
+
+ontology:
+  id: mif-docs
+  version: "1.0.0"
+  description: "Document genres of the mif-docs suite and the relationships that connect them into a knowledge graph"
+  extends:
+    - mif-base
+
+# Namespaces extend the cognitive triad with documentation areas.
+namespaces:
+  semantic:
+    children:
+      decisions:
+        description: "Architectural decision records"
+        type_hint: semantic
+      architecture:
+        description: "Architecture narratives, diagrams, and specs"
+        type_hint: semantic
+      specs:
+        description: "Requirements, feature specs, proposals"
+        type_hint: semantic
+      reference:
+        description: "Information-oriented reference material"
+        type_hint: semantic
+  procedural:
+    children:
+      operations:
+        description: "Runbooks, playbooks, task plans"
+        type_hint: procedural
+      learning:
+        description: "Tutorials and how-to guides"
+        type_hint: procedural
+  episodic:
+    children:
+      history:
+        description: "Changelogs and time-ordered records"
+        type_hint: episodic
+
+# Entity types — one per document genre. The `entity.entity_type` of each genre's
+# document is drawn from this list, typing the document in the graph.
+entity_types:
+  - { name: decision-record, description: "An architectural decision record (ADR)", base: semantic, traits: [versioned, documented] }
+  - { name: architecture-document, description: "An arc42 / AI-spec architecture narrative", base: semantic, traits: [documented] }
+  - { name: architecture-view, description: "A C4 model diagram set", base: semantic, traits: [documented] }
+  - { name: design-document, description: "A Google-style engineering design doc", base: semantic, traits: [documented] }
+  - { name: enhancement-proposal, description: "An RFC or PEP", base: semantic, traits: [versioned, documented] }
+  - { name: product-requirements, description: "A product requirements document (PRD)", base: semantic, traits: [documented] }
+  - { name: feature-specification, description: "A feature spec with acceptance criteria", base: semantic, traits: [documented] }
+  - { name: requirements-set, description: "A Kiro requirements.md", base: semantic, traits: [documented] }
+  - { name: design-spec, description: "A Kiro design.md", base: semantic, traits: [documented] }
+  - { name: task-plan, description: "A Kiro tasks.md implementation plan", base: procedural, traits: [documented] }
+  - { name: reference-document, description: "A Diataxis reference", base: semantic, traits: [documented] }
+  - { name: explanation, description: "A Diataxis explanation", base: semantic, traits: [documented] }
+  - { name: tutorial, description: "A Diataxis tutorial", base: procedural, traits: [documented] }
+  - { name: how-to-guide, description: "A Diataxis how-to guide", base: procedural, traits: [documented] }
+  - { name: runbook, description: "An SRE operational runbook", base: procedural, traits: [versioned, documented] }
+  - { name: playbook, description: "A strategic incident playbook", base: procedural, traits: [documented] }
+  - { name: changelog, description: "A Keep a Changelog release history", base: episodic, traits: [versioned] }
+
+# Relationships — the typed edges the genres declare in `relationships[]`. These
+# match the `type` tokens used across the suite, so the graph actually traverses.
+relationships:
+  realized-by:
+    description: "A spec/decision is realized by a downstream artifact"
+    from: [product-requirements, decision-record, requirements-set, feature-specification]
+    to: [feature-specification, design-spec, task-plan, architecture-document]
+    symmetric: false
+  derived-from:
+    description: "An artifact is derived from an upstream one"
+    from: [design-spec, task-plan, decision-record, feature-specification]
+    to: [requirements-set, design-spec, product-requirements]
+    symmetric: false
+  depends-on:
+    description: "An artifact depends on another"
+    from: [feature-specification, architecture-document]
+    to: [architecture-document, architecture-view]
+    symmetric: false
+  supersedes:
+    description: "A newer record supersedes an older one"
+    from: [decision-record, enhancement-proposal]
+    to: [decision-record, enhancement-proposal]
+    symmetric: false
+  relates-to:
+    description: "A general, non-directional association"
+    from: ["*"]
+    to: ["*"]
+    symmetric: true
+
+# Discovery — how an agent traverses the graph to find related knowledge.
+discovery:
+  description: "Traversal rules for knowledge discovery across documentation."
+  strategies:
+    - name: decision-lineage
+      description: "From a decision-record, follow realized-by to the specs and architecture that implement it, and supersedes to its replacements."
+      start: decision-record
+      follow: [realized-by, supersedes]
+    - name: spec-chain
+      description: "From product-requirements, follow realized-by -> feature-specification -> depends-on -> architecture-document."
+      start: product-requirements
+      follow: [realized-by, depends-on]
+    - name: kiro-traceability
+      description: "From requirements-set, follow realized-by -> design-spec -> realized-by -> task-plan (and derived-from in reverse)."
+      start: requirements-set
+      follow: [realized-by, derived-from]
+    - name: ops-coordination
+      description: "From a playbook, follow relates-to to the runbooks it coordinates."
+      start: playbook
+      follow: [relates-to]

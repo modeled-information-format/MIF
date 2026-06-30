@@ -1,0 +1,1580 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "@vocab": "https://mif-spec.dev/ns/ontology#",
+    "mif": "https://mif-spec.dev/ns/",
+    "schema": "https://schema.org/",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "ontology": {
+      "@id": "mif:Ontology",
+      "@type": "@id"
+    },
+    "id": {
+      "@id": "@id"
+    },
+    "version": {
+      "@id": "schema:version",
+      "@type": "xsd:string"
+    },
+    "description": {
+      "@id": "schema:description",
+      "@type": "xsd:string"
+    },
+    "schema_url": {
+      "@id": "rdfs:isDefinedBy",
+      "@type": "@id"
+    },
+    "namespaces": {
+      "@id": "mif:hasNamespace",
+      "@container": "@id"
+    },
+    "type_hint": {
+      "@id": "mif:typeHint",
+      "@type": "xsd:string"
+    },
+    "replaces": {
+      "@id": "mif:replaces",
+      "@type": "@id"
+    },
+    "children": {
+      "@id": "mif:hasChildNamespace",
+      "@container": "@id"
+    },
+    "entity_types": {
+      "@id": "mif:definesEntityType",
+      "@container": "@list"
+    },
+    "name": {
+      "@id": "schema:name",
+      "@type": "xsd:string"
+    },
+    "base": {
+      "@id": "mif:baseType",
+      "@type": "@vocab"
+    },
+    "semantic": "mif:SemanticMemory",
+    "episodic": "mif:EpisodicMemory",
+    "procedural": "mif:ProceduralMemory",
+    "traits": {
+      "@id": "mif:definesTrait",
+      "@container": "@id"
+    },
+    "subtype_of": {
+      "@id": "mif:subtypeOf",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "fields": {
+      "@id": "mif:hasField",
+      "@container": "@id"
+    },
+    "requires": {
+      "@id": "mif:requiresField",
+      "@container": "@list"
+    },
+    "relationships": {
+      "@id": "mif:definesRelationship",
+      "@container": "@id"
+    },
+    "from": {
+      "@id": "rdfs:domain",
+      "@container": "@set"
+    },
+    "to": {
+      "@id": "rdfs:range",
+      "@container": "@set"
+    },
+    "symmetric": {
+      "@id": "owl:SymmetricProperty",
+      "@type": "xsd:boolean"
+    },
+    "discovery": {
+      "@id": "mif:discoveryConfig"
+    },
+    "enabled": {
+      "@id": "mif:discoveryEnabled",
+      "@type": "xsd:boolean"
+    },
+    "patterns": {
+      "@id": "mif:hasDiscoveryPattern",
+      "@container": "@list"
+    },
+    "confidence_threshold": {
+      "@id": "mif:confidenceThreshold",
+      "@type": "xsd:decimal"
+    },
+    "content_pattern": {
+      "@id": "mif:contentPattern",
+      "@type": "xsd:string"
+    },
+    "file_pattern": {
+      "@id": "mif:filePattern",
+      "@type": "xsd:string"
+    },
+    "suggest_entity": {
+      "@id": "mif:suggestsEntityType",
+      "@type": "@id"
+    },
+    "suggest_namespace": {
+      "@id": "mif:suggestsNamespace",
+      "@type": "xsd:string"
+    }
+  },
+  "@id": "mif:ontology/regenerative-agriculture",
+  "@type": "mif:Ontology",
+  "identifier": "regenerative-agriculture",
+  "version": "0.1.0",
+  "description": "Regenerative agriculture ontology with ecosystem coverage",
+  "schema_url": "https://mif-spec.dev/schema/ontology/ontology.schema.json",
+  "namespaces": {
+    "semantic": {
+      "@id": "mif:namespace/semantic",
+      "@type": "mif:Namespace",
+      "name": "semantic",
+      "children": {
+        "land": {
+          "@id": "mif:namespace/semantic/land",
+          "@type": "mif:Namespace",
+          "name": "land",
+          "description": "Land parcels, fields, soil profiles",
+          "type_hint": "semantic"
+        },
+        "livestock": {
+          "@id": "mif:namespace/semantic/livestock",
+          "@type": "mif:Namespace",
+          "name": "livestock",
+          "description": "Animals, herds, breeding records",
+          "type_hint": "semantic"
+        },
+        "crops": {
+          "@id": "mif:namespace/semantic/crops",
+          "@type": "mif:Namespace",
+          "name": "crops",
+          "description": "Crops, varieties, rotations",
+          "type_hint": "semantic"
+        },
+        "equipment": {
+          "@id": "mif:namespace/semantic/equipment",
+          "@type": "mif:Namespace",
+          "name": "equipment",
+          "description": "Machinery, tools, infrastructure",
+          "type_hint": "semantic"
+        },
+        "inputs": {
+          "@id": "mif:namespace/semantic/inputs",
+          "@type": "mif:Namespace",
+          "name": "inputs",
+          "description": "Seeds, amendments, biological inputs",
+          "type_hint": "semantic"
+        },
+        "supply-chain": {
+          "@id": "mif:namespace/semantic/supply-chain",
+          "@type": "mif:Namespace",
+          "name": "supply-chain",
+          "description": "Buyers, processors, distributors",
+          "type_hint": "semantic"
+        },
+        "markets": {
+          "@id": "mif:namespace/semantic/markets",
+          "@type": "mif:Namespace",
+          "name": "markets",
+          "description": "Market channels, pricing, contracts",
+          "type_hint": "semantic"
+        },
+        "certifications": {
+          "@id": "mif:namespace/semantic/certifications",
+          "@type": "mif:Namespace",
+          "name": "certifications",
+          "description": "Organic, ROC, and other certifications",
+          "type_hint": "semantic"
+        },
+        "carbon": {
+          "@id": "mif:namespace/semantic/carbon",
+          "@type": "mif:Namespace",
+          "name": "carbon",
+          "description": "Carbon credits, soil carbon measurements",
+          "type_hint": "semantic"
+        }
+      }
+    },
+    "episodic": {
+      "@id": "mif:namespace/episodic",
+      "@type": "mif:Namespace",
+      "name": "episodic",
+      "children": {
+        "seasons": {
+          "@id": "mif:namespace/episodic/seasons",
+          "@type": "mif:Namespace",
+          "name": "seasons",
+          "description": "Growing seasons, planting/harvest cycles",
+          "type_hint": "episodic"
+        },
+        "weather": {
+          "@id": "mif:namespace/episodic/weather",
+          "@type": "mif:Namespace",
+          "name": "weather",
+          "description": "Weather events, climate impacts",
+          "type_hint": "episodic"
+        },
+        "inspections": {
+          "@id": "mif:namespace/episodic/inspections",
+          "@type": "mif:Namespace",
+          "name": "inspections",
+          "description": "Audits, inspections, certifications",
+          "type_hint": "episodic"
+        },
+        "transactions": {
+          "@id": "mif:namespace/episodic/transactions",
+          "@type": "mif:Namespace",
+          "name": "transactions",
+          "description": "Sales, purchases, market events",
+          "type_hint": "episodic"
+        }
+      }
+    },
+    "procedural": {
+      "@id": "mif:namespace/procedural",
+      "@type": "mif:Namespace",
+      "name": "procedural",
+      "children": {
+        "soil-health": {
+          "@id": "mif:namespace/procedural/soil-health",
+          "@type": "mif:Namespace",
+          "name": "soil-health",
+          "description": "Soil management protocols",
+          "type_hint": "procedural"
+        },
+        "animal-welfare": {
+          "@id": "mif:namespace/procedural/animal-welfare",
+          "@type": "mif:Namespace",
+          "name": "animal-welfare",
+          "description": "Livestock care procedures",
+          "type_hint": "procedural"
+        },
+        "harvest": {
+          "@id": "mif:namespace/procedural/harvest",
+          "@type": "mif:Namespace",
+          "name": "harvest",
+          "description": "Harvest and post-harvest handling",
+          "type_hint": "procedural"
+        },
+        "compliance": {
+          "@id": "mif:namespace/procedural/compliance",
+          "@type": "mif:Namespace",
+          "name": "compliance",
+          "description": "Certification audit preparation",
+          "type_hint": "procedural"
+        }
+      }
+    }
+  },
+  "entity_types": [
+    {
+      "@id": "mif:entityType/farm",
+      "@type": "mif:EntityType",
+      "name": "farm",
+      "base": "semantic",
+      "description": "A farm operation - the primary organizational unit",
+      "traits": [
+        "mif:trait/located",
+        "mif:trait/bounded",
+        "mif:trait/owned",
+        "mif:trait/certified",
+        "mif:trait/auditable"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "total_acres"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Farm name"
+          },
+          "total_acres": {
+            "type": "number",
+            "description": "Total farm acreage"
+          },
+          "operation_type": {
+            "type": "string",
+            "description": "Primary operation type",
+            "enum": [
+              "row_crop",
+              "livestock",
+              "mixed",
+              "orchard",
+              "vineyard",
+              "market_garden",
+              "dairy",
+              "pasture"
+            ]
+          },
+          "established_year": {
+            "type": "integer",
+            "description": "Year farm was established"
+          },
+          "regenerative_transition_year": {
+            "type": "integer",
+            "description": "Year regenerative practices began"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/field",
+      "@type": "mif:EntityType",
+      "name": "field",
+      "base": "semantic",
+      "description": "A distinct agricultural field or parcel",
+      "traits": [
+        "mif:trait/bounded",
+        "mif:trait/measured",
+        "mif:trait/seasonal"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "acres",
+          "farm_id"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Field name/identifier"
+          },
+          "acres": {
+            "type": "number",
+            "description": "Field size in acres"
+          },
+          "farm_id": {
+            "type": "string",
+            "description": "Parent farm reference"
+          },
+          "field_type": {
+            "type": "string",
+            "enum": [
+              "cropland",
+              "pasture",
+              "orchard",
+              "wetland",
+              "woodland",
+              "fallow"
+            ]
+          },
+          "soil_type": {
+            "type": "string",
+            "description": "Primary soil classification"
+          },
+          "irrigation_type": {
+            "type": "string",
+            "enum": [
+              "dryland",
+              "drip",
+              "pivot",
+              "flood",
+              "sprinkler"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/soil-profile",
+      "@type": "mif:EntityType",
+      "name": "soil-profile",
+      "base": "semantic",
+      "description": "Soil health profile with testing data",
+      "traits": [
+        "mif:trait/measured",
+        "mif:trait/timestamped"
+      ],
+      "schema": {
+        "required": [
+          "field_id",
+          "sample_date"
+        ],
+        "properties": {
+          "field_id": {
+            "type": "string",
+            "description": "Reference to field"
+          },
+          "sample_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "sample_depth_inches": {
+            "type": "number"
+          },
+          "organic_matter_percent": {
+            "type": "number",
+            "description": "Soil organic matter percentage"
+          },
+          "soil_carbon_tons_per_acre": {
+            "type": "number",
+            "description": "Soil organic carbon"
+          },
+          "ph": {
+            "type": "number"
+          },
+          "cec": {
+            "type": "number",
+            "description": "Cation exchange capacity"
+          },
+          "aggregate_stability": {
+            "type": "number",
+            "description": "Water-stable aggregate percentage"
+          },
+          "infiltration_rate": {
+            "type": "number",
+            "description": "Inches per hour"
+          },
+          "microbial_biomass": {
+            "type": "number",
+            "description": "Microbial biomass carbon"
+          },
+          "fungal_to_bacterial_ratio": {
+            "type": "number"
+          },
+          "lab": {
+            "type": "string",
+            "description": "Testing laboratory"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/crop",
+      "@type": "mif:EntityType",
+      "name": "crop",
+      "base": "semantic",
+      "description": "A crop type with agronomic information",
+      "traits": [
+        "mif:trait/categorized"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "crop_type"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Crop name"
+          },
+          "scientific_name": {
+            "type": "string"
+          },
+          "crop_type": {
+            "type": "string",
+            "enum": [
+              "cash_crop",
+              "cover_crop",
+              "forage",
+              "perennial"
+            ]
+          },
+          "family": {
+            "type": "string",
+            "description": "Botanical family"
+          },
+          "nitrogen_fixing": {
+            "type": "boolean"
+          },
+          "root_depth": {
+            "type": "string",
+            "enum": [
+              "shallow",
+              "medium",
+              "deep",
+              "tap_root"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/crop-rotation",
+      "@type": "mif:EntityType",
+      "name": "crop-rotation",
+      "base": "procedural",
+      "description": "Multi-year crop rotation plan",
+      "traits": [
+        "mif:trait/seasonal",
+        "mif:trait/reviewed"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "field_id",
+          "rotation_years"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "field_id": {
+            "type": "string"
+          },
+          "rotation_years": {
+            "type": "integer",
+            "description": "Number of years in rotation"
+          },
+          "sequence": {
+            "type": "array",
+            "description": "Crop sequence by year",
+            "items": {
+              "type": "object",
+              "properties": {
+                "year": {
+                  "type": "integer"
+                },
+                "cash_crop": {
+                  "type": "string"
+                },
+                "cover_crop": {
+                  "type": "string"
+                },
+                "notes": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "goals": {
+            "type": "array",
+            "description": "Rotation objectives",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/planting",
+      "@type": "mif:EntityType",
+      "name": "planting",
+      "base": "episodic",
+      "description": "A specific crop planting event",
+      "traits": [
+        "mif:trait/scheduled",
+        "mif:trait/measured"
+      ],
+      "schema": {
+        "required": [
+          "field_id",
+          "crop_id",
+          "planting_date"
+        ],
+        "properties": {
+          "field_id": {
+            "type": "string"
+          },
+          "crop_id": {
+            "type": "string"
+          },
+          "variety": {
+            "type": "string"
+          },
+          "planting_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "seeding_rate": {
+            "type": "number"
+          },
+          "seeding_unit": {
+            "type": "string"
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "no_till_drill",
+              "broadcast",
+              "transplant",
+              "interseeded"
+            ]
+          },
+          "seed_source": {
+            "type": "string"
+          },
+          "seed_treatment": {
+            "type": "string"
+          },
+          "expected_harvest_date": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/herd",
+      "@type": "mif:EntityType",
+      "name": "herd",
+      "base": "semantic",
+      "description": "A group of animals managed together",
+      "traits": [
+        "mif:trait/inventoried",
+        "mif:trait/owned"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "species",
+          "head_count"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "species": {
+            "type": "string",
+            "enum": [
+              "cattle",
+              "sheep",
+              "goats",
+              "pigs",
+              "poultry",
+              "bison",
+              "other"
+            ]
+          },
+          "breed": {
+            "type": "string"
+          },
+          "head_count": {
+            "type": "integer"
+          },
+          "purpose": {
+            "type": "string",
+            "enum": [
+              "beef",
+              "dairy",
+              "wool",
+              "eggs",
+              "breeding",
+              "dual_purpose"
+            ]
+          },
+          "grazing_unit": {
+            "type": "string",
+            "description": "Current grazing paddock/field"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/animal",
+      "@type": "mif:EntityType",
+      "name": "animal",
+      "base": "semantic",
+      "description": "Individual animal record",
+      "traits": [
+        "mif:trait/lifecycle",
+        "mif:trait/tagged"
+      ],
+      "schema": {
+        "required": [
+          "tag_id",
+          "species",
+          "herd_id"
+        ],
+        "properties": {
+          "tag_id": {
+            "type": "string",
+            "description": "Ear tag or RFID"
+          },
+          "species": {
+            "type": "string"
+          },
+          "breed": {
+            "type": "string"
+          },
+          "herd_id": {
+            "type": "string"
+          },
+          "birth_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "sex": {
+            "type": "string",
+            "enum": [
+              "male",
+              "female",
+              "castrated"
+            ]
+          },
+          "dam_id": {
+            "type": "string"
+          },
+          "sire_id": {
+            "type": "string"
+          },
+          "weight_history": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "date": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "weight_lbs": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/grazing-plan",
+      "@type": "mif:EntityType",
+      "name": "grazing-plan",
+      "base": "procedural",
+      "description": "Rotational grazing plan",
+      "traits": [
+        "mif:trait/scheduled",
+        "mif:trait/seasonal"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "herd_id"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "herd_id": {
+            "type": "string"
+          },
+          "paddock_sequence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "paddock_id": {
+                  "type": "string"
+                },
+                "entry_date": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "exit_date": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "animal_days": {
+                  "type": "number"
+                },
+                "recovery_days": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "stock_density": {
+            "type": "number",
+            "description": "Animal units per acre"
+          },
+          "rest_period_days": {
+            "type": "integer",
+            "description": "Minimum recovery days"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/equipment",
+      "@type": "mif:EntityType",
+      "name": "equipment",
+      "base": "semantic",
+      "description": "Farm machinery and tools",
+      "traits": [
+        "mif:trait/inventoried",
+        "mif:trait/maintainable",
+        "mif:trait/owned"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "equipment_type"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "equipment_type": {
+            "type": "string",
+            "enum": [
+              "tractor",
+              "implement",
+              "irrigation",
+              "livestock",
+              "harvesting",
+              "storage",
+              "vehicle"
+            ]
+          },
+          "make": {
+            "type": "string"
+          },
+          "model": {
+            "type": "string"
+          },
+          "year": {
+            "type": "integer"
+          },
+          "purchase_price": {
+            "type": "number"
+          },
+          "current_value": {
+            "type": "number"
+          },
+          "hours_meter": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/input",
+      "@type": "mif:EntityType",
+      "name": "input",
+      "base": "semantic",
+      "description": "Farm input product (seeds, amendments, etc.)",
+      "traits": [
+        "mif:trait/inventoried",
+        "mif:trait/certified"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "input_type"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "input_type": {
+            "type": "string",
+            "enum": [
+              "seed",
+              "amendment",
+              "biological",
+              "mineral",
+              "compost",
+              "mulch",
+              "fuel"
+            ]
+          },
+          "supplier": {
+            "type": "string"
+          },
+          "omri_listed": {
+            "type": "boolean",
+            "description": "OMRI approved for organic"
+          },
+          "application_rate": {
+            "type": "string"
+          },
+          "unit_cost": {
+            "type": "number"
+          },
+          "quantity_on_hand": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/certification",
+      "@type": "mif:EntityType",
+      "name": "certification",
+      "base": "semantic",
+      "description": "Farm certification (organic, ROC, etc.)",
+      "traits": [
+        "mif:trait/renewable",
+        "mif:trait/auditable"
+      ],
+      "schema": {
+        "required": [
+          "certification_type",
+          "certifying_body",
+          "status"
+        ],
+        "properties": {
+          "certification_type": {
+            "type": "string",
+            "enum": [
+              "usda_organic",
+              "roc_bronze",
+              "roc_silver",
+              "roc_gold",
+              "rainforest_alliance",
+              "rgn_basic",
+              "rgn_advanced",
+              "rgn_expert",
+              "sci_tier_1",
+              "sci_tier_2",
+              "sci_tier_3",
+              "sci_tier_4",
+              "biodynamic",
+              "grass_fed",
+              "animal_welfare_approved"
+            ]
+          },
+          "certifying_body": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "in_transition",
+              "suspended",
+              "expired",
+              "pending"
+            ]
+          },
+          "scope": {
+            "type": "array",
+            "description": "What's covered by certification",
+            "items": {
+              "type": "string"
+            }
+          },
+          "transition_start_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "certificate_number": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/inspection",
+      "@type": "mif:EntityType",
+      "name": "inspection",
+      "base": "episodic",
+      "description": "Certification inspection or audit event",
+      "traits": [
+        "mif:trait/scheduled",
+        "mif:trait/reviewed"
+      ],
+      "schema": {
+        "required": [
+          "certification_id",
+          "inspection_date",
+          "inspector"
+        ],
+        "properties": {
+          "certification_id": {
+            "type": "string"
+          },
+          "inspection_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "inspector": {
+            "type": "string"
+          },
+          "inspection_type": {
+            "type": "string",
+            "enum": [
+              "initial",
+              "annual",
+              "unannounced",
+              "follow_up"
+            ]
+          },
+          "findings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "category": {
+                  "type": "string"
+                },
+                "severity": {
+                  "type": "string",
+                  "enum": [
+                    "observation",
+                    "minor",
+                    "major",
+                    "critical"
+                  ]
+                },
+                "description": {
+                  "type": "string"
+                },
+                "corrective_action": {
+                  "type": "string"
+                },
+                "due_date": {
+                  "type": "string",
+                  "format": "date"
+                }
+              }
+            }
+          },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "passed",
+              "conditional",
+              "failed",
+              "pending"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/carbon-baseline",
+      "@type": "mif:EntityType",
+      "name": "carbon-baseline",
+      "base": "semantic",
+      "description": "Baseline carbon measurement for a field",
+      "traits": [
+        "mif:trait/measured"
+      ],
+      "schema": {
+        "required": [
+          "field_id",
+          "baseline_date",
+          "soil_carbon_baseline"
+        ],
+        "properties": {
+          "field_id": {
+            "type": "string"
+          },
+          "baseline_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "soil_carbon_baseline": {
+            "type": "number",
+            "description": "Metric tons CO2e per acre"
+          },
+          "measurement_protocol": {
+            "type": "string",
+            "description": "Carbon measurement standard used"
+          },
+          "verification_body": {
+            "type": "string"
+          },
+          "sampling_depth_cm": {
+            "type": "integer"
+          },
+          "bulk_density": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/carbon-credit",
+      "@type": "mif:EntityType",
+      "name": "carbon-credit",
+      "base": "semantic",
+      "description": "Verified carbon credit or offset",
+      "traits": [
+        "mif:trait/transactional",
+        "mif:trait/auditable"
+      ],
+      "schema": {
+        "required": [
+          "credit_id",
+          "vintage_year",
+          "quantity_tons",
+          "registry"
+        ],
+        "properties": {
+          "credit_id": {
+            "type": "string",
+            "description": "Registry credit identifier"
+          },
+          "vintage_year": {
+            "type": "integer"
+          },
+          "quantity_tons": {
+            "type": "number",
+            "description": "Metric tons CO2e"
+          },
+          "registry": {
+            "type": "string",
+            "enum": [
+              "verra",
+              "gold_standard",
+              "american_carbon_registry",
+              "climate_action_reserve",
+              "nori",
+              "indigo"
+            ]
+          },
+          "project_type": {
+            "type": "string",
+            "enum": [
+              "soil_carbon",
+              "avoided_emissions",
+              "agroforestry",
+              "grassland"
+            ]
+          },
+          "verification_status": {
+            "type": "string",
+            "enum": [
+              "verified",
+              "pending",
+              "retired"
+            ]
+          },
+          "price_per_ton": {
+            "type": "number"
+          },
+          "buyer": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/buyer",
+      "@type": "mif:EntityType",
+      "name": "buyer",
+      "base": "semantic",
+      "description": "Purchaser of farm products",
+      "traits": [
+        "mif:trait/contactable",
+        "mif:trait/located"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "buyer_type"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "buyer_type": {
+            "type": "string",
+            "enum": [
+              "direct_consumer",
+              "farmers_market",
+              "restaurant",
+              "grocery",
+              "distributor",
+              "processor",
+              "cooperative",
+              "export"
+            ]
+          },
+          "certifications_required": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "payment_terms": {
+            "type": "string"
+          },
+          "preferred_products": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/contract",
+      "@type": "mif:EntityType",
+      "name": "contract",
+      "base": "semantic",
+      "description": "Sales or supply contract",
+      "traits": [
+        "mif:trait/renewable",
+        "mif:trait/transactional",
+        "mif:trait/reviewed"
+      ],
+      "schema": {
+        "required": [
+          "buyer_id",
+          "product",
+          "contract_year"
+        ],
+        "properties": {
+          "buyer_id": {
+            "type": "string"
+          },
+          "product": {
+            "type": "string"
+          },
+          "contract_year": {
+            "type": "integer"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "unit": {
+            "type": "string"
+          },
+          "price_per_unit": {
+            "type": "number"
+          },
+          "delivery_terms": {
+            "type": "string"
+          },
+          "quality_requirements": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "certification_requirements": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/harvest-record",
+      "@type": "mif:EntityType",
+      "name": "harvest-record",
+      "base": "episodic",
+      "description": "Harvest event with yield data",
+      "traits": [
+        "mif:trait/measured",
+        "mif:trait/quality_controlled"
+      ],
+      "schema": {
+        "required": [
+          "field_id",
+          "crop_id",
+          "harvest_date"
+        ],
+        "properties": {
+          "field_id": {
+            "type": "string"
+          },
+          "crop_id": {
+            "type": "string"
+          },
+          "harvest_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "yield_quantity": {
+            "type": "number"
+          },
+          "yield_unit": {
+            "type": "string"
+          },
+          "moisture_percent": {
+            "type": "number"
+          },
+          "test_weight": {
+            "type": "number"
+          },
+          "storage_location": {
+            "type": "string"
+          },
+          "lot_number": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/weather-event",
+      "@type": "mif:EntityType",
+      "name": "weather-event",
+      "base": "episodic",
+      "description": "Significant weather event affecting operations",
+      "traits": [
+        "mif:trait/located"
+      ],
+      "schema": {
+        "required": [
+          "event_type",
+          "event_date"
+        ],
+        "properties": {
+          "event_type": {
+            "type": "string",
+            "enum": [
+              "frost",
+              "freeze",
+              "hail",
+              "drought",
+              "flood",
+              "tornado",
+              "excessive_heat",
+              "excessive_rain"
+            ]
+          },
+          "event_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "minor",
+              "moderate",
+              "severe",
+              "catastrophic"
+            ]
+          },
+          "affected_fields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "crop_damage_estimate": {
+            "type": "number",
+            "description": "Estimated loss percentage"
+          },
+          "insurance_claim": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  ],
+  "relationships": {
+    "located_on": {
+      "@id": "mif:relationship/located_on",
+      "@type": "mif:Relationship",
+      "name": "located_on",
+      "description": "Entity is located on a field or farm",
+      "from": [
+        "mif:entityType/herd",
+        "mif:entityType/planting",
+        "mif:entityType/equipment"
+      ],
+      "to": [
+        "mif:entityType/field",
+        "mif:entityType/farm"
+      ],
+      "symmetric": false
+    },
+    "part_of": {
+      "@id": "mif:relationship/part_of",
+      "@type": "mif:Relationship",
+      "name": "part_of",
+      "description": "Entity is part of a larger entity",
+      "from": [
+        "mif:entityType/field",
+        "mif:entityType/animal"
+      ],
+      "to": [
+        "mif:entityType/farm",
+        "mif:entityType/herd"
+      ],
+      "symmetric": false
+    },
+    "certified_by": {
+      "@id": "mif:relationship/certified_by",
+      "@type": "mif:Relationship",
+      "name": "certified_by",
+      "description": "Entity holds certification",
+      "from": [
+        "mif:entityType/farm",
+        "mif:entityType/field",
+        "mif:entityType/herd"
+      ],
+      "to": [
+        "mif:entityType/certification"
+      ],
+      "symmetric": false
+    },
+    "supplies_to": {
+      "@id": "mif:relationship/supplies_to",
+      "@type": "mif:Relationship",
+      "name": "supplies_to",
+      "description": "Farm supplies products to buyer",
+      "from": [
+        "mif:entityType/farm",
+        "mif:entityType/harvest-record"
+      ],
+      "to": [
+        "mif:entityType/buyer",
+        "mif:entityType/contract"
+      ],
+      "symmetric": false
+    },
+    "generates": {
+      "@id": "mif:relationship/generates",
+      "@type": "mif:Relationship",
+      "name": "generates",
+      "description": "Practice generates carbon credits",
+      "from": [
+        "mif:entityType/field",
+        "mif:entityType/grazing-plan",
+        "mif:entityType/crop-rotation"
+      ],
+      "to": [
+        "mif:entityType/carbon-credit"
+      ],
+      "symmetric": false
+    },
+    "affects": {
+      "@id": "mif:relationship/affects",
+      "@type": "mif:Relationship",
+      "name": "affects",
+      "description": "Weather event affects entity",
+      "from": [
+        "mif:entityType/weather-event"
+      ],
+      "to": [
+        "mif:entityType/field",
+        "mif:entityType/herd",
+        "mif:entityType/planting"
+      ],
+      "symmetric": false
+    },
+    "follows": {
+      "@id": "mif:relationship/follows",
+      "@type": "mif:Relationship",
+      "name": "follows",
+      "description": "Crop follows previous crop in rotation",
+      "from": [
+        "mif:entityType/planting"
+      ],
+      "to": [
+        "mif:entityType/planting"
+      ],
+      "symmetric": false
+    },
+    "documents": {
+      "@id": "mif:relationship/documents",
+      "@type": "mif:Relationship",
+      "name": "documents",
+      "description": "Procedure documents how to manage entity",
+      "from": [
+        "mif:entityType/grazing-plan",
+        "mif:entityType/crop-rotation"
+      ],
+      "to": [
+        "mif:entityType/herd",
+        "mif:entityType/field"
+      ],
+      "symmetric": false
+    }
+  },
+  "discovery": {
+    "enabled": true,
+    "confidence_threshold": 0.8,
+    "patterns": [
+      {
+        "@id": "mif:pattern/0",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(soil|organic matter|carbon|SOM|SOC)\\b",
+        "suggest_entity": "mif:entityType/soil-profile",
+        "suggest_namespace": "_semantic/land"
+      },
+      {
+        "@id": "mif:pattern/1",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(field|parcel|paddock|pasture|acreage)\\b",
+        "suggest_entity": "mif:entityType/field",
+        "suggest_namespace": "_semantic/land"
+      },
+      {
+        "@id": "mif:pattern/2",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(cover crop|rotation|cash crop|planting)\\b",
+        "suggest_entity": "mif:entityType/crop-rotation",
+        "suggest_namespace": "_procedural/soil-health"
+      },
+      {
+        "@id": "mif:pattern/3",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(no-till|no till|minimum till|tillage)\\b",
+        "suggest_entity": "mif:entityType/crop-rotation",
+        "suggest_namespace": "_procedural/soil-health"
+      },
+      {
+        "@id": "mif:pattern/4",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(herd|cattle|sheep|goats|livestock)\\b",
+        "suggest_entity": "mif:entityType/herd",
+        "suggest_namespace": "_semantic/livestock"
+      },
+      {
+        "@id": "mif:pattern/5",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(rotational grazing|mob grazing|AMP)\\b",
+        "suggest_entity": "mif:entityType/grazing-plan",
+        "suggest_namespace": "_procedural/animal-welfare"
+      },
+      {
+        "@id": "mif:pattern/6",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(organic|ROC|regenerative organic|certified)\\b",
+        "suggest_entity": "mif:entityType/certification",
+        "suggest_namespace": "_semantic/certifications"
+      },
+      {
+        "@id": "mif:pattern/7",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(audit|inspection|certifier|compliance)\\b",
+        "suggest_entity": "mif:entityType/inspection",
+        "suggest_namespace": "_episodic/inspections"
+      },
+      {
+        "@id": "mif:pattern/8",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(carbon credit|carbon offset|sequestration|CO2e)\\b",
+        "suggest_entity": "mif:entityType/carbon-credit",
+        "suggest_namespace": "_semantic/carbon"
+      },
+      {
+        "@id": "mif:pattern/9",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(baseline|soil carbon measurement|MRV)\\b",
+        "suggest_entity": "mif:entityType/carbon-baseline",
+        "suggest_namespace": "_semantic/carbon"
+      },
+      {
+        "@id": "mif:pattern/10",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(buyer|customer|market|contract|sale)\\b",
+        "suggest_entity": "mif:entityType/buyer",
+        "suggest_namespace": "_semantic/supply-chain"
+      },
+      {
+        "@id": "mif:pattern/11",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(harvest|yield|bushel|pounds|ton)\\b",
+        "suggest_entity": "mif:entityType/harvest-record",
+        "suggest_namespace": "_episodic/transactions"
+      },
+      {
+        "@id": "mif:pattern/12",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(frost|freeze|drought|flood|hail|storm)\\b",
+        "suggest_entity": "mif:entityType/weather-event",
+        "suggest_namespace": "_episodic/weather"
+      }
+    ]
+  }
+}

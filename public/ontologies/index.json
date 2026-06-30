@@ -1,0 +1,205 @@
+{
+  "name": "MIF ontology catalog",
+  "description": "Machine-readable index of the MIF (Modeled Information Format) ontology corpus served at https://mif-spec.dev/ontologies/. Each ontology's canonical URL is unversioned and tracks the latest corpus release; the version-pathed mirrors are immutable per-release snapshots. Each entry's `version` is the ontology's own version, independent of the corpus release `versions` listed here.",
+  "canonicalBase": "https://mif-spec.dev/ontologies/",
+  "mediaType": {
+    "intended": "application/ld+json",
+    "note": "GitHub Pages serves .json/.jsonld as application/json and does not allow per-file Content-Type overrides; application/ld+json is the intended media type for the .ontology.jsonld files on conforming hosts."
+  },
+  "versions": [
+    "0.1.0"
+  ],
+  "aliases": {
+    "latest": "0.1.0",
+    "v0": "0.1.0"
+  },
+  "ontologies": [
+    {
+      "id": "biology-research-lab",
+      "version": "0.1.0",
+      "canonical": "https://mif-spec.dev/ontologies/biology-research-lab.ontology.jsonld",
+      "yaml": "https://mif-spec.dev/ontologies/biology-research-lab.ontology.yaml",
+      "versioned": {
+        "0.1.0": "https://mif-spec.dev/ontologies/0.1.0/biology-research-lab.ontology.jsonld",
+        "latest": "https://mif-spec.dev/ontologies/latest/biology-research-lab.ontology.jsonld",
+        "v0": "https://mif-spec.dev/ontologies/v0/biology-research-lab.ontology.jsonld"
+      }
+    },
+    {
+      "id": "data-engineering",
+      "version": "0.2.0",
+      "canonical": "https://mif-spec.dev/ontologies/data-engineering.ontology.jsonld",
+      "yaml": "https://mif-spec.dev/ontologies/data-engineering.ontology.yaml",
+      "versioned": {
+        "0.1.0": "https://mif-spec.dev/ontologies/0.1.0/data-engineering.ontology.jsonld",
+        "latest": "https://mif-spec.dev/ontologies/latest/data-engineering.ontology.jsonld",
+        "v0": "https://mif-spec.dev/ontologies/v0/data-engineering.ontology.jsonld"
+      }
+    },
+    {
+      "id": "engineering-base",
+      "version": "0.1.0",
+      "canonical": "https://mif-spec.dev/ontologies/engineering-base.ontology.jsonld",
+      "yaml": "https://mif-spec.dev/ontologies/engineering-base.ontology.yaml",
+      "versioned": {
+        "0.1.0": "https://mif-spec.dev/ontologies/0.1.0/engineering-base.ontology.jsonld",
+        "latest": "https://mif-spec.dev/ontologies/latest/engineering-base.ontology.jsonld",
+        "v0": "https://mif-spec.dev/ontologies/v0/engineering-base.ontology.jsonld"
+      }
+    },
+    {
+      "id": "market-research",
+      "version": "0.1.0",
+      "canonical": "https://mif-spec.dev/ontologies/market-research.ontology.jsonld",
+      "yaml": "https://mif-spec.dev/ontologies/market-research.ontology.yaml",
+      "versioned": {
+        "0.1.0": "https://mif-spec.dev/ontologies/0.1.0/market-research.ontology.jsonld",
+        "latest": "https://mif-spec.dev/ontologies/latest/market-research.ontology.jsonld",
+        "v0": "https://mif-spec.dev/ontologies/v0/market-research.ontology.jsonld"
+      }
+    },
+    {
+      "id": "mif-base",
+      "version": "1.0.0",
+      "canonical": "https://mif-spec.dev/ontologies/mif-base.ontology.jsonld",
+      "yaml": "https://mif-spec.dev/ontologies/mif-base.ontology.yaml",
+      "versioned": {
+        "0.1.0": "https://mif-spec.dev/ontologies/0.1.0/mif-base.ontology.jsonld",
+        "latest": "https://mif-spec.dev/ontologies/latest/mif-base.ontology.jsonld",
+        "v0": "https://mif-spec.dev/ontologies/v0/mif-base.ontology.jsonld"
+      }
+    },
+    {
+      "id": "mif-docs",
+      "version": "1.0.0",
+      "canonical": "https://mif-spec.dev/ontologies/mif-docs.ontology.jsonld",
+      "yaml": "https://mif-spec.dev/ontologies/mif-docs.ontology.yaml",
+      "versioned": {
+        "0.1.0": "https://mif-spec.dev/ontologies/0.1.0/mif-docs.ontology.jsonld",
+        "latest": "https://mif-spec.dev/ontologies/latest/mif-docs.ontology.jsonld",
+        "v0": "https://mif-spec.dev/ontologies/v0/mif-docs.ontology.jsonld"
+      }
+    },
+    {
+      "id": "mif-generic",
+      "version": "1.0.0",
+      "canonical": "https://mif-spec.dev/ontologies/mif-generic.ontology.jsonld",
+      "yaml": "https://mif-spec.dev/ontologies/mif-generic.ontology.yaml",
+      "versioned": {
+        "0.1.0": "https://mif-spec.dev/ontologies/0.1.0/mif-generic.ontology.jsonld",
+        "latest": "https://mif-spec.dev/ontologies/latest/mif-generic.ontology.jsonld",
+        "v0": "https://mif-spec.dev/ontologies/v0/mif-generic.ontology.jsonld"
+      }
+    },
+    {
+      "id": "observability",
+      "version": "0.1.0",
+      "canonical": "https://mif-spec.dev/ontologies/observability.ontology.jsonld",
+      "yaml": "https://mif-spec.dev/ontologies/observability.ontology.yaml",
+      "versioned": {
+        "0.1.0": "https://mif-spec.dev/ontologies/0.1.0/observability.ontology.jsonld",
+        "latest": "https://mif-spec.dev/ontologies/latest/observability.ontology.jsonld",
+        "v0": "https://mif-spec.dev/ontologies/v0/observability.ontology.jsonld"
+      }
+    },
+    {
+      "id": "psycholinguistics",
+      "version": "0.1.0",
+      "canonical": "https://mif-spec.dev/ontologies/psycholinguistics.ontology.jsonld",
+      "yaml": "https://mif-spec.dev/ontologies/psycholinguistics.ontology.yaml",
+      "versioned": {
+        "0.1.0": "https://mif-spec.dev/ontologies/0.1.0/psycholinguistics.ontology.jsonld",
+        "latest": "https://mif-spec.dev/ontologies/latest/psycholinguistics.ontology.jsonld",
+        "v0": "https://mif-spec.dev/ontologies/v0/psycholinguistics.ontology.jsonld"
+      }
+    },
+    {
+      "id": "regenerative-agriculture-research",
+      "version": "0.3.1",
+      "canonical": "https://mif-spec.dev/ontologies/regenerative-agriculture-research.ontology.jsonld",
+      "yaml": "https://mif-spec.dev/ontologies/regenerative-agriculture-research.ontology.yaml",
+      "versioned": {
+        "0.1.0": "https://mif-spec.dev/ontologies/0.1.0/regenerative-agriculture-research.ontology.jsonld",
+        "latest": "https://mif-spec.dev/ontologies/latest/regenerative-agriculture-research.ontology.jsonld",
+        "v0": "https://mif-spec.dev/ontologies/v0/regenerative-agriculture-research.ontology.jsonld"
+      }
+    },
+    {
+      "id": "regenerative-agriculture",
+      "version": "0.1.0",
+      "canonical": "https://mif-spec.dev/ontologies/regenerative-agriculture.ontology.jsonld",
+      "yaml": "https://mif-spec.dev/ontologies/regenerative-agriculture.ontology.yaml",
+      "versioned": {
+        "0.1.0": "https://mif-spec.dev/ontologies/0.1.0/regenerative-agriculture.ontology.jsonld",
+        "latest": "https://mif-spec.dev/ontologies/latest/regenerative-agriculture.ontology.jsonld",
+        "v0": "https://mif-spec.dev/ontologies/v0/regenerative-agriculture.ontology.jsonld"
+      }
+    },
+    {
+      "id": "regulatory-legal",
+      "version": "0.1.0",
+      "canonical": "https://mif-spec.dev/ontologies/regulatory-legal.ontology.jsonld",
+      "yaml": "https://mif-spec.dev/ontologies/regulatory-legal.ontology.yaml",
+      "versioned": {
+        "0.1.0": "https://mif-spec.dev/ontologies/0.1.0/regulatory-legal.ontology.jsonld",
+        "latest": "https://mif-spec.dev/ontologies/latest/regulatory-legal.ontology.jsonld",
+        "v0": "https://mif-spec.dev/ontologies/v0/regulatory-legal.ontology.jsonld"
+      }
+    },
+    {
+      "id": "scientific",
+      "version": "0.1.0",
+      "canonical": "https://mif-spec.dev/ontologies/scientific.ontology.jsonld",
+      "yaml": "https://mif-spec.dev/ontologies/scientific.ontology.yaml",
+      "versioned": {
+        "0.1.0": "https://mif-spec.dev/ontologies/0.1.0/scientific.ontology.jsonld",
+        "latest": "https://mif-spec.dev/ontologies/latest/scientific.ontology.jsonld",
+        "v0": "https://mif-spec.dev/ontologies/v0/scientific.ontology.jsonld"
+      }
+    },
+    {
+      "id": "shared-traits",
+      "version": "1.0.0",
+      "canonical": "https://mif-spec.dev/ontologies/shared-traits.ontology.jsonld",
+      "yaml": "https://mif-spec.dev/ontologies/shared-traits.ontology.yaml",
+      "versioned": {
+        "0.1.0": "https://mif-spec.dev/ontologies/0.1.0/shared-traits.ontology.jsonld",
+        "latest": "https://mif-spec.dev/ontologies/latest/shared-traits.ontology.jsonld",
+        "v0": "https://mif-spec.dev/ontologies/v0/shared-traits.ontology.jsonld"
+      }
+    },
+    {
+      "id": "software-engineering",
+      "version": "0.5.0",
+      "canonical": "https://mif-spec.dev/ontologies/software-engineering.ontology.jsonld",
+      "yaml": "https://mif-spec.dev/ontologies/software-engineering.ontology.yaml",
+      "versioned": {
+        "0.1.0": "https://mif-spec.dev/ontologies/0.1.0/software-engineering.ontology.jsonld",
+        "latest": "https://mif-spec.dev/ontologies/latest/software-engineering.ontology.jsonld",
+        "v0": "https://mif-spec.dev/ontologies/v0/software-engineering.ontology.jsonld"
+      }
+    },
+    {
+      "id": "software-security",
+      "version": "0.1.0",
+      "canonical": "https://mif-spec.dev/ontologies/software-security.ontology.jsonld",
+      "yaml": "https://mif-spec.dev/ontologies/software-security.ontology.yaml",
+      "versioned": {
+        "0.1.0": "https://mif-spec.dev/ontologies/0.1.0/software-security.ontology.jsonld",
+        "latest": "https://mif-spec.dev/ontologies/latest/software-security.ontology.jsonld",
+        "v0": "https://mif-spec.dev/ontologies/v0/software-security.ontology.jsonld"
+      }
+    },
+    {
+      "id": "trend-analysis",
+      "version": "0.1.0",
+      "canonical": "https://mif-spec.dev/ontologies/trend-analysis.ontology.jsonld",
+      "yaml": "https://mif-spec.dev/ontologies/trend-analysis.ontology.yaml",
+      "versioned": {
+        "0.1.0": "https://mif-spec.dev/ontologies/0.1.0/trend-analysis.ontology.jsonld",
+        "latest": "https://mif-spec.dev/ontologies/latest/trend-analysis.ontology.jsonld",
+        "v0": "https://mif-spec.dev/ontologies/v0/trend-analysis.ontology.jsonld"
+      }
+    }
+  ]
+}
