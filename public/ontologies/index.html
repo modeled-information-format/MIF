@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MIF Ontology Corpus</title>
+<meta name="description" content="Machine-readable index of the MIF (Modeled Information Format) ontology corpus served at https://mif-spec.dev/ontologies/. Each ontology&#x27;s canonical URL is unversioned and tracks the latest corpus release; the version-pathed mirrors are immutable per-release snapshots. Each entry&#x27;s `version` is the ontology&#x27;s own version, independent of the corpus release `versions` listed here.">
+<style>
+  :root {
+    --void:#0A0D13; --base:#0E121B; --elev:#151B27; --border:#222C3C;
+    --text:#E8EEF6; --muted:#AEBCCF; --dim:#7C8AA0;
+    --machine:#34D3E8; --human:#F5B642;
+    --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,"SF Mono","JetBrains Mono","Fira Code",Menlo,Consolas,monospace;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:linear-gradient(160deg,var(--void),var(--base));
+    color:var(--text); font-family:var(--sans); line-height:1.6;
+    padding:3rem 1.5rem; }
+  main { max-width:880px; margin:0 auto; }
+  .mark { display:inline-block; vertical-align:middle; margin-right:.6rem; }
+  .word { font-family:var(--mono); font-weight:700; letter-spacing:.04em; font-size:1.3rem; }
+  h1 { font-size:2.4rem; letter-spacing:-0.02em; margin:.6rem 0 .2rem; }
+  .tag { font-family:var(--mono); color:var(--muted); margin:0 0 1.6rem; }
+  p { color:var(--muted); }
+  code { font-family:var(--mono); color:var(--text); }
+  a { color:var(--machine); text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  table { width:100%; border-collapse:collapse; margin:1.5rem 0; font-size:.95rem; }
+  caption { text-align:left; color:var(--dim); font-size:.85rem; margin-bottom:.5rem; }
+  th, td { text-align:left; padding:.55rem .6rem; border-bottom:1px solid var(--border); }
+  thead th { color:var(--dim); font-weight:600; font-size:.8rem; text-transform:uppercase; letter-spacing:.04em; }
+  tbody th { font-weight:600; }
+  td.v { font-family:var(--mono); color:var(--human); }
+  td a { font-family:var(--mono); font-size:.85rem; }
+  .card { background:var(--elev); border:1px solid var(--border); border-radius:16px;
+    padding:1.2rem 1.4rem; margin:1.5rem 0; }
+  .machine { color:var(--machine); } .human { color:var(--human); }
+  footer { color:var(--dim); font-family:var(--mono); font-size:.85rem;
+    margin-top:2.5rem; border-top:1px solid var(--border); padding-top:1rem;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:.5rem; }
+</style>
+</head>
+<body>
+<main>
+  <p>
+    <svg class="mark" width="34" height="30" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+      <path d="M6 42 L6 6 L24 29" stroke="#34D3E8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M24 29 L42 6 L42 42" stroke="#F5B642" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M24 25.6 L27.4 29 L24 32.4 L20.6 29 Z" fill="#E8EEF6"/>
+    </svg><span class="word">MIF</span>
+  </p>
+  <h1>Ontology Corpus</h1>
+  <p class="tag">One model, read the same by a <span class="human">person</span> and a <span class="machine">parser</span>.</p>
+  <p>The central corpus of ontologies for the Modeled Information Format, served here
+     at <code>https://mif-spec.dev/ontologies/</code>. Every ontology is one model in
+     two forms: the <span class="human">YAML</span> a person reads and the
+     <span class="machine">JSON-LD</span> a parser resolves.</p>
+
+  <table>
+    <caption>17 ontologies &middot; canonical URLs track the latest corpus release</caption>
+    <thead><tr><th>Ontology</th><th>Version</th><th>Human</th><th>Machine</th></tr></thead>
+    <tbody>
+      <tr><th scope="row"><code>biology-research-lab</code></th><td class="v">0.1.0</td><td><a href="./biology-research-lab.ontology.yaml">YAML</a></td><td><a href="./biology-research-lab.ontology.jsonld">JSON-LD</a></td></tr>
+      <tr><th scope="row"><code>data-engineering</code></th><td class="v">0.2.0</td><td><a href="./data-engineering.ontology.yaml">YAML</a></td><td><a href="./data-engineering.ontology.jsonld">JSON-LD</a></td></tr>
+      <tr><th scope="row"><code>engineering-base</code></th><td class="v">0.1.0</td><td><a href="./engineering-base.ontology.yaml">YAML</a></td><td><a href="./engineering-base.ontology.jsonld">JSON-LD</a></td></tr>
+      <tr><th scope="row"><code>market-research</code></th><td class="v">0.1.0</td><td><a href="./market-research.ontology.yaml">YAML</a></td><td><a href="./market-research.ontology.jsonld">JSON-LD</a></td></tr>
+      <tr><th scope="row"><code>mif-base</code></th><td class="v">1.0.0</td><td><a href="./mif-base.ontology.yaml">YAML</a></td><td><a href="./mif-base.ontology.jsonld">JSON-LD</a></td></tr>
+      <tr><th scope="row"><code>mif-docs</code></th><td class="v">1.0.0</td><td><a href="./mif-docs.ontology.yaml">YAML</a></td><td><a href="./mif-docs.ontology.jsonld">JSON-LD</a></td></tr>
+      <tr><th scope="row"><code>mif-generic</code></th><td class="v">1.0.0</td><td><a href="./mif-generic.ontology.yaml">YAML</a></td><td><a href="./mif-generic.ontology.jsonld">JSON-LD</a></td></tr>
+      <tr><th scope="row"><code>observability</code></th><td class="v">0.1.0</td><td><a href="./observability.ontology.yaml">YAML</a></td><td><a href="./observability.ontology.jsonld">JSON-LD</a></td></tr>
+      <tr><th scope="row"><code>psycholinguistics</code></th><td class="v">0.1.0</td><td><a href="./psycholinguistics.ontology.yaml">YAML</a></td><td><a href="./psycholinguistics.ontology.jsonld">JSON-LD</a></td></tr>
+      <tr><th scope="row"><code>regenerative-agriculture-research</code></th><td class="v">0.3.1</td><td><a href="./regenerative-agriculture-research.ontology.yaml">YAML</a></td><td><a href="./regenerative-agriculture-research.ontology.jsonld">JSON-LD</a></td></tr>
+      <tr><th scope="row"><code>regenerative-agriculture</code></th><td class="v">0.1.0</td><td><a href="./regenerative-agriculture.ontology.yaml">YAML</a></td><td><a href="./regenerative-agriculture.ontology.jsonld">JSON-LD</a></td></tr>
+      <tr><th scope="row"><code>regulatory-legal</code></th><td class="v">0.1.0</td><td><a href="./regulatory-legal.ontology.yaml">YAML</a></td><td><a href="./regulatory-legal.ontology.jsonld">JSON-LD</a></td></tr>
+      <tr><th scope="row"><code>scientific</code></th><td class="v">0.1.0</td><td><a href="./scientific.ontology.yaml">YAML</a></td><td><a href="./scientific.ontology.jsonld">JSON-LD</a></td></tr>
+      <tr><th scope="row"><code>shared-traits</code></th><td class="v">1.0.0</td><td><a href="./shared-traits.ontology.yaml">YAML</a></td><td><a href="./shared-traits.ontology.jsonld">JSON-LD</a></td></tr>
+      <tr><th scope="row"><code>software-engineering</code></th><td class="v">0.5.0</td><td><a href="./software-engineering.ontology.yaml">YAML</a></td><td><a href="./software-engineering.ontology.jsonld">JSON-LD</a></td></tr>
+      <tr><th scope="row"><code>software-security</code></th><td class="v">0.1.0</td><td><a href="./software-security.ontology.yaml">YAML</a></td><td><a href="./software-security.ontology.jsonld">JSON-LD</a></td></tr>
+      <tr><th scope="row"><code>trend-analysis</code></th><td class="v">0.1.0</td><td><a href="./trend-analysis.ontology.yaml">YAML</a></td><td><a href="./trend-analysis.ontology.jsonld">JSON-LD</a></td></tr>
+    </tbody>
+  </table>
+
+  <div class="card">
+    <p style="margin:.2rem 0;color:var(--text)"><strong>Machine catalog</strong> &mdash;
+       <a href="./index.json"><code>index.json</code></a> lists every ontology with its
+       canonical and versioned URLs.</p>
+    <p style="margin:.4rem 0 0">Pin an immutable release at
+       <code>/ontologies/&lt;version&gt;/&lt;name&gt;.ontology.jsonld</code>.
+       Corpus releases: <code>0.1.0</code>. Aliases: <code>latest</code>&rarr;<code>0.1.0</code>, <code>v0</code>&rarr;<code>0.1.0</code>.</p>
+  </div>
+
+  <footer>
+    <span>modeled-information-format/ontologies</span>
+    <span>mif-spec.dev</span>
+  </footer>
+</main>
+</body>
+</html>

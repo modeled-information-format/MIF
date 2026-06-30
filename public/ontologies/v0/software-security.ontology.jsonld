@@ -1,0 +1,1070 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "@vocab": "https://mif-spec.dev/ns/ontology#",
+    "mif": "https://mif-spec.dev/ns/",
+    "schema": "https://schema.org/",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "ontology": {
+      "@id": "mif:Ontology",
+      "@type": "@id"
+    },
+    "id": {
+      "@id": "@id"
+    },
+    "version": {
+      "@id": "schema:version",
+      "@type": "xsd:string"
+    },
+    "description": {
+      "@id": "schema:description",
+      "@type": "xsd:string"
+    },
+    "schema_url": {
+      "@id": "rdfs:isDefinedBy",
+      "@type": "@id"
+    },
+    "namespaces": {
+      "@id": "mif:hasNamespace",
+      "@container": "@id"
+    },
+    "type_hint": {
+      "@id": "mif:typeHint",
+      "@type": "xsd:string"
+    },
+    "replaces": {
+      "@id": "mif:replaces",
+      "@type": "@id"
+    },
+    "children": {
+      "@id": "mif:hasChildNamespace",
+      "@container": "@id"
+    },
+    "entity_types": {
+      "@id": "mif:definesEntityType",
+      "@container": "@list"
+    },
+    "name": {
+      "@id": "schema:name",
+      "@type": "xsd:string"
+    },
+    "base": {
+      "@id": "mif:baseType",
+      "@type": "@vocab"
+    },
+    "semantic": "mif:SemanticMemory",
+    "episodic": "mif:EpisodicMemory",
+    "procedural": "mif:ProceduralMemory",
+    "traits": {
+      "@id": "mif:definesTrait",
+      "@container": "@id"
+    },
+    "subtype_of": {
+      "@id": "mif:subtypeOf",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "fields": {
+      "@id": "mif:hasField",
+      "@container": "@id"
+    },
+    "requires": {
+      "@id": "mif:requiresField",
+      "@container": "@list"
+    },
+    "relationships": {
+      "@id": "mif:definesRelationship",
+      "@container": "@id"
+    },
+    "from": {
+      "@id": "rdfs:domain",
+      "@container": "@set"
+    },
+    "to": {
+      "@id": "rdfs:range",
+      "@container": "@set"
+    },
+    "symmetric": {
+      "@id": "owl:SymmetricProperty",
+      "@type": "xsd:boolean"
+    },
+    "discovery": {
+      "@id": "mif:discoveryConfig"
+    },
+    "enabled": {
+      "@id": "mif:discoveryEnabled",
+      "@type": "xsd:boolean"
+    },
+    "patterns": {
+      "@id": "mif:hasDiscoveryPattern",
+      "@container": "@list"
+    },
+    "confidence_threshold": {
+      "@id": "mif:confidenceThreshold",
+      "@type": "xsd:decimal"
+    },
+    "content_pattern": {
+      "@id": "mif:contentPattern",
+      "@type": "xsd:string"
+    },
+    "file_pattern": {
+      "@id": "mif:filePattern",
+      "@type": "xsd:string"
+    },
+    "suggest_entity": {
+      "@id": "mif:suggestsEntityType",
+      "@type": "@id"
+    },
+    "suggest_namespace": {
+      "@id": "mif:suggestsNamespace",
+      "@type": "xsd:string"
+    }
+  },
+  "@id": "mif:ontology/software-security",
+  "@type": "mif:Ontology",
+  "identifier": "software-security",
+  "version": "0.1.0",
+  "description": "Software-security domain ontology \u2014 vulnerabilities, weaknesses, controls, threat actors, campaigns, indicators of compromise, malware, supply-chain risk, policies, and assessments",
+  "namespaces": {
+    "semantic": {
+      "@id": "mif:namespace/semantic",
+      "@type": "mif:Namespace",
+      "name": "semantic",
+      "children": {
+        "threats": {
+          "@id": "mif:namespace/semantic/threats",
+          "@type": "mif:Namespace",
+          "name": "threats",
+          "description": "Malware families and threat techniques",
+          "type_hint": "semantic"
+        },
+        "vulnerabilities": {
+          "@id": "mif:namespace/semantic/vulnerabilities",
+          "@type": "mif:Namespace",
+          "name": "vulnerabilities",
+          "description": "CVE vulnerability instances",
+          "type_hint": "semantic"
+        },
+        "weaknesses": {
+          "@id": "mif:namespace/semantic/weaknesses",
+          "@type": "mif:Namespace",
+          "name": "weaknesses",
+          "description": "CWE weakness classes",
+          "type_hint": "semantic"
+        },
+        "controls": {
+          "@id": "mif:namespace/semantic/controls",
+          "@type": "mif:Namespace",
+          "name": "controls",
+          "description": "Security controls and safeguards",
+          "type_hint": "semantic"
+        },
+        "actors": {
+          "@id": "mif:namespace/semantic/actors",
+          "@type": "mif:Namespace",
+          "name": "actors",
+          "description": "Threat actors and intrusion sets",
+          "type_hint": "semantic"
+        },
+        "indicators": {
+          "@id": "mif:namespace/semantic/indicators",
+          "@type": "mif:Namespace",
+          "name": "indicators",
+          "description": "Indicators of compromise",
+          "type_hint": "semantic"
+        },
+        "supply-chain": {
+          "@id": "mif:namespace/semantic/supply-chain",
+          "@type": "mif:Namespace",
+          "name": "supply-chain",
+          "description": "Supply-chain (C-SCRM) risks",
+          "type_hint": "semantic"
+        }
+      }
+    },
+    "episodic": {
+      "@id": "mif:namespace/episodic",
+      "@type": "mif:Namespace",
+      "name": "episodic",
+      "children": {
+        "campaigns": {
+          "@id": "mif:namespace/episodic/campaigns",
+          "@type": "mif:Namespace",
+          "name": "campaigns",
+          "description": "Attack campaigns",
+          "type_hint": "episodic"
+        },
+        "assessments": {
+          "@id": "mif:namespace/episodic/assessments",
+          "@type": "mif:Namespace",
+          "name": "assessments",
+          "description": "Security assessments and audits",
+          "type_hint": "episodic"
+        }
+      }
+    },
+    "procedural": {
+      "@id": "mif:namespace/procedural",
+      "@type": "mif:Namespace",
+      "name": "procedural",
+      "children": {
+        "policies": {
+          "@id": "mif:namespace/procedural/policies",
+          "@type": "mif:Namespace",
+          "name": "policies",
+          "description": "Security policies and plans",
+          "type_hint": "procedural"
+        }
+      }
+    }
+  },
+  "entity_types": [
+    {
+      "@id": "mif:entityType/vulnerability",
+      "@type": "mif:EntityType",
+      "name": "vulnerability",
+      "base": "semantic",
+      "description": "A CVE vulnerability instance in a product or component",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/dated"
+      ],
+      "schema": {
+        "required": [
+          "vulnerability_name",
+          "weakness_class"
+        ],
+        "properties": {
+          "vulnerability_name": {
+            "type": "string"
+          },
+          "weakness_class": {
+            "type": "string",
+            "description": "CWE category e.g. CWE-79"
+          },
+          "cve_id": {
+            "type": "string"
+          },
+          "cvss_score": {
+            "type": "number"
+          },
+          "affected_component": {
+            "type": "string"
+          },
+          "remediation": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/weakness",
+      "@type": "mif:EntityType",
+      "name": "weakness",
+      "base": "semantic",
+      "description": "A CWE weakness class (a flaw type, distinct from a CVE instance)",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/versioned"
+      ],
+      "schema": {
+        "required": [
+          "weakness_name",
+          "cwe_id"
+        ],
+        "properties": {
+          "weakness_name": {
+            "type": "string"
+          },
+          "cwe_id": {
+            "type": "string"
+          },
+          "weakness_type": {
+            "type": "string",
+            "enum": [
+              "pillar",
+              "class",
+              "base",
+              "variant",
+              "compound"
+            ]
+          },
+          "consequence": {
+            "type": "string"
+          },
+          "detection_methods": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "applicable_platforms": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "likelihood_of_exploit": {
+            "type": "string",
+            "enum": [
+              "high",
+              "medium",
+              "low"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/control",
+      "@type": "mif:EntityType",
+      "name": "control",
+      "base": "semantic",
+      "description": "A security control or safeguard",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/versioned"
+      ],
+      "schema": {
+        "required": [
+          "control_name",
+          "control_family"
+        ],
+        "properties": {
+          "control_name": {
+            "type": "string"
+          },
+          "control_id": {
+            "type": "string",
+            "description": "e.g. NIST 800-53 AC-2"
+          },
+          "control_family": {
+            "type": "string",
+            "description": "e.g. Access Control"
+          },
+          "objective": {
+            "type": "string"
+          },
+          "implementation": {
+            "type": "string"
+          },
+          "baseline": {
+            "type": "string",
+            "description": "low/moderate/high or profile"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/threat-actor",
+      "@type": "mif:EntityType",
+      "name": "threat-actor",
+      "base": "semantic",
+      "description": "A threat actor or intrusion set",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/attributed"
+      ],
+      "schema": {
+        "required": [
+          "actor_name",
+          "actor_type"
+        ],
+        "properties": {
+          "actor_name": {
+            "type": "string"
+          },
+          "actor_type": {
+            "type": "string",
+            "enum": [
+              "nation-state",
+              "criminal",
+              "hacktivist",
+              "insider",
+              "unknown"
+            ]
+          },
+          "motivation": {
+            "type": "string"
+          },
+          "attributed_techniques": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "associated_campaigns": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "first_seen": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "country_of_origin": {
+            "type": "string"
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/attack-campaign",
+      "@type": "mif:EntityType",
+      "name": "attack-campaign",
+      "base": "episodic",
+      "description": "A grouping of adversarial behaviour over a period of time",
+      "traits": [
+        "mif:trait/timeline",
+        "mif:trait/cited"
+      ],
+      "schema": {
+        "required": [
+          "campaign_name",
+          "objective"
+        ],
+        "properties": {
+          "campaign_name": {
+            "type": "string"
+          },
+          "objective": {
+            "type": "string"
+          },
+          "attribution": {
+            "type": "string"
+          },
+          "first_seen": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "last_seen": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "target_sectors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "attack_campaign_id": {
+            "type": "string"
+          },
+          "techniques_used": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/indicator-of-compromise",
+      "@type": "mif:EntityType",
+      "name": "indicator-of-compromise",
+      "base": "semantic",
+      "description": "An observable pattern that indicates malicious activity",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/dated"
+      ],
+      "schema": {
+        "required": [
+          "indicator_pattern",
+          "indicator_type"
+        ],
+        "properties": {
+          "indicator_pattern": {
+            "type": "string"
+          },
+          "indicator_type": {
+            "type": "string",
+            "enum": [
+              "malicious-activity",
+              "anomalous-activity",
+              "attribution",
+              "benign",
+              "unknown"
+            ]
+          },
+          "pattern_type": {
+            "type": "string",
+            "enum": [
+              "stix",
+              "pcre",
+              "yara",
+              "sigma",
+              "snort"
+            ]
+          },
+          "valid_from": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "valid_until": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "confidence": {
+            "type": "number",
+            "description": "0-100",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "tlp_marking": {
+            "type": "string",
+            "enum": [
+              "TLP:WHITE",
+              "TLP:GREEN",
+              "TLP:AMBER",
+              "TLP:RED"
+            ]
+          },
+          "kill_chain_phases": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/malware",
+      "@type": "mif:EntityType",
+      "name": "malware",
+      "base": "semantic",
+      "description": "A malicious software family or instance",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/dated",
+        "mif:trait/versioned"
+      ],
+      "schema": {
+        "required": [
+          "malware_name",
+          "malware_type"
+        ],
+        "properties": {
+          "malware_name": {
+            "type": "string",
+            "description": "e.g. Mimikatz, WannaCry, Cobalt Strike"
+          },
+          "malware_type": {
+            "type": "string",
+            "enum": [
+              "ransomware",
+              "trojan",
+              "backdoor",
+              "rootkit",
+              "botnet",
+              "spyware",
+              "wiper",
+              "dropper",
+              "exploit-kit"
+            ]
+          },
+          "attack_id": {
+            "type": "string",
+            "description": "ATT&CK Software ID e.g. S0002"
+          },
+          "capabilities": {
+            "type": "string"
+          },
+          "cve_exploited": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "detection_signatures": {
+            "type": "string",
+            "description": "YARA / IOC patterns"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/supply-chain-risk",
+      "@type": "mif:EntityType",
+      "name": "supply-chain-risk",
+      "base": "semantic",
+      "description": "A cyber supply-chain (C-SCRM) supplier or component risk",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/versioned"
+      ],
+      "schema": {
+        "required": [
+          "risk_description",
+          "supplier_tier"
+        ],
+        "properties": {
+          "risk_description": {
+            "type": "string"
+          },
+          "supplier_tier": {
+            "type": "integer",
+            "enum": [
+              1,
+              2,
+              3
+            ]
+          },
+          "component_type": {
+            "type": "string",
+            "enum": [
+              "hardware",
+              "software",
+              "service",
+              "person",
+              "process"
+            ]
+          },
+          "sbom_reference": {
+            "type": "string"
+          },
+          "risk_level": {
+            "type": "string",
+            "enum": [
+              "critical",
+              "high",
+              "medium",
+              "low"
+            ]
+          },
+          "supplier_name": {
+            "type": "string"
+          },
+          "mitigation_strategy": {
+            "type": "string"
+          },
+          "acquisition_phase": {
+            "type": "string",
+            "enum": [
+              "design",
+              "development",
+              "integration",
+              "deployment",
+              "operations",
+              "disposal"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/security-policy",
+      "@type": "mif:EntityType",
+      "name": "security-policy",
+      "base": "procedural",
+      "description": "A security policy grounded in an OSCAL system security plan / profile",
+      "traits": [
+        "mif:trait/versioned",
+        "mif:trait/documented",
+        "mif:trait/cited"
+      ],
+      "schema": {
+        "required": [
+          "policy_name",
+          "policy_scope"
+        ],
+        "properties": {
+          "policy_name": {
+            "type": "string"
+          },
+          "policy_scope": {
+            "type": "string"
+          },
+          "policy_type": {
+            "type": "string",
+            "enum": [
+              "acceptable-use",
+              "access-control",
+              "incident-response",
+              "change-management",
+              "data-classification",
+              "supply-chain",
+              "privacy",
+              "disaster-recovery"
+            ]
+          },
+          "effective_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "review_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "oscal_profile_ref": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/security-assessment",
+      "@type": "mif:EntityType",
+      "name": "security-assessment",
+      "base": "episodic",
+      "description": "A security assessment, audit, or test of a system",
+      "traits": [
+        "mif:trait/timeline",
+        "mif:trait/cited",
+        "mif:trait/documented"
+      ],
+      "schema": {
+        "required": [
+          "assessment_type",
+          "scope"
+        ],
+        "properties": {
+          "assessment_type": {
+            "type": "string",
+            "enum": [
+              "penetration-test",
+              "audit",
+              "risk-assessment",
+              "vulnerability-scan",
+              "red-team",
+              "compliance-review",
+              "threat-modeling"
+            ]
+          },
+          "scope": {
+            "type": "string"
+          },
+          "conducted_by": {
+            "type": "string"
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "findings_count": {
+            "type": "integer"
+          },
+          "risk_level": {
+            "type": "string",
+            "enum": [
+              "critical",
+              "high",
+              "medium",
+              "low",
+              "informational"
+            ]
+          },
+          "oscal_plan_ref": {
+            "type": "string"
+          },
+          "oscal_results_ref": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  ],
+  "traits": {
+    "cited": {
+      "@id": "mif:trait/cited",
+      "@type": "mif:Trait",
+      "name": "cited",
+      "description": "Requires citations/sources",
+      "requires": [
+        "citations"
+      ]
+    },
+    "dated": {
+      "@id": "mif:trait/dated",
+      "@type": "mif:Trait",
+      "name": "dated",
+      "description": "Adds decision/event dates",
+      "fields": {
+        "decision_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "review_date": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "versioned": {
+      "@id": "mif:trait/versioned",
+      "@type": "mif:Trait",
+      "name": "versioned",
+      "description": "Adds version tracking fields",
+      "fields": {
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+.*$"
+        },
+        "changelog": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "attributed": {
+      "@id": "mif:trait/attributed",
+      "@type": "mif:Trait",
+      "name": "attributed",
+      "description": "Adds attribution tracking (who/what an entity is ascribed to)",
+      "fields": {
+        "attributed_to": {
+          "type": "string"
+        },
+        "attribution_confidence": {
+          "type": "string",
+          "enum": [
+            "confirmed",
+            "probable",
+            "possible",
+            "suspected"
+          ]
+        },
+        "attribution_basis": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "timeline": {
+      "@id": "mif:trait/timeline",
+      "@type": "mif:Trait",
+      "name": "timeline",
+      "description": "Adds an event timeline",
+      "fields": {
+        "timeline": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "timestamp": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "event": {
+                "type": "string"
+              },
+              "actor": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "documented": {
+      "@id": "mif:trait/documented",
+      "@type": "mif:Trait",
+      "name": "documented",
+      "description": "Adds documentation references",
+      "fields": {
+        "documentation_url": {
+          "type": "string"
+        },
+        "last_documented": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    }
+  },
+  "relationships": {
+    "attributed_to": {
+      "@id": "mif:relationship/attributed_to",
+      "@type": "mif:Relationship",
+      "name": "attributed_to",
+      "description": "A campaign is attributed to a threat actor (stix:attributed-to; campaign -> intrusion-set/threat-actor)",
+      "from": [
+        "mif:entityType/attack-campaign"
+      ],
+      "to": [
+        "mif:entityType/threat-actor"
+      ],
+      "symmetric": false
+    },
+    "categorizes": {
+      "@id": "mif:relationship/categorizes",
+      "@type": "mif:Relationship",
+      "name": "categorizes",
+      "description": "A weakness class categorizes a vulnerability instance (CWE CanPrecede / rdfs:subClassOf)",
+      "from": [
+        "mif:entityType/weakness"
+      ],
+      "to": [
+        "mif:entityType/vulnerability"
+      ],
+      "symmetric": false
+    },
+    "exploits": {
+      "@id": "mif:relationship/exploits",
+      "@type": "mif:Relationship",
+      "name": "exploits",
+      "description": "Malware exploits a vulnerability (stix:exploits, Malware -> Vulnerability)",
+      "from": [
+        "mif:entityType/malware"
+      ],
+      "to": [
+        "mif:entityType/vulnerability"
+      ],
+      "symmetric": false
+    },
+    "indicates": {
+      "@id": "mif:relationship/indicates",
+      "@type": "mif:Relationship",
+      "name": "indicates",
+      "description": "An indicator of compromise indicates malware (stix:indicates, Indicator -> Malware)",
+      "from": [
+        "mif:entityType/indicator-of-compromise"
+      ],
+      "to": [
+        "mif:entityType/malware"
+      ],
+      "symmetric": false
+    },
+    "mitigates": {
+      "@id": "mif:relationship/mitigates",
+      "@type": "mif:Relationship",
+      "name": "mitigates",
+      "description": "A control mitigates a vulnerability (RO:0000056 participates-in; OSCAL control satisfies risk)",
+      "from": [
+        "mif:entityType/control"
+      ],
+      "to": [
+        "mif:entityType/vulnerability"
+      ],
+      "symmetric": false
+    },
+    "defines": {
+      "@id": "mif:relationship/defines",
+      "@type": "mif:Relationship",
+      "name": "defines",
+      "description": "A framework defines a control (OSCAL profile import -> include-controls)",
+      "from": [
+        "mif:entityType/security-framework"
+      ],
+      "to": [
+        "mif:entityType/control"
+      ],
+      "symmetric": false
+    },
+    "realizes": {
+      "@id": "mif:relationship/realizes",
+      "@type": "mif:Relationship",
+      "name": "realizes",
+      "description": "An incident realizes a threat (RO:0000056 participates-in)",
+      "from": [
+        "mif:entityType/security-incident"
+      ],
+      "to": [
+        "mif:entityType/security-threat"
+      ],
+      "symmetric": false
+    }
+  },
+  "discovery": {
+    "enabled": true,
+    "confidence_threshold": 0.8,
+    "patterns": [
+      {
+        "@id": "mif:pattern/0",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(CVE-\\d{4}-\\d{4,})\\b",
+        "suggest_entity": "mif:entityType/vulnerability",
+        "suggest_namespace": "_semantic/vulnerabilities"
+      },
+      {
+        "@id": "mif:pattern/1",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\bCWE-\\d+\\b",
+        "suggest_entity": "mif:entityType/weakness",
+        "suggest_namespace": "_semantic/weaknesses"
+      },
+      {
+        "@id": "mif:pattern/2",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(AC|AU|SC|SI|IA)-\\d+\\b",
+        "suggest_entity": "mif:entityType/control",
+        "suggest_namespace": "_semantic/controls"
+      },
+      {
+        "@id": "mif:pattern/3",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(APT\\d+|Lazarus Group|FIN\\d+|Sandworm|Volt Typhoon)\\b",
+        "suggest_entity": "mif:entityType/threat-actor",
+        "suggest_namespace": "_semantic/actors"
+      },
+      {
+        "@id": "mif:pattern/4",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(Operation|Campaign)\\s+[A-Z][a-zA-Z]+\\b",
+        "suggest_entity": "mif:entityType/attack-campaign",
+        "suggest_namespace": "_episodic/campaigns"
+      },
+      {
+        "@id": "mif:pattern/5",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(IOC|YARA|Sigma rule|STIX pattern|TLP:)\\b",
+        "suggest_entity": "mif:entityType/indicator-of-compromise",
+        "suggest_namespace": "_semantic/indicators"
+      },
+      {
+        "@id": "mif:pattern/6",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(supply chain|SBOM|C-SCRM)\\b",
+        "suggest_entity": "mif:entityType/supply-chain-risk",
+        "suggest_namespace": "_semantic/supply-chain"
+      },
+      {
+        "@id": "mif:pattern/7",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(pen test|red team|audit finding|compliance review)\\b",
+        "suggest_entity": "mif:entityType/security-assessment",
+        "suggest_namespace": "_episodic/assessments"
+      },
+      {
+        "@id": "mif:pattern/8",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(acceptable use policy|data classification policy)\\b",
+        "suggest_entity": "mif:entityType/security-policy",
+        "suggest_namespace": "_procedural/policies"
+      },
+      {
+        "@id": "mif:pattern/9",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(Mimikatz|WannaCry|Cobalt Strike|S\\d{4})\\b",
+        "suggest_entity": "mif:entityType/malware",
+        "suggest_namespace": "_semantic/threats"
+      }
+    ]
+  }
+}

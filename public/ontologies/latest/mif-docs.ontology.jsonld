@@ -1,0 +1,464 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "@vocab": "https://mif-spec.dev/ns/ontology#",
+    "mif": "https://mif-spec.dev/ns/",
+    "schema": "https://schema.org/",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "ontology": {
+      "@id": "mif:Ontology",
+      "@type": "@id"
+    },
+    "id": {
+      "@id": "@id"
+    },
+    "version": {
+      "@id": "schema:version",
+      "@type": "xsd:string"
+    },
+    "description": {
+      "@id": "schema:description",
+      "@type": "xsd:string"
+    },
+    "schema_url": {
+      "@id": "rdfs:isDefinedBy",
+      "@type": "@id"
+    },
+    "namespaces": {
+      "@id": "mif:hasNamespace",
+      "@container": "@id"
+    },
+    "type_hint": {
+      "@id": "mif:typeHint",
+      "@type": "xsd:string"
+    },
+    "replaces": {
+      "@id": "mif:replaces",
+      "@type": "@id"
+    },
+    "children": {
+      "@id": "mif:hasChildNamespace",
+      "@container": "@id"
+    },
+    "entity_types": {
+      "@id": "mif:definesEntityType",
+      "@container": "@list"
+    },
+    "name": {
+      "@id": "schema:name",
+      "@type": "xsd:string"
+    },
+    "base": {
+      "@id": "mif:baseType",
+      "@type": "@vocab"
+    },
+    "semantic": "mif:SemanticMemory",
+    "episodic": "mif:EpisodicMemory",
+    "procedural": "mif:ProceduralMemory",
+    "traits": {
+      "@id": "mif:definesTrait",
+      "@container": "@id"
+    },
+    "subtype_of": {
+      "@id": "mif:subtypeOf",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "fields": {
+      "@id": "mif:hasField",
+      "@container": "@id"
+    },
+    "requires": {
+      "@id": "mif:requiresField",
+      "@container": "@list"
+    },
+    "relationships": {
+      "@id": "mif:definesRelationship",
+      "@container": "@id"
+    },
+    "from": {
+      "@id": "rdfs:domain",
+      "@container": "@set"
+    },
+    "to": {
+      "@id": "rdfs:range",
+      "@container": "@set"
+    },
+    "symmetric": {
+      "@id": "owl:SymmetricProperty",
+      "@type": "xsd:boolean"
+    },
+    "discovery": {
+      "@id": "mif:discoveryConfig"
+    },
+    "enabled": {
+      "@id": "mif:discoveryEnabled",
+      "@type": "xsd:boolean"
+    },
+    "patterns": {
+      "@id": "mif:hasDiscoveryPattern",
+      "@container": "@list"
+    },
+    "confidence_threshold": {
+      "@id": "mif:confidenceThreshold",
+      "@type": "xsd:decimal"
+    },
+    "content_pattern": {
+      "@id": "mif:contentPattern",
+      "@type": "xsd:string"
+    },
+    "file_pattern": {
+      "@id": "mif:filePattern",
+      "@type": "xsd:string"
+    },
+    "suggest_entity": {
+      "@id": "mif:suggestsEntityType",
+      "@type": "@id"
+    },
+    "suggest_namespace": {
+      "@id": "mif:suggestsNamespace",
+      "@type": "xsd:string"
+    }
+  },
+  "@id": "mif:ontology/mif-docs",
+  "@type": "mif:Ontology",
+  "identifier": "mif-docs",
+  "version": "1.0.0",
+  "description": "Document genres of the mif-docs suite and the relationships that connect them into a knowledge graph",
+  "namespaces": {
+    "semantic": {
+      "@id": "mif:namespace/semantic",
+      "@type": "mif:Namespace",
+      "name": "semantic",
+      "children": {
+        "decisions": {
+          "@id": "mif:namespace/semantic/decisions",
+          "@type": "mif:Namespace",
+          "name": "decisions",
+          "description": "Architectural decision records",
+          "type_hint": "semantic"
+        },
+        "architecture": {
+          "@id": "mif:namespace/semantic/architecture",
+          "@type": "mif:Namespace",
+          "name": "architecture",
+          "description": "Architecture narratives, diagrams, and specs",
+          "type_hint": "semantic"
+        },
+        "specs": {
+          "@id": "mif:namespace/semantic/specs",
+          "@type": "mif:Namespace",
+          "name": "specs",
+          "description": "Requirements, feature specs, proposals",
+          "type_hint": "semantic"
+        },
+        "reference": {
+          "@id": "mif:namespace/semantic/reference",
+          "@type": "mif:Namespace",
+          "name": "reference",
+          "description": "Information-oriented reference material",
+          "type_hint": "semantic"
+        }
+      }
+    },
+    "procedural": {
+      "@id": "mif:namespace/procedural",
+      "@type": "mif:Namespace",
+      "name": "procedural",
+      "children": {
+        "operations": {
+          "@id": "mif:namespace/procedural/operations",
+          "@type": "mif:Namespace",
+          "name": "operations",
+          "description": "Runbooks, playbooks, task plans",
+          "type_hint": "procedural"
+        },
+        "learning": {
+          "@id": "mif:namespace/procedural/learning",
+          "@type": "mif:Namespace",
+          "name": "learning",
+          "description": "Tutorials and how-to guides",
+          "type_hint": "procedural"
+        }
+      }
+    },
+    "episodic": {
+      "@id": "mif:namespace/episodic",
+      "@type": "mif:Namespace",
+      "name": "episodic",
+      "children": {
+        "history": {
+          "@id": "mif:namespace/episodic/history",
+          "@type": "mif:Namespace",
+          "name": "history",
+          "description": "Changelogs and time-ordered records",
+          "type_hint": "episodic"
+        }
+      }
+    }
+  },
+  "entity_types": [
+    {
+      "@id": "mif:entityType/decision-record",
+      "@type": "mif:EntityType",
+      "name": "decision-record",
+      "base": "semantic",
+      "description": "An architectural decision record (ADR)",
+      "traits": [
+        "mif:trait/versioned",
+        "mif:trait/documented"
+      ]
+    },
+    {
+      "@id": "mif:entityType/architecture-document",
+      "@type": "mif:EntityType",
+      "name": "architecture-document",
+      "base": "semantic",
+      "description": "An arc42 / AI-spec architecture narrative",
+      "traits": [
+        "mif:trait/documented"
+      ]
+    },
+    {
+      "@id": "mif:entityType/architecture-view",
+      "@type": "mif:EntityType",
+      "name": "architecture-view",
+      "base": "semantic",
+      "description": "A C4 model diagram set",
+      "traits": [
+        "mif:trait/documented"
+      ]
+    },
+    {
+      "@id": "mif:entityType/design-document",
+      "@type": "mif:EntityType",
+      "name": "design-document",
+      "base": "semantic",
+      "description": "A Google-style engineering design doc",
+      "traits": [
+        "mif:trait/documented"
+      ]
+    },
+    {
+      "@id": "mif:entityType/enhancement-proposal",
+      "@type": "mif:EntityType",
+      "name": "enhancement-proposal",
+      "base": "semantic",
+      "description": "An RFC or PEP",
+      "traits": [
+        "mif:trait/versioned",
+        "mif:trait/documented"
+      ]
+    },
+    {
+      "@id": "mif:entityType/product-requirements",
+      "@type": "mif:EntityType",
+      "name": "product-requirements",
+      "base": "semantic",
+      "description": "A product requirements document (PRD)",
+      "traits": [
+        "mif:trait/documented"
+      ]
+    },
+    {
+      "@id": "mif:entityType/feature-specification",
+      "@type": "mif:EntityType",
+      "name": "feature-specification",
+      "base": "semantic",
+      "description": "A feature spec with acceptance criteria",
+      "traits": [
+        "mif:trait/documented"
+      ]
+    },
+    {
+      "@id": "mif:entityType/requirements-set",
+      "@type": "mif:EntityType",
+      "name": "requirements-set",
+      "base": "semantic",
+      "description": "A Kiro requirements.md",
+      "traits": [
+        "mif:trait/documented"
+      ]
+    },
+    {
+      "@id": "mif:entityType/design-spec",
+      "@type": "mif:EntityType",
+      "name": "design-spec",
+      "base": "semantic",
+      "description": "A Kiro design.md",
+      "traits": [
+        "mif:trait/documented"
+      ]
+    },
+    {
+      "@id": "mif:entityType/task-plan",
+      "@type": "mif:EntityType",
+      "name": "task-plan",
+      "base": "procedural",
+      "description": "A Kiro tasks.md implementation plan",
+      "traits": [
+        "mif:trait/documented"
+      ]
+    },
+    {
+      "@id": "mif:entityType/reference-document",
+      "@type": "mif:EntityType",
+      "name": "reference-document",
+      "base": "semantic",
+      "description": "A Diataxis reference",
+      "traits": [
+        "mif:trait/documented"
+      ]
+    },
+    {
+      "@id": "mif:entityType/explanation",
+      "@type": "mif:EntityType",
+      "name": "explanation",
+      "base": "semantic",
+      "description": "A Diataxis explanation",
+      "traits": [
+        "mif:trait/documented"
+      ]
+    },
+    {
+      "@id": "mif:entityType/tutorial",
+      "@type": "mif:EntityType",
+      "name": "tutorial",
+      "base": "procedural",
+      "description": "A Diataxis tutorial",
+      "traits": [
+        "mif:trait/documented"
+      ]
+    },
+    {
+      "@id": "mif:entityType/how-to-guide",
+      "@type": "mif:EntityType",
+      "name": "how-to-guide",
+      "base": "procedural",
+      "description": "A Diataxis how-to guide",
+      "traits": [
+        "mif:trait/documented"
+      ]
+    },
+    {
+      "@id": "mif:entityType/runbook",
+      "@type": "mif:EntityType",
+      "name": "runbook",
+      "base": "procedural",
+      "description": "An SRE operational runbook",
+      "traits": [
+        "mif:trait/versioned",
+        "mif:trait/documented"
+      ]
+    },
+    {
+      "@id": "mif:entityType/playbook",
+      "@type": "mif:EntityType",
+      "name": "playbook",
+      "base": "procedural",
+      "description": "A strategic incident playbook",
+      "traits": [
+        "mif:trait/documented"
+      ]
+    },
+    {
+      "@id": "mif:entityType/changelog",
+      "@type": "mif:EntityType",
+      "name": "changelog",
+      "base": "episodic",
+      "description": "A Keep a Changelog release history",
+      "traits": [
+        "mif:trait/versioned"
+      ]
+    }
+  ],
+  "relationships": {
+    "realized-by": {
+      "@id": "mif:relationship/realized-by",
+      "@type": "mif:Relationship",
+      "name": "realized-by",
+      "description": "A spec/decision is realized by a downstream artifact",
+      "from": [
+        "mif:entityType/product-requirements",
+        "mif:entityType/decision-record",
+        "mif:entityType/requirements-set",
+        "mif:entityType/feature-specification"
+      ],
+      "to": [
+        "mif:entityType/feature-specification",
+        "mif:entityType/design-spec",
+        "mif:entityType/task-plan",
+        "mif:entityType/architecture-document"
+      ],
+      "symmetric": false
+    },
+    "derived-from": {
+      "@id": "mif:relationship/derived-from",
+      "@type": "mif:Relationship",
+      "name": "derived-from",
+      "description": "An artifact is derived from an upstream one",
+      "from": [
+        "mif:entityType/design-spec",
+        "mif:entityType/task-plan",
+        "mif:entityType/decision-record",
+        "mif:entityType/feature-specification"
+      ],
+      "to": [
+        "mif:entityType/requirements-set",
+        "mif:entityType/design-spec",
+        "mif:entityType/product-requirements"
+      ],
+      "symmetric": false
+    },
+    "depends-on": {
+      "@id": "mif:relationship/depends-on",
+      "@type": "mif:Relationship",
+      "name": "depends-on",
+      "description": "An artifact depends on another",
+      "from": [
+        "mif:entityType/feature-specification",
+        "mif:entityType/architecture-document"
+      ],
+      "to": [
+        "mif:entityType/architecture-document",
+        "mif:entityType/architecture-view"
+      ],
+      "symmetric": false
+    },
+    "supersedes": {
+      "@id": "mif:relationship/supersedes",
+      "@type": "mif:Relationship",
+      "name": "supersedes",
+      "description": "A newer record supersedes an older one",
+      "from": [
+        "mif:entityType/decision-record",
+        "mif:entityType/enhancement-proposal"
+      ],
+      "to": [
+        "mif:entityType/decision-record",
+        "mif:entityType/enhancement-proposal"
+      ],
+      "symmetric": false
+    },
+    "relates-to": {
+      "@id": "mif:relationship/relates-to",
+      "@type": "mif:Relationship",
+      "name": "relates-to",
+      "description": "A general, non-directional association",
+      "from": [
+        "mif:entityType/*"
+      ],
+      "to": [
+        "mif:entityType/*"
+      ],
+      "symmetric": true
+    }
+  },
+  "discovery": {
+    "enabled": false,
+    "confidence_threshold": 0.8
+  }
+}

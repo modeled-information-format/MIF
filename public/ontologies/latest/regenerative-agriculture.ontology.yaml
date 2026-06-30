@@ -1,0 +1,1046 @@
+---
+# Regenerative Agriculture Ontology
+#
+# A comprehensive ontology for regenerative farm businesses, including
+# full ecosystem coverage: farm operations, supply chain, carbon markets,
+# and certification bodies.
+#
+# Compatible with: mif-base v1.0.0, shared-traits v1.0.0
+#
+# Version: 0.1.0
+# Last Updated: 2026-01-26
+#
+# Sources:
+# - Rodale Institute Regenerative Organic Certified (ROC) Standards
+#   https://rodaleinstitute.org/regenerative-organic-certification/
+# - Soil & Climate Initiative Verification Framework v3.0 (2025)
+#   https://www.soilclimateinitiative.org
+# - USDA NRCS Soil Health Principles
+#   https://www.nrcs.usda.gov/soils/soil-health
+# - Rainforest Alliance Regenerative Agriculture Standard (2025)
+#   https://www.rainforest-alliance.org/
+# - Regenerative Farming Standard (RGN) - FoodChain ID
+#   https://www.foodchainid.com/certification/regenerative-farming
+# - Carbon Underground Initiative
+# - FAO Agroecology Knowledge Hub
+
+ontology:
+  id: regenerative-agriculture
+  version: "0.1.0"
+  description: "Regenerative agriculture ontology with ecosystem coverage"
+  schema_url: >-
+    https://mif-spec.dev/schema/ontology/ontology.schema.json
+  extends:
+    - mif-base
+    - shared-traits
+
+# ==============================================================================
+# CUSTOM NAMESPACES
+# ==============================================================================
+# These extend the base cognitive triad hierarchy with domain-specific paths.
+
+namespaces:
+  semantic:
+    children:
+      # Farm Infrastructure
+      land:
+        description: "Land parcels, fields, soil profiles"
+        type_hint: semantic
+      livestock:
+        description: "Animals, herds, breeding records"
+        type_hint: semantic
+      crops:
+        description: "Crops, varieties, rotations"
+        type_hint: semantic
+      equipment:
+        description: "Machinery, tools, infrastructure"
+        type_hint: semantic
+      inputs:
+        description: "Seeds, amendments, biological inputs"
+        type_hint: semantic
+
+      # Supply Chain
+      supply-chain:
+        description: "Buyers, processors, distributors"
+        type_hint: semantic
+      markets:
+        description: "Market channels, pricing, contracts"
+        type_hint: semantic
+
+      # Certifications & Carbon
+      certifications:
+        description: "Organic, ROC, and other certifications"
+        type_hint: semantic
+      carbon:
+        description: "Carbon credits, soil carbon measurements"
+        type_hint: semantic
+
+  episodic:
+    children:
+      seasons:
+        description: "Growing seasons, planting/harvest cycles"
+        type_hint: episodic
+      weather:
+        description: "Weather events, climate impacts"
+        type_hint: episodic
+      inspections:
+        description: "Audits, inspections, certifications"
+        type_hint: episodic
+      transactions:
+        description: "Sales, purchases, market events"
+        type_hint: episodic
+
+  procedural:
+    children:
+      soil-health:
+        description: "Soil management protocols"
+        type_hint: procedural
+      animal-welfare:
+        description: "Livestock care procedures"
+        type_hint: procedural
+      harvest:
+        description: "Harvest and post-harvest handling"
+        type_hint: procedural
+      compliance:
+        description: "Certification audit preparation"
+        type_hint: procedural
+
+# ==============================================================================
+# ENTITY TYPES
+# ==============================================================================
+
+entity_types:
+  # ---------------------------------------------------------------------------
+  # LAND & SOIL ENTITIES
+  # ---------------------------------------------------------------------------
+  - name: farm
+    description: "A farm operation - the primary organizational unit"
+    base: semantic
+    traits:
+      - located
+      - bounded
+      - owned
+      - certified
+      - auditable
+    schema:
+      required:
+        - name
+        - total_acres
+      properties:
+        name:
+          type: string
+          description: "Farm name"
+        total_acres:
+          type: number
+          description: "Total farm acreage"
+        operation_type:
+          type: string
+          description: "Primary operation type"
+          enum:
+            - row_crop
+            - livestock
+            - mixed
+            - orchard
+            - vineyard
+            - market_garden
+            - dairy
+            - pasture
+        established_year:
+          type: integer
+          description: "Year farm was established"
+        regenerative_transition_year:
+          type: integer
+          description: "Year regenerative practices began"
+
+  - name: field
+    description: "A distinct agricultural field or parcel"
+    base: semantic
+    traits:
+      - bounded
+      - measured
+      - seasonal
+    schema:
+      required:
+        - name
+        - acres
+        - farm_id
+      properties:
+        name:
+          type: string
+          description: "Field name/identifier"
+        acres:
+          type: number
+          description: "Field size in acres"
+        farm_id:
+          type: string
+          description: "Parent farm reference"
+        field_type:
+          type: string
+          enum:
+            - cropland
+            - pasture
+            - orchard
+            - wetland
+            - woodland
+            - fallow
+        soil_type:
+          type: string
+          description: "Primary soil classification"
+        irrigation_type:
+          type: string
+          enum:
+            - dryland
+            - drip
+            - pivot
+            - flood
+            - sprinkler
+
+  - name: soil-profile
+    description: "Soil health profile with testing data"
+    base: semantic
+    traits:
+      - measured
+      - timestamped
+    schema:
+      required:
+        - field_id
+        - sample_date
+      properties:
+        field_id:
+          type: string
+          description: "Reference to field"
+        sample_date:
+          type: string
+          format: date
+        sample_depth_inches:
+          type: number
+        organic_matter_percent:
+          type: number
+          description: "Soil organic matter percentage"
+        soil_carbon_tons_per_acre:
+          type: number
+          description: "Soil organic carbon"
+        ph:
+          type: number
+        cec:
+          type: number
+          description: "Cation exchange capacity"
+        aggregate_stability:
+          type: number
+          description: "Water-stable aggregate percentage"
+        infiltration_rate:
+          type: number
+          description: "Inches per hour"
+        microbial_biomass:
+          type: number
+          description: "Microbial biomass carbon"
+        fungal_to_bacterial_ratio:
+          type: number
+        lab:
+          type: string
+          description: "Testing laboratory"
+
+  # ---------------------------------------------------------------------------
+  # CROP ENTITIES
+  # ---------------------------------------------------------------------------
+  - name: crop
+    description: "A crop type with agronomic information"
+    base: semantic
+    traits:
+      - categorized
+    schema:
+      required:
+        - name
+        - crop_type
+      properties:
+        name:
+          type: string
+          description: "Crop name"
+        scientific_name:
+          type: string
+        crop_type:
+          type: string
+          enum:
+            - cash_crop
+            - cover_crop
+            - forage
+            - perennial
+        family:
+          type: string
+          description: "Botanical family"
+        nitrogen_fixing:
+          type: boolean
+        root_depth:
+          type: string
+          enum:
+            - shallow
+            - medium
+            - deep
+            - tap_root
+
+  - name: crop-rotation
+    description: "Multi-year crop rotation plan"
+    base: procedural
+    traits:
+      - seasonal
+      - reviewed
+    schema:
+      required:
+        - name
+        - field_id
+        - rotation_years
+      properties:
+        name:
+          type: string
+        field_id:
+          type: string
+        rotation_years:
+          type: integer
+          description: "Number of years in rotation"
+        sequence:
+          type: array
+          description: "Crop sequence by year"
+          items:
+            type: object
+            properties:
+              year:
+                type: integer
+              cash_crop:
+                type: string
+              cover_crop:
+                type: string
+              notes:
+                type: string
+        goals:
+          type: array
+          description: "Rotation objectives"
+          items:
+            type: string
+
+  - name: planting
+    description: "A specific crop planting event"
+    base: episodic
+    traits:
+      - scheduled
+      - measured
+    schema:
+      required:
+        - field_id
+        - crop_id
+        - planting_date
+      properties:
+        field_id:
+          type: string
+        crop_id:
+          type: string
+        variety:
+          type: string
+        planting_date:
+          type: string
+          format: date
+        seeding_rate:
+          type: number
+        seeding_unit:
+          type: string
+        method:
+          type: string
+          enum:
+            - no_till_drill
+            - broadcast
+            - transplant
+            - interseeded
+        seed_source:
+          type: string
+        seed_treatment:
+          type: string
+        expected_harvest_date:
+          type: string
+          format: date
+
+  # ---------------------------------------------------------------------------
+  # LIVESTOCK ENTITIES
+  # ---------------------------------------------------------------------------
+  - name: herd
+    description: "A group of animals managed together"
+    base: semantic
+    traits:
+      - inventoried
+      - owned
+    schema:
+      required:
+        - name
+        - species
+        - head_count
+      properties:
+        name:
+          type: string
+        species:
+          type: string
+          enum:
+            - cattle
+            - sheep
+            - goats
+            - pigs
+            - poultry
+            - bison
+            - other
+        breed:
+          type: string
+        head_count:
+          type: integer
+        purpose:
+          type: string
+          enum:
+            - beef
+            - dairy
+            - wool
+            - eggs
+            - breeding
+            - dual_purpose
+        grazing_unit:
+          type: string
+          description: "Current grazing paddock/field"
+
+  - name: animal
+    description: "Individual animal record"
+    base: semantic
+    traits:
+      - lifecycle
+      - tagged
+    schema:
+      required:
+        - tag_id
+        - species
+        - herd_id
+      properties:
+        tag_id:
+          type: string
+          description: "Ear tag or RFID"
+        species:
+          type: string
+        breed:
+          type: string
+        herd_id:
+          type: string
+        birth_date:
+          type: string
+          format: date
+        sex:
+          type: string
+          enum:
+            - male
+            - female
+            - castrated
+        dam_id:
+          type: string
+        sire_id:
+          type: string
+        weight_history:
+          type: array
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                format: date
+              weight_lbs:
+                type: number
+
+  - name: grazing-plan
+    description: "Rotational grazing plan"
+    base: procedural
+    traits:
+      - scheduled
+      - seasonal
+    schema:
+      required:
+        - name
+        - herd_id
+      properties:
+        name:
+          type: string
+        herd_id:
+          type: string
+        paddock_sequence:
+          type: array
+          items:
+            type: object
+            properties:
+              paddock_id:
+                type: string
+              entry_date:
+                type: string
+                format: date
+              exit_date:
+                type: string
+                format: date
+              animal_days:
+                type: number
+              recovery_days:
+                type: integer
+        stock_density:
+          type: number
+          description: "Animal units per acre"
+        rest_period_days:
+          type: integer
+          description: "Minimum recovery days"
+
+  # ---------------------------------------------------------------------------
+  # EQUIPMENT & INPUTS
+  # ---------------------------------------------------------------------------
+  - name: equipment
+    description: "Farm machinery and tools"
+    base: semantic
+    traits:
+      - inventoried
+      - maintainable
+      - owned
+    schema:
+      required:
+        - name
+        - equipment_type
+      properties:
+        name:
+          type: string
+        equipment_type:
+          type: string
+          enum:
+            - tractor
+            - implement
+            - irrigation
+            - livestock
+            - harvesting
+            - storage
+            - vehicle
+        make:
+          type: string
+        model:
+          type: string
+        year:
+          type: integer
+        purchase_price:
+          type: number
+        current_value:
+          type: number
+        hours_meter:
+          type: number
+
+  - name: input
+    description: "Farm input product (seeds, amendments, etc.)"
+    base: semantic
+    traits:
+      - inventoried
+      - certified
+    schema:
+      required:
+        - name
+        - input_type
+      properties:
+        name:
+          type: string
+        input_type:
+          type: string
+          enum:
+            - seed
+            - amendment
+            - biological
+            - mineral
+            - compost
+            - mulch
+            - fuel
+        supplier:
+          type: string
+        omri_listed:
+          type: boolean
+          description: "OMRI approved for organic"
+        application_rate:
+          type: string
+        unit_cost:
+          type: number
+        quantity_on_hand:
+          type: number
+
+  # ---------------------------------------------------------------------------
+  # CERTIFICATION ENTITIES
+  # ---------------------------------------------------------------------------
+  - name: certification
+    description: "Farm certification (organic, ROC, etc.)"
+    base: semantic
+    traits:
+      - renewable
+      - auditable
+    schema:
+      required:
+        - certification_type
+        - certifying_body
+        - status
+      properties:
+        certification_type:
+          type: string
+          enum:
+            - usda_organic
+            - roc_bronze
+            - roc_silver
+            - roc_gold
+            - rainforest_alliance
+            - rgn_basic
+            - rgn_advanced
+            - rgn_expert
+            - sci_tier_1
+            - sci_tier_2
+            - sci_tier_3
+            - sci_tier_4
+            - biodynamic
+            - grass_fed
+            - animal_welfare_approved
+        certifying_body:
+          type: string
+        status:
+          type: string
+          enum:
+            - active
+            - in_transition
+            - suspended
+            - expired
+            - pending
+        scope:
+          type: array
+          description: "What's covered by certification"
+          items:
+            type: string
+        transition_start_date:
+          type: string
+          format: date
+        certificate_number:
+          type: string
+
+  - name: inspection
+    description: "Certification inspection or audit event"
+    base: episodic
+    traits:
+      - scheduled
+      - reviewed
+    schema:
+      required:
+        - certification_id
+        - inspection_date
+        - inspector
+      properties:
+        certification_id:
+          type: string
+        inspection_date:
+          type: string
+          format: date
+        inspector:
+          type: string
+        inspection_type:
+          type: string
+          enum:
+            - initial
+            - annual
+            - unannounced
+            - follow_up
+        findings:
+          type: array
+          items:
+            type: object
+            properties:
+              category:
+                type: string
+              severity:
+                type: string
+                enum:
+                  - observation
+                  - minor
+                  - major
+                  - critical
+              description:
+                type: string
+              corrective_action:
+                type: string
+              due_date:
+                type: string
+                format: date
+        outcome:
+          type: string
+          enum:
+            - passed
+            - conditional
+            - failed
+            - pending
+
+  # ---------------------------------------------------------------------------
+  # CARBON & CLIMATE ENTITIES
+  # ---------------------------------------------------------------------------
+  - name: carbon-baseline
+    description: "Baseline carbon measurement for a field"
+    base: semantic
+    traits:
+      - measured
+    schema:
+      required:
+        - field_id
+        - baseline_date
+        - soil_carbon_baseline
+      properties:
+        field_id:
+          type: string
+        baseline_date:
+          type: string
+          format: date
+        soil_carbon_baseline:
+          type: number
+          description: "Metric tons CO2e per acre"
+        measurement_protocol:
+          type: string
+          description: "Carbon measurement standard used"
+        verification_body:
+          type: string
+        sampling_depth_cm:
+          type: integer
+        bulk_density:
+          type: number
+
+  - name: carbon-credit
+    description: "Verified carbon credit or offset"
+    base: semantic
+    traits:
+      - transactional
+      - auditable
+    schema:
+      required:
+        - credit_id
+        - vintage_year
+        - quantity_tons
+        - registry
+      properties:
+        credit_id:
+          type: string
+          description: "Registry credit identifier"
+        vintage_year:
+          type: integer
+        quantity_tons:
+          type: number
+          description: "Metric tons CO2e"
+        registry:
+          type: string
+          enum:
+            - verra
+            - gold_standard
+            - american_carbon_registry
+            - climate_action_reserve
+            - nori
+            - indigo
+        project_type:
+          type: string
+          enum:
+            - soil_carbon
+            - avoided_emissions
+            - agroforestry
+            - grassland
+        verification_status:
+          type: string
+          enum:
+            - verified
+            - pending
+            - retired
+        price_per_ton:
+          type: number
+        buyer:
+          type: string
+
+  # ---------------------------------------------------------------------------
+  # SUPPLY CHAIN ENTITIES
+  # ---------------------------------------------------------------------------
+  - name: buyer
+    description: "Purchaser of farm products"
+    base: semantic
+    traits:
+      - contactable
+      - located
+    schema:
+      required:
+        - name
+        - buyer_type
+      properties:
+        name:
+          type: string
+        buyer_type:
+          type: string
+          enum:
+            - direct_consumer
+            - farmers_market
+            - restaurant
+            - grocery
+            - distributor
+            - processor
+            - cooperative
+            - export
+        certifications_required:
+          type: array
+          items:
+            type: string
+        payment_terms:
+          type: string
+        preferred_products:
+          type: array
+          items:
+            type: string
+
+  - name: contract
+    description: "Sales or supply contract"
+    base: semantic
+    traits:
+      - renewable
+      - transactional
+      - reviewed
+    schema:
+      required:
+        - buyer_id
+        - product
+        - contract_year
+      properties:
+        buyer_id:
+          type: string
+        product:
+          type: string
+        contract_year:
+          type: integer
+        quantity:
+          type: number
+        unit:
+          type: string
+        price_per_unit:
+          type: number
+        delivery_terms:
+          type: string
+        quality_requirements:
+          type: array
+          items:
+            type: string
+        certification_requirements:
+          type: array
+          items:
+            type: string
+
+  - name: harvest-record
+    description: "Harvest event with yield data"
+    base: episodic
+    traits:
+      - measured
+      - quality_controlled
+    schema:
+      required:
+        - field_id
+        - crop_id
+        - harvest_date
+      properties:
+        field_id:
+          type: string
+        crop_id:
+          type: string
+        harvest_date:
+          type: string
+          format: date
+        yield_quantity:
+          type: number
+        yield_unit:
+          type: string
+        moisture_percent:
+          type: number
+        test_weight:
+          type: number
+        storage_location:
+          type: string
+        lot_number:
+          type: string
+
+  # ---------------------------------------------------------------------------
+  # WEATHER & EVENTS
+  # ---------------------------------------------------------------------------
+  - name: weather-event
+    description: "Significant weather event affecting operations"
+    base: episodic
+    traits:
+      - located
+    schema:
+      required:
+        - event_type
+        - event_date
+      properties:
+        event_type:
+          type: string
+          enum:
+            - frost
+            - freeze
+            - hail
+            - drought
+            - flood
+            - tornado
+            - excessive_heat
+            - excessive_rain
+        event_date:
+          type: string
+          format: date
+        severity:
+          type: string
+          enum:
+            - minor
+            - moderate
+            - severe
+            - catastrophic
+        affected_fields:
+          type: array
+          items:
+            type: string
+        crop_damage_estimate:
+          type: number
+          description: "Estimated loss percentage"
+        insurance_claim:
+          type: boolean
+
+# ==============================================================================
+# RELATIONSHIPS
+# ==============================================================================
+
+relationships:
+  located_on:
+    description: "Entity is located on a field or farm"
+    from:
+      - herd
+      - planting
+      - equipment
+    to:
+      - field
+      - farm
+    symmetric: false
+
+  part_of:
+    description: "Entity is part of a larger entity"
+    from:
+      - field
+      - animal
+    to:
+      - farm
+      - herd
+    symmetric: false
+
+  certified_by:
+    description: "Entity holds certification"
+    from:
+      - farm
+      - field
+      - herd
+    to:
+      - certification
+    symmetric: false
+
+  supplies_to:
+    description: "Farm supplies products to buyer"
+    from:
+      - farm
+      - harvest-record
+    to:
+      - buyer
+      - contract
+    symmetric: false
+
+  generates:
+    description: "Practice generates carbon credits"
+    from:
+      - field
+      - grazing-plan
+      - crop-rotation
+    to:
+      - carbon-credit
+    symmetric: false
+
+  affects:
+    description: "Weather event affects entity"
+    from:
+      - weather-event
+    to:
+      - field
+      - herd
+      - planting
+    symmetric: false
+
+  follows:
+    description: "Crop follows previous crop in rotation"
+    from:
+      - planting
+    to:
+      - planting
+    symmetric: false
+
+  documents:
+    description: "Procedure documents how to manage entity"
+    from:
+      - grazing-plan
+      - crop-rotation
+    to:
+      - herd
+      - field
+    symmetric: false
+
+# ==============================================================================
+# DISCOVERY PATTERNS
+# ==============================================================================
+
+discovery:
+  enabled: true
+  confidence_threshold: 0.8
+
+  patterns:
+    # Soil and land patterns
+    - content_pattern: "\\b(soil|organic matter|carbon|SOM|SOC)\\b"
+      suggest_entity: soil-profile
+      suggest_namespace: _semantic/land
+    - content_pattern: "\\b(field|parcel|paddock|pasture|acreage)\\b"
+      suggest_entity: field
+      suggest_namespace: _semantic/land
+
+    # Crop patterns
+    - content_pattern: "\\b(cover crop|rotation|cash crop|planting)\\b"
+      suggest_entity: crop-rotation
+      suggest_namespace: _procedural/soil-health
+    - content_pattern: "\\b(no-till|no till|minimum till|tillage)\\b"
+      suggest_entity: crop-rotation
+      suggest_namespace: _procedural/soil-health
+
+    # Livestock patterns
+    - content_pattern: "\\b(herd|cattle|sheep|goats|livestock)\\b"
+      suggest_entity: herd
+      suggest_namespace: _semantic/livestock
+    - content_pattern: "\\b(rotational grazing|mob grazing|AMP)\\b"
+      suggest_entity: grazing-plan
+      suggest_namespace: _procedural/animal-welfare
+
+    # Certification patterns
+    - content_pattern: "\\b(organic|ROC|regenerative organic|certified)\\b"
+      suggest_entity: certification
+      suggest_namespace: _semantic/certifications
+    - content_pattern: "\\b(audit|inspection|certifier|compliance)\\b"
+      suggest_entity: inspection
+      suggest_namespace: _episodic/inspections
+
+    # Carbon patterns
+    - content_pattern: "\\b(carbon credit|carbon offset|sequestration|CO2e)\\b"
+      suggest_entity: carbon-credit
+      suggest_namespace: _semantic/carbon
+    - content_pattern: "\\b(baseline|soil carbon measurement|MRV)\\b"
+      suggest_entity: carbon-baseline
+      suggest_namespace: _semantic/carbon
+
+    # Supply chain patterns
+    - content_pattern: "\\b(buyer|customer|market|contract|sale)\\b"
+      suggest_entity: buyer
+      suggest_namespace: _semantic/supply-chain
+    - content_pattern: "\\b(harvest|yield|bushel|pounds|ton)\\b"
+      suggest_entity: harvest-record
+      suggest_namespace: _episodic/transactions
+
+    # Weather patterns
+    - content_pattern: "\\b(frost|freeze|drought|flood|hail|storm)\\b"
+      suggest_entity: weather-event
+      suggest_namespace: _episodic/weather

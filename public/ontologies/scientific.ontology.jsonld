@@ -1,0 +1,1170 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "@vocab": "https://mif-spec.dev/ns/ontology#",
+    "mif": "https://mif-spec.dev/ns/",
+    "schema": "https://schema.org/",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "ontology": {
+      "@id": "mif:Ontology",
+      "@type": "@id"
+    },
+    "id": {
+      "@id": "@id"
+    },
+    "version": {
+      "@id": "schema:version",
+      "@type": "xsd:string"
+    },
+    "description": {
+      "@id": "schema:description",
+      "@type": "xsd:string"
+    },
+    "schema_url": {
+      "@id": "rdfs:isDefinedBy",
+      "@type": "@id"
+    },
+    "namespaces": {
+      "@id": "mif:hasNamespace",
+      "@container": "@id"
+    },
+    "type_hint": {
+      "@id": "mif:typeHint",
+      "@type": "xsd:string"
+    },
+    "replaces": {
+      "@id": "mif:replaces",
+      "@type": "@id"
+    },
+    "children": {
+      "@id": "mif:hasChildNamespace",
+      "@container": "@id"
+    },
+    "entity_types": {
+      "@id": "mif:definesEntityType",
+      "@container": "@list"
+    },
+    "name": {
+      "@id": "schema:name",
+      "@type": "xsd:string"
+    },
+    "base": {
+      "@id": "mif:baseType",
+      "@type": "@vocab"
+    },
+    "semantic": "mif:SemanticMemory",
+    "episodic": "mif:EpisodicMemory",
+    "procedural": "mif:ProceduralMemory",
+    "traits": {
+      "@id": "mif:definesTrait",
+      "@container": "@id"
+    },
+    "subtype_of": {
+      "@id": "mif:subtypeOf",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "fields": {
+      "@id": "mif:hasField",
+      "@container": "@id"
+    },
+    "requires": {
+      "@id": "mif:requiresField",
+      "@container": "@list"
+    },
+    "relationships": {
+      "@id": "mif:definesRelationship",
+      "@container": "@id"
+    },
+    "from": {
+      "@id": "rdfs:domain",
+      "@container": "@set"
+    },
+    "to": {
+      "@id": "rdfs:range",
+      "@container": "@set"
+    },
+    "symmetric": {
+      "@id": "owl:SymmetricProperty",
+      "@type": "xsd:boolean"
+    },
+    "discovery": {
+      "@id": "mif:discoveryConfig"
+    },
+    "enabled": {
+      "@id": "mif:discoveryEnabled",
+      "@type": "xsd:boolean"
+    },
+    "patterns": {
+      "@id": "mif:hasDiscoveryPattern",
+      "@container": "@list"
+    },
+    "confidence_threshold": {
+      "@id": "mif:confidenceThreshold",
+      "@type": "xsd:decimal"
+    },
+    "content_pattern": {
+      "@id": "mif:contentPattern",
+      "@type": "xsd:string"
+    },
+    "file_pattern": {
+      "@id": "mif:filePattern",
+      "@type": "xsd:string"
+    },
+    "suggest_entity": {
+      "@id": "mif:suggestsEntityType",
+      "@type": "@id"
+    },
+    "suggest_namespace": {
+      "@id": "mif:suggestsNamespace",
+      "@type": "xsd:string"
+    }
+  },
+  "@id": "mif:ontology/scientific",
+  "@type": "mif:Ontology",
+  "identifier": "scientific",
+  "version": "0.1.0",
+  "description": "Scientific research domain ontology \u2014 studies, methods, data, provenance",
+  "namespaces": {
+    "semantic": {
+      "@id": "mif:namespace/semantic",
+      "@type": "mif:Namespace",
+      "name": "semantic",
+      "children": {
+        "science": {
+          "@id": "mif:namespace/semantic/science",
+          "@type": "mif:Namespace",
+          "name": "science",
+          "description": "Hypotheses, methods, measurements, samples",
+          "type_hint": "semantic"
+        },
+        "instruments": {
+          "@id": "mif:namespace/semantic/instruments",
+          "@type": "mif:Namespace",
+          "name": "instruments",
+          "description": "Research instruments and devices",
+          "type_hint": "semantic"
+        },
+        "catalogs": {
+          "@id": "mif:namespace/semantic/catalogs",
+          "@type": "mif:Namespace",
+          "name": "catalogs",
+          "description": "Datasets and data catalogs",
+          "type_hint": "semantic"
+        },
+        "publications": {
+          "@id": "mif:namespace/semantic/publications",
+          "@type": "mif:Namespace",
+          "name": "publications",
+          "description": "Research publications and scholarly outputs",
+          "type_hint": "semantic"
+        },
+        "funding": {
+          "@id": "mif:namespace/semantic/funding",
+          "@type": "mif:Namespace",
+          "name": "funding",
+          "description": "Grants and research funding",
+          "type_hint": "semantic"
+        }
+      }
+    },
+    "episodic": {
+      "@id": "mif:namespace/episodic",
+      "@type": "mif:Namespace",
+      "name": "episodic",
+      "children": {
+        "studies": {
+          "@id": "mif:namespace/episodic/studies",
+          "@type": "mif:Namespace",
+          "name": "studies",
+          "description": "Studies, investigations, cohorts",
+          "type_hint": "episodic"
+        },
+        "provenance": {
+          "@id": "mif:namespace/episodic/provenance",
+          "@type": "mif:Namespace",
+          "name": "provenance",
+          "description": "Data provenance and derivation events",
+          "type_hint": "episodic"
+        }
+      }
+    },
+    "procedural": {
+      "@id": "mif:namespace/procedural",
+      "@type": "mif:Namespace",
+      "name": "procedural",
+      "children": {
+        "protocols": {
+          "@id": "mif:namespace/procedural/protocols",
+          "@type": "mif:Namespace",
+          "name": "protocols",
+          "description": "Methods and protocol applications",
+          "type_hint": "procedural"
+        }
+      }
+    }
+  },
+  "entity_types": [
+    {
+      "@id": "mif:entityType/study",
+      "@type": "mif:EntityType",
+      "name": "study",
+      "base": "episodic",
+      "description": "A scientific study with a defined design",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/dated",
+        "mif:trait/stakeholders"
+      ],
+      "schema": {
+        "required": [
+          "title",
+          "design"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "design": {
+            "type": "string",
+            "enum": [
+              "observational",
+              "experimental",
+              "randomized-controlled",
+              "cohort",
+              "case-control",
+              "cross-sectional",
+              "computational"
+            ]
+          },
+          "objective": {
+            "type": "string"
+          },
+          "population": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "planned",
+              "in-progress",
+              "completed",
+              "retracted"
+            ]
+          },
+          "registration_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/research-investigation",
+      "@type": "mif:EntityType",
+      "name": "research-investigation",
+      "base": "episodic",
+      "description": "A research investigation spanning planning, execution and reporting",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/dated",
+        "mif:trait/stakeholders"
+      ],
+      "schema": {
+        "required": [
+          "title",
+          "investigation_type"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "investigation_type": {
+            "type": "string",
+            "enum": [
+              "genomics",
+              "clinical-trial",
+              "observational",
+              "computational",
+              "environmental",
+              "epidemiological",
+              "multi-omics",
+              "survey-based"
+            ]
+          },
+          "objective": {
+            "type": "string"
+          },
+          "hypothesis_ref": {
+            "type": "string"
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "planned",
+              "active",
+              "completed",
+              "published",
+              "retracted"
+            ]
+          },
+          "registration_id": {
+            "type": "string"
+          },
+          "funding_ref": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/cohort",
+      "@type": "mif:EntityType",
+      "name": "cohort",
+      "base": "episodic",
+      "description": "A study population \u2014 the material entities constituting the subject of an investigation",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/dated"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "population_definition"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "population_definition": {
+            "type": "string"
+          },
+          "size": {
+            "type": "integer"
+          },
+          "follow_up_years": {
+            "type": "number"
+          },
+          "baseline_year": {
+            "type": "integer"
+          },
+          "study_design_type": {
+            "type": "string",
+            "enum": [
+              "prospective",
+              "retrospective",
+              "cross-sectional",
+              "case-control"
+            ]
+          },
+          "stratification": {
+            "type": "string"
+          },
+          "investigation_ref": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/method",
+      "@type": "mif:EntityType",
+      "name": "method",
+      "base": "procedural",
+      "description": "A scientific method or assay (a planned-process specification)",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/versioned"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "procedure"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "procedure": {
+            "type": "string"
+          },
+          "instrument": {
+            "type": "string"
+          },
+          "inputs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "output_type": {
+            "type": "string"
+          },
+          "protocol_url": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/protocol-application",
+      "@type": "mif:EntityType",
+      "name": "protocol-application",
+      "base": "procedural",
+      "description": "The execution of a protocol \u2014 distinct from the method/protocol specification",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/versioned",
+        "mif:trait/dated"
+      ],
+      "schema": {
+        "required": [
+          "protocol_ref",
+          "performer"
+        ],
+        "properties": {
+          "protocol_ref": {
+            "type": "string"
+          },
+          "performer": {
+            "type": "string"
+          },
+          "date_performed": {
+            "type": "string",
+            "format": "date"
+          },
+          "batch_id": {
+            "type": "string"
+          },
+          "deviations": {
+            "type": "string"
+          },
+          "instrument_used": {
+            "type": "string"
+          },
+          "output_data_ref": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/sample-organism",
+      "@type": "mif:EntityType",
+      "name": "sample-organism",
+      "base": "semantic",
+      "description": "A material sample (organism, tissue, or specimen)",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/dated"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "material_type"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "material_type": {
+            "type": "string",
+            "enum": [
+              "organism",
+              "tissue",
+              "cell-line",
+              "environmental",
+              "chemical",
+              "other"
+            ]
+          },
+          "taxon": {
+            "type": "string"
+          },
+          "collection_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "provenance": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/measurement",
+      "@type": "mif:EntityType",
+      "name": "measurement",
+      "base": "semantic",
+      "description": "A measurement datum (a value specification produced by an assay)",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/dated"
+      ],
+      "schema": {
+        "required": [
+          "variable",
+          "value"
+        ],
+        "properties": {
+          "variable": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "unit": {
+            "type": "string"
+          },
+          "method_ref": {
+            "type": "string"
+          },
+          "measured_on": {
+            "type": "string"
+          },
+          "uncertainty": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/hypothesis",
+      "@type": "mif:EntityType",
+      "name": "hypothesis",
+      "base": "semantic",
+      "description": "A falsifiable scientific hypothesis (hypothesis textual entity)",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "schema": {
+        "required": [
+          "statement",
+          "investigation_ref"
+        ],
+        "properties": {
+          "statement": {
+            "type": "string"
+          },
+          "investigation_ref": {
+            "type": "string"
+          },
+          "hypothesis_type": {
+            "type": "string",
+            "enum": [
+              "null",
+              "directional",
+              "mechanistic",
+              "predictive",
+              "exploratory"
+            ]
+          },
+          "operationalization": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "untested",
+              "supported",
+              "refuted",
+              "inconclusive"
+            ]
+          },
+          "derived_from": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/research-instrument",
+      "@type": "mif:EntityType",
+      "name": "research-instrument",
+      "base": "semantic",
+      "description": "A research instrument or device",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/versioned"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "instrument_type"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "instrument_type": {
+            "type": "string",
+            "enum": [
+              "sequencer",
+              "mass-spectrometer",
+              "microscope",
+              "assay-platform",
+              "imaging-device",
+              "survey-platform",
+              "flow-cytometer",
+              "other"
+            ]
+          },
+          "manufacturer": {
+            "type": "string"
+          },
+          "model": {
+            "type": "string"
+          },
+          "version_or_firmware": {
+            "type": "string"
+          },
+          "calibration_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "produces_data_type": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/research-publication",
+      "@type": "mif:EntityType",
+      "name": "research-publication",
+      "base": "semantic",
+      "description": "A research publication or scholarly output",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/versioned",
+        "mif:trait/documented"
+      ],
+      "schema": {
+        "required": [
+          "title",
+          "publication_type"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "publication_type": {
+            "type": "string",
+            "enum": [
+              "journal-article",
+              "preprint",
+              "book-chapter",
+              "conference-paper",
+              "dataset-descriptor",
+              "technical-report"
+            ]
+          },
+          "doi": {
+            "type": "string"
+          },
+          "authors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "journal_or_venue": {
+            "type": "string"
+          },
+          "year": {
+            "type": "integer"
+          },
+          "reports_investigation": {
+            "type": "string"
+          },
+          "open_access": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/research-funding",
+      "@type": "mif:EntityType",
+      "name": "research-funding",
+      "base": "semantic",
+      "description": "A grant providing monetary support for research",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/dated"
+      ],
+      "schema": {
+        "required": [
+          "grant_title",
+          "funder"
+        ],
+        "properties": {
+          "grant_title": {
+            "type": "string"
+          },
+          "funder": {
+            "type": "string"
+          },
+          "grant_id": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "string"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "funded_investigation": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/dataset",
+      "@type": "mif:EntityType",
+      "name": "dataset",
+      "base": "semantic",
+      "description": "A published dataset",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/versioned",
+        "mif:trait/documented"
+      ],
+      "schema": {
+        "required": [
+          "title",
+          "distribution"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "distribution": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "theme": {
+            "type": "string"
+          },
+          "keyword": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "produced_by_study": {
+            "type": "string"
+          },
+          "license": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/data-catalog",
+      "@type": "mif:EntityType",
+      "name": "data-catalog",
+      "base": "semantic",
+      "description": "A curated catalog of datasets",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/versioned",
+        "mif:trait/documented"
+      ],
+      "schema": {
+        "required": [
+          "title",
+          "catalog_url"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "catalog_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "publisher": {
+            "type": "string"
+          },
+          "themes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "dataset_count": {
+            "type": "integer"
+          },
+          "license": {
+            "type": "string"
+          },
+          "access_rights": {
+            "type": "string",
+            "enum": [
+              "open",
+              "restricted",
+              "embargoed"
+            ]
+          },
+          "contains_services": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/data-provenance",
+      "@type": "mif:EntityType",
+      "name": "data-provenance",
+      "base": "episodic",
+      "description": "A provenance record tracing how a data artifact was generated and derived",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/dated"
+      ],
+      "schema": {
+        "required": [
+          "entity_ref",
+          "generated_by"
+        ],
+        "properties": {
+          "entity_ref": {
+            "type": "string"
+          },
+          "generated_by": {
+            "type": "string"
+          },
+          "derived_from": {
+            "type": "string"
+          },
+          "attributed_to": {
+            "type": "string"
+          },
+          "generation_time": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "usage_ref": {
+            "type": "string"
+          },
+          "revision_of": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  ],
+  "traits": {
+    "cited": {
+      "@id": "mif:trait/cited",
+      "@type": "mif:Trait",
+      "name": "cited",
+      "description": "Requires citations/sources backing the entity",
+      "requires": [
+        "citations"
+      ]
+    },
+    "dated": {
+      "@id": "mif:trait/dated",
+      "@type": "mif:Trait",
+      "name": "dated",
+      "description": "Adds an event/record date",
+      "fields": {
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "as_of": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "versioned": {
+      "@id": "mif:trait/versioned",
+      "@type": "mif:Trait",
+      "name": "versioned",
+      "description": "Adds version tracking fields",
+      "fields": {
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+.*$"
+        },
+        "changelog": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "documented": {
+      "@id": "mif:trait/documented",
+      "@type": "mif:Trait",
+      "name": "documented",
+      "description": "Adds documentation/description linkage",
+      "fields": {
+        "documentation_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "stakeholders": {
+      "@id": "mif:trait/stakeholders",
+      "@type": "mif:Trait",
+      "name": "stakeholders",
+      "description": "Adds stakeholder tracking",
+      "fields": {
+        "stakeholders": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "role": {
+                "type": "string"
+              },
+              "contact": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "relationships": {
+    "catalogs": {
+      "@id": "mif:relationship/catalogs",
+      "@type": "mif:Relationship",
+      "name": "catalogs",
+      "description": "A data-catalog catalogs a dataset (dcat:dataset)",
+      "from": [
+        "mif:entityType/data-catalog"
+      ],
+      "to": [
+        "mif:entityType/dataset"
+      ],
+      "symmetric": false
+    },
+    "funded-by": {
+      "@id": "mif:relationship/funded-by",
+      "@type": "mif:Relationship",
+      "name": "funded-by",
+      "description": "A research-investigation is funded by a research-funding grant (schema:funding)",
+      "from": [
+        "mif:entityType/research-investigation"
+      ],
+      "to": [
+        "mif:entityType/research-funding"
+      ],
+      "symmetric": false
+    },
+    "has-input": {
+      "@id": "mif:relationship/has-input",
+      "@type": "mif:Relationship",
+      "name": "has-input",
+      "description": "A protocol-application has a sample-organism as input (RO:0002233 has input)",
+      "from": [
+        "mif:entityType/protocol-application"
+      ],
+      "to": [
+        "mif:entityType/sample-organism"
+      ],
+      "symmetric": false
+    },
+    "has-output": {
+      "@id": "mif:relationship/has-output",
+      "@type": "mif:Relationship",
+      "name": "has-output",
+      "description": "A protocol-application has a measurement as output (RO:0002234 has output)",
+      "from": [
+        "mif:entityType/protocol-application"
+      ],
+      "to": [
+        "mif:entityType/measurement"
+      ],
+      "symmetric": false
+    },
+    "is-about": {
+      "@id": "mif:relationship/is-about",
+      "@type": "mif:Relationship",
+      "name": "is-about",
+      "description": "An information artifact is about another entity (IAO:0000136 is about) \u2014 a hypothesis about a measurement, a publication about an investigation",
+      "from": [
+        "mif:entityType/hypothesis",
+        "mif:entityType/research-publication"
+      ],
+      "to": [
+        "mif:entityType/measurement",
+        "mif:entityType/research-investigation"
+      ],
+      "symmetric": false
+    },
+    "participates-in": {
+      "@id": "mif:relationship/participates-in",
+      "@type": "mif:Relationship",
+      "name": "participates-in",
+      "description": "A sample-organism participates in a research-investigation (RO:0000056 participates in)",
+      "from": [
+        "mif:entityType/sample-organism"
+      ],
+      "to": [
+        "mif:entityType/research-investigation"
+      ],
+      "symmetric": false
+    },
+    "was-derived-from": {
+      "@id": "mif:relationship/was-derived-from",
+      "@type": "mif:Relationship",
+      "name": "was-derived-from",
+      "description": "A data-provenance record traces a dataset derived from another (prov:wasDerivedFrom)",
+      "from": [
+        "mif:entityType/data-provenance"
+      ],
+      "to": [
+        "mif:entityType/dataset"
+      ],
+      "symmetric": false
+    },
+    "was-generated-by": {
+      "@id": "mif:relationship/was-generated-by",
+      "@type": "mif:Relationship",
+      "name": "was-generated-by",
+      "description": "A dataset was generated by a protocol-application (prov:wasGeneratedBy)",
+      "from": [
+        "mif:entityType/dataset"
+      ],
+      "to": [
+        "mif:entityType/protocol-application"
+      ],
+      "symmetric": false
+    }
+  },
+  "discovery": {
+    "enabled": true,
+    "confidence_threshold": 0.8,
+    "patterns": [
+      {
+        "@id": "mif:pattern/0",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(study|trial|investigation|cohort|randomi[sz]ed controlled)\\b",
+        "suggest_entity": "mif:entityType/study",
+        "suggest_namespace": "_episodic/studies"
+      },
+      {
+        "@id": "mif:pattern/1",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(assay|protocol|method|procedure|RNA-seq|ChIP-seq)\\b",
+        "suggest_entity": "mif:entityType/method",
+        "suggest_namespace": "_semantic/science"
+      },
+      {
+        "@id": "mif:pattern/2",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(specimen|material sample|organism|cell line|tissue|taxon)\\b",
+        "suggest_entity": "mif:entityType/sample-organism",
+        "suggest_namespace": "_semantic/science"
+      },
+      {
+        "@id": "mif:pattern/3",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(measurement|measured value|reading|datum)\\b",
+        "suggest_entity": "mif:entityType/measurement",
+        "suggest_namespace": "_semantic/science"
+      },
+      {
+        "@id": "mif:pattern/4",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(dataset|data catalog|DCAT|distribution|data download)\\b",
+        "suggest_entity": "mif:entityType/dataset",
+        "suggest_namespace": "_semantic/science"
+      },
+      {
+        "@id": "mif:pattern/5",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(hypothesis|we hypothesi[sz]e|null hypothesis)\\b",
+        "suggest_entity": "mif:entityType/hypothesis",
+        "suggest_namespace": "_semantic/science"
+      },
+      {
+        "@id": "mif:pattern/6",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(protocol application|batch|run performed|executed protocol)\\b",
+        "suggest_entity": "mif:entityType/protocol-application",
+        "suggest_namespace": "_procedural/protocols"
+      },
+      {
+        "@id": "mif:pattern/7",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(ClinicalTrials\\.gov|OSF|PROSPERO|multi-omics)\\b",
+        "suggest_entity": "mif:entityType/research-investigation",
+        "suggest_namespace": "_episodic/studies"
+      },
+      {
+        "@id": "mif:pattern/8",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(sequencer|mass spectrometer|microscope|flow cytometer|instrument)\\b",
+        "suggest_entity": "mif:entityType/research-instrument",
+        "suggest_namespace": "_semantic/instruments"
+      },
+      {
+        "@id": "mif:pattern/9",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(DOI|preprint|journal article|ScholarlyArticle)\\b",
+        "suggest_entity": "mif:entityType/research-publication",
+        "suggest_namespace": "_semantic/publications"
+      },
+      {
+        "@id": "mif:pattern/10",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(MonetaryGrant|grant number|funded by|award)\\b",
+        "suggest_entity": "mif:entityType/research-funding",
+        "suggest_namespace": "_semantic/funding"
+      },
+      {
+        "@id": "mif:pattern/11",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(prov:wasDerivedFrom|provenance|lineage|wasGeneratedBy)\\b",
+        "suggest_entity": "mif:entityType/data-provenance",
+        "suggest_namespace": "_episodic/provenance"
+      }
+    ]
+  }
+}

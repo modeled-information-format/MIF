@@ -1,0 +1,569 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "@vocab": "https://mif-spec.dev/ns/ontology#",
+    "mif": "https://mif-spec.dev/ns/",
+    "schema": "https://schema.org/",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "ontology": {
+      "@id": "mif:Ontology",
+      "@type": "@id"
+    },
+    "id": {
+      "@id": "@id"
+    },
+    "version": {
+      "@id": "schema:version",
+      "@type": "xsd:string"
+    },
+    "description": {
+      "@id": "schema:description",
+      "@type": "xsd:string"
+    },
+    "schema_url": {
+      "@id": "rdfs:isDefinedBy",
+      "@type": "@id"
+    },
+    "namespaces": {
+      "@id": "mif:hasNamespace",
+      "@container": "@id"
+    },
+    "type_hint": {
+      "@id": "mif:typeHint",
+      "@type": "xsd:string"
+    },
+    "replaces": {
+      "@id": "mif:replaces",
+      "@type": "@id"
+    },
+    "children": {
+      "@id": "mif:hasChildNamespace",
+      "@container": "@id"
+    },
+    "entity_types": {
+      "@id": "mif:definesEntityType",
+      "@container": "@list"
+    },
+    "name": {
+      "@id": "schema:name",
+      "@type": "xsd:string"
+    },
+    "base": {
+      "@id": "mif:baseType",
+      "@type": "@vocab"
+    },
+    "semantic": "mif:SemanticMemory",
+    "episodic": "mif:EpisodicMemory",
+    "procedural": "mif:ProceduralMemory",
+    "traits": {
+      "@id": "mif:definesTrait",
+      "@container": "@id"
+    },
+    "subtype_of": {
+      "@id": "mif:subtypeOf",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "fields": {
+      "@id": "mif:hasField",
+      "@container": "@id"
+    },
+    "requires": {
+      "@id": "mif:requiresField",
+      "@container": "@list"
+    },
+    "relationships": {
+      "@id": "mif:definesRelationship",
+      "@container": "@id"
+    },
+    "from": {
+      "@id": "rdfs:domain",
+      "@container": "@set"
+    },
+    "to": {
+      "@id": "rdfs:range",
+      "@container": "@set"
+    },
+    "symmetric": {
+      "@id": "owl:SymmetricProperty",
+      "@type": "xsd:boolean"
+    },
+    "discovery": {
+      "@id": "mif:discoveryConfig"
+    },
+    "enabled": {
+      "@id": "mif:discoveryEnabled",
+      "@type": "xsd:boolean"
+    },
+    "patterns": {
+      "@id": "mif:hasDiscoveryPattern",
+      "@container": "@list"
+    },
+    "confidence_threshold": {
+      "@id": "mif:confidenceThreshold",
+      "@type": "xsd:decimal"
+    },
+    "content_pattern": {
+      "@id": "mif:contentPattern",
+      "@type": "xsd:string"
+    },
+    "file_pattern": {
+      "@id": "mif:filePattern",
+      "@type": "xsd:string"
+    },
+    "suggest_entity": {
+      "@id": "mif:suggestsEntityType",
+      "@type": "@id"
+    },
+    "suggest_namespace": {
+      "@id": "mif:suggestsNamespace",
+      "@type": "xsd:string"
+    }
+  },
+  "@id": "mif:ontology/psycholinguistics",
+  "@type": "mif:Ontology",
+  "identifier": "psycholinguistics",
+  "version": "0.1.0",
+  "description": "Psycholinguistics and computational stylometry ontology \u2014 constructs, features, indices, protocols, instruments, frameworks, and references for personality-language mapping, voice elicitation, and authorship research.",
+  "schema_url": "https://mif-spec.dev/schema/ontology/ontology.schema.json",
+  "namespaces": {
+    "semantic": {
+      "@id": "mif:namespace/semantic",
+      "@type": "mif:Namespace",
+      "name": "semantic",
+      "children": {
+        "constructs": {
+          "@id": "mif:namespace/semantic/constructs",
+          "@type": "mif:Namespace",
+          "name": "constructs",
+          "description": "Psycholinguistic and psychological constructs",
+          "type_hint": "semantic"
+        },
+        "features": {
+          "@id": "mif:namespace/semantic/features",
+          "@type": "mif:Namespace",
+          "name": "features",
+          "description": "Stylometric and linguistic features extracted from text",
+          "type_hint": "semantic"
+        },
+        "indices": {
+          "@id": "mif:namespace/semantic/indices",
+          "@type": "mif:Namespace",
+          "name": "indices",
+          "description": "Psychometric indices and derived scores",
+          "type_hint": "semantic"
+        },
+        "instruments": {
+          "@id": "mif:namespace/semantic/instruments",
+          "@type": "mif:Namespace",
+          "name": "instruments",
+          "description": "Research instruments, tools, and platforms",
+          "type_hint": "semantic"
+        },
+        "frameworks": {
+          "@id": "mif:namespace/semantic/frameworks",
+          "@type": "mif:Namespace",
+          "name": "frameworks",
+          "description": "Linguistic and psycholinguistic frameworks",
+          "type_hint": "semantic"
+        },
+        "protocols": {
+          "@id": "mif:namespace/semantic/protocols",
+          "@type": "mif:Namespace",
+          "name": "protocols",
+          "description": "Elicitation and interview protocols",
+          "type_hint": "semantic"
+        }
+      }
+    }
+  },
+  "entity_types": [
+    {
+      "@id": "mif:entityType/psycholinguistic-construct",
+      "@type": "mif:EntityType",
+      "name": "psycholinguistic-construct",
+      "base": "semantic",
+      "description": "An abstract psycholinguistic or psychological construct measurable via language (e.g. Big Five trait, attachment style)",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "subtype_of": [
+        "mif:entityType/concept"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "construct_family"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Construct name (e.g. Openness to Experience)"
+          },
+          "construct_family": {
+            "type": "string",
+            "description": "Parent family (e.g. Big Five, HEXACO, attachment, need-for-cognition)"
+          },
+          "measurement_instrument": {
+            "type": "string",
+            "description": "Primary instrument used to measure this construct (e.g. NEO-PI-R, BFI)"
+          },
+          "dimension_count": {
+            "type": "string",
+            "description": "Number of facets or sub-dimensions"
+          },
+          "corpus_application": {
+            "type": "string",
+            "description": "How this construct is operationalized in a text corpus"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/stylometric-feature",
+      "@type": "mif:EntityType",
+      "name": "stylometric-feature",
+      "base": "semantic",
+      "description": "A quantifiable textual feature used in authorship analysis or style profiling (e.g. type-token ratio, function-word frequency)",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "subtype_of": [
+        "mif:entityType/concept"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "feature_class"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Feature name (e.g. MATTR, mean sentence length, POS trigram)"
+          },
+          "feature_class": {
+            "type": "string",
+            "description": "Class of feature (lexical, syntactic, character, semantic)"
+          },
+          "extraction_method": {
+            "type": "string",
+            "description": "How the feature is computed (tool, algorithm, window size)"
+          },
+          "discriminating_power": {
+            "type": "string",
+            "description": "Reported effectiveness for authorship discrimination"
+          },
+          "prior_art": {
+            "type": "string",
+            "description": "Key studies or tools establishing this feature"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/psychometric-index",
+      "@type": "mif:EntityType",
+      "name": "psychometric-index",
+      "base": "semantic",
+      "description": "A derived psychometric index or score computed over text or survey responses (e.g. Flesch Reading Ease, LIWC Analytic)",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "subtype_of": [
+        "mif:entityType/delivery-metric"
+      ],
+      "schema": {
+        "required": [
+          "metric_name"
+        ],
+        "properties": {
+          "metric_name": {
+            "type": "string",
+            "description": "Index name (e.g. Flesch-Kincaid Grade Level, LIWC Analytic)"
+          },
+          "index_type": {
+            "type": "string",
+            "description": "Index category (readability, personality, affect, complexity)"
+          },
+          "formula": {
+            "type": "string",
+            "description": "Computational formula or algorithm"
+          },
+          "normative_range": {
+            "type": "string",
+            "description": "Expected range or population norms"
+          },
+          "tool": {
+            "type": "string",
+            "description": "Software or platform that computes this index"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/elicitation-protocol",
+      "@type": "mif:EntityType",
+      "name": "elicitation-protocol",
+      "base": "semantic",
+      "description": "A structured protocol for eliciting language samples or self-report responses for psycholinguistic analysis",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "subtype_of": [
+        "mif:entityType/design-pattern"
+      ],
+      "schema": {
+        "required": [
+          "pattern_name",
+          "context",
+          "solution"
+        ],
+        "properties": {
+          "pattern_name": {
+            "type": "string",
+            "description": "Protocol name (e.g. Cognitive Interview, Think-Aloud, Voice Elicitation)"
+          },
+          "context": {
+            "type": "string",
+            "description": "Research context and target constructs"
+          },
+          "solution": {
+            "type": "string",
+            "description": "How the protocol structures the elicitation"
+          },
+          "elicitation_type": {
+            "type": "string",
+            "description": "Modality (written, spoken, structured, semi-structured)"
+          },
+          "question_sequencing": {
+            "type": "string",
+            "description": "Order and branching logic of prompts"
+          },
+          "respondent_burden": {
+            "type": "string",
+            "description": "Estimated time and cognitive load for respondent"
+          },
+          "validity_notes": {
+            "type": "string",
+            "description": "Known validity or reliability constraints"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/research-instrument",
+      "@type": "mif:EntityType",
+      "name": "research-instrument",
+      "base": "semantic",
+      "description": "A software tool, survey platform, or analysis package used in psycholinguistic research",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "subtype_of": [
+        "mif:entityType/technology"
+      ],
+      "schema": {
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Instrument name (e.g. LIWC-22, stylo R package, APA PsycINFO)"
+          },
+          "instrument_type": {
+            "type": "string",
+            "description": "Type (text-analysis-software, survey-platform, corpus-tool, statistical-package)"
+          },
+          "vendor_or_author": {
+            "type": "string",
+            "description": "Developer, author, or institution"
+          },
+          "version": {
+            "type": "string",
+            "description": "Version or edition"
+          },
+          "primary_use": {
+            "type": "string",
+            "description": "Main analytical use case"
+          },
+          "licensing": {
+            "type": "string",
+            "description": "License or access model (open-source, commercial, academic)"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/linguistic-framework",
+      "@type": "mif:EntityType",
+      "name": "linguistic-framework",
+      "base": "semantic",
+      "description": "A theoretical or computational framework grounding psycholinguistic research (e.g. LIWC dictionary, Universal Dependencies)",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "subtype_of": [
+        "mif:entityType/concept"
+      ],
+      "schema": {
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Framework name (e.g. LIWC, Universal Dependencies, Systemic Functional Linguistics)"
+          },
+          "framework_type": {
+            "type": "string",
+            "description": "Type (dictionary-based, dependency-grammar, discourse, register)"
+          },
+          "primary_author": {
+            "type": "string",
+            "description": "Lead author(s) or originating institution"
+          },
+          "publication": {
+            "type": "string",
+            "description": "Canonical publication or specification"
+          },
+          "harness_application": {
+            "type": "string",
+            "description": "How this framework is applied in the research harness"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/existing-framework-reference",
+      "@type": "mif:EntityType",
+      "name": "existing-framework-reference",
+      "base": "semantic",
+      "description": "A reference to an existing psycholinguistic or stylometric framework for comparative or reuse analysis",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "subtype_of": [
+        "mif:entityType/concept"
+      ],
+      "schema": {
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Referenced framework or tool name"
+          },
+          "framework_origin": {
+            "type": "string",
+            "description": "Originating research group or project"
+          },
+          "capability": {
+            "type": "string",
+            "description": "What the framework offers"
+          },
+          "limitation": {
+            "type": "string",
+            "description": "Known limitations or scope boundaries"
+          },
+          "comparison_basis": {
+            "type": "string",
+            "description": "Basis for comparing with or adopting from this framework"
+          }
+        }
+      }
+    }
+  ],
+  "traits": {
+    "cited": {
+      "@id": "mif:trait/cited",
+      "@type": "mif:Trait",
+      "name": "cited",
+      "description": "Requires citations/sources",
+      "requires": [
+        "citations"
+      ]
+    }
+  },
+  "relationships": {
+    "measures": {
+      "@id": "mif:relationship/measures",
+      "@type": "mif:Relationship",
+      "name": "measures",
+      "description": "A research instrument measures a psycholinguistic construct, stylometric feature, or psychometric index (RO:0000056 participates-in)",
+      "from": [
+        "mif:entityType/research-instrument"
+      ],
+      "to": [
+        "mif:entityType/psycholinguistic-construct",
+        "mif:entityType/stylometric-feature",
+        "mif:entityType/psychometric-index"
+      ],
+      "symmetric": false
+    },
+    "operationalizes": {
+      "@id": "mif:relationship/operationalizes",
+      "@type": "mif:Relationship",
+      "name": "operationalizes",
+      "description": "An elicitation protocol operationalizes a psycholinguistic construct, making it empirically observable (RO:0002234 has-output)",
+      "from": [
+        "mif:entityType/elicitation-protocol"
+      ],
+      "to": [
+        "mif:entityType/psycholinguistic-construct"
+      ],
+      "symmetric": false
+    },
+    "grounds": {
+      "@id": "mif:relationship/grounds",
+      "@type": "mif:Relationship",
+      "name": "grounds",
+      "description": "A linguistic framework grounds a psycholinguistic construct, providing theoretical or categorical basis (IAO:0000136 is-about)",
+      "from": [
+        "mif:entityType/linguistic-framework"
+      ],
+      "to": [
+        "mif:entityType/psycholinguistic-construct"
+      ],
+      "symmetric": false
+    }
+  },
+  "discovery": {
+    "enabled": true,
+    "confidence_threshold": 0.8,
+    "patterns": [
+      {
+        "@id": "mif:pattern/0",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(Big Five|OCEAN|openness|conscientiousness|extraversion|agreeableness|neuroticism|HEXACO|LIWC)\\b",
+        "suggest_entity": "mif:entityType/psycholinguistic-construct",
+        "suggest_namespace": "_semantic/constructs"
+      },
+      {
+        "@id": "mif:pattern/1",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(TTR|MATTR|MTLD|Flesch|Kincaid|readability|type.token ratio|lexical density)\\b",
+        "suggest_entity": "mif:entityType/psychometric-index",
+        "suggest_namespace": "_semantic/indices"
+      },
+      {
+        "@id": "mif:pattern/2",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(Stylo|Burrows.?s Delta|stylo|Delta method|stylometry|authorship attribution)\\b",
+        "suggest_entity": "mif:entityType/research-instrument",
+        "suggest_namespace": "_semantic/instruments"
+      },
+      {
+        "@id": "mif:pattern/3",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(elicitation|cognitive interview|think.aloud|voice interview|structured elicitation)\\b",
+        "suggest_entity": "mif:entityType/elicitation-protocol",
+        "suggest_namespace": "_semantic/protocols"
+      }
+    ]
+  }
+}

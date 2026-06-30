@@ -1,0 +1,505 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "@vocab": "https://mif-spec.dev/ns/ontology#",
+    "mif": "https://mif-spec.dev/ns/",
+    "schema": "https://schema.org/",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "ontology": {
+      "@id": "mif:Ontology",
+      "@type": "@id"
+    },
+    "id": {
+      "@id": "@id"
+    },
+    "version": {
+      "@id": "schema:version",
+      "@type": "xsd:string"
+    },
+    "description": {
+      "@id": "schema:description",
+      "@type": "xsd:string"
+    },
+    "schema_url": {
+      "@id": "rdfs:isDefinedBy",
+      "@type": "@id"
+    },
+    "namespaces": {
+      "@id": "mif:hasNamespace",
+      "@container": "@id"
+    },
+    "type_hint": {
+      "@id": "mif:typeHint",
+      "@type": "xsd:string"
+    },
+    "replaces": {
+      "@id": "mif:replaces",
+      "@type": "@id"
+    },
+    "children": {
+      "@id": "mif:hasChildNamespace",
+      "@container": "@id"
+    },
+    "entity_types": {
+      "@id": "mif:definesEntityType",
+      "@container": "@list"
+    },
+    "name": {
+      "@id": "schema:name",
+      "@type": "xsd:string"
+    },
+    "base": {
+      "@id": "mif:baseType",
+      "@type": "@vocab"
+    },
+    "semantic": "mif:SemanticMemory",
+    "episodic": "mif:EpisodicMemory",
+    "procedural": "mif:ProceduralMemory",
+    "traits": {
+      "@id": "mif:definesTrait",
+      "@container": "@id"
+    },
+    "subtype_of": {
+      "@id": "mif:subtypeOf",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "fields": {
+      "@id": "mif:hasField",
+      "@container": "@id"
+    },
+    "requires": {
+      "@id": "mif:requiresField",
+      "@container": "@list"
+    },
+    "relationships": {
+      "@id": "mif:definesRelationship",
+      "@container": "@id"
+    },
+    "from": {
+      "@id": "rdfs:domain",
+      "@container": "@set"
+    },
+    "to": {
+      "@id": "rdfs:range",
+      "@container": "@set"
+    },
+    "symmetric": {
+      "@id": "owl:SymmetricProperty",
+      "@type": "xsd:boolean"
+    },
+    "discovery": {
+      "@id": "mif:discoveryConfig"
+    },
+    "enabled": {
+      "@id": "mif:discoveryEnabled",
+      "@type": "xsd:boolean"
+    },
+    "patterns": {
+      "@id": "mif:hasDiscoveryPattern",
+      "@container": "@list"
+    },
+    "confidence_threshold": {
+      "@id": "mif:confidenceThreshold",
+      "@type": "xsd:decimal"
+    },
+    "content_pattern": {
+      "@id": "mif:contentPattern",
+      "@type": "xsd:string"
+    },
+    "file_pattern": {
+      "@id": "mif:filePattern",
+      "@type": "xsd:string"
+    },
+    "suggest_entity": {
+      "@id": "mif:suggestsEntityType",
+      "@type": "@id"
+    },
+    "suggest_namespace": {
+      "@id": "mif:suggestsNamespace",
+      "@type": "xsd:string"
+    }
+  },
+  "@id": "mif:ontology/data-engineering",
+  "@type": "mif:Ontology",
+  "identifier": "data-engineering",
+  "version": "0.2.0",
+  "description": "Data engineering domain ontology",
+  "namespaces": {
+    "semantic": {
+      "@id": "mif:namespace/semantic",
+      "@type": "mif:Namespace",
+      "name": "semantic",
+      "children": {
+        "contracts": {
+          "@id": "mif:namespace/semantic/contracts",
+          "@type": "mif:Namespace",
+          "name": "contracts",
+          "description": "Data contracts and product interface agreements",
+          "type_hint": "semantic"
+        },
+        "governance": {
+          "@id": "mif:namespace/semantic/governance",
+          "@type": "mif:Namespace",
+          "name": "governance",
+          "description": "Governance policies, controls, and stewardship",
+          "type_hint": "semantic"
+        },
+        "storage": {
+          "@id": "mif:namespace/semantic/storage",
+          "@type": "mif:Namespace",
+          "name": "storage",
+          "description": "Storage and scaling architectures",
+          "type_hint": "semantic"
+        }
+      }
+    },
+    "procedural": {
+      "@id": "mif:namespace/procedural",
+      "@type": "mif:Namespace",
+      "name": "procedural",
+      "children": {
+        "pipelines": {
+          "@id": "mif:namespace/procedural/pipelines",
+          "@type": "mif:Namespace",
+          "name": "pipelines",
+          "description": "Pipeline and data-movement patterns",
+          "type_hint": "procedural"
+        }
+      }
+    }
+  },
+  "entity_types": [
+    {
+      "@id": "mif:entityType/data-contract",
+      "@type": "mif:EntityType",
+      "name": "data-contract",
+      "base": "semantic",
+      "description": "A data contract: an enforceable agreement on schema, semantics, and SLAs between data producers and consumers",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "schema": {
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Contract name or subject"
+          },
+          "scope": {
+            "type": "string",
+            "description": "What the contract covers (dataset, interface, domain)"
+          },
+          "parties": {
+            "type": "string",
+            "description": "Producer and consumer parties bound by the contract"
+          },
+          "enforcement": {
+            "type": "string",
+            "description": "How the contract is enforced (CI gate, registry, runtime check)"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/data-product",
+      "@type": "mif:EntityType",
+      "name": "data-product",
+      "base": "semantic",
+      "description": "A data product: a discoverable, governed, consumable data asset with an owner and interface",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "schema": {
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Data product name"
+          },
+          "domain": {
+            "type": "string",
+            "description": "Owning business domain"
+          },
+          "interface": {
+            "type": "string",
+            "description": "Consumption interface (view, table, API, share)"
+          },
+          "sla": {
+            "type": "string",
+            "description": "Service-level agreement (freshness, availability)"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/data-governance-policy",
+      "@type": "mif:EntityType",
+      "name": "data-governance-policy",
+      "base": "semantic",
+      "description": "A governance policy or control: a rule governing access, retention, classification, or stewardship of data",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "schema": {
+        "required": [
+          "policy_name"
+        ],
+        "properties": {
+          "policy_name": {
+            "type": "string",
+            "description": "Policy or control name"
+          },
+          "scope": {
+            "type": "string",
+            "description": "What the policy governs (catalog, schema, table, tag)"
+          },
+          "control": {
+            "type": "string",
+            "description": "Control type (preventive, detective, corrective)"
+          },
+          "enforcement": {
+            "type": "string",
+            "description": "Mechanism that enforces the policy"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/data-quality-rule",
+      "@type": "mif:EntityType",
+      "name": "data-quality-rule",
+      "base": "semantic",
+      "description": "A data quality rule, check, or assertion applied to data to detect or prevent defects",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "schema": {
+        "required": [
+          "rule_name"
+        ],
+        "properties": {
+          "rule_name": {
+            "type": "string",
+            "description": "Rule or check name"
+          },
+          "dimension": {
+            "type": "string",
+            "description": "Quality dimension (freshness, completeness, validity, uniqueness, drift)"
+          },
+          "check": {
+            "type": "string",
+            "description": "How the check is expressed or computed"
+          },
+          "action": {
+            "type": "string",
+            "description": "Reaction on violation (drop, mark, quarantine, alert, fail)"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/storage-architecture",
+      "@type": "mif:EntityType",
+      "name": "storage-architecture",
+      "base": "semantic",
+      "description": "A storage or scaling architecture for data (e.g. Postgres sharding, Snowflake multi-tenant isolation, lakehouse table format)",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "schema": {
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Architecture name"
+          },
+          "pattern": {
+            "type": "string",
+            "description": "The structural pattern (proxy, extension, shared/isolated, branching)"
+          },
+          "scaling_model": {
+            "type": "string",
+            "description": "How it scales (sharding, read replicas, serverless, multi-cluster)"
+          },
+          "tradeoffs": {
+            "type": "string",
+            "description": "Key trade-offs and constraints"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/pipeline-pattern",
+      "@type": "mif:EntityType",
+      "name": "pipeline-pattern",
+      "base": "procedural",
+      "description": "A pipeline or data-movement pattern (e.g. ETL/ELT, streaming, write-audit-publish, reverse-ETL)",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "schema": {
+        "required": [
+          "pattern_name"
+        ],
+        "properties": {
+          "pattern_name": {
+            "type": "string",
+            "description": "Pattern name"
+          },
+          "context": {
+            "type": "string",
+            "description": "When to use this pattern"
+          },
+          "solution": {
+            "type": "string",
+            "description": "How the pattern moves or validates data"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/data-platform",
+      "@type": "mif:EntityType",
+      "name": "data-platform",
+      "base": "semantic",
+      "description": "A named data platform, tool, catalog, or engine (e.g. Snowflake, Postgres, dbt, Airflow, Kafka, Iceberg, Unity Catalog)",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "category"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Platform or tool name"
+          },
+          "category": {
+            "type": "string",
+            "description": "Free-form category (warehouse, catalog, observability, streaming, proxy, table-format, transformation, etc.)"
+          },
+          "vendor": {
+            "type": "string",
+            "description": "Maintaining vendor or project"
+          },
+          "use_case": {
+            "type": "string",
+            "description": "Primary role in the data stack"
+          }
+        }
+      }
+    }
+  ],
+  "traits": {
+    "cited": {
+      "@id": "mif:trait/cited",
+      "@type": "mif:Trait",
+      "name": "cited",
+      "description": "Requires citations/sources",
+      "requires": [
+        "citations"
+      ]
+    }
+  },
+  "relationships": {
+    "enforces": {
+      "@id": "mif:relationship/enforces",
+      "@type": "mif:Relationship",
+      "name": "enforces",
+      "description": "A governance policy or contract enforces a quality rule",
+      "from": [
+        "mif:entityType/data-governance-policy",
+        "mif:entityType/data-contract"
+      ],
+      "to": [
+        "mif:entityType/data-quality-rule"
+      ],
+      "symmetric": false
+    },
+    "governs": {
+      "@id": "mif:relationship/governs",
+      "@type": "mif:Relationship",
+      "name": "governs",
+      "description": "A policy or platform governs a data product or architecture",
+      "from": [
+        "mif:entityType/data-governance-policy",
+        "mif:entityType/data-platform"
+      ],
+      "to": [
+        "mif:entityType/data-product",
+        "mif:entityType/storage-architecture"
+      ],
+      "symmetric": false
+    },
+    "implements": {
+      "@id": "mif:relationship/implements",
+      "@type": "mif:Relationship",
+      "name": "implements",
+      "description": "A platform or architecture implements a pattern or decision",
+      "from": [
+        "mif:entityType/data-platform",
+        "mif:entityType/storage-architecture"
+      ],
+      "to": [
+        "mif:entityType/pipeline-pattern",
+        "mif:entityType/design-pattern",
+        "mif:entityType/architectural-decision"
+      ],
+      "symmetric": false
+    },
+    "governed_by": {
+      "@id": "mif:relationship/governed_by",
+      "@type": "mif:Relationship",
+      "name": "governed_by",
+      "description": "A data product or storage architecture is governed by a control or policy",
+      "from": [
+        "mif:entityType/data-product",
+        "mif:entityType/storage-architecture"
+      ],
+      "to": [
+        "mif:entityType/control",
+        "mif:entityType/policy"
+      ],
+      "symmetric": false
+    }
+  },
+  "discovery": {
+    "enabled": true,
+    "confidence_threshold": 0.8,
+    "patterns": [
+      {
+        "@id": "mif:pattern/0",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(Snowflake|Postgres|PostgreSQL|BigQuery|Redshift)\\b",
+        "suggest_entity": "mif:entityType/data-platform",
+        "suggest_namespace": "_semantic/entities"
+      },
+      {
+        "@id": "mif:pattern/1",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(dbt|Airflow|Kafka|Iceberg|Delta\\s+Lake|Unity\\s+Catalog|Polaris)\\b",
+        "suggest_entity": "mif:entityType/data-platform",
+        "suggest_namespace": "_semantic/entities"
+      },
+      {
+        "@id": "mif:pattern/2",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(write-audit-publish|WAP|reverse-ETL|ELT|ETL)\\b",
+        "suggest_entity": "mif:entityType/pipeline-pattern",
+        "suggest_namespace": "_procedural/patterns"
+      }
+    ]
+  }
+}
