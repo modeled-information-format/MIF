@@ -265,7 +265,7 @@
     "shared-traits": {
       "version": "1.0.0",
       "file": "shared-traits.ontology.yaml",
-      "sha256": "7efdf229283b1961d4994767f836498b28d176ccbb52c659aec3f73da82501bb",
+      "sha256": "c73ad92ab6bb4e3fabb303f7253c4e6f1870bc2be9c9e9086b6bc0b8d696a02c",
       "extends": [
         "mif-base"
       ],
