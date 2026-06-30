@@ -21,4 +21,4 @@ jobs:
     with:
       update-types: patch
     secrets:
-      app-private-key: ${{ secrets.MIF_CI_CLIENT_APP_PRIVATE_KEY }}
+      app-private-key: ${{ secrets.AUTOMERGE_CLIENT_APP_PRIVATE_KEY }}
