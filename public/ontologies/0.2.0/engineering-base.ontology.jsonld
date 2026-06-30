@@ -1,0 +1,664 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "@vocab": "https://mif-spec.dev/ns/ontology#",
+    "mif": "https://mif-spec.dev/ns/",
+    "schema": "https://schema.org/",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "ontology": {
+      "@id": "mif:Ontology",
+      "@type": "@id"
+    },
+    "id": {
+      "@id": "@id"
+    },
+    "version": {
+      "@id": "schema:version",
+      "@type": "xsd:string"
+    },
+    "description": {
+      "@id": "schema:description",
+      "@type": "xsd:string"
+    },
+    "schema_url": {
+      "@id": "rdfs:isDefinedBy",
+      "@type": "@id"
+    },
+    "namespaces": {
+      "@id": "mif:hasNamespace",
+      "@container": "@id"
+    },
+    "type_hint": {
+      "@id": "mif:typeHint",
+      "@type": "xsd:string"
+    },
+    "replaces": {
+      "@id": "mif:replaces",
+      "@type": "@id"
+    },
+    "children": {
+      "@id": "mif:hasChildNamespace",
+      "@container": "@id"
+    },
+    "entity_types": {
+      "@id": "mif:definesEntityType",
+      "@container": "@list"
+    },
+    "name": {
+      "@id": "schema:name",
+      "@type": "xsd:string"
+    },
+    "base": {
+      "@id": "mif:baseType",
+      "@type": "@vocab"
+    },
+    "semantic": "mif:SemanticMemory",
+    "episodic": "mif:EpisodicMemory",
+    "procedural": "mif:ProceduralMemory",
+    "traits": {
+      "@id": "mif:definesTrait",
+      "@container": "@id"
+    },
+    "subtype_of": {
+      "@id": "mif:subtypeOf",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "fields": {
+      "@id": "mif:hasField",
+      "@container": "@id"
+    },
+    "requires": {
+      "@id": "mif:requiresField",
+      "@container": "@list"
+    },
+    "relationships": {
+      "@id": "mif:definesRelationship",
+      "@container": "@id"
+    },
+    "from": {
+      "@id": "rdfs:domain",
+      "@container": "@set"
+    },
+    "to": {
+      "@id": "rdfs:range",
+      "@container": "@set"
+    },
+    "symmetric": {
+      "@id": "owl:SymmetricProperty",
+      "@type": "xsd:boolean"
+    },
+    "discovery": {
+      "@id": "mif:discoveryConfig"
+    },
+    "enabled": {
+      "@id": "mif:discoveryEnabled",
+      "@type": "xsd:boolean"
+    },
+    "patterns": {
+      "@id": "mif:hasDiscoveryPattern",
+      "@container": "@list"
+    },
+    "confidence_threshold": {
+      "@id": "mif:confidenceThreshold",
+      "@type": "xsd:decimal"
+    },
+    "content_pattern": {
+      "@id": "mif:contentPattern",
+      "@type": "xsd:string"
+    },
+    "file_pattern": {
+      "@id": "mif:filePattern",
+      "@type": "xsd:string"
+    },
+    "suggest_entity": {
+      "@id": "mif:suggestsEntityType",
+      "@type": "@id"
+    },
+    "suggest_namespace": {
+      "@id": "mif:suggestsNamespace",
+      "@type": "xsd:string"
+    }
+  },
+  "@id": "mif:ontology/engineering-base",
+  "@type": "mif:Ontology",
+  "identifier": "engineering-base",
+  "version": "0.1.0",
+  "description": "Shared engineering supertypes \u2014 the MIF-compliant intermediate layer the engineering domains extend",
+  "namespaces": {
+    "semantic": {
+      "@id": "mif:namespace/semantic",
+      "@type": "mif:Namespace",
+      "name": "semantic",
+      "children": {
+        "architecture": {
+          "@id": "mif:namespace/semantic/architecture",
+          "@type": "mif:Namespace",
+          "name": "architecture",
+          "description": "System architecture and component designs",
+          "type_hint": "semantic"
+        },
+        "patterns": {
+          "@id": "mif:namespace/semantic/patterns",
+          "@type": "mif:Namespace",
+          "name": "patterns",
+          "description": "Design and architectural patterns",
+          "type_hint": "semantic"
+        }
+      }
+    }
+  },
+  "entity_types": [
+    {
+      "@id": "mif:entityType/component",
+      "@type": "mif:EntityType",
+      "name": "component",
+      "base": "semantic",
+      "description": "A software/system component, module, or service",
+      "traits": [
+        "mif:trait/versioned",
+        "mif:trait/documented"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "responsibility"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Component name"
+          },
+          "responsibility": {
+            "type": "string",
+            "description": "Single responsibility description"
+          },
+          "dependencies": {
+            "type": "array",
+            "description": "List of component dependencies",
+            "items": {
+              "type": "string"
+            }
+          },
+          "interfaces": {
+            "type": "array",
+            "description": "Public interfaces/APIs",
+            "items": {
+              "type": "string"
+            }
+          },
+          "owner": {
+            "type": "string",
+            "description": "Team or person owning this component"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/architectural-decision",
+      "@type": "mif:EntityType",
+      "name": "architectural-decision",
+      "base": "semantic",
+      "description": "An architectural decision with full context",
+      "traits": [
+        "mif:trait/dated",
+        "mif:trait/cited"
+      ],
+      "schema": {
+        "required": [
+          "decision",
+          "rationale"
+        ],
+        "properties": {
+          "decision": {
+            "type": "string",
+            "description": "The decision made"
+          },
+          "rationale": {
+            "type": "string",
+            "description": "Why this decision was made"
+          },
+          "alternatives": {
+            "type": "array",
+            "description": "Alternatives considered",
+            "items": {
+              "type": "object"
+            }
+          },
+          "consequences": {
+            "type": "object",
+            "description": "Known consequences and trade-offs"
+          },
+          "status": {
+            "type": "string",
+            "description": "Decision status",
+            "enum": [
+              "proposed",
+              "accepted",
+              "deprecated",
+              "superseded"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/design-pattern",
+      "@type": "mif:EntityType",
+      "name": "design-pattern",
+      "base": "semantic",
+      "description": "A design pattern or architectural pattern",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "schema": {
+        "required": [
+          "pattern_name",
+          "context",
+          "solution"
+        ],
+        "properties": {
+          "pattern_name": {
+            "type": "string"
+          },
+          "context": {
+            "type": "string",
+            "description": "When to use this pattern"
+          },
+          "solution": {
+            "type": "string",
+            "description": "How the pattern solves the problem"
+          },
+          "consequences": {
+            "type": "object",
+            "description": "Trade-offs and implications"
+          },
+          "related_patterns": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/delivery-metric",
+      "@type": "mif:EntityType",
+      "name": "delivery-metric",
+      "base": "semantic",
+      "description": "A delivery, reliability, or operations metric (e.g. DORA four/five keys, SLO/SLI, MTTR, throughput)",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "schema": {
+        "required": [
+          "metric_name"
+        ],
+        "properties": {
+          "metric_name": {
+            "type": "string"
+          },
+          "definition": {
+            "type": "string",
+            "description": "What the metric measures"
+          },
+          "benchmark": {
+            "type": "string",
+            "description": "Target or elite-tier value"
+          },
+          "source": {
+            "type": "string",
+            "description": "Originating framework or study"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/engineering-practice",
+      "@type": "mif:EntityType",
+      "name": "engineering-practice",
+      "base": "semantic",
+      "description": "An organizational, cultural, or operating practice (e.g. blameless postmortems, you-build-it-you-run-it, data mesh, federated governance)",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "schema": {
+        "required": [
+          "practice_name"
+        ],
+        "properties": {
+          "practice_name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "description": "What the practice is"
+          },
+          "evidence": {
+            "type": "string",
+            "description": "Empirical support or outcome"
+          },
+          "origin": {
+            "type": "string",
+            "description": "Originating model, study, or author"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/process-discipline",
+      "@type": "mif:EntityType",
+      "name": "process-discipline",
+      "base": "semantic",
+      "description": "A governance or production-readiness discipline (e.g. PRR, ORR, change enablement, acceptance criteria, stewardship cadence)",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "schema": {
+        "required": [
+          "discipline_name"
+        ],
+        "properties": {
+          "discipline_name": {
+            "type": "string"
+          },
+          "purpose": {
+            "type": "string",
+            "description": "What the discipline governs"
+          },
+          "criteria": {
+            "type": "string",
+            "description": "Acceptance or gating criteria"
+          },
+          "stage": {
+            "type": "string",
+            "description": "Lifecycle stage where it applies"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/control",
+      "@type": "mif:EntityType",
+      "name": "control",
+      "base": "semantic",
+      "description": "A control or safeguard governing a component, artifact, or asset (security, data-governance, or compliance control)",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "schema": {
+        "required": [
+          "control_name"
+        ],
+        "properties": {
+          "control_name": {
+            "type": "string"
+          },
+          "control_type": {
+            "type": "string",
+            "description": "preventive / detective / corrective"
+          },
+          "framework_ref": {
+            "type": "string",
+            "description": "Originating framework or catalog (e.g. NIST 800-53 AC-2, SOC 2 CC6.1)"
+          },
+          "statement": {
+            "type": "string",
+            "description": "What the control requires"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/artifact",
+      "@type": "mif:EntityType",
+      "name": "artifact",
+      "base": "semantic",
+      "description": "A produced, content-addressable artifact (software package/build, dataset, model, report)",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "schema": {
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "artifact_type": {
+            "type": "string",
+            "description": "build / package / image / dataset / model / report"
+          },
+          "digest": {
+            "type": "string",
+            "description": "Content hash (e.g. sha256:...)"
+          },
+          "uri": {
+            "type": "string",
+            "description": "Locator for the artifact"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/policy",
+      "@type": "mif:EntityType",
+      "name": "policy",
+      "base": "semantic",
+      "description": "A policy: a rule governing access, retention, classification, or change, enforced across the lifecycle",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "schema": {
+        "required": [
+          "policy_name"
+        ],
+        "properties": {
+          "policy_name": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string",
+            "description": "What the policy governs"
+          },
+          "enforcement": {
+            "type": "string",
+            "description": "Mechanism that enforces it (policy-as-code, gate, ABAC tag)"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/provenance",
+      "@type": "mif:EntityType",
+      "name": "provenance",
+      "base": "semantic",
+      "description": "A provenance or attestation record binding an artifact to how it was produced (SLSA/in-toto, OpenLineage)",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "schema": {
+        "required": [
+          "subject"
+        ],
+        "properties": {
+          "subject": {
+            "type": "string",
+            "description": "The artifact or entity the provenance describes"
+          },
+          "builder": {
+            "type": "string",
+            "description": "The system/identity that produced it"
+          },
+          "predicate_type": {
+            "type": "string",
+            "description": "Attestation predicate (e.g. SLSA provenance, in-toto, OpenLineage run)"
+          },
+          "materials": {
+            "type": "array",
+            "description": "Inputs/materials consumed",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "traits": {
+    "versioned": {
+      "@id": "mif:trait/versioned",
+      "@type": "mif:Trait",
+      "name": "versioned",
+      "description": "Adds version tracking fields",
+      "fields": {
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+.*$"
+        },
+        "changelog": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "documented": {
+      "@id": "mif:trait/documented",
+      "@type": "mif:Trait",
+      "name": "documented",
+      "description": "Adds documentation reference",
+      "fields": {
+        "documentation_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "readme_path": {
+          "type": "string"
+        }
+      }
+    },
+    "dated": {
+      "@id": "mif:trait/dated",
+      "@type": "mif:Trait",
+      "name": "dated",
+      "description": "Adds decision/event date",
+      "fields": {
+        "decision_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "review_date": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "cited": {
+      "@id": "mif:trait/cited",
+      "@type": "mif:Trait",
+      "name": "cited",
+      "description": "Requires citations/sources",
+      "requires": [
+        "citations"
+      ]
+    }
+  },
+  "relationships": {
+    "depends_on": {
+      "@id": "mif:relationship/depends_on",
+      "@type": "mif:Relationship",
+      "name": "depends_on",
+      "description": "Component dependency relationship",
+      "from": [
+        "mif:entityType/component"
+      ],
+      "to": [
+        "mif:entityType/component",
+        "mif:entityType/technology"
+      ],
+      "symmetric": false
+    },
+    "implements": {
+      "@id": "mif:relationship/implements",
+      "@type": "mif:Relationship",
+      "name": "implements",
+      "description": "Component implements a pattern or decision",
+      "from": [
+        "mif:entityType/component"
+      ],
+      "to": [
+        "mif:entityType/design-pattern",
+        "mif:entityType/architectural-decision"
+      ],
+      "symmetric": false
+    },
+    "governs": {
+      "@id": "mif:relationship/governs",
+      "@type": "mif:Relationship",
+      "name": "governs",
+      "description": "A control or policy governs a component or artifact",
+      "from": [
+        "mif:entityType/control",
+        "mif:entityType/policy"
+      ],
+      "to": [
+        "mif:entityType/component",
+        "mif:entityType/artifact"
+      ],
+      "symmetric": false
+    },
+    "attests": {
+      "@id": "mif:relationship/attests",
+      "@type": "mif:Relationship",
+      "name": "attests",
+      "description": "A provenance record attests an artifact",
+      "from": [
+        "mif:entityType/provenance"
+      ],
+      "to": [
+        "mif:entityType/artifact"
+      ],
+      "symmetric": false
+    },
+    "derived_from": {
+      "@id": "mif:relationship/derived_from",
+      "@type": "mif:Relationship",
+      "name": "derived_from",
+      "description": "Artifact lineage \u2014 an artifact is derived from another",
+      "from": [
+        "mif:entityType/artifact"
+      ],
+      "to": [
+        "mif:entityType/artifact"
+      ],
+      "symmetric": false
+    }
+  },
+  "discovery": {
+    "enabled": true,
+    "confidence_threshold": 0.8,
+    "patterns": [
+      {
+        "@id": "mif:pattern/0",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(Factory|Singleton|Observer|Repository|Strategy|Decorator)\\s+Pattern\\b",
+        "suggest_entity": "mif:entityType/design-pattern",
+        "suggest_namespace": "_semantic/patterns"
+      },
+      {
+        "@id": "mif:pattern/1",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(CQRS|Event\\s+Sourcing|Saga)\\b",
+        "suggest_entity": "mif:entityType/design-pattern",
+        "suggest_namespace": "_semantic/patterns"
+      }
+    ]
+  }
+}

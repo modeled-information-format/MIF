@@ -25,11 +25,14 @@ Run it as a release-prep step BEFORE tagging and commit the result.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import shutil
 import sys
 from pathlib import Path
+
+import yaml
 
 SEMVER = re.compile(r"^\d+\.\d+\.\d+$")
 ROOT = Path(__file__).resolve().parent.parent / "public" / "ontologies"
@@ -77,6 +80,17 @@ def _own_version(name: str) -> str:
     return str(data.get("version", "")) or "unknown"
 
 
+def _sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _extends(name: str) -> list[str]:
+    """The ontology's `extends` closure parents, read from its canonical YAML."""
+    data = yaml.safe_load((ROOT / f"{name}.ontology.yaml").read_text()) or {}
+    ext = (data.get("ontology") or {}).get("extends") or []
+    return [str(e) for e in ext]
+
+
 def _copy_set(dest_dir: Path, names: list[str], check: bool, problems: list[str]) -> None:
     for name in names:
         for ext in ("ontology.yaml", "ontology.jsonld"):
@@ -101,19 +115,25 @@ def _build_index(version: str) -> dict:
     for m in majors:
         aliases[f"v{m}"] = max((v for v in versions if v.split(".")[0] == m), key=_semver_key)
 
-    ontologies = []
+    # ADR-0002 (ontologies): the catalog is an OBJECT keyed by id, each entry carrying
+    # the on-demand fetch contract (file + sha256 of the served .ontology.yaml + extends)
+    # alongside the discovery URLs. This is the shape the harness fetcher consumes
+    # fail-closed and the one the ontologies repo's gen-ontology-index.sh already emits.
+    ontologies = {}
     for name in names:
         versioned = {}
         for alias in (*versions, "latest", *(f"v{m}" for m in majors)):
             if (ROOT / alias / f"{name}.ontology.jsonld").is_file():
                 versioned[alias] = f"{CANONICAL_BASE}{alias}/{name}.ontology.jsonld"
-        ontologies.append({
-            "id": name,
+        ontologies[name] = {
             "version": _own_version(name),
+            "file": f"{name}.ontology.yaml",
+            "sha256": _sha256(ROOT / f"{name}.ontology.yaml"),
+            "extends": _extends(name),
             "canonical": f"{CANONICAL_BASE}{name}.ontology.jsonld",
             "yaml": f"{CANONICAL_BASE}{name}.ontology.yaml",
             "versioned": versioned,
-        })
+        }
 
     return {**INDEX_META, "versions": versions, "aliases": aliases, "ontologies": ontologies}
 
@@ -126,8 +146,8 @@ def _build_html(index: dict) -> str:
     """
     from html import escape
     rows = []
-    for o in index["ontologies"]:
-        name = escape(o["id"])
+    for name_key, o in sorted(index["ontologies"].items()):
+        name = escape(name_key)
         ver = escape(o["version"])
         rows.append(
             f'      <tr><th scope="row"><code>{name}</code></th>'

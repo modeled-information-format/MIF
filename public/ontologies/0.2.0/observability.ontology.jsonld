@@ -1,0 +1,676 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "@vocab": "https://mif-spec.dev/ns/ontology#",
+    "mif": "https://mif-spec.dev/ns/",
+    "schema": "https://schema.org/",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "ontology": {
+      "@id": "mif:Ontology",
+      "@type": "@id"
+    },
+    "id": {
+      "@id": "@id"
+    },
+    "version": {
+      "@id": "schema:version",
+      "@type": "xsd:string"
+    },
+    "description": {
+      "@id": "schema:description",
+      "@type": "xsd:string"
+    },
+    "schema_url": {
+      "@id": "rdfs:isDefinedBy",
+      "@type": "@id"
+    },
+    "namespaces": {
+      "@id": "mif:hasNamespace",
+      "@container": "@id"
+    },
+    "type_hint": {
+      "@id": "mif:typeHint",
+      "@type": "xsd:string"
+    },
+    "replaces": {
+      "@id": "mif:replaces",
+      "@type": "@id"
+    },
+    "children": {
+      "@id": "mif:hasChildNamespace",
+      "@container": "@id"
+    },
+    "entity_types": {
+      "@id": "mif:definesEntityType",
+      "@container": "@list"
+    },
+    "name": {
+      "@id": "schema:name",
+      "@type": "xsd:string"
+    },
+    "base": {
+      "@id": "mif:baseType",
+      "@type": "@vocab"
+    },
+    "semantic": "mif:SemanticMemory",
+    "episodic": "mif:EpisodicMemory",
+    "procedural": "mif:ProceduralMemory",
+    "traits": {
+      "@id": "mif:definesTrait",
+      "@container": "@id"
+    },
+    "subtype_of": {
+      "@id": "mif:subtypeOf",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "fields": {
+      "@id": "mif:hasField",
+      "@container": "@id"
+    },
+    "requires": {
+      "@id": "mif:requiresField",
+      "@container": "@list"
+    },
+    "relationships": {
+      "@id": "mif:definesRelationship",
+      "@container": "@id"
+    },
+    "from": {
+      "@id": "rdfs:domain",
+      "@container": "@set"
+    },
+    "to": {
+      "@id": "rdfs:range",
+      "@container": "@set"
+    },
+    "symmetric": {
+      "@id": "owl:SymmetricProperty",
+      "@type": "xsd:boolean"
+    },
+    "discovery": {
+      "@id": "mif:discoveryConfig"
+    },
+    "enabled": {
+      "@id": "mif:discoveryEnabled",
+      "@type": "xsd:boolean"
+    },
+    "patterns": {
+      "@id": "mif:hasDiscoveryPattern",
+      "@container": "@list"
+    },
+    "confidence_threshold": {
+      "@id": "mif:confidenceThreshold",
+      "@type": "xsd:decimal"
+    },
+    "content_pattern": {
+      "@id": "mif:contentPattern",
+      "@type": "xsd:string"
+    },
+    "file_pattern": {
+      "@id": "mif:filePattern",
+      "@type": "xsd:string"
+    },
+    "suggest_entity": {
+      "@id": "mif:suggestsEntityType",
+      "@type": "@id"
+    },
+    "suggest_namespace": {
+      "@id": "mif:suggestsNamespace",
+      "@type": "xsd:string"
+    }
+  },
+  "@id": "mif:ontology/observability",
+  "@type": "mif:Ontology",
+  "identifier": "observability",
+  "version": "0.1.0",
+  "description": "Observability-platform domain ontology \u2014 services, telemetry signals, capability comparisons, service-ownership registries, migration patterns, market positioning, and roadmap signals, organized as an IS-A tree rooted in generic types",
+  "schema_url": "https://mif-spec.dev/schema/ontology/ontology.schema.json",
+  "namespaces": {
+    "_semantic": {
+      "@id": "mif:namespace/_semantic",
+      "@type": "mif:Namespace",
+      "name": "_semantic",
+      "description": "Facts, concepts, comparisons",
+      "type_hint": "semantic",
+      "children": {
+        "services": {
+          "@id": "mif:namespace/_semantic/services",
+          "@type": "mif:Namespace",
+          "name": "services",
+          "description": "Observability services and the signals/registries they provide",
+          "type_hint": "semantic"
+        },
+        "analysis": {
+          "@id": "mif:namespace/_semantic/analysis",
+          "@type": "mif:Namespace",
+          "name": "analysis",
+          "description": "Capability comparisons and market positioning",
+          "type_hint": "semantic"
+        }
+      }
+    },
+    "_episodic": {
+      "@id": "mif:namespace/_episodic",
+      "@type": "mif:Namespace",
+      "name": "_episodic",
+      "description": "Time-stamped product and roadmap signals",
+      "type_hint": "episodic",
+      "children": {
+        "roadmap": {
+          "@id": "mif:namespace/_episodic/roadmap",
+          "@type": "mif:Namespace",
+          "name": "roadmap",
+          "description": "GA dates, launches, deprecations, predictions",
+          "type_hint": "episodic"
+        }
+      }
+    },
+    "_procedural": {
+      "@id": "mif:namespace/_procedural",
+      "@type": "mif:Namespace",
+      "name": "_procedural",
+      "description": "Migration approaches and patterns",
+      "type_hint": "procedural",
+      "children": {
+        "migrations": {
+          "@id": "mif:namespace/_procedural/migrations",
+          "@type": "mif:Namespace",
+          "name": "migrations",
+          "description": "Datadog-to-AWS-native migration patterns and case studies",
+          "type_hint": "procedural"
+        }
+      }
+    }
+  },
+  "entity_types": [
+    {
+      "@id": "mif:entityType/observability-resource",
+      "@type": "mif:EntityType",
+      "name": "observability-resource",
+      "base": "semantic",
+      "description": "Abstract supertype: a deployable observability capability/system (specializes the generic technology)",
+      "subtype_of": [
+        "mif:entityType/technology"
+      ],
+      "schema": {
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/observability-assessment",
+      "@type": "mif:EntityType",
+      "name": "observability-assessment",
+      "base": "semantic",
+      "description": "Abstract supertype: an analytical judgment about observability (specializes the generic concept)",
+      "subtype_of": [
+        "mif:entityType/concept"
+      ],
+      "schema": {
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/observability-service",
+      "@type": "mif:EntityType",
+      "name": "observability-service",
+      "base": "semantic",
+      "description": "An observability service or product (CloudWatch, X-Ray, ADOT, Amazon Managed Prometheus/Grafana, Datadog) and the pillars it serves",
+      "subtype_of": [
+        "mif:entityType/observability-resource"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "provider",
+          "pillars"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "provider": {
+            "type": "string",
+            "description": "Vendor/platform that ships the service",
+            "enum": [
+              "aws",
+              "datadog",
+              "grafana",
+              "other"
+            ]
+          },
+          "pillars": {
+            "type": "array",
+            "description": "Observability pillars the service serves",
+            "items": {
+              "type": "string",
+              "enum": [
+                "metrics",
+                "logs",
+                "traces",
+                "apm",
+                "rum",
+                "synthetics",
+                "dashboards",
+                "profiling",
+                "aiops"
+              ]
+            }
+          },
+          "maturity": {
+            "type": "string",
+            "enum": [
+              "ga",
+              "preview",
+              "maintenance",
+              "end-of-support"
+            ]
+          },
+          "aws_service_name": {
+            "type": "string",
+            "description": "Canonical AWS service name when provider is aws"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/service-ownership-registry",
+      "@type": "mif:EntityType",
+      "name": "service-ownership-registry",
+      "base": "semantic",
+      "description": "A service catalog, resource registry, service map, or internal developer portal that tracks service ownership/topology",
+      "subtype_of": [
+        "mif:entityType/observability-resource"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "registry_kind"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "registry_kind": {
+            "type": "string",
+            "enum": [
+              "telemetry-catalog",
+              "resource-registry",
+              "service-map",
+              "idp"
+            ]
+          },
+          "provider": {
+            "type": "string"
+          },
+          "features": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/telemetry-signal",
+      "@type": "mif:EntityType",
+      "name": "telemetry-signal",
+      "base": "semantic",
+      "description": "A class of telemetry data (a signal/pillar) produced and consumed across observability services",
+      "subtype_of": [
+        "mif:entityType/delivery-metric"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "signal_type"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "signal_type": {
+            "type": "string",
+            "enum": [
+              "metric",
+              "log",
+              "trace",
+              "rum",
+              "synthetic",
+              "profile",
+              "event"
+            ]
+          },
+          "producers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "backends": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/capability-comparison",
+      "@type": "mif:EntityType",
+      "name": "capability-comparison",
+      "base": "semantic",
+      "description": "A capability or gap comparison between an observability subject and a baseline (e.g. AWS-native vs Datadog for a pillar)",
+      "subtype_of": [
+        "mif:entityType/observability-assessment"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "subject",
+          "baseline",
+          "parity"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string",
+            "description": "The capability under evaluation (e.g. AWS-native APM)"
+          },
+          "baseline": {
+            "type": "string",
+            "description": "The comparator it is measured against (e.g. Datadog APM)"
+          },
+          "parity": {
+            "type": "string",
+            "enum": [
+              "parity",
+              "partial",
+              "gap",
+              "superior"
+            ]
+          },
+          "gaps": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/market-position",
+      "@type": "mif:EntityType",
+      "name": "market-position",
+      "base": "semantic",
+      "description": "A vendor's positioning in the observability market per an analyst or market source",
+      "subtype_of": [
+        "mif:entityType/observability-assessment"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "vendor"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "vendor": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string",
+            "description": "The market/analyst source (e.g. Gartner Magic Quadrant 2025)"
+          },
+          "placement": {
+            "type": "string",
+            "enum": [
+              "leader",
+              "challenger",
+              "visionary",
+              "niche",
+              "unranked"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/roadmap-signal",
+      "@type": "mif:EntityType",
+      "name": "roadmap-signal",
+      "base": "episodic",
+      "description": "A time-stamped product or roadmap signal: a GA date, launch, deprecation/maintenance move, or near-term prediction",
+      "subtype_of": [
+        "mif:entityType/observability-assessment"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "signal_kind"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "signal_kind": {
+            "type": "string",
+            "enum": [
+              "ga",
+              "preview",
+              "launch",
+              "maintenance",
+              "end-of-support",
+              "prediction"
+            ]
+          },
+          "date": {
+            "type": "string",
+            "description": "Signal date (ISO date or month/quarter as published)"
+          },
+          "capability_area": {
+            "type": "string",
+            "description": "The pillar/capability the signal advances"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/migration-pattern",
+      "@type": "mif:EntityType",
+      "name": "migration-pattern",
+      "base": "procedural",
+      "description": "An approach, case study, or community pattern for migrating between observability platforms",
+      "subtype_of": [
+        "mif:entityType/design-pattern"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "from_platform",
+          "to_platform"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "from_platform": {
+            "type": "string"
+          },
+          "to_platform": {
+            "type": "string"
+          },
+          "approach": {
+            "type": "string"
+          },
+          "evidence_type": {
+            "type": "string",
+            "enum": [
+              "case-study",
+              "community-pattern",
+              "vendor-report",
+              "reference-architecture"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "traits": {
+    "sourced": {
+      "@id": "mif:trait/sourced",
+      "@type": "mif:Trait",
+      "name": "sourced",
+      "description": "Adds a primary-source reference",
+      "fields": {
+        "source_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "source_title": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "relationships": {
+    "emits": {
+      "@id": "mif:relationship/emits",
+      "@type": "mif:Relationship",
+      "name": "emits",
+      "description": "A service produces a telemetry signal",
+      "from": [
+        "mif:entityType/observability-service"
+      ],
+      "to": [
+        "mif:entityType/telemetry-signal"
+      ],
+      "symmetric": false
+    },
+    "compares": {
+      "@id": "mif:relationship/compares",
+      "@type": "mif:Relationship",
+      "name": "compares",
+      "description": "A comparison evaluates a service/technology against a baseline",
+      "from": [
+        "mif:entityType/capability-comparison"
+      ],
+      "to": [
+        "mif:entityType/observability-service",
+        "mif:entityType/technology"
+      ],
+      "symmetric": false
+    },
+    "positions": {
+      "@id": "mif:relationship/positions",
+      "@type": "mif:Relationship",
+      "name": "positions",
+      "description": "A market position situates a vendor/technology",
+      "from": [
+        "mif:entityType/market-position"
+      ],
+      "to": [
+        "mif:entityType/technology"
+      ],
+      "symmetric": false
+    },
+    "advances": {
+      "@id": "mif:relationship/advances",
+      "@type": "mif:Relationship",
+      "name": "advances",
+      "description": "A roadmap signal advances a service's capability",
+      "from": [
+        "mif:entityType/roadmap-signal"
+      ],
+      "to": [
+        "mif:entityType/observability-service"
+      ],
+      "symmetric": false
+    },
+    "catalogs": {
+      "@id": "mif:relationship/catalogs",
+      "@type": "mif:Relationship",
+      "name": "catalogs",
+      "description": "A registry catalogs services/components",
+      "from": [
+        "mif:entityType/service-ownership-registry"
+      ],
+      "to": [
+        "mif:entityType/observability-service",
+        "mif:entityType/component"
+      ],
+      "symmetric": false
+    }
+  },
+  "discovery": {
+    "enabled": true,
+    "confidence_threshold": 0.8,
+    "patterns": [
+      {
+        "@id": "mif:pattern/0",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(CloudWatch|X-Ray|ADOT|OpenTelemetry|Managed Prometheus|Managed Grafana|Application Signals)\\b",
+        "suggest_entity": "mif:entityType/observability-service",
+        "suggest_namespace": "_semantic/services"
+      },
+      {
+        "@id": "mif:pattern/1",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(service catalog|service ownership|AppRegistry|myApplications|developer portal|IDP|service map)\\b",
+        "suggest_entity": "mif:entityType/service-ownership-registry",
+        "suggest_namespace": "_semantic/services"
+      },
+      {
+        "@id": "mif:pattern/2",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(parity|capability gap|pillar-by-pillar|vs\\.?\\s+Datadog)\\b",
+        "suggest_entity": "mif:entityType/capability-comparison",
+        "suggest_namespace": "_semantic/analysis"
+      },
+      {
+        "@id": "mif:pattern/3",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(migration|migrate)\\b.*\\b(case study|pattern|Datadog)\\b",
+        "suggest_entity": "mif:entityType/migration-pattern",
+        "suggest_namespace": "_procedural/migrations"
+      },
+      {
+        "@id": "mif:pattern/4",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(Gartner|Magic Quadrant|market (leader|position)|challenger)\\b",
+        "suggest_entity": "mif:entityType/market-position",
+        "suggest_namespace": "_semantic/analysis"
+      },
+      {
+        "@id": "mif:pattern/5",
+        "@type": "mif:DiscoveryPattern",
+        "content_pattern": "\\b(GA|generally available|re:Invent|end-of-support|maintenance mode|roadmap)\\b",
+        "suggest_entity": "mif:entityType/roadmap-signal",
+        "suggest_namespace": "_episodic/roadmap"
+      }
+    ]
+  }
+}

@@ -126,7 +126,7 @@
   "@id": "mif:ontology/trend-analysis",
   "@type": "mif:Ontology",
   "identifier": "trend-analysis",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Strategic foresight and trend-analysis domain ontology \u2014 signals, drivers, trends, scenarios, forecasts",
   "namespaces": {
     "semantic": {
@@ -138,7 +138,7 @@
           "@id": "mif:namespace/semantic/foresight",
           "@type": "mif:Namespace",
           "name": "foresight",
-          "description": "Signals, drivers, trends, megatrends, and wild cards",
+          "description": "Signals, drivers, trends, megatrends, uncertainties, and derived foresight artifacts",
           "type_hint": "semantic",
           "children": {
             "curves": {
@@ -161,8 +161,43 @@
               "name": "scenarios",
               "description": "Plausible future narratives and scenario sets",
               "type_hint": "semantic"
+            },
+            "horizons": {
+              "@id": "mif:namespace/semantic/foresight/horizons",
+              "@type": "mif:Namespace",
+              "name": "horizons",
+              "description": "Three-Horizons temporal planning zones",
+              "type_hint": "semantic"
+            },
+            "implications": {
+              "@id": "mif:namespace/semantic/foresight/implications",
+              "@type": "mif:Namespace",
+              "name": "implications",
+              "description": "Cascading consequences mapped from change (futures wheel)",
+              "type_hint": "semantic"
+            },
+            "visions": {
+              "@id": "mif:namespace/semantic/foresight/visions",
+              "@type": "mif:Namespace",
+              "name": "visions",
+              "description": "Normative preferred future states (backcasting)",
+              "type_hint": "semantic"
             }
           }
+        }
+      }
+    },
+    "procedural": {
+      "@id": "mif:namespace/procedural",
+      "@type": "mif:Namespace",
+      "name": "procedural",
+      "children": {
+        "roadmaps": {
+          "@id": "mif:namespace/procedural/roadmaps",
+          "@type": "mif:Namespace",
+          "name": "roadmaps",
+          "description": "Time-sequenced strategic and technology roadmaps",
+          "type_hint": "procedural"
         }
       }
     }
@@ -188,8 +223,15 @@
             "type": "string"
           },
           "observation": {
+            "type": "string"
+          },
+          "source_url": {
             "type": "string",
-            "description": "The concrete local artifact/event"
+            "format": "uri"
+          },
+          "observed_date": {
+            "type": "string",
+            "format": "date"
           },
           "steep_category": {
             "type": "string",
@@ -201,10 +243,6 @@
               "political"
             ]
           },
-          "observed_date": {
-            "type": "string",
-            "format": "date"
-          },
           "novelty": {
             "type": "string",
             "enum": [
@@ -213,9 +251,11 @@
               "strengthening"
             ]
           },
-          "source_url": {
-            "type": "string",
-            "format": "uri"
+          "geographic_scope": {
+            "type": "string"
+          },
+          "related_driver": {
+            "type": "string"
           }
         }
       }
@@ -239,8 +279,7 @@
             "type": "string"
           },
           "description": {
-            "type": "string",
-            "description": "The broad long-term force"
+            "type": "string"
           },
           "steep_category": {
             "type": "string",
@@ -255,8 +294,27 @@
           "time_horizon": {
             "type": "string"
           },
-          "impact": {
-            "type": "string"
+          "impact_level": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          "evidence_signals": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "certainty_level": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
           }
         }
       }
@@ -297,115 +355,28 @@
           },
           "scope": {
             "type": "string"
-          }
-        }
-      }
-    },
-    {
-      "@id": "mif:entityType/adoption-curve",
-      "@type": "mif:EntityType",
-      "name": "adoption-curve",
-      "base": "semantic",
-      "description": "An adoption / maturity curve positioning a subject on an S-curve or hype cycle",
-      "traits": [
-        "mif:trait/cited",
-        "mif:trait/dated"
-      ],
-      "schema": {
-        "required": [
-          "name",
-          "stage"
-        ],
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "The technology/practice profiled"
           },
-          "stage": {
+          "steep_category": {
             "type": "string",
             "enum": [
-              "innovators",
-              "early-adopters",
-              "early-majority",
-              "late-majority",
-              "laggards"
+              "social",
+              "technological",
+              "environmental",
+              "economic",
+              "political"
             ]
           },
-          "s_curve_position": {
+          "strength": {
             "type": "string",
             "enum": [
-              "early-exponential",
-              "inflection",
-              "linear-growth",
-              "saturation",
-              "decline"
+              "weak",
+              "moderate",
+              "strong"
             ]
           },
-          "hype_phase": {
+          "first_observed": {
             "type": "string",
-            "enum": [
-              "technology-trigger",
-              "peak-inflated-expectations",
-              "trough-disillusionment",
-              "slope-enlightenment",
-              "plateau-productivity"
-            ]
-          },
-          "time_to_mainstream": {
-            "type": "string"
-          },
-          "adoption_barriers": {
-            "type": "string"
-          },
-          "enabling_factors": {
-            "type": "string"
-          },
-          "related_trend_ref": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    {
-      "@id": "mif:entityType/forecast",
-      "@type": "mif:EntityType",
-      "name": "forecast",
-      "base": "semantic",
-      "description": "A forecast: a probabilistic single-variable projection of a future outcome",
-      "traits": [
-        "mif:trait/cited",
-        "mif:trait/dated",
-        "mif:trait/timeline"
-      ],
-      "schema": {
-        "required": [
-          "statement",
-          "horizon"
-        ],
-        "properties": {
-          "statement": {
-            "type": "string",
-            "description": "The projected future outcome"
-          },
-          "horizon": {
-            "type": "string",
-            "description": "Target timeframe"
-          },
-          "confidence": {
-            "type": "string",
-            "enum": [
-              "low",
-              "medium",
-              "high"
-            ]
-          },
-          "basis": {
-            "type": "string",
-            "description": "Grounding signals/drivers/trends"
-          },
-          "scenario_type": {
-            "type": "string",
-            "description": "baseline / alternative / wildcard"
+            "format": "date"
           }
         }
       }
@@ -422,43 +393,333 @@
       ],
       "schema": {
         "required": [
-          "megatrend_name",
-          "time_horizon_years"
+          "name",
+          "description"
         ],
         "properties": {
-          "megatrend_name": {
-            "type": "string",
-            "description": "e.g. Demographic Shift, Climate Change, Digitalization"
+          "name": {
+            "type": "string"
           },
-          "time_horizon_years": {
-            "type": "integer",
-            "minimum": 10,
-            "description": "Typically 10\u201330 years"
+          "description": {
+            "type": "string"
           },
-          "structural_dimensions": {
+          "temporal_scale": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          },
+          "sub_trends": {
             "type": "array",
             "items": {
-              "type": "string",
-              "enum": [
-                "demographic",
-                "technological",
-                "environmental",
-                "geopolitical",
-                "economic"
-              ]
+              "type": "string"
             }
           },
-          "source_publication": {
-            "type": "string",
-            "description": "e.g. EU JRC Global Trends 2040"
+          "related_megatrends": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
-          "certainty_level": {
+          "policy_domains_affected": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "last_reviewed": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/emerging-issue",
+      "@type": "mif:EntityType",
+      "name": "emerging-issue",
+      "base": "semantic",
+      "description": "An emerging issue: a novel phenomenon gaining recognition before it becomes a trend",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/dated"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "description"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "novelty_stage": {
+            "type": "string"
+          },
+          "recognition_level": {
+            "type": "string"
+          },
+          "competing_issues": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "steep_category": {
+            "type": "string",
+            "enum": [
+              "social",
+              "technological",
+              "environmental",
+              "economic",
+              "political"
+            ]
+          },
+          "first_identified": {
+            "type": "string",
+            "format": "date"
+          },
+          "source_signal": {
+            "type": "string"
+          },
+          "policy_relevance": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/wild-card",
+      "@type": "mif:EntityType",
+      "name": "wild-card",
+      "base": "semantic",
+      "description": "A wild card: a low-probability, high-impact rupture event",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/dated"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "impact_domain"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "probability_estimate": {
+            "type": "string",
+            "enum": [
+              "very-low",
+              "low"
+            ]
+          },
+          "impact_level": {
             "type": "string",
             "enum": [
               "high",
-              "medium",
-              "low"
+              "very-high",
+              "extreme"
             ]
+          },
+          "impact_domain": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "steep_category": {
+            "type": "string",
+            "enum": [
+              "social",
+              "technological",
+              "environmental",
+              "economic",
+              "political"
+            ]
+          },
+          "trigger_conditions": {
+            "type": "string"
+          },
+          "preparedness_notes": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/critical-uncertainty",
+      "@type": "mif:EntityType",
+      "name": "critical-uncertainty",
+      "base": "semantic",
+      "description": "A critical uncertainty: a high-impact factor that is genuinely unpredictable, used as a scenario axis",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/dated"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "description"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "impact_level": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          "uncertainty_level": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          "axis_pole_low": {
+            "type": "string"
+          },
+          "axis_pole_high": {
+            "type": "string"
+          },
+          "related_drivers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "scenarios_generated": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/adoption-curve",
+      "@type": "mif:EntityType",
+      "name": "adoption-curve",
+      "base": "semantic",
+      "description": "An adoption / maturity curve positioning a subject on an S-curve or hype cycle",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/dated"
+      ],
+      "schema": {
+        "required": [
+          "subject",
+          "model"
+        ],
+        "properties": {
+          "subject": {
+            "type": "string"
+          },
+          "model": {
+            "type": "string",
+            "enum": [
+              "rogers-s-curve",
+              "gartner-hype-cycle"
+            ]
+          },
+          "current_phase": {
+            "type": "string"
+          },
+          "adopter_segment": {
+            "type": "string",
+            "enum": [
+              "innovators",
+              "early-adopters",
+              "early-majority",
+              "late-majority",
+              "laggards"
+            ]
+          },
+          "time_to_plateau": {
+            "type": "string"
+          },
+          "critical_mass_reached": {
+            "type": "boolean"
+          },
+          "evidence": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/forecast",
+      "@type": "mif:EntityType",
+      "name": "forecast",
+      "base": "semantic",
+      "description": "A forecast: a projected future outcome grounded in signals, drivers, and trends",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/dated",
+        "mif:trait/timeline"
+      ],
+      "schema": {
+        "required": [
+          "statement",
+          "horizon"
+        ],
+        "properties": {
+          "statement": {
+            "type": "string"
+          },
+          "horizon": {
+            "type": "string"
+          },
+          "confidence_level": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          "basis_signals": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "basis_drivers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "scenario_type": {
+            "type": "string",
+            "enum": [
+              "baseline",
+              "alternative",
+              "wildcard"
+            ]
+          },
+          "created_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "author": {
+            "type": "string"
           }
         }
       }
@@ -475,170 +736,273 @@
       ],
       "schema": {
         "required": [
-          "scenario_name",
-          "time_horizon"
+          "name",
+          "horizon"
         ],
         "properties": {
-          "scenario_name": {
-            "type": "string",
-            "description": "e.g. Mountains, Oceans"
-          },
-          "time_horizon": {
-            "type": "string",
-            "description": "e.g. 2035, 2050"
-          },
-          "key_uncertainties": {
-            "type": "array",
-            "description": "The axes of the scenario space",
-            "items": {
-              "type": "string"
-            }
-          },
-          "narrative_summary": {
+          "name": {
             "type": "string"
           },
-          "driving_forces": {
+          "narrative": {
+            "type": "string"
+          },
+          "horizon": {
+            "type": "string"
+          },
+          "scenario_type": {
+            "type": "string",
+            "enum": [
+              "baseline",
+              "alternative",
+              "aspirational",
+              "collapse"
+            ]
+          },
+          "critical_uncertainties_used": {
             "type": "array",
-            "description": "Drivers / megatrends",
             "items": {
               "type": "string"
             }
           },
-          "probability_assessment": {
-            "type": "string",
-            "enum": [
-              "plausible",
-              "unlikely",
-              "aspirational"
-            ]
+          "key_drivers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "plausibility_rationale": {
+            "type": "string"
+          },
+          "world_state": {
+            "type": "string"
           }
         }
       }
     },
     {
-      "@id": "mif:entityType/wild-card",
+      "@id": "mif:entityType/horizon",
       "@type": "mif:EntityType",
-      "name": "wild-card",
+      "name": "horizon",
       "base": "semantic",
-      "description": "A wild card: a surprising low-probability, very-high-impact rupture event",
+      "description": "A horizon: a Three-Horizons temporal planning zone (H1/H2/H3)",
       "traits": [
         "mif:trait/cited",
         "mif:trait/dated"
       ],
       "schema": {
         "required": [
-          "wildcard_name",
-          "impact_domain"
+          "label",
+          "horizon_type"
         ],
         "properties": {
-          "wildcard_name": {
-            "type": "string",
-            "description": "e.g. AGI breakthrough, Pandemic X, Solar superstorm"
-          },
-          "impact_domain": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "probability_assessment": {
-            "type": "string",
-            "enum": [
-              "very-low",
-              "low"
-            ]
-          },
-          "impact_magnitude": {
-            "type": "string",
-            "enum": [
-              "extreme",
-              "very-high"
-            ]
-          },
-          "timeframe": {
+          "label": {
             "type": "string"
           },
-          "affected_megatrends": {
+          "horizon_type": {
+            "type": "string",
+            "enum": [
+              "h1",
+              "h2",
+              "h3"
+            ]
+          },
+          "time_span": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "dominant_system": {
+            "type": "string"
+          },
+          "key_innovations": {
             "type": "array",
             "items": {
               "type": "string"
             }
+          },
+          "mindset_type": {
+            "type": "string"
+          },
+          "transition_triggers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/implication",
+      "@type": "mif:EntityType",
+      "name": "implication",
+      "base": "semantic",
+      "description": "An implication: a cascading consequence of a change (futures wheel ring)",
+      "traits": [
+        "mif:trait/cited"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "parent_change"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "order": {
+            "type": "integer"
+          },
+          "parent_change": {
+            "type": "string"
+          },
+          "impact_domain": {
+            "type": "string"
+          },
+          "steep_category": {
+            "type": "string",
+            "enum": [
+              "social",
+              "technological",
+              "environmental",
+              "economic",
+              "political"
+            ]
+          },
+          "valence": {
+            "type": "string",
+            "enum": [
+              "positive",
+              "negative",
+              "neutral",
+              "mixed"
+            ]
+          },
+          "probability_estimate": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/vision",
+      "@type": "mif:EntityType",
+      "name": "vision",
+      "base": "semantic",
+      "description": "A vision: a desired or preferred future state used as a backcasting anchor",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/stakeholders"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "description"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "target_horizon": {
+            "type": "string"
+          },
+          "normative_basis": {
+            "type": "string"
+          },
+          "stakeholders": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "backcasting_pathway": {
+            "type": "string"
+          },
+          "key_milestones": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "values_underpinning": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "@id": "mif:entityType/roadmap",
+      "@type": "mif:EntityType",
+      "name": "roadmap",
+      "base": "procedural",
+      "description": "A roadmap: a time-sequenced action plan working backward from a vision",
+      "traits": [
+        "mif:trait/cited",
+        "mif:trait/versioned",
+        "mif:trait/timeline"
+      ],
+      "schema": {
+        "required": [
+          "name",
+          "scope"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          },
+          "target_vision": {
+            "type": "string"
+          },
+          "milestones": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "time_horizon": {
+            "type": "string"
+          },
+          "technology_areas": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "resource_requirements": {
+            "type": "string"
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "last_updated": {
+            "type": "string",
+            "format": "date"
           }
         }
       }
     }
   ],
-  "traits": {
-    "cited": {
-      "@id": "mif:trait/cited",
-      "@type": "mif:Trait",
-      "name": "cited",
-      "description": "Requires citations/sources",
-      "requires": [
-        "citations"
-      ]
-    },
-    "dated": {
-      "@id": "mif:trait/dated",
-      "@type": "mif:Trait",
-      "name": "dated",
-      "description": "Adds decision/event date",
-      "fields": {
-        "decision_date": {
-          "type": "string",
-          "format": "date"
-        },
-        "review_date": {
-          "type": "string",
-          "format": "date"
-        }
-      }
-    },
-    "timeline": {
-      "@id": "mif:trait/timeline",
-      "@type": "mif:Trait",
-      "name": "timeline",
-      "description": "Adds an event timeline",
-      "fields": {
-        "timeline": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "timestamp": {
-                "type": "string",
-                "format": "date-time"
-              },
-              "event": {
-                "type": "string"
-              },
-              "actor": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    },
-    "versioned": {
-      "@id": "mif:trait/versioned",
-      "@type": "mif:Trait",
-      "name": "versioned",
-      "description": "Adds version tracking fields",
-      "fields": {
-        "version": {
-          "type": "string",
-          "pattern": "^\\d+\\.\\d+\\.\\d+.*$"
-        },
-        "changelog": {
-          "type": "array",
-          "items": {
-            "type": "object"
-          }
-        }
-      }
-    }
-  },
   "relationships": {
     "causes": {
       "@id": "mif:relationship/causes",
@@ -657,7 +1021,7 @@
       "@id": "mif:relationship/matures_into",
       "@type": "mif:Relationship",
       "name": "matures_into",
-      "description": "A signal matures into a trend (a weak signal strengthens into a visible trend)",
+      "description": "A signal matures into a trend (IFTF: weak signal strengthens into a visible trend)",
       "from": [
         "mif:entityType/signal"
       ],
@@ -670,7 +1034,7 @@
       "@id": "mif:relationship/indicates",
       "@type": "mif:Relationship",
       "name": "indicates",
-      "description": "A signal indicates a driver (signals are symptoms of drivers)",
+      "description": "A signal indicates a driver (IFTF: signals are symptoms of drivers)",
       "from": [
         "mif:entityType/signal"
       ],
@@ -683,7 +1047,7 @@
       "@id": "mif:relationship/placed_on",
       "@type": "mif:Relationship",
       "name": "placed_on",
-      "description": "A trend is placed on an adoption-curve (positioned on a maturity curve)",
+      "description": "A trend is placed on an adoption-curve (Rogers/Gartner: a trend is positioned on an S-curve or hype cycle)",
       "from": [
         "mif:entityType/trend"
       ],
@@ -769,6 +1133,110 @@
       "to": [
         "mif:entityType/trend",
         "mif:entityType/megatrend"
+      ],
+      "symmetric": false
+    },
+    "constrains": {
+      "@id": "mif:relationship/constrains",
+      "@type": "mif:Relationship",
+      "name": "constrains",
+      "description": "A critical-uncertainty constrains and differentiates the scenario space (Shell/GBN 2x2 axis)",
+      "from": [
+        "mif:entityType/critical-uncertainty"
+      ],
+      "to": [
+        "mif:entityType/scenario"
+      ],
+      "symmetric": false
+    },
+    "generates": {
+      "@id": "mif:relationship/generates",
+      "@type": "mif:Relationship",
+      "name": "generates",
+      "description": "A driver produces a trend (IFTF: drivers precipitate visible trends)",
+      "from": [
+        "mif:entityType/driver"
+      ],
+      "to": [
+        "mif:entityType/trend"
+      ],
+      "symmetric": false
+    },
+    "grounds": {
+      "@id": "mif:relationship/grounds",
+      "@type": "mif:Relationship",
+      "name": "grounds",
+      "description": "A driver grounds a forecast (IFTF: drivers/trends are building blocks of forecasts)",
+      "from": [
+        "mif:entityType/driver"
+      ],
+      "to": [
+        "mif:entityType/forecast"
+      ],
+      "symmetric": false
+    },
+    "informs": {
+      "@id": "mif:relationship/informs",
+      "@type": "mif:Relationship",
+      "name": "informs",
+      "description": "A scenario informs a vision (OECD-OPSI: scenarios reveal futures from which a preferred future is selected)",
+      "from": [
+        "mif:entityType/scenario"
+      ],
+      "to": [
+        "mif:entityType/vision"
+      ],
+      "symmetric": false
+    },
+    "operationalizes": {
+      "@id": "mif:relationship/operationalizes",
+      "@type": "mif:Relationship",
+      "name": "operationalizes",
+      "description": "A vision operationalizes into a roadmap (backcasting works backward from a vision to a time-sequenced roadmap)",
+      "from": [
+        "mif:entityType/vision"
+      ],
+      "to": [
+        "mif:entityType/roadmap"
+      ],
+      "symmetric": false
+    },
+    "produces": {
+      "@id": "mif:relationship/produces",
+      "@type": "mif:Relationship",
+      "name": "produces",
+      "description": "A trend produces an implication (Futures Wheel: a trend produces cascading implications)",
+      "from": [
+        "mif:entityType/trend"
+      ],
+      "to": [
+        "mif:entityType/implication"
+      ],
+      "symmetric": false
+    },
+    "specializes": {
+      "@id": "mif:relationship/specializes",
+      "@type": "mif:Relationship",
+      "name": "specializes",
+      "description": "A megatrend specializes a trend (rdfs:subClassOf \u2014 megatrend is a structural subtype of trend)",
+      "from": [
+        "mif:entityType/megatrend"
+      ],
+      "to": [
+        "mif:entityType/trend"
+      ],
+      "symmetric": false
+    },
+    "intensifies": {
+      "@id": "mif:relationship/intensifies",
+      "@type": "mif:Relationship",
+      "name": "intensifies",
+      "description": "A wild-card intensifies a critical-uncertainty (rdfs:subClassOf \u2014 a wild card is a low-probability, very-high-impact subtype of critical uncertainty)",
+      "from": [
+        "mif:entityType/wild-card"
+      ],
+      "to": [
+        "mif:entityType/critical-uncertainty"
       ],
       "symmetric": false
     }
