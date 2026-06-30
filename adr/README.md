@@ -1,5 +1,30 @@
 ---
-diataxis_type: reference
+id: reference-mif-adr-index
+type: semantic
+created: '2026-06-30T12:00:00Z'
+modified: '2026-06-30T12:00:00Z'
+namespace: reference/adr
+title: Architecture Decision Records
+tags:
+  - reference
+  - adr
+  - index
+temporal:
+  '@type': TemporalMetadata
+  validFrom: '2026-06-30T00:00:00Z'
+  recordedAt: '2026-06-30T12:00:00Z'
+  ttl: P1Y
+relationships:
+  - type: relates-to
+    target: ADR-018-ontology-corpus-dedicated-repository-and-serving.md
+ontology:
+  '@type': OntologyReference
+  id: mif-docs
+  version: 1.0.0
+  uri: https://mif-spec.dev/ontologies/mif-docs
+entity:
+  name: Architecture Decision Records
+  entity_type: reference-document
 ---
 
 # Architecture Decision Records
