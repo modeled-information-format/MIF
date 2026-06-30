@@ -77,6 +77,6 @@ jobs:
     permissions:
       contents: read
       security-events: write
-    uses: modeled-information-format/.github/.github/workflows/reusable-shellcheck.yml@d16f2d7aa9dfb6ca21f99f80a2b0ef853beb3ba6
+    uses: modeled-information-format/.github/.github/workflows/reusable-shellcheck.yml@02f479d564026f83ee42952a0afad0e123e38bfa
     with:
       strict-on-push: false
