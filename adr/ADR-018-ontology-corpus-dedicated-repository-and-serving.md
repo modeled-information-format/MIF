@@ -30,6 +30,7 @@ related:
   - ADR-007-github-raw-urls-for-schema-ids.md
   - ADR-011-markdown-canonical-derived-jsonld.md
   - ADR-016-versioned-schema-mirror-publication.md
+  - ADR-019-deploy-time-attested-ontology-vendoring.md
 ---
 
 # ADR-018: Ontology Corpus: Dedicated Repository, Flat Layout, and Versioned Serving
@@ -42,6 +43,14 @@ This ADR resolves the precursor recorded as org discussion #168
 ("House the Ontologies in a Dedicated modeled-information-format/ontologies
 Repository", status `proposed`). It records the architecture as built and
 answers that discussion's three open questions (scope, consumption, versioning).
+
+**Amendment (2026-06-30):** [ADR-019](ADR-019-deploy-time-attested-ontology-vendoring.md)
+(proposed) replaces the propagation mechanism named below as a follow-up
+(bot-opened PR mirroring into `public/ontologies/`, never built) with a
+deploy-time fetch of the `ontologies` repo's signed release tarball, verified
+fail-closed with `gh attestation verify`. Every other decision in this ADR
+(source of record, schema/context location, layout, URL patterns, identity
+invariant) is unchanged.
 
 ## Context
 
