@@ -307,8 +307,11 @@ requires, as one atomic change:
 - `modeled-information-format/ontologies` `.github/workflows/release.yml` —
   the build → attest → fail-closed-verify → tag-gated-publish chain producing
   the signed tarball this decision fetches.
-- [`scripts/snapshot-ontology-version.py`](../scripts/snapshot-ontology-version.py)
-  — the committed-snapshot generator whose commit step this decision retires.
+- `scripts/snapshot-ontology-version.py` (retired by this decision's
+  implementation; see the 2026-07-01 implementation audit entry below) — the
+  committed-snapshot generator whose commit step this decision retires, and
+  whose enrichment/HTML-generation logic was ported into
+  [`scripts/vendor-ontologies.py`](../scripts/vendor-ontologies.py).
 
 ## More Information
 
