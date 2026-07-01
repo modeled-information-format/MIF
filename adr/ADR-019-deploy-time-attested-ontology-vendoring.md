@@ -12,7 +12,7 @@ tags:
   - registry
 status: proposed
 created: 2026-06-30
-updated: 2026-06-30
+updated: 2026-07-01
 author: MIF Maintainers
 project: MIF
 technologies:
@@ -23,7 +23,6 @@ audience:
   - developers
   - architects
 related:
-  - ADR-004-three-tier-trait-inheritance.md
   - ADR-007-github-raw-urls-for-schema-ids.md
   - ADR-015-attested-release-orchestration.md
   - ADR-016-versioned-schema-mirror-publication.md
@@ -79,10 +78,6 @@ plain checkout of the corpus, copied by hand.
 - **No cross-repo freshness signal exists yet.** Nothing currently ties an
   `ontologies` release to a rebuild here, so the served surface cannot
   self-heal.
-- **Base and domain ontologies share one propagation path**, despite
-  different governance cadence: `mif-base` and `shared-traits` are this
-  repo's normative floor (ADR-004); the domain corpus grows in the
-  `ontologies` repo without touching that floor.
 
 ## Decision Drivers
 
@@ -105,12 +100,10 @@ plain checkout of the corpus, copied by hand.
 1. **One index contract.** This repo enriches the vendored, attested
    `{version, file, sha256, extends[]}` core (aliases, versioned URLs); it
    never recomputes those attested fields.
-2. **Normative floor stays authored here.** `mif-base` and `shared-traits`
-   remain canonical in this repo per ADR-004; only the open-growth domain
-   corpus is fetched from the external release.
-3. **Preserve every ADR-018 invariant.** The `ontologies` repo stays the
-   source of record, the schema/context stay in MIF, and the served URL
-   patterns and identity invariant are unchanged. Only propagation moves.
+2. **Preserve every ADR-018 invariant.** The `ontologies` repo stays the
+   source of record for every ontology including `mif-base`/`shared-traits`,
+   the schema/context stay in MIF, and the served URL patterns and identity
+   invariant are unchanged. Only propagation moves.
 
 ## Considered Options
 
@@ -142,31 +135,26 @@ admitted on merge, not on verified attestation.
 `${NAME}-${VERSION}.tar.gz`, runs `gh attestation verify` against it
 fail-closed, and untars it into build output (`dist/ontologies/`, following
 the same non-committed pattern ADR-016 established for the versioned schema
-mirror). The job composes the fetched domain corpus onto this repo's
-canonical `mif-base`/`shared-traits`, refusing composition if the tarball
-declares an incompatible base version. It then enriches — never
-recomputes — the attested `index.json` core with `latest`/version aliases.
-Historical versions are enumerated from `ontologies` release tags, each an
-immutable signed tarball. The deploy triggers on an `ontologies` release
-(`repository_dispatch`, authenticated via the ADR-011 five-app fleet, ref
-carried in the payload), on this repo's own changes, and on a scattered
-scheduled backstop; concurrency-grouped so bursts collapse to one publish.
-On verification failure, the deploy keeps the last-good published surface and
-signals rather than publishing unverified bytes.
+mirror). The job vendors the fetched corpus as-is — `mif-base` and
+`shared-traits` fetched and verified identically to every domain ontology,
+per ADR-018 — then enriches — never recomputes — the attested `index.json`
+core with `latest`/version aliases. Historical versions are enumerated from
+`ontologies` release tags, each an immutable signed tarball. The deploy
+triggers on an `ontologies` release (`repository_dispatch`, authenticated via
+the ADR-011 five-app fleet, ref carried in the payload), on this repo's own
+changes, and on a fuzzily scheduled backstop; concurrency-grouped so bursts
+collapse to one publish. On verification failure, the deploy keeps the
+last-good published surface and signals rather than publishing unverified
+bytes.
 
 **Advantages**: Structurally removes the manual hand-off; trust root becomes
 the tarball's attestation rather than a PR-merge decision; reuses
-`release.yml` + `gh attestation verify` verbatim; governance splits cleanly
-along the base/domain boundary ADR-004 already draws; collapses the
+`release.yml` + `gh attestation verify` verbatim; collapses the
 committed-mirror-plus-tarball duplication to a single attested artifact.
 
 **Disadvantages**: The deploy becomes non-hermetic (a build-time network
-fetch); the `extends` graph now crosses repos at build time rather than at
-PR-review time, so an `ontologies` corpus validator must resolve `mif-base`
-from a pinned, verified version of this repo, and a `mif-base` change here
-should run the `ontologies` corpus validators before merge (reverse
-validation); mirror changes are no longer individually reviewable in a PR
-diff before shipping — only the attestation gates them; cutover must land as
+fetch); mirror changes are no longer individually reviewable in a PR diff
+before shipping — only the attestation gates them; cutover must land as
 one atomic change (fetch job + `repository_dispatch` wiring + retirement of
 the committed snapshot) or the served surface breaks mid-transition.
 
@@ -200,14 +188,13 @@ per-version release tarball. Every other ADR-018 decision is unchanged.
   `gen-ontology-index.sh`) as the attested manifest. This repo enriches that
   index; it never recomputes the attested `{version, file, sha256,
   extends[]}` core.
-- **Base/domain split:** `mif-base` and `shared-traits` remain canonical and
-  authored in this repo (ADR-004 unchanged). The fetched tarball declares the
-  `mif-base` version it validated against; the deploy refuses to compose it
-  onto an incompatible base — a fail-closed compatibility check, not just an
-  integrity check.
+- **No MIF-side ontology content:** per ADR-018, every ontology — including
+  `mif-base` and `shared-traits` — is authored and versioned in the
+  `ontologies` repo as source of record. This repo has no canonical copy to
+  check compatibility against; the fetched corpus is vendored as-is.
 - **Freshness:** the deploy triggers on `ontologies` release
   (`repository_dispatch` carrying the ref, authenticated via the ADR-011 app
-  fleet), on this repo's own changes, and on a scattered scheduled backstop.
+  fleet), on this repo's own changes, and on a fuzzily scheduled backstop.
   Concurrency-grouped. Verification failure keeps the last-good published
   surface and signals; it never publishes partial or unverified bytes.
 - **No committed mirror:** `public/ontologies/` becomes build output under
@@ -230,10 +217,7 @@ per-version release tarball. Every other ADR-018 decision is unchanged.
    enriched but not altered, rather than the output of a merged PR.
 3. **No new fetch/verify code to maintain.** The deploy job reuses
    `release.yml` and `gh attestation verify` exactly as they exist today.
-4. **Governance matches ownership.** The normative floor stays small, slow,
-   and authored here; the domain corpus grows open and additive in the
-   `ontologies` repo without touching the floor.
-5. **Collapses artifact duplication.** ADR-018's plan produced a
+4. **Collapses artifact duplication.** ADR-018's plan produced a
    PR-reviewed committed tree alongside an unused attested tarball; this
    decision uses the tarball as the sole trust root.
 
@@ -247,11 +231,7 @@ per-version release tarball. Every other ADR-018 decision is unchanged.
    diff before merge; this decision replaces that human review step with
    cryptographic verification only. Corpus changes are still reviewed as PRs
    in the `ontologies` repo itself, upstream of the release tag.
-3. **Cross-repo `extends` seam.** The `ontologies` corpus validators must
-   resolve `mif-base` from a pinned, verified version of this repo; a
-   `mif-base` change here should run the `ontologies` corpus validators
-   before merge (reverse validation), which is new cross-repo CI coupling.
-4. **Atomic cutover requirement.** The fetch/verify/untar job, the
+3. **Atomic cutover requirement.** The fetch/verify/untar job, the
    `repository_dispatch` wiring, and the retirement of the committed snapshot
    must land together; a partial cutover leaves the served surface broken
    between states.
@@ -261,7 +241,7 @@ per-version release tarball. Every other ADR-018 decision is unchanged.
 1. The `index.json` contract is unchanged; only who materializes it and when
    changes. Per-ontology `version` semantics are unaffected.
 2. `engineering-base` and `research` remain domain-side family bases in the
-   `ontologies` repo, not part of this repo's canonical floor.
+   `ontologies` repo, distinct from `mif-base`/`shared-traits`.
 3. Every ADR-018 decision outside propagation (source of record, schema
    location, flat layout, URL patterns, identity invariant) is unchanged.
 
@@ -273,17 +253,16 @@ admission is fail-closed on `gh attestation verify` against the signed
 tarball rather than on a PR merge; and the fetch reuses the existing
 attested-release chain rather than introducing new signing or verification
 logic. The secondary drivers are also met: the index contract is preserved
-by enrichment rather than recomputation, the normative floor keeps its own
-governance under ADR-004 while the domain corpus grows freely, and every
-other ADR-018 invariant (source of record, schema location, URL patterns,
-identity invariant) is preserved unchanged.
+by enrichment rather than recomputation, and every other ADR-018 invariant
+(source of record for every ontology including `mif-base`, schema location,
+URL patterns, identity invariant) is preserved unchanged.
 
-The residual costs are accepted: a non-hermetic build and a cross-repo
-`extends` seam both reduce to "pin the other repo at a verified ref"; the
-loss of PR-diff review for mirror changes is offset because corpus content is
-still reviewed as PRs upstream, in the `ontologies` repo, before a release
-tag is cut; and the keep-last-good-on-failure gate means freshness is
-best-effort under integrity, never at its expense.
+The residual costs are accepted: the non-hermetic build reduces to "pin the
+fetched ref and verify its attestation"; the loss of PR-diff review for
+mirror changes is offset because corpus content is still reviewed as PRs
+upstream, in the `ontologies` repo, before a release tag is cut; and the
+keep-last-good-on-failure gate means freshness is best-effort under
+integrity, never at its expense.
 
 ## Implementation
 
@@ -296,13 +275,10 @@ requires, as one atomic change:
    fail-closed, and untars it into `dist/ontologies/` at build time.
 2. A `repository_dispatch` receiver wired to the `ontologies` repo's release
    workflow, authenticated via the ADR-011 app fleet.
-3. A scattered scheduled workflow as the convergence backstop.
+3. A fuzzily scheduled workflow as the convergence backstop.
 4. An enrichment step that adds `latest`/version aliases to the fetched
    `index.json` without altering its attested core fields.
-5. A base-compatibility check that refuses composition when the fetched
-   tarball's declared `mif-base` version does not match this repo's
-   canonical version.
-6. Retirement of `scripts/snapshot-ontology-version.py`'s commit step, the
+5. Retirement of `scripts/snapshot-ontology-version.py`'s commit step, the
    committed `public/ontologies/` tree, and ADR-018's never-built
    PR-propagation follow-up.
 
@@ -311,9 +287,6 @@ requires, as one atomic change:
 - [ADR-018: Ontology Corpus: Dedicated Repository, Flat Layout, and Versioned Serving](ADR-018-ontology-corpus-dedicated-repository-and-serving.md)
   — the decision this ADR amends. Everything in ADR-018 stands except the
   propagation mechanism named in its Implementation section as a follow-up.
-- [ADR-004: Three-Tier Trait Inheritance](ADR-004-three-tier-trait-inheritance.md)
-  — defines the `mif-base` / `shared-traits` / domain-ontology layering this
-  decision uses to draw the canonical-floor boundary.
 - [ADR-007: GitHub Raw URLs for Schema IDs](ADR-007-github-raw-urls-for-schema-ids.md)
   — the unversioned, stable-identifier precedent this decision's versioned
   ontology URLs follow, mirroring the schema mirror's `$id` invariant.
@@ -362,8 +335,25 @@ from the attested tarball's `index.json`, this decision has been violated.
 
 **Summary:** This ADR captures the design agreed in cross-repo ideation and
 amends ADR-018's unbuilt propagation follow-up. The fetch/verify/untar job,
-the `repository_dispatch` wiring, the base/domain compatibility check, and
-the retirement of the committed snapshot are all open implementation work.
+the `repository_dispatch` wiring, and the retirement of the committed
+snapshot are all open implementation work.
 
 **Action Required:** Implement per the Implementation section above before
 this ADR can move to Accepted.
+
+### 2026-07-01
+
+**Status:** Correction.
+
+The original text of this ADR stated `mif-base` and `shared-traits` remain
+"canonical and authored in this repo" (MIF), with a fail-closed
+base-compatibility check refusing composition onto an incompatible base. That
+contradicted the already-accepted ADR-018, which put every ontology —
+including `mif-base` — in the `ontologies` repo as source of record; that
+repo's own `ontologies/index.json` confirms `mif-base` is an entry there, not
+in MIF. Corrected throughout this ADR: MIF holds no canonical ontology
+content and runs no compatibility check; it is a pure consumer of the
+`ontologies` repo's attested corpus. No change to the chosen mechanism
+(Option 2, deploy-time fetch/verify/untar) or to any other decision in this
+ADR. The corresponding Implementation item (base-compatibility check) is
+removed as no longer applicable.
