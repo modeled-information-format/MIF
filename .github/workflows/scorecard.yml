@@ -28,4 +28,4 @@ jobs:
       publish-results: true
     secrets:
       # Org CI App private key → Scorecard reads branch protection (administration:read).
-      app-private-key: ${{ secrets.MIF_CI_CLIENT_APP_PRIVATE_KEY }}
+      app-private-key: ${{ secrets.CI_CLIENT_APP_PRIVATE_KEY }}
