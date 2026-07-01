@@ -23,7 +23,7 @@ jobs:
       id-token: write
       contents: read
       actions: read
-    uses: modeled-information-format/.github/.github/workflows/reusable-scorecard.yml@f83ee8058630235396f7242580570b26cf3617fa
+    uses: modeled-information-format/.github/.github/workflows/reusable-scorecard.yml@f29366f7dbe223fcf14e8994483fec667faa3164
     with:
       publish-results: true
     secrets:
