@@ -360,3 +360,38 @@ content and runs no compatibility check; it is a pure consumer of the
 (Option 2, deploy-time fetch/verify/untar) or to any other decision in this
 ADR. The corresponding Implementation item (base-compatibility check) is
 removed as no longer applicable.
+
+### 2026-07-01 — Implemented
+
+**Status:** Implemented (Option 2, all five Implementation items complete).
+
+- `scripts/vendor-ontologies.py`: fetches every `ontologies` release tag,
+  runs the exact fail-closed `gh attestation verify` sequence that repo's own
+  `release.yml` `verify` job runs (SLSA provenance, SBOM, three seam-signed
+  gate verdicts, VEX), and untars the verified `ontologies/` subtree into
+  `public/ontologies/`. Builds in a staging directory and only atomically
+  swaps into the served path on complete success, so a failure anywhere
+  (including a historical tag's verification failing after the target tag
+  already succeeded) leaves the previous vendor untouched — verified
+  directly by injecting a mid-loop failure.
+- `deploy.yml`: the vendor step runs before `npm run build` (Astro copies
+  `public/` into `dist/` verbatim, no plugin needed); `repository_dispatch:
+  [ontology-corpus-released]` receiver added, plus a fuzzy-scheduled
+  convergence backstop; cross-repo `gh` calls authenticate via the `ci` App
+  (not the default `GITHUB_TOKEN`), matching that App's existing
+  cross-repo-read purpose.
+- The companion `ontologies` repo PR adds a `notify-mif` job to that repo's
+  `release.yml`, firing the `repository_dispatch` after a tag-triggered
+  publish via the existing `pages` App.
+- `public/ontologies/` (188 files) is removed from git tracking and
+  `.gitignore`d; `scripts/snapshot-ontology-version.py` (no CI/release
+  wiring referenced it) is deleted, its enrichment/HTML-generation logic
+  ported into `vendor-ontologies.py`.
+
+**Verification performed:** `vendor-ontologies.py v0.2.1` run locally
+produces a `public/ontologies/index.json` whose full 20-entry
+`{version, file, sha256, extends}` core matches `ontologies/index.json` on
+that repo's `main` exactly (0 mismatches); `npm run build` confirms
+`dist/ontologies/index.json` is identical, proving Astro's copy behavior;
+`validate-ontologies.py`, `validate-namespaces.py`, `test_subtype_of.py`,
+`okf_validate.py`, and `mif_convert.py roundtrip` all pass unaffected.
