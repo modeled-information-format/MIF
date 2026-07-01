@@ -1,4 +1,7 @@
 ---
+id: docs-api-reference
+type: semantic
+created: '2026-07-01T00:00:00Z'
 diataxis_type: reference
 ---
 
@@ -30,7 +33,7 @@ python scripts/yaml2jsonld.py --all
 |----------|----------|-------------|
 | `input` | Yes* | Input YAML file path |
 | `output` | No | Output JSON-LD file path (default: same name with `.jsonld` extension) |
-| `--all` | No | Convert all `*.ontology.yaml` files in `ontologies/` directory |
+| `--all` | No | Convert all `*.ontology.yaml` files in the given directory |
 
 *Required unless `--all` is specified.
 
@@ -38,15 +41,15 @@ python scripts/yaml2jsonld.py --all
 
 ```bash
 # Basic conversion
-python scripts/yaml2jsonld.py ontologies/mif-base.ontology.yaml
-# Output: ontologies/mif-base.ontology.jsonld
+python scripts/yaml2jsonld.py <path-to-ontology>.yaml
+# Output: <path-to-ontology>.jsonld
 
 # Custom output path
-python scripts/yaml2jsonld.py ontologies/mif-base.ontology.yaml output/mif-base.jsonld
+python scripts/yaml2jsonld.py <path-to-ontology>.yaml output/<name>.jsonld
 
 # Batch conversion
-python scripts/yaml2jsonld.py --all
-# Converts all *.ontology.yaml files in ontologies/
+python scripts/yaml2jsonld.py --all <path-to-directory>
+# Converts all *.ontology.yaml files in that directory
 ```
 
 #### Exit Codes

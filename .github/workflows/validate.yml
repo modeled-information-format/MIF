@@ -8,7 +8,6 @@ name: Validate MIF Bundles and Schemas
       - 'schema/**'
       - 'examples/**'
       - 'profiles/**'
-      - 'ontologies/**'
       - 'scripts/*.py'
       - 'test/**'
       - 'docs/**'
@@ -45,14 +44,14 @@ jobs:
           python scripts/okf_validate.py \
             examples \
             profiles/ai-memory/examples \
-            ontologies/examples/memories
+            docs/examples/memories
 
       - name: Lossless markdown -> json-ld -> markdown round-trip
         run: |
           python scripts/mif_convert.py roundtrip \
             examples \
             profiles/ai-memory/examples \
-            ontologies/examples/memories
+            docs/examples/memories
 
   schema-validation:
     name: Validate JSON-LD Projection Against Schema
@@ -79,7 +78,7 @@ jobs:
       - name: Emit derived JSON-LD projections
         run: |
           python scripts/mif_convert.py emit-jsonld \
-            examples profiles/ai-memory/examples ontologies/examples/memories \
+            examples profiles/ai-memory/examples docs/examples/memories \
             --out-dir dist/jsonld
 
       - name: Validate every projection against schema/mif.schema.json

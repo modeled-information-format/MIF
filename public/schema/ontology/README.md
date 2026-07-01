@@ -29,7 +29,7 @@ JSON-LD context for semantic web compatibility. Maps ontology concepts to:
 ```bash
 # Using ajv-cli (ajv reads JSON, so convert the YAML first)
 # Requires: npm install -g ajv-cli ajv-formats
-yq -o=json '.' ../../../ontologies/mif-base.ontology.yaml > /tmp/ontology.json
+yq -o=json '.' <path-to-ontology>.yaml > /tmp/ontology.json
 npx ajv validate -s ontology.schema.json -d /tmp/ontology.json --spec=draft2020 -c ajv-formats
 
 # Using Python jsonschema
@@ -39,7 +39,7 @@ from jsonschema import validate
 
 with open('ontology.schema.json') as f:
     schema = json.load(f)
-with open('../../../ontologies/mif-base.ontology.yaml') as f:
+with open('<path-to-ontology>.yaml') as f:
     data = yaml.safe_load(f)
 validate(data, schema)
 print('Valid!')
@@ -49,7 +49,7 @@ print('Valid!')
 ### Converting to JSON-LD
 
 ```bash
-python ../../../scripts/yaml2jsonld.py ../../../ontologies/mif-base.ontology.yaml
+python ../../../scripts/yaml2jsonld.py <path-to-ontology>.yaml
 ```
 
 ## Schema Evolution

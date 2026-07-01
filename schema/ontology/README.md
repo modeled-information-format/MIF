@@ -1,4 +1,7 @@
 ---
+id: schema-ontology-readme
+type: semantic
+created: '2026-07-01T00:00:00Z'
 diataxis_type: reference
 ---
 
@@ -36,20 +39,20 @@ python3 -c "
 import json, sys
 from jsonschema import validate
 import yaml
-with open('ontology.schema.json') as s, open('../../ontologies/mif-base.ontology.yaml') as d:
+with open('ontology.schema.json') as s, open('<path-to-ontology>.yaml') as d:
     validate(yaml.safe_load(d), json.load(s))
 print('Valid')
 "
 
 # ajv validation (requires JSON conversion; npm install -g ajv-cli ajv-formats)
-yq -o=json '.' ../../ontologies/mif-base.ontology.yaml | \
+yq -o=json '.' <path-to-ontology>.yaml | \
   npx ajv validate -s ontology.schema.json -d /dev/stdin --spec=draft2020 -c ajv-formats
 ```
 
 ### Converting to JSON-LD
 
 ```bash
-python ../../scripts/yaml2jsonld.py ../../ontologies/mif-base.ontology.yaml
+python ../../scripts/yaml2jsonld.py <path-to-ontology>.yaml
 ```
 
 ## Schema Evolution
