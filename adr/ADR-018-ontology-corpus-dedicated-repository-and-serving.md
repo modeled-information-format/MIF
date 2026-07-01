@@ -30,13 +30,14 @@ related:
   - ADR-007-github-raw-urls-for-schema-ids.md
   - ADR-011-markdown-canonical-derived-jsonld.md
   - ADR-016-versioned-schema-mirror-publication.md
+  - ADR-019-deploy-time-attested-ontology-vendoring.md
 ---
 
 # ADR-018: Ontology Corpus: Dedicated Repository, Flat Layout, and Versioned Serving
 
 ## Status
 
-Accepted
+Accepted (amendment proposed 2026-06-30 — see Amendment section)
 
 This ADR resolves the precursor recorded as org discussion #168
 ("House the Ontologies in a Dedicated modeled-information-format/ontologies
@@ -332,9 +333,34 @@ and mitigated by reusing the ADR-016 snapshot tooling and its fail-closed gate.
 
 ## More Information
 
-- **Date:** 2026-06-30
+- **Date:** 2026-06-30 (original); amendment proposed 2026-06-30
 - **Source:** org discussion #168; `public/ontologies/`; `scripts/snapshot-ontology-version.py`.
-- **Related ADRs:** ADR-004, ADR-005, ADR-007, ADR-011, ADR-016
+- **Related ADRs:** ADR-004, ADR-005, ADR-007, ADR-011, ADR-016, ADR-019
+
+## Amendment
+
+### 2026-06-30 — propagation mechanism amendment proposed
+
+This ADR's Implementation section named a follow-up that was never built: "a
+release-propagation job in the `ontologies` repo that, on a `vX.Y.Z` tag,
+mirrors the released corpus into MIF's `public/ontologies/` and opens a PR;
+MIF merges and deploys." [ADR-019](ADR-019-deploy-time-attested-ontology-vendoring.md)
+(proposed, not yet accepted) would replace that unbuilt mechanism with a
+deploy-time fetch of the `ontologies` repo's signed release tarball, verified
+fail-closed with `gh attestation verify`, in place of a committed mirror and a
+bot-opened PR. The propagation mechanism recorded above remains this ADR's
+decision until ADR-019 is accepted.
+
+**Rationale for amendment:** the PR-propagation plan was never implemented,
+and in its absence the mirror was refreshed by hand and drifted from
+upstream. A PR merge is also a human trust decision, not a cryptographic one;
+fetching and verifying the tarball's attestation directly is a stronger
+admission gate than reviewing a diff.
+
+**Unchanged by this amendment:** every other decision recorded above — the
+`ontologies` repo as source of record, the normative schema and JSON-LD
+context staying in MIF, the flat layout, the served URL patterns, and the
+`id`/`version` identity invariant.
 
 ## Audit
 
