@@ -349,16 +349,16 @@ from the attested tarball's `index.json`, this decision has been violated.
 
 ### 2026-06-30
 
-**Status:** Proposed — not yet implemented.
+**Status:** Pending — not yet implemented.
 
 **Findings:**
 
 | Finding | Files | Lines | Assessment |
 |---------|-------|-------|------------|
-| Served surface still built from a committed, hand-vendored snapshot | `scripts/snapshot-ontology-version.py`, `public/ontologies/` | full files | not yet implemented |
-| ADR-018's named PR-propagation follow-up was never built | `adr/ADR-018-ontology-corpus-dedicated-repository-and-serving.md` | Implementation section | confirmed absent; no propagation workflow exists |
-| No fetch/verify/untar deploy job exists | (none) | n/a | not yet implemented |
-| No `repository_dispatch` receiver for `ontologies` releases | (none) | n/a | not yet implemented |
+| Served surface is still built from a committed, hand-vendored snapshot | `scripts/snapshot-ontology-version.py` | 23 | confirmed: instructs running the script and committing the result before tagging |
+| `public/ontologies/index.json` is a committed file, not build output | `public/ontologies/index.json` | 1 | confirmed present as committed source |
+| Deploy has no `repository_dispatch` trigger for `ontologies` releases | `.github/workflows/deploy.yml` | 4-7 | confirmed: only `push`/`workflow_dispatch` triggers exist |
+| ADR-018's named PR-propagation follow-up was never built | `adr/ADR-018-ontology-corpus-dedicated-repository-and-serving.md` | 315-317 | confirmed absent; no propagation workflow exists anywhere under `.github/workflows/` |
 
 **Summary:** This ADR captures the design agreed in cross-repo ideation and
 amends ADR-018's unbuilt propagation follow-up. The fetch/verify/untar job,
