@@ -19,10 +19,14 @@ Scripts are located at `.claude/skills/ontology-manager/scripts/`.
 
 ### Create a New Ontology
 
+Every ontology, base and domain, is authored in the
+`modeled-information-format/ontologies` repo, not here — run this from a
+checkout of that repo, writing into its `ontologies/` directory:
+
 ```bash
-bash .claude/skills/ontology-manager/scripts/scaffold_ontology.sh \
+bash <path-to-MIF-checkout>/.claude/skills/ontology-manager/scripts/scaffold_ontology.sh \
   <id> <version> [--extends mif-base,shared-traits] \
-  > ontologies/examples/<id>.ontology.yaml
+  > ontologies/<id>.ontology.yaml
 ```
 
 - `id`: lowercase, hyphens only (e.g. `my-domain`)
@@ -122,8 +126,7 @@ yq -i '.ontology.version = "0.2.0"' ontology.yaml
 
 ## Reference Files
 
-- Schema: `schema/ontology/ontology.schema.json`
-- Base ontology: `ontologies/mif-base.ontology.yaml`
-- Shared traits: `ontologies/shared-traits.ontology.yaml`
-- Examples: `ontologies/examples/`
+- Schema (this repo): `schema/ontology/ontology.schema.json`
+- Base ontology, shared traits, domain ontologies, and examples: all in the
+  `modeled-information-format/ontologies` repo's `ontologies/` directory
 - Detailed reference: `.claude/skills/ontology-manager/references/schema-reference.md`

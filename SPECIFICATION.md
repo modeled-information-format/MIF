@@ -291,7 +291,7 @@ A Memory Unit MAY declare which ontology it conforms to using the `ontology` fie
 ontology:
   id: regenerative-agriculture
   version: "1.0.0"
-  uri: https://github.com/modeled-information-format/MIF/ontologies/examples/regenerative-agriculture.ontology.yaml
+  uri: https://mif-spec.dev/ontologies/regenerative-agriculture.ontology.yaml
 ```
 
 The `ontology.id` MUST match the `ontology.id` field in the referenced ontology definition file. This enables:

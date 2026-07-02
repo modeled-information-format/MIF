@@ -142,11 +142,14 @@ discovery:
 
 ## Existing Ontologies for Reference
 
-| File | ID | Entities | Purpose |
-|------|----|----------|---------|
-| `ontologies/mif-base.ontology.yaml` | mif-base | 0 | Base cognitive triad |
-| `ontologies/shared-traits.ontology.yaml` | shared-traits | 0 | Reusable traits library |
-| `ontologies/examples/software-engineering.ontology.yaml` | software-engineering | 9 | Dev domain example |
-| `ontologies/examples/biology-research-lab.ontology.yaml` | biology-research-lab | 19 | Science domain |
-| `ontologies/examples/k12-educational-publishing.ontology.yaml` | k12-educational-publishing | 16 | Education domain |
-| `ontologies/examples/regenerative-agriculture.ontology.yaml` | regenerative-agriculture | 19 | Agriculture domain |
+Every ontology (base and domain) now lives in the `modeled-information-format/ontologies`
+repo, not in this repo — fetch/browse there for reference examples:
+
+| ID | Entities | Purpose |
+|----|----------|---------|
+| mif-base | 0 | Base cognitive triad |
+| shared-traits | 0 | Reusable traits library |
+| software-engineering | 9 | Dev domain example |
+| biology-research-lab | 19 | Science domain |
+| k12-educational-publishing | 16 | Education domain |
+| regenerative-agriculture | 19 | Agriculture domain |

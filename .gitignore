@@ -20,6 +20,13 @@ dist/
 .astro/
 node_modules/
 
+# Ontology corpus (ADR-019): vendored at deploy time from the ontologies
+# repo's signed release by scripts/vendor-ontologies.py, never committed
+# source. Staging/backup dirs that script uses for its atomic swap.
+public/ontologies/
+.ontologies-staging/
+.ontologies-previous/
+
 # Python
 __pycache__/
 *.pyc

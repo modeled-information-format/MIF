@@ -124,11 +124,11 @@ OKF conformance is enforced by `.github/workflows/validate.yml` as gating jobs:
    consistency.
 
 All bundle sets — `examples`, `profiles/ai-memory/examples`, and
-`ontologies/examples/memories` — are passed to the conformance, round-trip, and
+`docs/examples/memories` — are passed to the conformance, round-trip, and
 schema jobs.
 
 The workflow triggers on the source paths that affect conformance
-(`schema/**`, `examples/**`, `profiles/**`, `ontologies/**`, `scripts/*.py`,
+(`schema/**`, `examples/**`, `profiles/**`, `scripts/*.py`,
 `docs/**`, `src/content/docs/**`, `package.json`, `astro.config.mjs`) and runs on
 pull requests targeting `main`, `release/**`, and `develop/**` so v1.0.0
 integration branches are gated.

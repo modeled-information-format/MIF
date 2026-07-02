@@ -251,10 +251,13 @@ def convert_file(input_path: Path, output_path: Optional[Path] = None) -> Path:
     return output_path
 
 
-def convert_all_ontologies() -> list:
-    """Convert all ontology YAML files in the ontologies directory."""
-    script_dir = Path(__file__).parent
-    ontologies_dir = script_dir.parent / "ontologies"
+def convert_all_ontologies(ontologies_dir: Path | None = None) -> list:
+    """Convert all ontology YAML files under `ontologies_dir` (default: this repo's
+    own ontologies/, which no longer exists since ontology content moved to the
+    ontologies repo -- ADR-018)."""
+    if ontologies_dir is None:
+        script_dir = Path(__file__).parent
+        ontologies_dir = script_dir.parent / "ontologies"
 
     if not ontologies_dir.exists():
         print(f"Ontologies directory not found: {ontologies_dir}", file=sys.stderr)
@@ -291,13 +294,19 @@ def main():
     parser.add_argument(
         "--all",
         action="store_true",
-        help="Convert all ontology files in ontologies/ directory"
+        help="Convert all ontology files under --path (default: ontologies/, which no longer exists here -- ADR-018)"
+    )
+    parser.add_argument(
+        "--path",
+        type=Path,
+        default=None,
+        help="Directory to convert all *.ontology.yaml files from, used with --all"
     )
 
     args = parser.parse_args()
 
     if args.all:
-        converted = convert_all_ontologies()
+        converted = convert_all_ontologies(args.path)
         print(f"\nConverted {len(converted)} files")
         sys.exit(0)
 

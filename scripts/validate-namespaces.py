@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Validate that memory namespaces exist in their declared ontologies."""
 
+import argparse
 import re
 import sys
 from pathlib import Path
@@ -46,13 +47,9 @@ def get_ontology_namespaces(ontology: dict) -> set[str]:
     return namespaces
 
 
-def load_all_ontologies(repo_root: Path) -> dict[str, set[str]]:
+def load_all_ontologies(ontology_dirs: list[Path]) -> dict[str, set[str]]:
     """Load all ontologies and their namespaces."""
     ontologies = {}
-    ontology_dirs = [
-        repo_root / "ontologies",
-        repo_root / "ontologies" / "examples",
-    ]
 
     for ontology_dir in ontology_dirs:
         if not ontology_dir.exists():
@@ -131,16 +128,41 @@ def validate_memory_namespace(
 
 def main():
     """Main entry point."""
+    parser = argparse.ArgumentParser(
+        description="Validate that MIF's own memory examples declare namespaces that exist in some ontology."
+    )
+    parser.add_argument(
+        "--path",
+        type=Path,
+        default=None,
+        help=(
+            "Directory containing *.ontology.yaml files to check memory namespaces "
+            "against (e.g. a checked-out ontologies repo, or MIF's own vendored "
+            "public/ontologies/ after vendor-ontologies.py runs). Defaults to this "
+            "repo's own ontologies/ and ontologies/examples/, which no longer exist "
+            "here since ontology content moved to the ontologies repo (ADR-018) -- "
+            "pass --path explicitly, or this check has nothing to validate against."
+        ),
+    )
+    args = parser.parse_args()
+
     repo_root = Path(__file__).parent.parent
+    if args.path:
+        ontology_dirs = [args.path]
+    else:
+        ontology_dirs = [
+            repo_root / "ontologies",
+            repo_root / "ontologies" / "examples",
+        ]
     memory_dirs = [
         repo_root / "examples",
         repo_root / "profiles" / "ai-memory" / "examples",
-        repo_root / "ontologies" / "examples" / "memories",
+        repo_root / "docs" / "examples" / "memories",
     ]
     reserved = {"index.md", "log.md"}
 
     # Load all ontologies
-    ontologies = load_all_ontologies(repo_root)
+    ontologies = load_all_ontologies(ontology_dirs)
 
     # Get mif-base namespaces
     mif_base_namespaces = ontologies.get("mif-base", set())
@@ -168,6 +190,16 @@ def main():
                 print(error)
         # Don't fail on namespace warnings - they may be intentional extensions
         print("\nNote: Namespace extensions are allowed. Review warnings above.")
+        sys.exit(0)
+    elif not ontologies:
+        # Never claim success when there was nothing to check against -- this
+        # exact silent false-positive already happened once, when
+        # ontologies/ was removed from this repo (ADR-018) and this script
+        # kept reporting "All memory namespaces validated successfully"
+        # while validating zero namespaces against zero ontologies.
+        searched = ", ".join(str(d) for d in ontology_dirs)
+        print(f"No ontology definitions found under: {searched}")
+        print("Pass --path <dir> to check memory namespaces against a real corpus.")
         sys.exit(0)
     else:
         print("All memory namespaces validated successfully.")

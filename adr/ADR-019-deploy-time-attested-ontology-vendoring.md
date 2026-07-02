@@ -307,8 +307,11 @@ requires, as one atomic change:
 - `modeled-information-format/ontologies` `.github/workflows/release.yml` —
   the build → attest → fail-closed-verify → tag-gated-publish chain producing
   the signed tarball this decision fetches.
-- [`scripts/snapshot-ontology-version.py`](../scripts/snapshot-ontology-version.py)
-  — the committed-snapshot generator whose commit step this decision retires.
+- `scripts/snapshot-ontology-version.py` (retired by this decision's
+  implementation; see the 2026-07-01 implementation audit entry below) — the
+  committed-snapshot generator whose commit step this decision retires, and
+  whose enrichment/HTML-generation logic was ported into
+  [`scripts/vendor-ontologies.py`](../scripts/vendor-ontologies.py).
 
 ## More Information
 
@@ -357,3 +360,53 @@ content and runs no compatibility check; it is a pure consumer of the
 (Option 2, deploy-time fetch/verify/untar) or to any other decision in this
 ADR. The corresponding Implementation item (base-compatibility check) is
 removed as no longer applicable.
+
+### 2026-07-01 — Implemented
+
+**Status:** Implemented (Option 2, all five Implementation items complete).
+
+- `scripts/vendor-ontologies.py`: fetches every `ontologies` release tag,
+  runs the exact fail-closed `gh attestation verify` sequence that repo's own
+  `release.yml` `verify` job runs (SLSA provenance, SBOM, three seam-signed
+  gate verdicts, VEX), and untars the verified `ontologies/` subtree into
+  `public/ontologies/`. Builds in a staging directory and only atomically
+  swaps into the served path on complete success, so a failure anywhere
+  (including a historical tag's verification failing after the target tag
+  already succeeded) leaves the previous vendor untouched — verified
+  directly by injecting a mid-loop failure.
+- `deploy.yml`: the vendor step runs before `npm run build` (Astro copies
+  `public/` into `dist/` verbatim, no plugin needed); `repository_dispatch:
+  [ontology-corpus-released]` receiver added, plus a fuzzy-scheduled
+  convergence backstop; cross-repo `gh` calls authenticate via the `ci` App
+  (not the default `GITHUB_TOKEN`), matching that App's existing
+  cross-repo-read purpose.
+- The companion `ontologies` repo PR adds a `notify-mif` job to that repo's
+  `release.yml`, firing the `repository_dispatch` after a tag-triggered
+  publish via the existing `pages` App.
+- `public/ontologies/` (188 files) is removed from git tracking and
+  `.gitignore`d; `scripts/snapshot-ontology-version.py` (no CI/release
+  wiring referenced it) is deleted, its enrichment/HTML-generation logic
+  ported into `vendor-ontologies.py`.
+
+**Verification performed:** `vendor-ontologies.py v0.2.1` run locally
+produces a `public/ontologies/index.json` whose full 20-entry
+`{version, file, sha256, extends}` core matches `ontologies/index.json` on
+that repo's `main` exactly (0 mismatches); `npm run build` confirms
+`dist/ontologies/index.json` is identical, proving Astro's copy behavior;
+`test_subtype_of.py` (fixture-based, unaffected by the corpus move),
+`okf_validate.py`, and `mif_convert.py roundtrip` all pass genuinely.
+
+**Correction found during independent review:** an initial claim here that
+`validate-ontologies.py` and `validate-namespaces.py` "pass unaffected" was
+wrong. Both hardcode a scan path (`repo_root / "ontologies"`) that no
+longer exists in this repo, so they silently scanned zero files and
+reported success on an empty check, not a real one -- the exact
+false-positive-pass failure mode this ADR's own vendoring pipeline exists
+to eliminate elsewhere. Fixed by adding an optional `--path <dir>` argument
+to both scripts (also fixing `yaml2jsonld.py --all` the same way, which had
+the identical hardcoded-path bug) and making them report an explicit error
+instead of a false "all validated successfully" when zero files are found
+and no `--path` is given. This restores the manual `ontologies` repo
+release-runbook workflow ("run them from a MIF checkout") that also
+depended on this same hardcoded path, and lets any future automation point
+them at the vendored `public/ontologies/` corpus.
