@@ -10,9 +10,9 @@ tags:
   - deployment
   - attestation
   - registry
-status: proposed
+status: implemented
 created: 2026-06-30
-updated: 2026-07-01
+updated: 2026-07-02
 author: MIF Maintainers
 project: MIF
 technologies:
@@ -33,7 +33,7 @@ related:
 
 ## Status
 
-Proposed
+Implemented
 
 This ADR amends [ADR-018](ADR-018-ontology-corpus-dedicated-repository-and-serving.md).
 ADR-018 is unchanged and stays Accepted for everything it decided: the
@@ -410,3 +410,33 @@ and no `--path` is given. This restores the manual `ontologies` repo
 release-runbook workflow ("run them from a MIF checkout") that also
 depended on this same hardcoded path, and lets any future automation point
 them at the vendored `public/ontologies/` corpus.
+
+### 2026-07-02 — Merged and closed out
+
+`MIF`#203 merged alongside the companion `ontologies`#25 and `.github`#44.
+Merging pushed a normal commit to `main`, which triggered `deploy.yml`'s
+existing `push` trigger without needing the `repository_dispatch` to fire
+first; that run vendored the corpus and redeployed successfully
+(`gh run list` confirms `conclusion: success` at the exact merge commit).
+Re-verified end to end against the live site, not just the local checkout:
+`https://mif-spec.dev/ontologies/index.json` returns HTTP 200 and matches
+`ontologies`' current `main` exactly on all 20 entries'
+`version`/`file`/`sha256`/`extends`. `ontologies`#6 (the issue this ADR
+pair exists to close) closed on this evidence.
+
+Fixing the `--path` false-positive above (previous entry) surfaced a real
+regression: `.github/workflows/validate.yml`'s "Validate Ontology Files"
+required check called `validate-ontologies.py`/`validate-namespaces.py`
+with no `--path`, so the newly-honest failure mode broke that check. Fixed
+by dropping both corpus-scanning steps from that job (nothing local to
+check now that ontology content lives entirely in the `ontologies` repo)
+and keeping only `test_subtype_of.py`. The job's `name:` was kept exactly
+as `Validate Ontology Files` since it is a required branch-protection
+status check; renaming it would have made that check permanently
+unsatisfiable.
+
+Running the fixed `validate-ontologies.py --path` against the `ontologies`
+repo's real corpus (rather than zero files) also surfaced genuine,
+pre-existing `subtype_of` substitutability violations in four ontologies
+that this check had never actually run against before. Filed as
+`ontologies`#26; out of scope for this ADR, tracked separately.
