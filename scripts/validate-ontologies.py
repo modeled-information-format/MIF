@@ -4,6 +4,7 @@ tool, matching the JSON-LD validation job), plus entity-type subsumption integri
 (cross-ontology `subtype_of` resolution, acyclicity, substitutability) — graph checks
 no JSON Schema validator can express."""
 
+import argparse
 import json
 import os
 import subprocess
@@ -82,10 +83,10 @@ def _type_info(ontology: dict) -> dict[str, dict]:
     return info
 
 
-def load_ontology_corpus(repo_root: Path) -> dict[str, dict]:
+def load_ontology_corpus(ontology_dirs: list[Path]) -> dict[str, dict]:
     """Load every ontology YAML keyed by its id: {id: {'extends': [...], 'types': {name: info}}}."""
     corpus: dict[str, dict] = {}
-    for d in (repo_root / "ontologies", repo_root / "ontologies" / "examples"):
+    for d in ontology_dirs:
         if not d.exists():
             continue
         for f in d.glob("*.ontology.yaml"):
@@ -193,28 +194,65 @@ def validate_ontology(ontology_path: Path, schema_path: Path, corpus: dict[str, 
 
 def main():
     """Main entry point."""
+    parser = argparse.ArgumentParser(
+        description="Validate ontology YAML files against the schema and subtype_of integrity."
+    )
+    parser.add_argument(
+        "--path",
+        type=Path,
+        default=None,
+        help=(
+            "Directory containing *.ontology.yaml files to validate (e.g. a checked-out "
+            "ontologies repo, or MIF's own vendored public/ontologies/ after "
+            "vendor-ontologies.py runs). Defaults to this repo's own ontologies/ and "
+            "ontologies/examples/, which no longer exist here since ontology content "
+            "moved to the ontologies repo (ADR-018) -- pass --path explicitly instead "
+            "of relying on the default."
+        ),
+    )
+    args = parser.parse_args()
+
     repo_root = Path(__file__).parent.parent
     schema_path = repo_root / "schema" / "ontology" / "ontology.schema.json"
-    ontology_dirs = [
-        repo_root / "ontologies",
-        repo_root / "ontologies" / "examples",
-    ]
+    if args.path:
+        ontology_dirs = [args.path]
+    else:
+        ontology_dirs = [
+            repo_root / "ontologies",
+            repo_root / "ontologies" / "examples",
+        ]
 
     if not schema_path.exists():
         print(f"ERROR: Schema not found: {schema_path}")
         sys.exit(1)
 
-    corpus = load_ontology_corpus(repo_root)
+    corpus = load_ontology_corpus(ontology_dirs)
     all_errors = {}
+    total_files = 0
 
     for ontology_dir in ontology_dirs:
         if not ontology_dir.exists():
             continue
         for ontology_file in ontology_dir.glob("*.ontology.yaml"):
+            total_files += 1
             errors = validate_ontology(ontology_file, schema_path, corpus)
             if errors:
-                rel_path = ontology_file.relative_to(repo_root)
+                try:
+                    rel_path = ontology_file.relative_to(repo_root)
+                except ValueError:
+                    rel_path = ontology_file
                 all_errors[str(rel_path)] = errors
+
+    if total_files == 0:
+        # Fail closed: a silent "0 files, 0 errors" pass is indistinguishable
+        # from a real clean corpus and has already caused a real incident
+        # (this script kept reporting success after ontologies/ was removed
+        # from this repo per ADR-018, when it should have said "nothing to
+        # check"). Never let an empty scan look identical to a passing one.
+        searched = ", ".join(str(d) for d in ontology_dirs)
+        print(f"ERROR: no *.ontology.yaml files found under: {searched}")
+        print("Pass --path <dir> to point at the corpus to validate.")
+        sys.exit(1)
 
     if all_errors:
         print("Ontology validation FAILED:")

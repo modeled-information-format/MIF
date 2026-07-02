@@ -393,5 +393,20 @@ produces a `public/ontologies/index.json` whose full 20-entry
 `{version, file, sha256, extends}` core matches `ontologies/index.json` on
 that repo's `main` exactly (0 mismatches); `npm run build` confirms
 `dist/ontologies/index.json` is identical, proving Astro's copy behavior;
-`validate-ontologies.py`, `validate-namespaces.py`, `test_subtype_of.py`,
-`okf_validate.py`, and `mif_convert.py roundtrip` all pass unaffected.
+`test_subtype_of.py` (fixture-based, unaffected by the corpus move),
+`okf_validate.py`, and `mif_convert.py roundtrip` all pass genuinely.
+
+**Correction found during independent review:** an initial claim here that
+`validate-ontologies.py` and `validate-namespaces.py` "pass unaffected" was
+wrong. Both hardcode a scan path (`repo_root / "ontologies"`) that no
+longer exists in this repo, so they silently scanned zero files and
+reported success on an empty check, not a real one -- the exact
+false-positive-pass failure mode this ADR's own vendoring pipeline exists
+to eliminate elsewhere. Fixed by adding an optional `--path <dir>` argument
+to both scripts (also fixing `yaml2jsonld.py --all` the same way, which had
+the identical hardcoded-path bug) and making them report an explicit error
+instead of a false "all validated successfully" when zero files are found
+and no `--path` is given. This restores the manual `ontologies` repo
+release-runbook workflow ("run them from a MIF checkout") that also
+depended on this same hardcoded path, and lets any future automation point
+them at the vendored `public/ontologies/` corpus.

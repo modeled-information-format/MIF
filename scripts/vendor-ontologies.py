@@ -327,16 +327,22 @@ def _build(tag: str, all_tags: list[str]) -> dict:
             continue
         fetched_index_by_tag[version] = json.loads(idx_path.read_text())
 
-    # Refresh latest/ and vMAJOR/ as copies of the newest tag's canonical
-    # *.ontology.{yaml,jsonld} pairs only -- NOT a copytree of ROOT itself,
-    # which now also contains sibling version/alias subdirectories (copying
-    # a directory into its own descendant is invalid and would recurse).
+    # Refresh <latest_version>/, latest/, and vMAJOR/ as copies of the newest
+    # tag's canonical *.ontology.{yaml,jsonld} pairs only -- NOT a copytree of
+    # ROOT itself, which now also contains sibling version/alias
+    # subdirectories (copying a directory into its own descendant is invalid
+    # and would recurse). The target tag's own files land directly in ROOT
+    # (see the fetch loop above), so unlike historical tags it has no
+    # public/ontologies/<version>/ snapshot yet -- include latest_version
+    # here so the immutable per-release pin (documented above and in the
+    # generated index page) also resolves for the current release, not just
+    # for superseded ones.
     latest_version = tag.lstrip("v")
     canonical_files = [
         p for p in ROOT.iterdir()
         if p.is_file() and (p.name.endswith(".ontology.yaml") or p.name.endswith(".ontology.jsonld"))
     ]
-    for alias_dir in ("latest", f"v{latest_version.split('.')[0]}"):
+    for alias_dir in (latest_version, "latest", f"v{latest_version.split('.')[0]}"):
         dst = ROOT / alias_dir
         if dst.exists():
             shutil.rmtree(dst)
