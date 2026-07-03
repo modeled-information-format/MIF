@@ -79,8 +79,8 @@
       <circle cx="322" cy="231" r="5" fill="#34D3E8"/>
       <text x="336" y="235" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="13" font-weight="700" fill="#34D3E8">machine-parseable</text>
       <text x="318" y="270" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12.5" fill="#7C8AA0">{</text>
-      <text x="332" y="288" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12.5"><tspan fill="#34D3E8">"@type"</tspan><tspan fill="#7C8AA0">: </tspan><tspan fill="#F5B642">"Decision"</tspan><tspan fill="#7C8AA0">,</tspan></text>
-      <text x="332" y="306" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12.5"><tspan fill="#34D3E8">"entity"</tspan><tspan fill="#7C8AA0">: </tspan><tspan fill="#AEBCCF">{ … }</tspan></text>
+      <text x="332" y="288" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12.5" xml:space="preserve"><tspan fill="#34D3E8">"@type"</tspan><tspan fill="#7C8AA0">: </tspan><tspan fill="#F5B642">"Decision"</tspan><tspan fill="#7C8AA0">,</tspan></text>
+      <text x="332" y="306" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12.5" xml:space="preserve"><tspan fill="#34D3E8">"entity"</tspan><tspan fill="#7C8AA0">: </tspan><tspan fill="#AEBCCF">{ … }</tspan></text>
       <text x="318" y="324" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12.5" fill="#7C8AA0">}</text>
       <text x="318" y="346" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="11.5" letter-spacing="0.04em" fill="#7C8AA0">JSON-LD · a parser resolves</text>
     </g>
@@ -89,7 +89,7 @@
     <path d="M292 294 L304 300 L292 306" stroke="#34D3E8" stroke-width="1.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
     <rect x="98" y="386" width="364" height="30" rx="15" fill="#0B2618" stroke="#34C77B" stroke-opacity="0.5"/>
     <circle cx="116" cy="401" r="4.5" fill="#34C77B"/>
-    <text x="132" y="405" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12.5" letter-spacing="0.02em"><tspan fill="#34C77B">mif-validate</tspan><tspan fill="#AEBCCF"> · lossless round-trip · L1→L3</tspan></text>
+    <text x="132" y="405" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12.5" letter-spacing="0.02em" xml:space="preserve"><tspan fill="#34C77B">mif-validate</tspan><tspan fill="#AEBCCF"> · lossless round-trip · L1→L3</tspan></text>
   </g>
 
   <!-- ===== Footer locators ===== -->
