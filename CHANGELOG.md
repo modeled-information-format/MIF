@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Entity-type classification fields** (ADR-020) — the ontology schema's
+  `entity_type` definition gains three optional, additive string-array
+  fields supporting confidence-tiered embedding-based classification:
+  `aliases` (synonyms/label variations, `skos:altLabel`), `exemplars`
+  (curated canonical examples, `skos:example`), and `negative_examples`
+  (curated near-misses from confusable type pairs,
+  `mif-spec.dev/ns/ontology#negativeExample`). Ontology schema version
+  1.0.0 -> 1.1.0; `yaml2jsonld.py` projects the new fields; existing
+  ontologies carrying only `description` remain valid.
+
 ## [1.1.0] - 2026-06-30
 
 ### Breaking Changes
