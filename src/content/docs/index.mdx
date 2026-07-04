@@ -1,12 +1,68 @@
 ---
 title: "Introduction"
 description: "MIF — the Modeled Information Format specification: a vendor-neutral data model for portable AI memory."
+template: splash
+hero:
+  tagline: One document, read losslessly two ways — human Markdown, machine JSON-LD. No translation, no drift.
+  image:
+    html: |
+      <svg viewBox="0 0 560 480" width="560" height="480" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="MIF — a single source document fans out to a human-readable Markdown panel (amber) and a machine-parseable JSON-LD panel (cyan), joined by a lossless round-trip.">
+        <title>One document, two readers</title>
+        <desc>The chevron-M mark above a Markdown panel and a JSON-LD panel meeting at a round-trip arrow, with a mif-validate conformance badge below.</desc>
+        <defs>
+          <linearGradient id="mif-home-field" x1="0" y1="0" x2="560" y2="480" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#0A0D13"/>
+            <stop offset="1" stop-color="#0E121B"/>
+          </linearGradient>
+        </defs>
+        <rect width="560" height="480" rx="20" fill="url(#mif-home-field)"/>
+        <rect x="12" y="12" width="536" height="456" rx="14" fill="none" stroke="#222C3C" stroke-width="1.5"/>
+
+        <g transform="translate(238 26) scale(1.55)" fill="none" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+          <path d="M6 42 L6 6 L24 29" stroke="#34D3E8"/>
+          <path d="M24 29 L42 6 L42 42" stroke="#F5B642"/>
+          <path d="M24 25.6 L27.4 29 L24 32.4 L20.6 29 Z" fill="#E8EEF6" stroke="none"/>
+        </g>
+        <text x="280" y="122" text-anchor="middle" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12" letter-spacing="0.1em" fill="#7C8AA0">ONE DOCUMENT, TWO READERS</text>
+
+        <g>
+          <rect x="34" y="150" width="222" height="160" rx="12" fill="#0E121B" stroke="#2E3A4D"/>
+          <path d="M34 162 a12 12 0 0 1 12 -12 h198 a12 12 0 0 1 12 12 v10 h-222 z" fill="#2A2110"/>
+          <circle cx="52" cy="167" r="5" fill="#F5B642"/>
+          <text x="66" y="171" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="13" font-weight="700" fill="#F5B642">human-readable</text>
+          <text x="48" y="210" font-family="system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#E8EEF6"># A decision, in prose</text>
+          <rect x="48" y="223" width="180" height="7" rx="3.5" fill="#3C4B63"/>
+          <rect x="48" y="237" width="194" height="7" rx="3.5" fill="#2E3A4D"/>
+          <rect x="48" y="251" width="150" height="7" rx="3.5" fill="#2E3A4D"/>
+          <text x="48" y="288" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="11.5" letter-spacing="0.04em" fill="#7C8AA0">Markdown · a person reads</text>
+        </g>
+        <g>
+          <rect x="304" y="150" width="222" height="160" rx="12" fill="#0E121B" stroke="#2E3A4D"/>
+          <path d="M304 162 a12 12 0 0 1 12 -12 h198 a12 12 0 0 1 12 12 v10 h-222 z" fill="#0A2630"/>
+          <circle cx="322" cy="167" r="5" fill="#34D3E8"/>
+          <text x="336" y="171" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="13" font-weight="700" fill="#34D3E8">machine-parseable</text>
+          <text x="318" y="206" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12.5" fill="#7C8AA0">{</text>
+          <text x="332" y="224" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12.5" xml:space="preserve"><tspan fill="#34D3E8">"@type"</tspan><tspan fill="#7C8AA0">: </tspan><tspan fill="#F5B642">"Decision"</tspan><tspan fill="#7C8AA0">,</tspan></text>
+          <text x="332" y="242" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12.5" xml:space="preserve"><tspan fill="#34D3E8">"entity"</tspan><tspan fill="#7C8AA0">: </tspan><tspan fill="#AEBCCF">{ … }</tspan></text>
+          <text x="318" y="260" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12.5" fill="#7C8AA0">}</text>
+          <text x="318" y="288" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="11.5" letter-spacing="0.04em" fill="#7C8AA0">JSON-LD · a parser resolves</text>
+        </g>
+        <path d="M256 230 L304 230" stroke="#7C8AA0" stroke-width="1.5"/>
+        <path d="M268 224 L256 230 L268 236" stroke="#F5B642" stroke-width="1.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+        <path d="M292 224 L304 230 L292 236" stroke="#34D3E8" stroke-width="1.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+
+        <rect x="98" y="336" width="364" height="30" rx="15" fill="#0B2618" stroke="#34C77B" stroke-opacity="0.5"/>
+        <circle cx="116" cy="351" r="4.5" fill="#34C77B"/>
+        <text x="132" y="355" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12.5" letter-spacing="0.02em" xml:space="preserve"><tspan fill="#34C77B">mif-validate</tspan><tspan fill="#AEBCCF"> · lossless round-trip · L1→L3</tspan></text>
+      </svg>
+  actions:
+    - text: Specification Overview
+      link: /specification/overview/
+      icon: right-arrow
+    - text: Browse schemas
+      link: https://mif-spec.dev/schema/index.json
+      variant: minimal
 ---
-
-# Modeled Information Format
-
-> A vendor-neutral data model for portable AI memory, with dual human-readable
-> Markdown and machine-processable JSON-LD representations.
 
 This site is the **normative specification** for MIF (Modeled Information
 Format). It defines the data model, the two on-disk formats, the type system,
