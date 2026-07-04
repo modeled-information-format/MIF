@@ -85,6 +85,8 @@ python ../../scripts/yaml2jsonld.py <path-to-ontology>.yaml
 - **v1.0**: Three-type hierarchy with nested namespaces
 
 When updating the schema:
-1. Increment version in `$id`
+1. Bump `schemas.ontology` in `VERSION.json` (the `$id` stays unversioned
+   and stable per ADR-007; versioned copies are release-prep mirrors per
+   ADR-016)
 2. Update CHANGELOG.md
 3. Regenerate JSON-LD files from YAML sources
