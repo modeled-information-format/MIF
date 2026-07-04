@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `aliases` (synonyms/label variations, `skos:altLabel`), `exemplars`
   (curated canonical examples, `skos:example`), and `negative_examples`
   (curated near-misses from confusable type pairs,
-  `mif-spec.dev/ns/ontology#negativeExample`). Ontology schema version
+  `https://mif-spec.dev/ns/ontology#negativeExample`). Ontology schema version
   1.0.0 -> 1.1.0; `yaml2jsonld.py` projects the new fields; existing
   ontologies carrying only `description` remain valid.
 
