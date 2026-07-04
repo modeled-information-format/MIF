@@ -96,6 +96,14 @@ jobs:
             done
           }
           check latest public/schema
-          [ -d public/schema/1.0.0 ] && check v1 public/schema/1.0.0
-          [ -d public/schema/0.1.0 ] && check v0 public/schema/0.1.0
+          # vMAJOR aliases track the NEWEST release in that major (ADR-016);
+          # the authoritative alias map is index.json, maintained by
+          # snapshot-schema-version.py. Hardcoding 1.0.0 here broke on the
+          # first post-1.0.0 minor release.
+          for alias in v0 v1; do
+            target=$(python3 -c "import json; print(json.load(open('public/schema/index.json'))['aliases'].get('$alias', ''))")
+            if [ -n "$target" ] && [ -d "public/schema/$target" ]; then
+              check "$alias" "public/schema/$target"
+            fi
+          done
           exit $fail
