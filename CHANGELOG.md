@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **JSON-LD context: `accessed` typed `xsd:date`** — the context declared
+  `xsd:dateTime` while both `citation.schema.json` and `mif.schema.json`
+  constrain `accessed` to `format: date` (YYYY-MM-DD, not a valid
+  `xsd:dateTime` lexical form); the context now agrees with the schemas,
+  matching the sibling `date` term.
 - **Release workflow: SBOM release attach removed** (#210) — the SBOM
   generation action attempted to attach the raw SBOM file to the release
   under the job's read-only `GITHUB_TOKEN` and failed every

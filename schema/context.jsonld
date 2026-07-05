@@ -103,7 +103,7 @@
     },
     "accessed": {
       "@id": "mif:accessed",
-      "@type": "xsd:dateTime"
+      "@type": "xsd:date"
     },
     "relevance": {
       "@id": "mif:relevance",
