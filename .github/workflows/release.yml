@@ -164,6 +164,11 @@ jobs:
           format: cyclonedx-json
           output-file: mif-${{ steps.ver.outputs.version }}.sbom.cdx.json
           artifact-name: mif-${{ steps.ver.outputs.version }}.sbom.cdx.json
+          # The verified-upload step below publishes the SBOM with the
+          # release App token; the action's own release attach would need
+          # contents:write on GITHUB_TOKEN (kept read-only) and 403s on a
+          # release-published event.
+          upload-release-assets: false
 
       - name: Attest build provenance (SLSA) for both artifacts
         uses: actions/attest-build-provenance@0f67c3f4856b2e3261c31976d6725780e5e4c373 # v4.1.1
