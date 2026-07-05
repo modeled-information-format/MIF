@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.1] - 2026-07-04
+
+### Fixed
+
+- **Release workflow: SBOM release attach removed** (#210) — the SBOM
+  generation action attempted to attach the raw SBOM file to the release
+  under the job's read-only `GITHUB_TOKEN` and failed every
+  release-published run; the verified App-token upload step already
+  publishes the SBOM alongside the attested artifacts. No attestation or
+  verification step changed.
+- The v1.2.0 GitHub release object was deleted during failure recovery
+  and cannot be recreated (immutable releases); the `v1.2.0` tag and its
+  content remain. v1.2.1 is the attested release for the 1.2 line.
+
 ## [1.2.0] - 2026-07-04
 
 ### Added
