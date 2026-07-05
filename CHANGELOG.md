@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.2] - 2026-07-04
+
+### Fixed
+
+- **Release workflow: draft-first publication** — the workflow now triggers
+  on the version tag push, creates the release itself as a draft after all
+  attestations verify fail-closed, uploads the attested artifacts to the
+  draft, and publishes last via the release App identity. Under the repo's
+  immutable-releases setting the previous publish-then-upload flow could
+  never attach assets (HTTP 422 at upload); the v1.2.0 and v1.2.1 release
+  slots remain published but assetless for this reason. v1.2.2 is the first
+  release carrying its attested artifacts.
+
 ## [1.2.1] - 2026-07-04
 
 ### Fixed

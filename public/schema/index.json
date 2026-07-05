@@ -1,7 +1,7 @@
 {
   "name": "MIF JSON Schema catalog",
   "description": "Machine-readable index of MIF (Modeled Information Format) JSON Schemas served at https://mif-spec.dev/schema/. Canonical $id values are unversioned and stable (ADR-007); the versioned paths below are immutable per-release mirrors whose internal $id is unchanged. Versioning of the canonical $id remains git-tag based.",
-  "specVersion": "1.2.1",
+  "specVersion": "1.2.2",
   "dialect": "https://json-schema.org/draft/2020-12/schema",
   "canonicalBase": "https://mif-spec.dev/schema/",
   "mediaType": {
@@ -9,9 +9,9 @@
     "note": "GitHub Pages serves .json as application/json and does not allow per-file Content-Type overrides; application/schema+json is the intended media type for conforming hosts."
   },
   "aliases": {
-    "latest": "1.2.1",
+    "latest": "1.2.2",
     "v0": "0.1.0",
-    "v1": "1.2.1"
+    "v1": "1.2.2"
   },
   "reserved": {
     "v2": "first 2.x release (not yet published)"
@@ -20,7 +20,8 @@
     "0.1.0",
     "1.0.0",
     "1.2.0",
-    "1.2.1"
+    "1.2.1",
+    "1.2.2"
   ],
   "schemas": [
     {
@@ -33,7 +34,8 @@
         "v0": "https://mif-spec.dev/schema/v0/mif.schema.json",
         "v1": "https://mif-spec.dev/schema/v1/mif.schema.json",
         "1.2.0": "https://mif-spec.dev/schema/1.2.0/mif.schema.json",
-        "1.2.1": "https://mif-spec.dev/schema/1.2.1/mif.schema.json"
+        "1.2.1": "https://mif-spec.dev/schema/1.2.1/mif.schema.json",
+        "1.2.2": "https://mif-spec.dev/schema/1.2.2/mif.schema.json"
       }
     },
     {
@@ -46,7 +48,8 @@
         "v0": "https://mif-spec.dev/schema/v0/citation.schema.json",
         "v1": "https://mif-spec.dev/schema/v1/citation.schema.json",
         "1.2.0": "https://mif-spec.dev/schema/1.2.0/citation.schema.json",
-        "1.2.1": "https://mif-spec.dev/schema/1.2.1/citation.schema.json"
+        "1.2.1": "https://mif-spec.dev/schema/1.2.1/citation.schema.json",
+        "1.2.2": "https://mif-spec.dev/schema/1.2.2/citation.schema.json"
       }
     },
     {
@@ -59,7 +62,8 @@
         "v0": "https://mif-spec.dev/schema/v0/definitions/entity-reference.schema.json",
         "v1": "https://mif-spec.dev/schema/v1/definitions/entity-reference.schema.json",
         "1.2.0": "https://mif-spec.dev/schema/1.2.0/definitions/entity-reference.schema.json",
-        "1.2.1": "https://mif-spec.dev/schema/1.2.1/definitions/entity-reference.schema.json"
+        "1.2.1": "https://mif-spec.dev/schema/1.2.1/definitions/entity-reference.schema.json",
+        "1.2.2": "https://mif-spec.dev/schema/1.2.2/definitions/entity-reference.schema.json"
       }
     },
     {
@@ -72,7 +76,8 @@
         "v0": "https://mif-spec.dev/schema/v0/ontology/ontology.schema.json",
         "v1": "https://mif-spec.dev/schema/v1/ontology/ontology.schema.json",
         "1.2.0": "https://mif-spec.dev/schema/1.2.0/ontology/ontology.schema.json",
-        "1.2.1": "https://mif-spec.dev/schema/1.2.1/ontology/ontology.schema.json"
+        "1.2.1": "https://mif-spec.dev/schema/1.2.1/ontology/ontology.schema.json",
+        "1.2.2": "https://mif-spec.dev/schema/1.2.2/ontology/ontology.schema.json"
       }
     },
     {
@@ -85,7 +90,8 @@
         "v0": "https://mif-spec.dev/schema/v0/context.jsonld",
         "v1": "https://mif-spec.dev/schema/v1/context.jsonld",
         "1.2.0": "https://mif-spec.dev/schema/1.2.0/context.jsonld",
-        "1.2.1": "https://mif-spec.dev/schema/1.2.1/context.jsonld"
+        "1.2.1": "https://mif-spec.dev/schema/1.2.1/context.jsonld",
+        "1.2.2": "https://mif-spec.dev/schema/1.2.2/context.jsonld"
       }
     },
     {
@@ -98,7 +104,8 @@
         "v0": "https://mif-spec.dev/schema/v0/ontology/ontology.context.jsonld",
         "v1": "https://mif-spec.dev/schema/v1/ontology/ontology.context.jsonld",
         "1.2.0": "https://mif-spec.dev/schema/1.2.0/ontology/ontology.context.jsonld",
-        "1.2.1": "https://mif-spec.dev/schema/1.2.1/ontology/ontology.context.jsonld"
+        "1.2.1": "https://mif-spec.dev/schema/1.2.1/ontology/ontology.context.jsonld",
+        "1.2.2": "https://mif-spec.dev/schema/1.2.2/ontology/ontology.context.jsonld"
       }
     }
   ]
