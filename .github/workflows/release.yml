@@ -20,14 +20,20 @@ name: release
 #     --repo modeled-information-format/MIF \
 #     --signer-workflow modeled-information-format/MIF/.github/workflows/release.yml
 #
-# Publication is fail-closed: the upload step runs only after every attestation
-# re-verifies in-run. `workflow_dispatch` exercises build -> attest -> verify as
-# a dry-run without cutting a version (no upload). The workflow never creates a
-# release itself.
+# Publication is fail-closed AND draft-first: pushing a v* tag triggers the
+# workflow, which builds, attests, and re-verifies everything BEFORE any
+# release exists; only then does it create a DRAFT release, upload the
+# verified artifacts to the draft, and flip it to published with the release
+# App token. This repo has immutable releases enabled: a published release's
+# assets are frozen at publish time (upload-after-publish gets HTTP 422), so
+# assets must land on the draft. Publishing last also means a failed gate
+# leaves no public release at all. `workflow_dispatch` exercises
+# build -> attest -> verify as a dry-run without cutting a version (no
+# release, no upload).
 
 "on":
-  release:
-    types: [published]
+  push:
+    tags: ["v*"]
   workflow_dispatch:
     inputs:
       tag:
@@ -45,7 +51,7 @@ jobs:
   changelog-check:
     uses: modeled-information-format/.github/.github/workflows/reusable-changelog-check.yml@824b7ba80c0f798bf1be1d4b776e3688b89152fc
     with:
-      version: ${{ github.event.release.tag_name || inputs.tag }}
+      version: ${{ github.event_name == 'push' && github.ref_name || inputs.tag }}
 
   attest-release:
     name: attest-release
@@ -59,16 +65,16 @@ jobs:
       - name: Resolve checkout ref
         id: ref
         env:
-          EVENT_TAG: ${{ github.event.release.tag_name }}
+          EVENT_TAG: ${{ github.ref_name }}
           INPUT_TAG: ${{ inputs.tag }}
         run: |
           set -euo pipefail
           # What to check out, and (when tag-based) the release tag:
-          #   - release event: the published tag.
+          #   - tag push: the pushed tag.
           #   - workflow_dispatch with a tag: that existing tag (re-attest).
           #   - workflow_dispatch without a tag: current HEAD (dry-run); the
           #     version is read from VERSION.json after checkout.
-          if [ "${GITHUB_EVENT_NAME}" = "release" ]; then
+          if [ "${GITHUB_EVENT_NAME}" = "push" ]; then
             TAG="${EVENT_TAG#refs/tags/}"; REF="${TAG}"
           elif [ -n "${INPUT_TAG}" ]; then
             TAG="${INPUT_TAG#refs/tags/}"; REF="${TAG}"
@@ -210,7 +216,7 @@ jobs:
 
       - name: Mint release app token (publish identity)
         id: release_token
-        if: github.event_name == 'release'
+        if: github.event_name == 'push'
         uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         with:
           client-id: ${{ vars.RELEASE_CLIENT_APP_ID }}
@@ -218,8 +224,8 @@ jobs:
           owner: ${{ github.repository_owner }}
           repositories: ${{ github.event.repository.name }}
 
-      - name: Upload attested artifacts to the release
-        if: github.event_name == 'release'
+      - name: Create draft release, upload attested artifacts, publish
+        if: github.event_name == 'push'
         env:
           GH_TOKEN: ${{ steps.release_token.outputs.token }}
           TAG: ${{ steps.ver.outputs.tag }}
@@ -228,8 +234,38 @@ jobs:
           VERSION: ${{ steps.ver.outputs.version }}
         run: |
           set -euo pipefail
+          # Immutable releases freeze assets at publish, so the release is
+          # born as a draft, receives the verified artifacts, and publishes
+          # last. Release notes are the version's CHANGELOG section (the
+          # changelog-check job already guaranteed it exists and is
+          # non-empty).
+          awk -v ver="${VERSION}" '
+            index($0, "## [" ver "]") == 1 { hit = 1; next }
+            hit && /^## \[/ { exit }
+            hit { print }
+          ' CHANGELOG.md > release-notes.md
+          if ! grep -q '[^[:space:]]' release-notes.md; then
+            echo "::error::empty CHANGELOG section for ${VERSION}" >&2
+            exit 1
+          fi
+          # Rerun safety: a leftover DRAFT from a previously failed run is
+          # replaced; an already-published tag is immutable and a hard stop.
+          if gh release view "${TAG}" --json isDraft --jq .isDraft >draft.state 2>/dev/null; then
+            if [ "$(cat draft.state)" = "true" ]; then
+              gh release delete "${TAG}" --yes
+            else
+              echo "::error::release ${TAG} is already published (immutable); refusing to touch it" >&2
+              exit 1
+            fi
+          fi
+          gh release create "${TAG}" \
+            --draft \
+            --verify-tag \
+            --title "MIF ${TAG}" \
+            --notes-file release-notes.md
           gh release upload "${TAG}" \
             "${SRC_ARTIFACT}" \
             "${SCHEMAS_ARTIFACT}" \
-            "mif-${VERSION}.sbom.cdx.json" \
-            --clobber
+            "mif-${VERSION}.sbom.cdx.json"
+          gh release edit "${TAG}" --draft=false
+          echo "Published ${TAG} with attested assets."
