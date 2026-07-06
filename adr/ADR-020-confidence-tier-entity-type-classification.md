@@ -11,7 +11,7 @@ tags:
   - confidence
 status: accepted
 created: 2026-07-04
-updated: 2026-07-04
+updated: 2026-07-06
 author: MIF Maintainers
 project: MIF
 audience:
@@ -276,3 +276,20 @@ carry the decision; no numeric thresholds are fixed anywhere in this repo,
 matching the decision's calibration requirement.
 
 **Action Required:** None.
+
+### 2026-07-06
+
+**Status:** Compliant
+
+**Findings:**
+
+| Finding | Files | Lines | Assessment |
+| --- | --- | --- | --- |
+| `negative_examples` scoring implemented as a non-reordering demotion gate (`negative-demotion-v1`), matching this ADR's decision-boundary-only framing | `mif-rs` `crates/mif-ontology/src/confidence.rs`, `crates/mif-rh/src/suggest.rs` | `negative_demotes`, `build_candidates`/`suggest_from_candidates` | accepted |
+| Confusion-matrix export (`calibrate --confusions`) shipped to ground human curation, per this ADR's "human-curated, never auto-mined" requirement | `mif-rs` `crates/mif-rh/src/calibrate.rs` | `confusions()` | accepted |
+| 234 `negative_examples` curated for 59 entity types across 8 packs (`data-engineering`, `engineering-base`, `market-research`, `mif-generic`, `observability`, `software-engineering`, `software-security`, `trend-analysis`), human-reviewed across three fix passes before merge | `modeled-information-format/ontologies` v0.4.0 (modeled-information-format/ontologies#40, modeled-information-format/ontologies#41) | `*.ontology.yaml` `negative_examples` fields | accepted |
+| Before/after calibration evidence produced; honest result recorded even though it did not match the naive expectation | `modeled-information-format/mif-rs` `reviews/mif-rs-negative-examples-evidence.md` | full report | accepted |
+
+**Summary:** All three schema fields (`aliases`, `exemplars`, `negative_examples`) are now implemented end to end: parsed, scored, curated in the corpus, and calibration-evidenced. The evidence found that `negative_examples` does not move `calibrate`'s tier1_floor/tier1_margin/tier2_floor/confusion-pair metrics, because `negative-demotion-v1` is a non-reordering gate applied downstream of the raw ranking those metrics measure, an architectural property of this ADR's own design (negative evidence "for decision-boundary sharpening only," never concatenated into the positive embedding document), not a curation defect. A correctly-scoped metric, the direct demotion rate measured via `suggest-type`, confirms the mechanism is real: 138 of 226 current confusion pairs (61.1%) demote their wrong-answer candidate out of `auto_classify_eligible` on the first grounding finding tested.
+
+**Action Required:** None. Future recalibration work on this corpus should measure `negative_examples`' effect via demotion rate (`suggest-type`), not `calibrate`'s aggregate gate-quality numbers, which are structurally insensitive to it by this ADR's own design.
