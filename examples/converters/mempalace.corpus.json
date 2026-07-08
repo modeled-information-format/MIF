@@ -1,0 +1,68 @@
+{
+  "@context": "https://mif-spec.dev/schema/context.jsonld",
+  "@type": "MemoryCorpus",
+  "mif_version": "1.2.2",
+  "records": [
+    {
+      "kind": "memory",
+      "payload": {
+        "@context": "https://mif-spec.dev/schema/context.jsonld",
+        "@type": "Memory",
+        "@id": "urn:mif:48a71d43-e025-507e-a222-761e43cdcc03",
+        "conceptType": "episodic",
+        "namespace": "_episodic/sessions/Project-Phoenix",
+        "content": "The team traced the Phoenix rate spike to an un-throttled batch consumer and added a sliding-window limit.",
+        "created": "2026-01-15T10:30:00Z",
+        "tags": [
+          "Incidents",
+          "chat",
+          "mempalace"
+        ],
+        "extensions": {
+          "mempalace": {
+            "drawer_id": "drawer-7f31a2",
+            "wing": "Project Phoenix",
+            "room": "Incidents",
+            "filed_at": "2026-01-15T10:30:00Z",
+            "added_by": "agent"
+          }
+        }
+      }
+    },
+    {
+      "kind": "memory",
+      "payload": {
+        "@context": "https://mif-spec.dev/schema/context.jsonld",
+        "@type": "Memory",
+        "@id": "urn:mif:897fbf98-a6cd-5e0d-b719-18095c15ab5c",
+        "conceptType": "episodic",
+        "namespace": "_episodic/sessions/NCP",
+        "content": "Intra-NVL72 NCCL all-reduce baseline on GB200 is 900 GB/s+.",
+        "created": "2026-06-25T00:00:00Z",
+        "title": "NVL72 all-reduce baseline",
+        "tags": [
+          "Requirements",
+          "mempalace",
+          "ncp-requirements-pdf"
+        ],
+        "extensions": {
+          "mempalace": {
+            "drawer_id": "drawer-9c02b8",
+            "wing": "NCP",
+            "room": "Requirements",
+            "filed_at": "2026-06-25T00:00:00Z",
+            "added_by": "jperlow"
+          }
+        }
+      }
+    }
+  ],
+  "provenance": {
+    "@type": "prov:Entity",
+    "prov:wasGeneratedBy": {
+      "@type": "prov:Activity",
+      "prov:used": "mempalace",
+      "prov:generatedAtTime": "2026-07-08T00:00:00Z"
+    }
+  }
+}
