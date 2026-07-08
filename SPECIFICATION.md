@@ -2256,8 +2256,8 @@ schema.
 The Container Profile is **orthogonal to conformance levels**: a container may
 hold Level-1 and Level-3 memories together. A container is valid when every
 `memory` record is a valid MIF memory and every `document` record is a recognized
-document type. Reference converters (Mem0, Letta, Cognee, Graphiti, MemPalace) and
-a validator are provided separately — see issue #77.
+document type. Reference converters (Mem0, Letta, Cognee, Graphiti, MemPalace) that emit
+this envelope, plus a validator, are in progress — see issue #77.
 
 ---
 
