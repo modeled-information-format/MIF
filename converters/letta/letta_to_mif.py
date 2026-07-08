@@ -177,8 +177,15 @@ class _LettaClient:
             headers["Authorization"] = f"Bearer {self.token}"
         if self.org:
             headers["X-Organization"] = self.org
+        # Restrict to http(s): `url` derives from the operator-supplied Letta
+        # server base (CLI --base), but guard against file://, ftp://, etc. so a
+        # misconfigured base cannot turn this GET into an arbitrary-file read.
+        if urllib.parse.urlparse(url).scheme not in ("http", "https"):
+            raise SystemExit(f"refusing non-http(s) Letta URL: {url!r}")
         req = urllib.request.Request(url, headers=headers, method="GET")
         try:
+            # nosemgrep: python.lang.security.audit.dynamic-urllib-use-detected -- url is an
+            # operator-provided Letta server endpoint, scheme-restricted to http(s) just above.
             with urllib.request.urlopen(req, timeout=60) as resp:
                 return json.loads(resp.read())
         except urllib.error.HTTPError as e:
