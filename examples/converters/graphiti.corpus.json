@@ -1,0 +1,138 @@
+{
+  "@context": "https://mif-spec.dev/schema/context.jsonld",
+  "@type": "MemoryCorpus",
+  "mif_version": "1.2.2",
+  "records": [
+    {
+      "kind": "memory",
+      "payload": {
+        "@context": "https://mif-spec.dev/schema/context.jsonld",
+        "@type": "Memory",
+        "@id": "urn:mif:b1e6c0aa-1111-4a2b-8c3d-000000000001",
+        "conceptType": "semantic",
+        "namespace": "_semantic/entities/history",
+        "content": "Ada Lovelace\n\nMathematician; wrote the first algorithm for the Analytical Engine.",
+        "created": "2026-05-01T09:00:00+00:00",
+        "title": "Ada Lovelace",
+        "tags": [
+          "Person",
+          "entity",
+          "graphiti"
+        ],
+        "relationships": [
+          {
+            "type": "collaborated-with",
+            "target": "urn:mif:b1e6c0aa-2222-4a2b-8c3d-000000000002",
+            "metadata": {
+              "graphiti": {
+                "kind": "EntityEdge",
+                "uuid": "b1e6c0aa-4444-4a2b-8c3d-000000000004",
+                "label": "collaborated_with",
+                "fact": "Ada Lovelace collaborated with Charles Babbage on the Analytical Engine.",
+                "group_id": "history",
+                "created_at": "2026-05-01T09:02:00+00:00",
+                "valid_at": "1843-01-01T00:00:00+00:00",
+                "invalid_at": null,
+                "episodes": [
+                  "b1e6c0aa-3333-4a2b-8c3d-000000000003"
+                ]
+              }
+            }
+          }
+        ],
+        "extensions": {
+          "graphiti": {
+            "kind": "EntityNode",
+            "uuid": "b1e6c0aa-1111-4a2b-8c3d-000000000001",
+            "name": "Ada Lovelace",
+            "group_id": "history",
+            "labels": [
+              "Person"
+            ],
+            "attributes": {
+              "occupation": "mathematician"
+            },
+            "created_at": "2026-05-01T09:00:00+00:00",
+            "valid_at": "1843-01-01T00:00:00+00:00",
+            "invalid_at": null
+          }
+        }
+      }
+    },
+    {
+      "kind": "memory",
+      "payload": {
+        "@context": "https://mif-spec.dev/schema/context.jsonld",
+        "@type": "Memory",
+        "@id": "urn:mif:b1e6c0aa-2222-4a2b-8c3d-000000000002",
+        "conceptType": "semantic",
+        "namespace": "_semantic/entities/history",
+        "content": "Charles Babbage\n\nDesigned the Analytical Engine.",
+        "created": "2026-05-01T09:00:05+00:00",
+        "title": "Charles Babbage",
+        "tags": [
+          "Person",
+          "entity",
+          "graphiti"
+        ],
+        "extensions": {
+          "graphiti": {
+            "kind": "EntityNode",
+            "uuid": "b1e6c0aa-2222-4a2b-8c3d-000000000002",
+            "name": "Charles Babbage",
+            "group_id": "history",
+            "labels": [
+              "Person"
+            ],
+            "attributes": {
+              "occupation": "inventor"
+            },
+            "created_at": "2026-05-01T09:00:05+00:00",
+            "valid_at": "1837-01-01T00:00:00+00:00",
+            "invalid_at": null
+          }
+        }
+      }
+    },
+    {
+      "kind": "memory",
+      "payload": {
+        "@context": "https://mif-spec.dev/schema/context.jsonld",
+        "@type": "Memory",
+        "@id": "urn:mif:b1e6c0aa-3333-4a2b-8c3d-000000000003",
+        "conceptType": "episodic",
+        "namespace": "_episodic/episodes/history",
+        "content": "Ada annotated Menabrea's paper, adding notes describing an algorithm.",
+        "created": "2026-05-01T09:01:00+00:00",
+        "title": "letter-1843-notes",
+        "tags": [
+          "episode",
+          "graphiti"
+        ],
+        "extensions": {
+          "graphiti": {
+            "kind": "EpisodicNode",
+            "uuid": "b1e6c0aa-3333-4a2b-8c3d-000000000003",
+            "name": "letter-1843-notes",
+            "group_id": "history",
+            "source": "text",
+            "source_description": "ingested historical letter",
+            "created_at": "2026-05-01T09:01:00+00:00",
+            "valid_at": "1843-10-01T00:00:00+00:00",
+            "invalid_at": null,
+            "entity_edges": []
+          }
+        }
+      }
+    }
+  ],
+  "provenance": {
+    "@type": "prov:Entity",
+    "prov:wasGeneratedBy": {
+      "@type": "prov:Activity",
+      "prov:used": "graphiti",
+      "prov:generatedAtTime": "2026-07-08T17:35:25.388726+00:00"
+    },
+    "prov:wasDerivedFrom": "bolt://localhost:7687/history"
+  }
+}
