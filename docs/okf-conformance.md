@@ -7,8 +7,9 @@
 This document is **normative within MIF**. It embeds a pinned copy of Google's
 Open Knowledge Format (OKF) v0.1 conformance criteria. MIF conforms to *this
 pinned copy*, not to whatever OKF publishes next. Updates to OKF are reviewed
-deliberately and adopted only by an explicit MIF revision (see SPECIFICATION.md,
-Invariant 5 — "No floating dependency on OKF").
+deliberately and adopted only by an explicit MIF revision (see
+[SPECIFICATION.md, Invariant 5](../SPECIFICATION.md#invariants) — "No floating
+dependency on OKF").
 
 > **Provenance note.** The criteria below are reconstructed from the OKF v0.1
 > interoperability surface (a directory of markdown files with YAML frontmatter,
