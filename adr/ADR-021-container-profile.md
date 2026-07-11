@@ -552,3 +552,41 @@ CI change has been made under it yet.
 
 **Action Required:** Implement the items in Decision Outcome, then re-audit
 against the actual files/lines.
+
+### 2026-07-10 (implementation)
+
+**Status:** Partial
+
+**Findings:**
+
+| Finding | Files | Lines | Assessment |
+|---------|-------|-------|------------|
+| `MemoryCorpus` envelope schema present, `additionalProperties: false`, `kind`-dispatched `if`/`then` on `conceptType`/`@type` | `schema/container.schema.json` | 37 (`@type` const), 133-217 (`Record` `$defs`) | compliant |
+| Envelope JSON-LD context registered, `extensions` mapped `@type: @json` (not the per-unit `@container: @index` pattern — confirmed via `pyld` that the latter drops content on expand) | `schema/container-context.jsonld` | 49 | compliant |
+| `DocumentReference` wrapper schema for `kind: "document"` validation (`ajv-cli` cannot take a `#/$defs/...` fragment on `-s` directly) | `schema/document-reference.schema.json` | 1-6 | compliant |
+| Container-aware CI validation entry point added, no path filter on `pull_request` | `.github/workflows/validate.yml` | 97-119 | compliant |
+| Dedicated validator: envelope + per-record `kind`-dispatched `ajv` validation, `extensions` deliberately unvalidated | `scripts/validate_container.py` | full file | compliant |
+| Worked example: 2 memory records (fact + event, `namespace`-distinguished, no `memoryCategory`), 1 `DocumentReference` document record, `extensions."mnemos:compressionManifest"` | `examples/container/ncp-requirements.corpus.json` | full file (71 lines) | compliant |
+| Reference documentation | `docs/CONTAINER-PROFILE.md` | full file (135 lines) | compliant |
+| Cross-reference from both spec surfaces (source + Starlight mirror) | `SPECIFICATION.md`, `src/content/docs/specification/overview.mdx` | 29, 10 | compliant |
+
+**Summary:** All five Decision Outcome implementation items are complete and
+locally verified: `python scripts/validate_container.py examples/container`
+passes; both new schemas compile clean (`ajv compile --strict=false`); the
+existing `okf_validate.py`, `mif_convert.py roundtrip`, and the
+`schema-validation` job's `ajv` loop over the pre-existing `.md` example
+trees are all unaffected (still exactly 13 concepts checked, unchanged); the
+worked example round-trips losslessly through `pyld` `expand`/`compact`
+(`records[]` and `extensions` both survive, unlike PR #205's design); the
+Astro site builds clean (`npm run build` → `Complete!`).
+
+Item 5 (formally requesting `@perlowja`'s confirmation on issue #77) is
+**not done** — this is an external, social step, not a local implementation
+task, and this work has not been pushed or posted anywhere. `Status` stays
+**Proposed** until that confirmation happens; this audit entry records
+`Partial` (implementation verified, external sign-off outstanding), not
+`Compliant`.
+
+**Action Required:** None for the code. Formally request `@perlowja`'s
+confirmation on issue #77 once this branch is ready to open as a PR, then
+re-audit and move `Status` to `Accepted`.

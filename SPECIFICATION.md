@@ -24,7 +24,9 @@ semantics.
 > **MIF is the opinionated, OKF-compliant content model that fills OKF's
 > deliberately empty envelope.** OKF is the transport surface; MIF supplies the
 > concrete type system. AI memory is the first domain profile of MIF, not its
-> identity (see `profiles/ai-memory/`).
+> identity (see `profiles/ai-memory/`). Moving many memory units as one
+> wire artifact is a separate, transport-layer concern (see the proposed
+> Container Profile, `docs/CONTAINER-PROFILE.md`), not a domain profile.
 
 OKF compliance is achieved as a **superset, not by subordination**: every MIF
 bundle MUST validate as a conformant OKF bundle, but MIF remains an independent
