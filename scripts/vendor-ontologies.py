@@ -7,7 +7,7 @@ ontologies ADR-0004): at deploy time, fetch the `ontologies` repo's signed
 attestation verify` fail-closed against it (the exact checks that repo's own
 `release.yml` `verify` job runs), and untar the verified `ontologies/`
 subtree into `public/ontologies/`. No ontology content is authored in this
-repo (per ADR-018): every one of the 20 ontologies, including `mif-base` and
+repo (per ADR-018): every ontology in the corpus, including `mif-base` and
 `shared-traits`, is vendored here, none recomputed.
 
 The served `index.json` core (`{version, file, sha256, extends}` per
