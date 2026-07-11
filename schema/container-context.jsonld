@@ -1,0 +1,54 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "mif": "https://mif-spec.dev/ns/",
+    "prov": "http://www.w3.org/ns/prov#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "MemoryCorpus": "mif:MemoryCorpus",
+    "containerProfileVersion": {
+      "@id": "mif:containerProfileVersion",
+      "@type": "xsd:string"
+    },
+    "records": {
+      "@id": "mif:records",
+      "@container": "@set"
+    },
+    "kind": {
+      "@id": "mif:recordKind",
+      "@type": "@vocab"
+    },
+    "memory": "mif:RecordKindMemory",
+    "document": "mif:RecordKindDocument",
+    "payload": {
+      "@id": "mif:payload",
+      "@context": "https://mif-spec.dev/schema/context.jsonld"
+    },
+    "provenance": {
+      "@id": "mif:provenance",
+      "@context": {
+        "wasDerivedFrom": {
+          "@id": "prov:wasDerivedFrom",
+          "@type": "@id"
+        }
+      }
+    },
+    "editChain": {
+      "@id": "mif:editChain",
+      "@container": "@set",
+      "@context": {
+        "supersedes": {
+          "@id": "mif:corpusSupersedes",
+          "@type": "@id"
+        },
+        "createdAt": {
+          "@id": "mif:createdAt",
+          "@type": "xsd:dateTime"
+        }
+      }
+    },
+    "extensions": {
+      "@id": "mif:extensions",
+      "@type": "@json"
+    }
+  }
+}
