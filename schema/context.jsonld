@@ -197,7 +197,18 @@
         "@vocab": "https://mif-spec.dev/ns/",
         "type": {
           "@id": "mif:relationshipType",
-          "@type": "@vocab"
+          "@type": "@vocab",
+          "@context": {
+            "relates-to": "mif:RelatesTo",
+            "derived-from": "mif:DerivedFrom",
+            "supersedes": "mif:Supersedes",
+            "conflicts-with": "mif:ConflictsWith",
+            "part-of": "mif:PartOf",
+            "implements": "mif:Implements",
+            "uses": "mif:Uses",
+            "created": "mif:Created",
+            "mentioned-in": "mif:MentionedIn"
+          }
         },
         "target": {
           "@id": "mif:target",
@@ -209,28 +220,10 @@
         }
       }
     },
-    "relationshipType": {
-      "@id": "mif:relationshipType",
-      "@type": "@vocab"
-    },
-    "target": {
-      "@id": "mif:target",
-      "@type": "@id"
-    },
     "strength": {
       "@id": "mif:strength",
       "@type": "xsd:decimal"
     },
-
-    "RelatesTo": "mif:RelatesTo",
-    "DerivedFrom": "mif:DerivedFrom",
-    "Supersedes": "mif:Supersedes",
-    "ConflictsWith": "mif:ConflictsWith",
-    "PartOf": "mif:PartOf",
-    "Implements": "mif:Implements",
-    "Uses": "mif:Uses",
-    "Created": "mif:Created",
-    "MentionedIn": "mif:MentionedIn",
 
     "temporal": "mif:temporal",
     "validFrom": {
