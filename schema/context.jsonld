@@ -127,21 +127,23 @@
     "DocumentReference": "mif:DocumentReference",
     "documentType": {
       "@id": "mif:documentType",
-      "@type": "@vocab"
+      "@type": "@vocab",
+      "@context": {
+        "pdf": "mif:DocumentTypePdf",
+        "html": "mif:DocumentTypeHtml",
+        "markdown": "mif:DocumentTypeMarkdown",
+        "text": "mif:DocumentTypeText",
+        "transcript": "mif:DocumentTypeTranscript",
+        "dataset": "mif:DocumentTypeDataset",
+        "spreadsheet": "mif:DocumentTypeSpreadsheet",
+        "presentation": "mif:DocumentTypePresentation",
+        "image": "mif:DocumentTypeImage",
+        "audio": "mif:DocumentTypeAudio",
+        "video": "mif:DocumentTypeVideo",
+        "email": "mif:DocumentTypeEmail",
+        "other": "mif:DocumentTypeOther"
+      }
     },
-    "pdf": "mif:DocumentTypePdf",
-    "html": "mif:DocumentTypeHtml",
-    "markdown": "mif:DocumentTypeMarkdown",
-    "text": "mif:DocumentTypeText",
-    "transcript": "mif:DocumentTypeTranscript",
-    "dataset": "mif:DocumentTypeDataset",
-    "spreadsheet": "mif:DocumentTypeSpreadsheet",
-    "presentation": "mif:DocumentTypePresentation",
-    "image": "mif:DocumentTypeImage",
-    "audio": "mif:DocumentTypeAudio",
-    "video": "mif:DocumentTypeVideo",
-    "email": "mif:DocumentTypeEmail",
-    "other": "mif:DocumentTypeOther",
     "contentType": "mif:contentType",
     "byteLength": {
       "@id": "mif:byteLength",

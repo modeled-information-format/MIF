@@ -14,9 +14,21 @@ testing against pyld (not by inspection):
   terms for its enum): unrecognized values fall back to document-base-relative
   IRI resolution, so the same value expands to a different, non-equal IRI
   depending on the document's base URL. Fixed by registering each
-  `DocumentReference.documentType` enum value as an explicit `mif:`-namespaced
-  term, mirroring the existing `conceptType`/`semantic`|`episodic`|`procedural`
+  `DocumentReference.documentType` enum value as a term-scoped `mif:`-namespaced
+  term (a nested `@context` on the `documentType` term definition itself),
+  mirroring the existing `documents.hash`/`relationships` scoped-context
   pattern already in this file.
+
+  An earlier version of this fix registered the same 13 terms at the TOP
+  LEVEL of the shared context instead of scoping them to `documentType`.
+  JSON-LD `@type:@vocab` resolution checks the whole active context, not
+  just the property being expanded, so that flat registration silently
+  redirected `Citation.citationType` values that happen to share a name with
+  a `documentType` enum value (`video`, `dataset`, `other` are valid values
+  of both fields) to the wrong `mif:DocumentType*` IRI. Scoping the terms to
+  `documentType`'s own `@context` keeps `citationType` (still unregistered,
+  still base-URI-dependent -- a separate, pre-existing instance of the same
+  class of bug, out of scope for this fix) unaffected.
 """
 import json
 import sys
@@ -27,10 +39,7 @@ from pyld import jsonld
 ROOT = Path(__file__).parent.parent
 CONTEXT = json.loads((ROOT / "schema" / "context.jsonld").read_text())["@context"]
 
-DOCUMENT_TYPES = [
-    "pdf", "html", "markdown", "text", "transcript", "dataset", "spreadsheet",
-    "presentation", "image", "audio", "video", "email", "other",
-]
+DOCUMENT_TYPES = list(CONTEXT["documentType"]["@context"].keys())
 
 
 def _compact(expanded: object, ctx: dict) -> dict:

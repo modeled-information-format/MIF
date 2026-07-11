@@ -39,6 +39,9 @@ jobs:
       - name: Install dependencies (hash-pinned)
         run: pip install --require-hashes -r requirements-ci.txt
 
+      - name: Install JSON-LD fidelity test dependencies (hash-pinned)
+        run: pip install --require-hashes -r requirements-jsonld-ci.txt
+
       - name: OKF conformance test (relationship sync + round-trip)
         run: |
           python scripts/okf_validate.py \
