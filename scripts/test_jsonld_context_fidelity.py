@@ -10,14 +10,15 @@ testing against pyld (not by inspection):
   (unregistered) keys silently vanish on expand, because they resolve against
   no vocabulary. Fixed by `@type: @json`, which carries the whole subtree as
   an opaque JSON-LD literal.
-- `documentType`, `citationType`, `citationRole` (`@type: @vocab` with no
-  `@vocab` default and no registered terms for their enum): unrecognized
-  values fall back to document-base-relative IRI resolution, so the same
-  value expands to a different, non-equal IRI depending on the document's
-  base URL. Fixed by registering each property's enum values as a
-  term-scoped `mif:`-namespaced term (a nested `@context` on the property's
-  own term definition), mirroring the existing `documents.hash`/
-  `relationships` scoped-context pattern already in this file.
+- `documentType`, `citationType`, `citationRole`, `conceptType`, `memoryType`,
+  `sourceType`, `trustLevel` (`@type: @vocab` with no `@vocab` default and no
+  registered terms for their enum): unrecognized values fall back to
+  document-base-relative IRI resolution, so the same value expands to a
+  different, non-equal IRI depending on the document's base URL. Fixed by
+  registering each property's enum values as a term-scoped `mif:`-namespaced
+  term (a nested `@context` on the property's own term definition),
+  mirroring the existing `documents.hash`/`relationships` scoped-context
+  pattern already in this file.
 
   An earlier version of `documentType`'s fix registered its 13 terms at the
   TOP LEVEL of the shared context instead of scoping them to `documentType`.
@@ -26,8 +27,16 @@ testing against pyld (not by inspection):
   redirected `Citation.citationType` values that happen to share a name with
   a `documentType` enum value (`video`, `dataset`, `other` are valid values
   of both fields) to the wrong `mif:DocumentType*` IRI. Scoping every one of
-  these three properties' terms to its own `@context` keeps them from
+  these properties' terms to its own `@context` keeps them from
   contaminating each other despite the overlapping enum values.
+
+`scripts/check_vocab_term_coverage.py` is this file's sibling: it statically
+proves every enum value has a matching registered term (and that no stale
+extra term exists), for ANY current or future `@type:@vocab` property, by
+cross-referencing `schema/context.jsonld` against `schema/mif.schema.json`.
+This file proves the registered terms actually behave correctly under a real
+JSON-LD 1.1 processor -- static presence and runtime semantics are two
+different failure modes, so both checks are needed.
 """
 import json
 import sys
@@ -39,12 +48,20 @@ ROOT = Path(__file__).parent.parent
 CONTEXT = json.loads((ROOT / "schema" / "context.jsonld").read_text())["@context"]
 
 # (prop, node_type, extra_fields) for every term-scoped @type:@vocab property
-# this file exercises. Single source of truth: adding a fourth such property
-# means adding one row here, not touching N call sites.
+# this file exercises. Single source of truth: adding another such property
+# means adding one row here, not touching N call sites. sourceType/trustLevel
+# are schema-nested under Provenance in practice, but "provenance" is a bare
+# string term (no nested @context of its own), so it introduces no new
+# resolution scope -- testing them as direct Memory properties here exercises
+# the identical term-resolution mechanics as their real nested usage.
 VOCAB_PROPERTIES = [
     ("documentType", "DocumentReference", {"url": "https://example.com/doc"}),
     ("citationType", "Citation", {}),
     ("citationRole", "Citation", {}),
+    ("conceptType", "Memory", {}),
+    ("memoryType", "Memory", {}),
+    ("sourceType", "Memory", {}),
+    ("trustLevel", "Memory", {}),
 ]
 
 VOCAB_VALUES = {prop: list(CONTEXT[prop]["@context"].keys()) for prop, _, _ in VOCAB_PROPERTIES}
@@ -148,8 +165,8 @@ def check_document_type_citation_type_no_cross_contamination() -> list[str]:
 
 CHECKS = [
     ("extensions round-trips losslessly through @type:@json (#224)", check_extensions_round_trip),
-    ("documentType/citationType/citationRole are base-URI-independent for all enum values (#225, #226)", check_vocab_base_independence),
-    ("documentType/citationType/citationRole custom-namespaced escape hatch still resolves", check_vocab_custom_namespace_still_works),
+    ("every scoped vocab property is base-URI-independent for all enum values (#225, #226, #228)", check_vocab_base_independence),
+    ("every scoped vocab property's custom-namespaced escape hatch still resolves", check_vocab_custom_namespace_still_works),
     ("documentType and citationType don't contaminate each other's shared enum values", check_document_type_citation_type_no_cross_contamination),
 ]
 
