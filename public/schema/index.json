@@ -1,7 +1,7 @@
 {
   "name": "MIF JSON Schema catalog",
   "description": "Machine-readable index of MIF (Modeled Information Format) JSON Schemas served at https://mif-spec.dev/schema/. Canonical $id values are unversioned and stable (ADR-007); the versioned paths below are immutable per-release mirrors whose internal $id is unchanged. Versioning of the canonical $id remains git-tag based.",
-  "specVersion": "1.2.2",
+  "specVersion": "1.3.0",
   "dialect": "https://json-schema.org/draft/2020-12/schema",
   "canonicalBase": "https://mif-spec.dev/schema/",
   "mediaType": {
@@ -9,9 +9,9 @@
     "note": "GitHub Pages serves .json as application/json and does not allow per-file Content-Type overrides; application/schema+json is the intended media type for conforming hosts."
   },
   "aliases": {
-    "latest": "1.2.2",
+    "latest": "1.3.0",
     "v0": "0.1.0",
-    "v1": "1.2.2"
+    "v1": "1.3.0"
   },
   "reserved": {
     "v2": "first 2.x release (not yet published)"
@@ -21,7 +21,8 @@
     "1.0.0",
     "1.2.0",
     "1.2.1",
-    "1.2.2"
+    "1.2.2",
+    "1.3.0"
   ],
   "schemas": [
     {
@@ -35,7 +36,8 @@
         "v1": "https://mif-spec.dev/schema/v1/mif.schema.json",
         "1.2.0": "https://mif-spec.dev/schema/1.2.0/mif.schema.json",
         "1.2.1": "https://mif-spec.dev/schema/1.2.1/mif.schema.json",
-        "1.2.2": "https://mif-spec.dev/schema/1.2.2/mif.schema.json"
+        "1.2.2": "https://mif-spec.dev/schema/1.2.2/mif.schema.json",
+        "1.3.0": "https://mif-spec.dev/schema/1.3.0/mif.schema.json"
       }
     },
     {
@@ -49,7 +51,8 @@
         "v1": "https://mif-spec.dev/schema/v1/citation.schema.json",
         "1.2.0": "https://mif-spec.dev/schema/1.2.0/citation.schema.json",
         "1.2.1": "https://mif-spec.dev/schema/1.2.1/citation.schema.json",
-        "1.2.2": "https://mif-spec.dev/schema/1.2.2/citation.schema.json"
+        "1.2.2": "https://mif-spec.dev/schema/1.2.2/citation.schema.json",
+        "1.3.0": "https://mif-spec.dev/schema/1.3.0/citation.schema.json"
       }
     },
     {
@@ -63,7 +66,8 @@
         "v1": "https://mif-spec.dev/schema/v1/definitions/entity-reference.schema.json",
         "1.2.0": "https://mif-spec.dev/schema/1.2.0/definitions/entity-reference.schema.json",
         "1.2.1": "https://mif-spec.dev/schema/1.2.1/definitions/entity-reference.schema.json",
-        "1.2.2": "https://mif-spec.dev/schema/1.2.2/definitions/entity-reference.schema.json"
+        "1.2.2": "https://mif-spec.dev/schema/1.2.2/definitions/entity-reference.schema.json",
+        "1.3.0": "https://mif-spec.dev/schema/1.3.0/definitions/entity-reference.schema.json"
       }
     },
     {
@@ -77,7 +81,8 @@
         "v1": "https://mif-spec.dev/schema/v1/ontology/ontology.schema.json",
         "1.2.0": "https://mif-spec.dev/schema/1.2.0/ontology/ontology.schema.json",
         "1.2.1": "https://mif-spec.dev/schema/1.2.1/ontology/ontology.schema.json",
-        "1.2.2": "https://mif-spec.dev/schema/1.2.2/ontology/ontology.schema.json"
+        "1.2.2": "https://mif-spec.dev/schema/1.2.2/ontology/ontology.schema.json",
+        "1.3.0": "https://mif-spec.dev/schema/1.3.0/ontology/ontology.schema.json"
       }
     },
     {
@@ -91,7 +96,8 @@
         "v1": "https://mif-spec.dev/schema/v1/context.jsonld",
         "1.2.0": "https://mif-spec.dev/schema/1.2.0/context.jsonld",
         "1.2.1": "https://mif-spec.dev/schema/1.2.1/context.jsonld",
-        "1.2.2": "https://mif-spec.dev/schema/1.2.2/context.jsonld"
+        "1.2.2": "https://mif-spec.dev/schema/1.2.2/context.jsonld",
+        "1.3.0": "https://mif-spec.dev/schema/1.3.0/context.jsonld"
       }
     },
     {
@@ -105,23 +111,36 @@
         "v1": "https://mif-spec.dev/schema/v1/ontology/ontology.context.jsonld",
         "1.2.0": "https://mif-spec.dev/schema/1.2.0/ontology/ontology.context.jsonld",
         "1.2.1": "https://mif-spec.dev/schema/1.2.1/ontology/ontology.context.jsonld",
-        "1.2.2": "https://mif-spec.dev/schema/1.2.2/ontology/ontology.context.jsonld"
+        "1.2.2": "https://mif-spec.dev/schema/1.2.2/ontology/ontology.context.jsonld",
+        "1.3.0": "https://mif-spec.dev/schema/1.3.0/ontology/ontology.context.jsonld"
       }
     },
     {
       "id": "container",
       "canonical": "https://mif-spec.dev/schema/container.schema.json",
-      "versioned": {}
+      "versioned": {
+        "1.3.0": "https://mif-spec.dev/schema/1.3.0/container.schema.json",
+        "latest": "https://mif-spec.dev/schema/latest/container.schema.json",
+        "v1": "https://mif-spec.dev/schema/v1/container.schema.json"
+      }
     },
     {
       "id": "container-context",
       "canonical": "https://mif-spec.dev/schema/container-context.jsonld",
-      "versioned": {}
+      "versioned": {
+        "1.3.0": "https://mif-spec.dev/schema/1.3.0/container-context.jsonld",
+        "latest": "https://mif-spec.dev/schema/latest/container-context.jsonld",
+        "v1": "https://mif-spec.dev/schema/v1/container-context.jsonld"
+      }
     },
     {
       "id": "document-reference",
       "canonical": "https://mif-spec.dev/schema/document-reference.schema.json",
-      "versioned": {}
+      "versioned": {
+        "1.3.0": "https://mif-spec.dev/schema/1.3.0/document-reference.schema.json",
+        "latest": "https://mif-spec.dev/schema/latest/document-reference.schema.json",
+        "v1": "https://mif-spec.dev/schema/v1/document-reference.schema.json"
+      }
     }
   ]
 }

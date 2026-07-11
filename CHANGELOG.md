@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-07-11
+
 ### Added
 
 - **Container Profile (ADR-021)** — an OPTIONAL, single-file `*.corpus.json`
@@ -337,7 +339,11 @@ See [MIGRATION.md](MIGRATION.md) and run
 - MIF specification draft v0.1
 - Market research framework
 
-[Unreleased]: https://github.com/modeled-information-format/MIF/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/modeled-information-format/MIF/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/modeled-information-format/MIF/compare/v1.2.2...v1.3.0
+[1.2.2]: https://github.com/modeled-information-format/MIF/compare/v1.2.1...v1.2.2
+[1.2.1]: https://github.com/modeled-information-format/MIF/compare/v1.2.0...v1.2.1
+[1.2.0]: https://github.com/modeled-information-format/MIF/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/modeled-information-format/MIF/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/modeled-information-format/MIF/compare/v0.1.0...v1.0.0
 [0.1.0]: https://github.com/modeled-information-format/MIF/releases/tag/v0.1.0
