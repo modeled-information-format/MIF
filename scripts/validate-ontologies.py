@@ -5,15 +5,13 @@ tool, matching the JSON-LD validation job), plus entity-type subsumption integri
 no JSON Schema validator can express."""
 
 import argparse
-import json
-import os
-import subprocess
 import sys
-import tempfile
 from graphlib import CycleError, TopologicalSorter
 from pathlib import Path
 
 import yaml
+
+from _ajv_common import ajv_validate
 
 
 def load_yaml(yaml_path: Path) -> dict:
@@ -23,28 +21,10 @@ def load_yaml(yaml_path: Path) -> dict:
 
 
 def _ajv_validate(data: dict, schema_path: Path) -> list[str]:
-    """Validate `data` against `schema_path` with ajv (draft2020, formats). Fail-closed:
-    a missing ajv is reported as an error, never a silent pass."""
-    fd, tmp = tempfile.mkstemp(suffix=".json")
-    try:
-        with os.fdopen(fd, "w") as f:
-            json.dump(data, f)
-        proc = subprocess.run(
-            ["ajv", "validate", "--spec=draft2020", "--strict=false",
-             "-c", "ajv-formats", "-s", str(schema_path), "-d", tmp],
-            capture_output=True, text=True,
-        )
-        if proc.returncode == 0:
-            return []
-        out = (proc.stderr or proc.stdout or "").strip()
-        return [f"  - schema: {ln}" for ln in out.splitlines() if ln.strip()][:20]
-    except FileNotFoundError:
-        return ["  - schema: ajv not found on PATH (install: npm i -g ajv-cli ajv-formats)"]
-    finally:
-        try:
-            os.unlink(tmp)
-        except OSError:
-            pass
+    """Validate `data` against `schema_path` with ajv (draft2020, formats,
+    strict=false), prefixed/truncated to this script's existing error style."""
+    lines = ajv_validate(schema_path, data, use_npx=False, truncate=20)
+    return [f"  - schema: {ln}" for ln in lines]
 
 
 def _entity_types(ontology: dict) -> list[dict]:

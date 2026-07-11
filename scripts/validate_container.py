@@ -30,10 +30,11 @@ Usage::
 from __future__ import annotations
 
 import json
-import subprocess
 import sys
 import tempfile
 from pathlib import Path
+
+from _ajv_common import ajv_validate
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 MIF_SCHEMA = REPO_ROOT / "schema" / "mif.schema.json"
@@ -42,24 +43,11 @@ DOCUMENT_REFERENCE_SCHEMA = REPO_ROOT / "schema" / "document-reference.schema.js
 DEFS_GLOB = str(REPO_ROOT / "schema" / "definitions" / "*.schema.json")
 
 
-def _ajv_validate(schema: Path, instance: Path, extra_refs: tuple[Path, ...] = ()) -> list[str]:
-    """Validate `instance` against `schema` with ajv (draft2020, formats).
-    `extra_refs` are additional -r schema files ajv should resolve $ref/$id
-    against (e.g. document-reference.schema.json's $ref onto mif.schema.json).
-    Fail-closed: a missing ajv/npx is reported as an error, never a silent pass."""
-    cmd = ["npx", "--no-install", "ajv", "validate", "-s", str(schema)]
-    for ref in extra_refs:
-        cmd += ["-r", str(ref)]
-    cmd += ["-r", DEFS_GLOB, "-d", str(instance), "--spec=draft2020", "-c", "ajv-formats"]
-    try:
-        proc = subprocess.run(cmd, capture_output=True, text=True)
-    except FileNotFoundError:
-        return ["npx not found on PATH (run: npm ci)"]
-
-    if proc.returncode == 0:
-        return []
-    out = (proc.stderr or proc.stdout or "").strip()
-    return [ln for ln in out.splitlines() if ln.strip()]
+def _ajv_validate(schema: Path, instance: Path, extra_refs: tuple[Path | str, ...] = ()) -> list[str]:
+    """Validate `instance` against `schema`, always resolving DEFS_GLOB in
+    addition to any caller-supplied `extra_refs` (e.g. document-reference.
+    schema.json's $ref onto mif.schema.json)."""
+    return ajv_validate(schema, instance, extra_refs=(*extra_refs, DEFS_GLOB))
 
 
 def validate_corpus(path: Path) -> list[str]:
