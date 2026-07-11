@@ -41,6 +41,15 @@ See `examples/container/ncp-requirements.corpus.json` for a complete,
 schema-valid worked example (two memory records, one document record, and a
 vendor `extensions` block).
 
+> **Canonical URL availability.** `https://mif-spec.dev/schema/` serves the
+> committed `public/schema/` mirror, which moves with releases
+> (`public/schema/VERSIONING.md`) — so the container schema/context URLs
+> above resolve only once the first schema release including them is
+> snapshotted (see `docs/RELEASING.md` §1c). Until then, validate against
+> the repo-local `schema/container.schema.json` and
+> `schema/container-context.jsonld` (which `scripts/validate_container.py`
+> and the fidelity test already do).
+
 ## 2. `records[]`, `kind`-discriminated
 
 Every entry is `{ "kind": "memory" | "document", "payload": {...} }`.
@@ -94,14 +103,17 @@ adopter's internal data model as MIF's own — exactly the coupling this
 mechanism exists to avoid. See ADR-021 Decision point 7.
 
 `extensions` is mapped as JSON-LD `@type: @json` in
-`schema/container-context.jsonld`, not the per-unit `extensions` field's
-`@container: @index` pattern — `@type: @json` carries the entire object as
-an opaque JSON-LD literal, round-tripping arbitrary vendor content through
+`schema/container-context.jsonld` — it carries the entire object as an
+opaque JSON-LD literal, round-tripping arbitrary vendor content through
 `expand`/`compact` losslessly with zero imposed vocabulary. `@container:
 @index` was tried first and confirmed (via `pyld.jsonld.expand()`) to
 silently drop the *value* at each index key on expansion — only the key
 itself survives — the same class of content-loss defect this whole design
-exists to fix, recurring in a new field. See ADR-021 Decision point 8.
+exists to fix, recurring in a new field. (The per-unit `extensions` term in
+`schema/context.jsonld` once used `@container: @index` and had exactly this
+bug; issue #224 fixed it to `@type: @json`, so the two terms' mappings match
+today and `scripts/check_container_context_drift.py` keeps them matching.)
+See ADR-021 Decision point 8.
 
 ## 5. Validating a corpus locally
 

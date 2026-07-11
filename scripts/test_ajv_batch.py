@@ -13,10 +13,7 @@ import sys
 import tempfile
 from pathlib import Path
 
-ROOT = Path(__file__).parent.parent
-sys.path.insert(0, str(ROOT / "scripts"))
-
-from _ajv_common import ajv_validate_batch  # noqa: E402
+from _ajv_common import ajv_validate_batch
 
 _SCHEMA = {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -70,6 +67,25 @@ def main() -> int:
         print(f"{verdict}: 5 instances -> {spawn_count} ajv subprocess spawn(s) (expected 1)")
         if not ok:
             failed.append("subprocess spawn count")
+
+        # Case 3: fail-closed on a truncated batch -- if ajv exits nonzero
+        # without reporting a result line for an instance (killed mid-batch,
+        # OOM), that instance must come back with an error, never a silent
+        # empty (valid-looking) list.
+        def _dead_run(*args, **kwargs):
+            return subprocess.CompletedProcess(args=args, returncode=1, stdout="", stderr="")
+
+        subprocess.run = _dead_run  # type: ignore[assignment]
+        try:
+            results = ajv_validate_batch(tmp_schema, {"a": {"name": "x"}, "b": {"name": "y"}})
+        finally:
+            subprocess.run = real_run  # type: ignore[assignment]
+
+        ok = all(results.get(n) for n in ("a", "b"))
+        verdict = "PASS" if ok else "FAIL"
+        print(f"{verdict}: nonzero exit with no result lines fails closed -> {results}")
+        if not ok:
+            failed.append("fail-closed on missing result lines")
 
     if failed:
         print(f"\najv batch validation test FAILED: {failed}")

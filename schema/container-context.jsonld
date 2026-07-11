@@ -21,13 +21,37 @@
     "document": "mif:RecordKindDocument",
     "payload": {
       "@id": "mif:payload",
-      "@context": "https://mif-spec.dev/schema/context.jsonld"
+      "@context": [
+        "https://mif-spec.dev/schema/context.jsonld",
+        {
+          "hash": {
+            "@id": "mif:hash",
+            "@context": {
+              "algorithm": "mif:algorithm",
+              "value": "mif:value"
+            }
+          }
+        }
+      ]
     },
     "provenance": {
       "@id": "mif:provenance",
       "@context": {
+        "id": "@id",
         "wasDerivedFrom": {
           "@id": "prov:wasDerivedFrom",
+          "@type": "@id"
+        },
+        "wasGeneratedBy": {
+          "@id": "prov:wasGeneratedBy",
+          "@type": "@id"
+        },
+        "wasAttributedTo": {
+          "@id": "prov:wasAttributedTo",
+          "@type": "@id"
+        },
+        "wasAssociatedWith": {
+          "@id": "prov:wasAssociatedWith",
           "@type": "@id"
         }
       }

@@ -20,6 +20,8 @@ from pathlib import Path
 from pyld import jsonld
 from pyld.jsonld import JsonLdError
 
+from mif_convert import CONTEXT_URL as _CORE_CONTEXT_URL
+
 ROOT = Path(__file__).parent.parent
 CONTAINER_CONTEXT = json.loads((ROOT / "schema" / "container-context.jsonld").read_text())["@context"]
 
@@ -36,7 +38,9 @@ CONTAINER_CONTEXT = json.loads((ROOT / "schema" / "container-context.jsonld").re
 # happened to be available). This loader makes the test fully hermetic by
 # resolving that one known URL to the real local file, and refusing
 # everything else.
-_CORE_CONTEXT_URL = "https://mif-spec.dev/schema/context.jsonld"
+# _CORE_CONTEXT_URL is imported from mif_convert (CONTEXT_URL) above, so a
+# future change to the published context URL updates this loader too instead
+# of leaving a stale hard-coded copy here.
 _CORE_CONTEXT_DOC = json.loads((ROOT / "schema" / "context.jsonld").read_text())
 
 
@@ -69,7 +73,7 @@ def check_extensions_round_trip() -> list[str]:
     doc = {
         "@context": CONTAINER_CONTEXT,
         "@type": "MemoryCorpus",
-        "containerProfileVersion": "1.0",
+        "containerProfileVersion": "1.0.0",
         "records": [],
         "extensions": {
             "mnemos:compressionManifest": {"algorithm": "gzip", "level": 5, "chunks": [1, 2, 3]},
@@ -130,11 +134,75 @@ def check_provenance_wasderivedfrom_round_trip() -> list[str]:
     return errors
 
 
+def check_document_payload_hash_round_trip() -> list[str]:
+    """Regression check: the core context defines `hash` only inside the
+    `documents` term's scoped @context, which a bare `kind: "document"`
+    DocumentReference payload never activates -- without the payload-scoped
+    `hash` copy in container-context.jsonld, the ADR-014 integrity anchor
+    silently vanished on expand."""
+    errors = []
+    hash_obj = {"algorithm": "sha256", "value": "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"}
+    doc = {
+        "@context": CONTAINER_CONTEXT,
+        "@type": "MemoryCorpus",
+        "containerProfileVersion": "1.0.0",
+        "records": [
+            {
+                "kind": "document",
+                "payload": {
+                    "@type": "DocumentReference",
+                    "url": "https://example.com/doc.pdf",
+                    "contentType": "application/pdf",
+                    "hash": hash_obj,
+                },
+            }
+        ],
+    }
+    compacted = _compact(_expand(doc), CONTAINER_CONTEXT)
+    records = compacted.get("records")
+    record = records[0] if isinstance(records, list) else records
+    payload = record.get("payload", {}) if isinstance(record, dict) else {}
+    if payload.get("hash") != hash_obj:
+        errors.append(
+            f"document payload hash did not round-trip: got {payload.get('hash')!r}, want {hash_obj!r}"
+        )
+    return errors
+
+
+def check_provenance_provnode_forms_round_trip() -> list[str]:
+    """Regression check: the `provenance` scoped context must carry the same
+    latitude the schema grants (ProvNode keyed by `id`, and the other PROV
+    relations context.jsonld registers) -- without the `id` alias and the
+    PROV relation terms, those keys silently dropped on expand."""
+    errors = []
+    doc = {
+        "@context": CONTAINER_CONTEXT,
+        "@type": "MemoryCorpus",
+        "containerProfileVersion": "1.0.0",
+        "records": [],
+        "provenance": {
+            "@type": "prov:Entity",
+            "wasDerivedFrom": {"id": "urn:mif:bundle:prev"},
+            "wasGeneratedBy": "urn:mif:activity:export-run-42",
+        },
+    }
+    compacted = _compact(_expand(doc), CONTAINER_CONTEXT)
+    prov = compacted.get("provenance", {})
+    if prov.get("wasDerivedFrom") not in ("urn:mif:bundle:prev", {"id": "urn:mif:bundle:prev"}):
+        errors.append(f"id-keyed wasDerivedFrom ProvNode lost its identifier: got {prov.get('wasDerivedFrom')!r}")
+    if prov.get("wasGeneratedBy") != "urn:mif:activity:export-run-42":
+        errors.append(f"wasGeneratedBy did not round-trip: got {prov.get('wasGeneratedBy')!r}")
+    return errors
+
+
 CHECKS = [
     ("extensions round-trips losslessly through @type:@json (#257)", check_extensions_round_trip),
     ("extensions survives expand as an opaque @json literal, not an @container:@index map (#257)",
      check_extensions_scalar_and_nested_survive_expand),
     ("provenance.wasDerivedFrom round-trips", check_provenance_wasderivedfrom_round_trip),
+    ("kind:document payload hash survives expand/compact", check_document_payload_hash_round_trip),
+    ("provenance ProvNode forms (id-keyed node, other PROV relations) survive expand/compact",
+     check_provenance_provnode_forms_round_trip),
 ]
 
 

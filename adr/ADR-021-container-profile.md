@@ -12,7 +12,7 @@ tags:
   - provenance
 status: proposed
 created: 2026-07-10
-updated: 2026-07-10
+updated: 2026-07-11
 author: MIF Maintainers
 project: MIF
 technologies:
@@ -42,8 +42,8 @@ Proposed
 
 MIF defines a single **memory unit** (`.md` frontmatter, derived `.jsonld`
 projection, conformance Levels 1-3) and a **Bundle** (a directory of these
-units, `SPECIFICATION.md` line 97, structure at §3.3) as the spec's existing
-multi-memory mechanism. A Bundle is git-friendly, diffable and built for
+units, `SPECIFICATION.md` §1 Definitions' **Bundle** entry, structure at
+§3.3) as the spec's existing multi-memory mechanism. A Bundle is git-friendly, diffable and built for
 authoring and storage.
 
 Several tools need something Bundle does not provide: moving many memory
@@ -411,11 +411,24 @@ flowchart LR
    MIF has not actually agreed on yet, to ship its own feature.
 8. **JSON-LD registration: a dedicated `schema/container-context.jsonld`,
    not an extension of the core context.** `MemoryCorpus`, `records`,
-   `kind`, `payload`, `containerProfileVersion`, `editChain`, and
-   `extensions` are registered there. The core `schema/context.jsonld` —
+   `kind`, `payload`, `containerProfileVersion`, `provenance`, `editChain`,
+   and `extensions` are registered there. The core `schema/context.jsonld` —
    which every memory unit's projection already depends on — is not
    modified. A container's `@context` therefore points at the
-   container-specific context, not the bare memory-unit context.
+   container-specific context, not the bare memory-unit context. Two
+   scoped-term details keep that framing honest under a real JSON-LD
+   processor: the `payload` term's scoped context carries a copy of the
+   core context's `documents`-scoped `hash` definition (a bare
+   `kind: "document"` `DocumentReference` payload never activates the core
+   `documents` term's scope, so without the copy the ADR-014 integrity
+   anchor silently dropped on expand), and the `provenance` term's scoped
+   context carries the `id` alias plus the same PROV relation terms the
+   core context registers top-level (so every ProvNode form the schema
+   permits — including `id`-keyed nodes and relations beyond
+   `wasDerivedFrom` — survives expand/compact). Both hand-copies are
+   enforced against their core-context originals by
+   `scripts/check_container_context_drift.py`, and exercised by
+   `scripts/test_container_context_fidelity.py`.
    `extensions` is mapped as `{"@id": "mif:extensions", "@type": "@json"}`
    — at the time this ADR was drafted, deliberately **not** the `@container:
    @index` pattern the per-unit `extensions` term used
@@ -578,6 +591,20 @@ flowchart LR
    vocab-term-scoping work that landed on `main` the same day — this
    branch picked up both fixes via its subsequent `merge: sync with main`.
    No further action is needed for either.
+3. **The canonical URLs go live at the next schema release, not at merge.**
+   `https://mif-spec.dev/schema/` serves the committed `public/schema/`
+   mirror, which moves with releases (`public/schema/VERSIONING.md`) — so
+   `container.schema.json`'s `$id`, `document-reference.schema.json`'s
+   `$id`, and the `container-context.jsonld` URL the `@context` `const`
+   requires resolve only once the first schema release including them is
+   snapshotted (`docs/RELEASING.md` §1c syncs `schema/` into
+   `public/schema/` at release prep; `scripts/snapshot-schema-version.py
+   --check` fails closed until that happens, which is the designed forcing
+   function). Until then, validation is repo-local
+   (`scripts/validate_container.py`, the fidelity test's offline document
+   loader), and the three schemas are already cataloged in
+   `public/schema/index.json` so the next release publishes them
+   automatically.
 
 ## Decision Outcome
 
@@ -623,6 +650,8 @@ Audit below.
 
 ### 2026-07-10 (initial proposal)
 
+**Audited revision:** `ad37414cba60fe796ccb244dde71aff0caccc4f6`
+
 **Status:** Pending
 
 **Findings:**
@@ -641,6 +670,8 @@ CI change has been made under it yet.
 against the actual files/lines.
 
 ### 2026-07-10 (implementation)
+
+**Audited revision:** `fde7d2f5894f7f5d69c9ff1295a212331e436ddc`
 
 **Status:** Partial
 
@@ -680,6 +711,8 @@ confirmation on issue #77 once this branch is ready to open as a PR, then
 re-audit and move `Status` to `Accepted`.
 
 ### 2026-07-11 (follow-up fixes)
+
+**Audited revision:** `bfba8a0c0518d620c9e2dba6b834f258ad9b07fc`
 
 **Status:** Partial
 

@@ -7,9 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added (proposed)
+### Added
 
-- **Container Profile (ADR-021)** — an OPTIONAL, single-file `*.corpus.json`
+- **Container Profile (ADR-021, proposed)** — an OPTIONAL, single-file `*.corpus.json`
   transport envelope that serializes a Bundle (or a subset of one) for wire
   transport: `schema/container.schema.json`, `schema/container-context.jsonld`,
   `schema/document-reference.schema.json`, `scripts/validate_container.py`,
@@ -19,9 +19,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   generalized `extensions` mechanism rather than becoming native MIF
   vocabulary. Proposed — ADR-021's `Status` stays `Proposed` pending
   `@perlowja`'s confirmation on issue #77.
-
-### Added
-
 - **[Tooling]**: `scripts/check_relationship_type_vocab_coverage.py` — cross-checks
   `schema/context.jsonld`'s `relationships.type.@context` term mapping against
   `public/ns/vocabulary.jsonld`'s registered `rdfs:Class` terms, guarding against

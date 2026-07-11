@@ -123,7 +123,7 @@
           ]
         },
         "payload": {
-          "description": "For kind:memory, MUST validate against https://mif-spec.dev/schema/mif.schema.json (conceptType required; see ADR-021 Decision point 1). For kind:document, MUST validate against https://mif-spec.dev/schema/mif.schema.json#/$defs/DocumentReference (ADR-014 / ADR-021 Decision point 2) via schema/document-reference.schema.json. This schema does not duplicate either definition; scripts/validate_container.py dispatches on `kind` and validates payload against the correct external schema.",
+          "description": "For kind:memory, MUST validate against https://mif-spec.dev/schema/mif.schema.json (conceptType required; see ADR-021 Decision point 1). For kind:document, MUST validate against https://mif-spec.dev/schema/mif.schema.json#/$defs/DocumentReference (ADR-014 / ADR-021 Decision point 2) via schema/document-reference.schema.json. This schema does not duplicate either definition beyond the two minimal kind-discrimination anchors asserted in the allOf below (payload.conceptType required for kind:memory; payload.@type const for kind:document -- keep those in sync with mif.schema.json if its requirements ever change); scripts/validate_container.py dispatches on `kind` and validates payload against the correct external schema.",
           "type": "object"
         }
       },

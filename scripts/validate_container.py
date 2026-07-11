@@ -69,6 +69,13 @@ def validate_corpus(path: Path) -> list[str]:
     for line in _ajv_validate(CONTAINER_SCHEMA, corpus, extra_refs=(MIF_SCHEMA,)):
         errors.append(f"{path}: envelope invalid against container.schema.json: {line}")
 
+    if not isinstance(corpus, dict):
+        # A non-object top level already failed the envelope check above;
+        # report that instead of crashing on corpus.get() below (and keep
+        # going with the remaining files).
+        errors.append(f"{path}: expected a JSON object at the top level, got {type(corpus).__name__}")
+        return errors
+
     # Only two kinds are ever defined (ADR-021 Decision point 3); one batched
     # ajv-cli call per kind present, instead of one call per record (#260).
     # `str(i)` keys the batch by plain record index; `kind == "..."` string
@@ -113,6 +120,12 @@ def main(argv: list[str]) -> int:
     all_errors: list[str] = []
     checked = 0
     for dir_arg in dirs:
+        # Fail-closed per argument: Path.rglob() on a nonexistent (typo'd)
+        # path silently yields nothing, which would let a misspelled
+        # directory report green as long as any other argument matched.
+        if not Path(dir_arg).is_dir():
+            all_errors.append(f"{dir_arg}: not a directory (typo'd argument?)")
+            continue
         for corpus_file in sorted(Path(dir_arg).rglob("*.corpus.json")):
             checked += 1
             all_errors.extend(validate_corpus(corpus_file))
