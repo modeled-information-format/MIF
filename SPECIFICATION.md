@@ -63,8 +63,7 @@ question OKF leaves open.
 
 SPECIFICATION.md, `adr/`, `MIGRATION.md`, and `docs/okf-conformance.md` all
 cite specific "Invariant N" numbers in prose. This is the canonical
-enumerated list they refer back to — no single place named all of them
-before now.
+enumerated list they refer back to.
 
 - **Invariant 2 — Markdown is canonical; JSON-LD is a derived projection.**
   The `.md` file is the source of truth; the `.jsonld` form is regenerated
@@ -87,14 +86,12 @@ before now.
   "forgetting curve" origin of the temporal model) lives in
   `profiles/ai-memory/`, not here (`MIGRATION.md`).
 
-No citation anywhere in this repo names an "Invariant 1" or an "Invariant 7"
-or higher — confirmed by repo-wide search (2026-07-11). The Abstract's
-"OKF-compliant: every bundle is a valid OKF bundle (a tested invariant)"
-bullet is the closest candidate for a future "Invariant 1" (it precedes
-Invariant 2 in that same list and is independently called out as "tested"),
-but no existing citation actually numbers it, so it is not asserted as one
-here — numbering it would be inventing a new normative claim this document
-doesn't currently make anywhere else.
+The list enumerates the invariant numbers existing citations use
+(Invariants 2-6). The Abstract's "OKF-compliant: every bundle is a valid
+OKF bundle (a tested invariant)" bullet is deliberately left unnumbered:
+no citation numbers it, and assigning it a number here would introduce a
+new normative claim rather than consolidate existing ones. New invariants
+are added to this list when a normative citation first needs a number.
 
 ---
 
