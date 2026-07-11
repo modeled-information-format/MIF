@@ -190,6 +190,12 @@ find its current line.
 
 ### 2026-06-18
 
+**Audited revision:** `7f8d2de` — an anchor persisting doesn't guarantee what
+it does hasn't changed (see the 2026-07-11 entry's `validate-ontologies`
+finding for exactly that happening); pin the commit so a citation can be
+re-verified against what was actually true then, not just against whatever
+currently has a matching anchor.
+
 **Status:** Compliant
 
 **Findings:**
@@ -213,6 +219,11 @@ this session, and the suite was run locally to green.
 **Action Required:** None.
 
 ### 2026-07-11
+
+**Audited revision:** `444f468` (main, before this PR's own ADR-only changes —
+this audit verifies `validate.yml`/`schema/mif.schema.json`/
+`docs/okf-conformance.md`/`scripts/okf_validate.py`, none of which this PR
+touches).
 
 **Status:** Compliant with one discrepancy (`validate-ontologies`, see note; tracked as #240)
 
