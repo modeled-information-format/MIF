@@ -129,6 +129,19 @@
       "@id": "mif:documentType",
       "@type": "@vocab"
     },
+    "pdf": "mif:DocumentTypePdf",
+    "html": "mif:DocumentTypeHtml",
+    "markdown": "mif:DocumentTypeMarkdown",
+    "text": "mif:DocumentTypeText",
+    "transcript": "mif:DocumentTypeTranscript",
+    "dataset": "mif:DocumentTypeDataset",
+    "spreadsheet": "mif:DocumentTypeSpreadsheet",
+    "presentation": "mif:DocumentTypePresentation",
+    "image": "mif:DocumentTypeImage",
+    "audio": "mif:DocumentTypeAudio",
+    "video": "mif:DocumentTypeVideo",
+    "email": "mif:DocumentTypeEmail",
+    "other": "mif:DocumentTypeOther",
     "contentType": "mif:contentType",
     "byteLength": {
       "@id": "mif:byteLength",
@@ -296,7 +309,7 @@
 
     "extensions": {
       "@id": "mif:extensions",
-      "@container": "@index"
+      "@type": "@json"
     },
 
     "semantic": "mif:SemanticType",

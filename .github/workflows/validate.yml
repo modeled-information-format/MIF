@@ -53,6 +53,9 @@ jobs:
             profiles/ai-memory/examples \
             docs/examples/memories
 
+      - name: JSON-LD context fidelity (real JSON-LD 1.1 expand/compact)
+        run: python scripts/test_jsonld_context_fidelity.py
+
   schema-validation:
     name: Validate JSON-LD Projection Against Schema
     runs-on: ubuntu-latest
