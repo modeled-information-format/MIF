@@ -222,19 +222,27 @@ independence (own governance). Mitigations:
 
 ## Audit
 
+Findings cite durable anchors (heading text), not raw line numbers — line
+numbers in `SPECIFICATION.md` and `docs/okf-conformance.md` shift as
+unrelated content is added, which had already made this entry's original
+citations stale by the 2026-07-11 audit below (see that entry's Summary).
+`grep -n` for the quoted anchor text to find its current line.
+
 ### 2026-06-18
+
+**Audited revision:** `7f8d2de6c671cf5f354e4034b1524c0c112ddf1f`
 
 **Status:** Compliant
 
 **Findings:**
 
-| Finding | Files | Lines | Assessment |
-|---------|-------|-------|------------|
-| Superset-not-subordination and "no normative dependency / pin OKF v0.1" stated normatively | `SPECIFICATION.md` | L29-L34 | compliant |
-| Invariant 5 ("normative within MIF") pinned criteria document present | `docs/okf-conformance.md` | L3-L19 | compliant |
-| Pinned OKF v0.1 criteria enumerated (bundle shape, required `type`, reserved filenames, concept graph, broken-links-tolerated) | `docs/okf-conformance.md` | L25-L41 | compliant |
-| MIF → OKF mapping (typed relationships overlay OKF links; `.jsonld` outside `*.md` glob) | `docs/okf-conformance.md` | L52-L65 | compliant |
-| "MIF answers OKF's open questions" positioning table | `SPECIFICATION.md` | L49-L57 | compliant |
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
+| Superset-not-subordination and "no normative dependency / pin OKF v0.1" stated normatively | `SPECIFICATION.md` | the Abstract paragraph beginning "OKF compliance is achieved as a **superset, not by subordination**" | compliant |
+| Invariant 5 ("normative within MIF") pinned criteria document present | `docs/okf-conformance.md` | document heading "# OKF Conformance (pinned)" plus the phrase "**normative within MIF**" in the sentence following it | compliant |
+| Pinned OKF v0.1 criteria enumerated (bundle shape, required `type`, reserved filenames, concept graph, broken-links-tolerated) | `docs/okf-conformance.md` | heading "## 1. Pinned OKF v0.1 criteria" | compliant |
+| MIF → OKF mapping (typed relationships overlay OKF links; `.jsonld` outside `*.md` glob) | `docs/okf-conformance.md` | heading "## 2. MIF → OKF mapping" | compliant |
+| "MIF answers OKF's open questions" positioning table | `SPECIFICATION.md` | heading "### MIF answers OKF's open questions" | compliant |
 
 **Summary:** The superset relationship, the pinned-v0.1 / no-floating-dependency
 rule (Invariant 5), and the MIF→OKF mapping are all present and normative in the

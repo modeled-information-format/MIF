@@ -205,15 +205,17 @@ current line.
 
 ### 2026-06-26
 
+**Audited revision:** `42eee4b506fb7906d31a50e9a09a7d29262cfcb4`
+
 **Status:** Compliant
 
 **Findings:**
 
-| Finding | Files | Lines | Assessment |
-|---------|-------|-------|------------|
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
 | `$defs.DocumentReference` is vendor-neutral, `@type` const, located by `url` or `id` via `anyOf`, `additionalProperties: false` | `schema/mif.schema.json` | `$defs.DocumentReference` | compliant |
 | Optional top-level `documents` array references `#/$defs/DocumentReference` | `schema/mif.schema.json` | `properties.documents` | compliant |
-| `documents` added to `FRONTMATTER_ORDER` and both passthrough lists | `scripts/mif_convert.py` | L64, L148, L192 | compliant |
+| `documents` added to `FRONTMATTER_ORDER` and both passthrough lists | `scripts/mif_convert.py` | `FRONTMATTER_ORDER` list entry `"documents"`; `md_to_jsonld()`'s `passthrough` list entry `"documents"`; `jsonld_to_md()`'s `passthrough` list entry `"documents"` | compliant |
 | Context maps `documents`, `DocumentReference`, and DocumentReference fields | `schema/context.jsonld` | `documents`/`DocumentReference` block | compliant |
 | Example carries a `documents:` entry that round-trips | `profiles/ai-memory/examples/level-3-citations.md` | `documents:` | compliant |
 

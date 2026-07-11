@@ -283,18 +283,29 @@ None.
 
 ## Audit
 
+Findings cite durable anchors (field name / enclosing construct), not raw
+line numbers — the files these originally cited also physically relocated
+out of this repo entirely (see the 2026-07-11 entry below), which is a more
+severe version of the staleness raw line numbers alone would already have
+suffered. `grep -n` for the quoted anchor text in the file's current home to
+find its current line.
+
 ### 2026-06-18
+
+**Audited revision:** `7f8d2de6c671cf5f354e4034b1524c0c112ddf1f` (this repo — at
+this date, the cited `ontologies/` paths were still local to this repo, before
+ADR-018/ADR-019 relocated them; see the 2026-07-11 entry for their current home)
 
 **Status:** Compliant
 
 **Findings:**
 
-| Finding | Files | Lines | Assessment |
-|---------|-------|-------|------------|
-| Tier 1 `mif-base` defines the MIF-core reusable traits (`timestamped`, `confidence`, `provenance`) | `ontologies/mif-base.ontology.yaml` | L82-L110 | compliant |
-| Tier 2 `shared-traits` extends `mif-base` via the `extends` field | `ontologies/shared-traits.ontology.yaml` | L22-L23 | compliant |
-| Tier 2 cross-domain mixins present (`lifecycle`, `auditable`, `certified`, `located`, `bounded`, `owned`, `scheduled`, `transactional`, `measured`) | `ontologies/shared-traits.ontology.yaml` | L29-L355 | compliant |
-| Tier 3 domain ontology extends both base tiers (`extends: [mif-base, shared-traits]`) | `ontologies/examples/csi-5w1h.ontology.yaml` | L32-L34 | compliant |
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
+| Tier 1 `mif-base` defines the MIF-core reusable traits (`timestamped`, `confidence`, `provenance`) | `ontologies/mif-base.ontology.yaml` (path as it existed in this repo at this date) | the `traits:` block's `timestamped`, `confidence`, and `provenance` keys | compliant |
+| Tier 2 `shared-traits` extends `mif-base` via the `extends` field | `ontologies/shared-traits.ontology.yaml` (path as it existed in this repo at this date) | the `ontology.extends:` list (`- mif-base`) | compliant |
+| Tier 2 cross-domain mixins present (`lifecycle`, `auditable`, `certified`, `located`, `bounded`, `owned`, `scheduled`, `transactional`, `measured`) | `ontologies/shared-traits.ontology.yaml` (path as it existed in this repo at this date) | the `traits:` block's nine keys: `lifecycle`, `auditable`, `certified`, `located`, `bounded`, `owned`, `transactional`, `scheduled`, `measured` | compliant |
+| Tier 3 domain ontology extends both base tiers (`extends: [mif-base, shared-traits]`) | `ontologies/examples/csi-5w1h.ontology.yaml` (path as it existed in this repo at this date — this specific file no longer exists anywhere, see 2026-07-11 entry) | the `ontology.extends:` list (`- mif-base`, `- shared-traits`) | compliant |
 
 **Summary:** The three-tier chain is present and verifiable in the shipped
 ontologies: `mif-base` supplies Tier 1 core traits, `shared-traits` extends it

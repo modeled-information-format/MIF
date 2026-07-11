@@ -318,19 +318,28 @@ changed from peer-equivalence to source-and-projection.
 
 ## Audit
 
+Findings cite durable anchors (heading / field name / enclosing construct),
+not raw line numbers — line numbers in `SPECIFICATION.md` and
+`scripts/mif_convert.py` shift as unrelated content is added, which had
+already made this entry's original citations stale by the 2026-07-11 audit
+below (see that entry's Summary). `grep -n` for the quoted anchor text to
+find its current line.
+
 ### 2026-06-18
+
+**Audited revision:** `7f8d2de6c671cf5f354e4034b1524c0c112ddf1f`
 
 **Status:** Compliant
 
 **Findings:**
 
-| Finding | Files | Lines | Assessment |
-|---------|-------|-------|------------|
-| Dual representation (`.md` human-readable, `.jsonld` machine-processable) defined as first-class | `SPECIFICATION.md` | L103-L108 | compliant |
-| "Both representations MUST be losslessly convertible to each other" (the convertibility claim this ADR makes) | `SPECIFICATION.md` | L110 | compliant |
-| Refinement: Markdown is the source of truth (Invariant 2) and JSON-LD is a *derived* projection — basis for the ADR-011 amendment | `scripts/mif_convert.py` | L2-L9 | compliant |
-| Converter implements `to-jsonld` / `to-markdown` and lossless `roundtrip` over bundles | `scripts/mif_convert.py` | L19-L22, L286-L295 | compliant |
-| Derived-projection emitter (`emit-jsonld`) regenerates `.jsonld` from canonical `.md` | `scripts/mif_convert.py` | L267-L279 | compliant |
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
+| Dual representation (`.md` human-readable, `.jsonld` machine-processable) defined as first-class | `SPECIFICATION.md` | heading `### 2.1 Dual Representation` and its enumerated list (`1. **Markdown Format** (`.md`)`, `2. **JSON-LD Format** (`.jsonld`)`) | compliant |
+| "Both representations MUST be losslessly convertible to each other" (the convertibility claim this ADR makes) | `SPECIFICATION.md` | sentence "Both representations MUST be losslessly convertible to each other." immediately under `### 2.1 Dual Representation` | compliant |
+| Refinement: Markdown is the source of truth (Invariant 2) and JSON-LD is a *derived* projection — basis for the ADR-011 amendment | `scripts/mif_convert.py` | module docstring, bullets "The `.md` concept file is the source of truth (Invariant 2)." and "JSON-LD is a *derived* projection, reproducible by running this converter (Invariant 2) and lossless on a `markdown -> json-ld -> markdown` round trip for all conformance-level data (Invariant 4)." | compliant |
+| Converter implements `to-jsonld` / `to-markdown` and lossless `roundtrip` over bundles | `scripts/mif_convert.py` | functions `cmd_to_jsonld`, `cmd_to_markdown`, `cmd_roundtrip`; CLI subcommands `to-jsonld`, `to-markdown`, `roundtrip` registered via `add_parser(...)` in `main()` | compliant |
+| Derived-projection emitter (`emit-jsonld`) regenerates `.jsonld` from canonical `.md` | `scripts/mif_convert.py` | function `cmd_emit_jsonld`; CLI subcommand `emit-jsonld` registered via `add_parser("emit-jsonld", ...)` in `main()` | compliant |
 
 **Summary:** The dual-representation design and the lossless-convertibility
 requirement are both stated normatively in SPECIFICATION.md §2.1. The
@@ -344,7 +353,7 @@ emitter described in this ADR.
 
 ### 2026-07-11
 
-**Audited revision:** 88b4a8f20d87773286abbc64644f4d5c762f6ce8
+**Audited revision:** `88b4a8f20d87773286abbc64644f4d5c762f6ce8`
 
 **Status:** Compliant, with two documentation-drift notes (see Summary) — neither is a CI-gating regression
 
