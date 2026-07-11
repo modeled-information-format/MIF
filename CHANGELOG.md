@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **[Tooling]**: `scripts/check_relationship_type_vocab_coverage.py` — cross-checks
+  `schema/context.jsonld`'s `relationships.type.@context` term mapping against
+  `public/ns/vocabulary.jsonld`'s registered `rdfs:Class` terms, guarding against
+  the #230 defect class (a relationship-type term declared in one file but never
+  wired to the other) recurring. Wired into the `okf-conformance` CI job. (#233)
+- **[Tooling]**: `scripts/test_temporal_and_properties.py` (temporal-consistency
+  and `properties`-construct regression suite) is now run in the `okf-conformance`
+  CI job via `pytest`; previously it only ran if a contributor had `pytest`
+  installed locally and remembered to invoke it by hand. (#235)
+
 ## [1.2.2] - 2026-07-04
 
 ### Fixed

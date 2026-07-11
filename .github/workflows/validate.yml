@@ -62,8 +62,14 @@ jobs:
       - name: Vocab term coverage (every @type:@vocab enum value is registered)
         run: python scripts/check_vocab_term_coverage.py
 
+      - name: Relationship-type vocab coverage (context.jsonld terms are registered in vocabulary.jsonld)
+        run: python scripts/check_relationship_type_vocab_coverage.py
+
       - name: Custom relationship_types registry (.mif/config.yaml)
         run: python scripts/test_relationship_types_config.py
+
+      - name: Temporal consistency + properties construct regression suite
+        run: python -m pytest scripts/test_temporal_and_properties.py -q
 
   schema-validation:
     name: Validate JSON-LD Projection Against Schema
