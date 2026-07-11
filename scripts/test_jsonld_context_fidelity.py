@@ -82,12 +82,16 @@ def check_extensions_round_trip() -> list[str]:
     return errors
 
 
-def _expanded_vocab_id(expanded: list, prop: str, value: str, base_label: str) -> str | None:
+def _expanded_vocab_id(expanded: list, prop: str, value: str) -> str | None:
     prop_iri = f"https://mif-spec.dev/ns/{prop}"
     try:
         return expanded[0][prop_iri][0]["@id"]
     except (IndexError, KeyError, TypeError) as e:
-        return f"<malformed expansion for {prop}={value!r} ({base_label}): {e!r}>"
+        # Deliberately base-label-agnostic: two identically-malformed expansions
+        # across different base URLs must produce the SAME placeholder, or the
+        # base-independence check below would misdiagnose them as "base-URI-
+        # dependent" (iri_a != iri_b) instead of "malformed expansion".
+        return f"<malformed expansion for {prop}={value!r}: {e!r}>"
 
 
 def check_vocab_base_independence() -> list[str]:
@@ -97,8 +101,8 @@ def check_vocab_base_independence() -> list[str]:
             doc = {"@context": CONTEXT, "@type": node_type, **extra_fields, prop: value}
             expanded_a = jsonld.expand(doc, {"base": "https://host-a.example/"})
             expanded_b = jsonld.expand(doc, {"base": "https://host-b.example/"})
-            iri_a = _expanded_vocab_id(expanded_a, prop, value, "host-a")
-            iri_b = _expanded_vocab_id(expanded_b, prop, value, "host-b")
+            iri_a = _expanded_vocab_id(expanded_a, prop, value)
+            iri_b = _expanded_vocab_id(expanded_b, prop, value)
             if iri_a != iri_b:
                 errors.append(
                     f"{prop}={value!r} is base-URI-dependent: {iri_a!r} (host-a) != {iri_b!r} (host-b)"
@@ -132,11 +136,11 @@ def check_document_type_citation_type_no_cross_contamination() -> list[str]:
         return errors
     for value in sorted(shared):
         doc_a = {"@context": CONTEXT, "@type": "DocumentReference", "url": "https://x", "documentType": value}
-        iri_a = _expanded_vocab_id(jsonld.expand(doc_a), "documentType", value, "n/a")
+        iri_a = _expanded_vocab_id(jsonld.expand(doc_a), "documentType", value)
         if iri_a is not None and "CitationType" in iri_a:
             errors.append(f"documentType={value!r} contaminated by citationType terms: {iri_a}")
         doc_b = {"@context": CONTEXT, "@type": "Citation", "citationType": value}
-        iri_b = _expanded_vocab_id(jsonld.expand(doc_b), "citationType", value, "n/a")
+        iri_b = _expanded_vocab_id(jsonld.expand(doc_b), "citationType", value)
         if iri_b is not None and "DocumentType" in iri_b:
             errors.append(f"citationType={value!r} contaminated by documentType terms: {iri_b}")
     return errors
