@@ -12,6 +12,7 @@ name: Validate MIF Bundles and Schemas
       - 'test/**'
       - 'docs/**'
       - 'src/content/docs/**'
+      - 'adr/**'
       - 'package.json'
       - 'astro.config.mjs'
     # No path filter on PRs: this is a required branch-protection gate, so it
@@ -61,6 +62,15 @@ jobs:
 
       - name: Vocab term coverage (every @type:@vocab enum value is registered)
         run: python scripts/check_vocab_term_coverage.py
+
+      - name: Relationship-type vocab coverage (context.jsonld terms are registered in vocabulary.jsonld)
+        run: python scripts/check_relationship_type_vocab_coverage.py
+
+      - name: Custom relationship_types registry (.mif/config.yaml)
+        run: python scripts/test_relationship_types_config.py
+
+      - name: Temporal consistency + properties construct regression suite
+        run: python -m pytest scripts/test_temporal_and_properties.py -q
 
   schema-validation:
     name: Validate JSON-LD Projection Against Schema
@@ -183,3 +193,52 @@ jobs:
 
       - name: Test subtype_of integrity
         run: python scripts/test_subtype_of.py
+
+  adr-audit-citation-lint:
+    # Diff-scoped guardrail against the #241 bug class: flags a NEWLY ADDED
+    # raw L\d+ line-number citation in an adr/*.md Audit table (#238's
+    # durable-anchor convention, documented in adr/README.md). Deliberately
+    # does not check the 11 ADRs #241 catalogued as already using raw line
+    # numbers -- retrofitting those is separate, tracked work (#241), not
+    # something this check demands overnight.
+    name: ADR Audit Citation Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          # Full history, not the default shallow depth-1: the diff below needs
+          # a resolvable merge-base against an arbitrary-distance PR base branch
+          # (`git diff base...head`), which a shallow clone can't guarantee.
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: '3.12'
+
+      - name: Check for newly-added raw line-number citations
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          # The PR base SHA, not a branch name: actions/checkout with
+          # fetch-depth: 0 fetches the history needed to reach this exact
+          # commit, but does not reliably create an `origin/<branch>`
+          # remote-tracking ref for it -- diffing against the SHA directly
+          # sidesteps that ref-resolution question entirely.
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          BEFORE_SHA: ${{ github.event.before }}
+        run: |
+          NULL_SHA="0000000000000000000000000000000000000000"
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            BASE="$PR_BASE_SHA"
+          elif [ "$EVENT_NAME" = "push" ] && [ -n "$BEFORE_SHA" ] && [ "$BEFORE_SHA" != "$NULL_SHA" ]; then
+            BASE="$BEFORE_SHA"
+          else
+            # workflow_dispatch, or a push with no resolvable prior state (a
+            # brand-new branch's first push has BEFORE_SHA=$NULL_SHA): there is
+            # no single prior commit to diff against. Compare against
+            # origin/main instead of silently producing an empty (and falsely
+            # "clean") base...head range.
+            echo "No PR base or resolvable prior push state (event=$EVENT_NAME) -- comparing against origin/main instead."
+            BASE="origin/main"
+          fi
+          python scripts/check_adr_audit_citations.py --base "$BASE" --head HEAD

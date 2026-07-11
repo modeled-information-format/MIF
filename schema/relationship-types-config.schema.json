@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mif-spec.dev/schema/relationship-types-config.schema.json",
+  "title": "MIF Relationship Types Configuration",
+  "description": "JSON Schema for a bundle's .mif/config.yaml relationship_types registry (SPECIFICATION.md 8.1). Declares the relationship types a bundle recognizes -- the nine core types (no namespace) for documentation/opt-in-recognition, and domain-specific custom types (with a namespace) that relationships[].type values in this bundle are validated against.",
+  "type": "object",
+  "properties": {
+    "relationship_types": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/RelationshipTypeDeclaration" }
+    },
+    "namespaces": {
+      "type": "object",
+      "description": "Maps each custom namespace prefix used by this bundle's relationship_types (or any other namespaced token) to the IRI it expands to -- the same mapping SPECIFICATION.md 8.3's JSON-LD representation example shows added as a second @context array entry (e.g. {\"farm\": \"https://example.org/farm/\"}). scripts/mif_convert.py merges this into every JSON-LD projection emitted for the bundle, so a declared namespace prefix actually resolves to a real IRI on expansion instead of staying an opaque, unexpanded compact-IRI-looking string.",
+      "propertyNames": { "pattern": "^[a-z][a-z0-9]*$" },
+      "additionalProperties": { "type": "string", "format": "uri" }
+    }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "RelationshipTypeDeclaration": {
+      "type": "object",
+      "description": "One declared relationship type. A `namespace` marks it as a custom type: its kebab-cased `name`, prefixed with `namespace:`, is the value used in relationships[].type (e.g. name: BreedsWith, namespace: farm -> \"farm:breeds-with\"). No `namespace` means it documents one of the nine core types (SPECIFICATION.md 8.2); the core types' registration is fixed regardless of what's declared here.",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[A-Z][a-zA-Z0-9]*$",
+          "description": "PascalCase display name and IRI local name (e.g. \"BreedsWith\"). The kebab-cased form (\"breeds-with\") is the actual relationships[].type token."
+        },
+        "namespace": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]*$",
+          "description": "Lowercase prefix identifying a custom (non-core) type, e.g. \"farm\". Should have a matching entry in this file's top-level `namespaces` map (its IRI) so the type actually resolves on JSON-LD expansion, not just validates as declared."
+        },
+        "description": {
+          "type": "string"
+        },
+        "inverse": {
+          "type": "string",
+          "description": "PascalCase name of this type's inverse relationship (e.g. \"Derives\" for \"DerivedFrom\"), if directional and not self-symmetric. Declaration only: scripts/okf_validate.py does not check that a reciprocal edge of this type actually exists anywhere in the bundle."
+        },
+        "symmetric": {
+          "type": "boolean",
+          "default": false,
+          "description": "True when the relationship reads the same in both directions (e.g. RelatesTo, ConflictsWith). Declaration only: scripts/okf_validate.py does not check that a matching reverse-direction edge actually exists anywhere in the bundle."
+        },
+        "icon": {
+          "type": "string",
+          "description": "A single display emoji, for tooling/docs."
+        },
+        "properties": {
+          "type": "array",
+          "description": "Structured metadata fields this relationship type carries. These are NOT new keys on the Relationship object itself (which is closed, additionalProperties:false) -- they're carried as namespaced keys inside the relationship's own metadata object (e.g. {\"farm:breeding_date\": \"2025-10-15\"}), per SPECIFICATION.md 8.3's JSON-LD representation example.",
+          "items": { "$ref": "#/$defs/RelationshipTypePropertyDeclaration" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "RelationshipTypePropertyDeclaration": {
+      "type": "object",
+      "required": ["name", "type"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Property name; carried in metadata as \"<namespace>:<name>\"."
+        },
+        "type": {
+          "type": "string",
+          "enum": ["string", "boolean", "integer", "decimal", "date", "datetime"],
+          "description": "Enforced by scripts/okf_validate.py's check (8) against this property's actual metadata value, when the relationship's metadata carries it."
+        },
+        "enum": {
+          "type": "array",
+          "description": "Allowed values, when `type` is \"string\". Enforced by check (8) the same way `type` is.",
+          "items": { "type": "string" },
+          "minItems": 1
+        },
+        "range": {
+          "type": "array",
+          "description": "[min, max] inclusive bounds, when `type` is \"integer\" or \"decimal\". Enforced by check (8) the same way `type` is.",
+          "items": { "type": "number" },
+          "minItems": 2,
+          "maxItems": 2
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
