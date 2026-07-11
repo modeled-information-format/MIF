@@ -678,3 +678,35 @@ task, and this work has not been pushed or posted anywhere. `Status` stays
 **Action Required:** None for the code. Formally request `@perlowja`'s
 confirmation on issue #77 once this branch is ready to open as a PR, then
 re-audit and move `Status` to `Accepted`.
+
+### 2026-07-11 (follow-up fixes)
+
+**Status:** Partial
+
+**Findings:**
+
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
+| `validate_container.py` batches same-`kind` records into one `ajv-cli` invocation instead of one spawn per record (#260) | `scripts/_ajv_common.py`, `scripts/validate_container.py`, `scripts/test_ajv_batch.py` | `ajv_validate_batch`, `_KIND_SCHEMAS`-driven grouping in `validate_corpus()` | compliant |
+| Real `pyld` expand/compact regression check added for `container-context.jsonld`'s `extensions` term (#257) | `scripts/test_container_context_fidelity.py`, `.github/workflows/validate.yml` (`container-validation` job) | full file; the two new steps in that job | compliant |
+| Structural drift check added for the `mif`/`prov`/`xsd` prefixes and `extensions`/`wasDerivedFrom` terms shared with `context.jsonld` (#259, option (c)) | `scripts/check_container_context_drift.py`, `.github/workflows/validate.yml` | full file; the new step in `container-validation` | compliant |
+
+**Summary:** The three findings this Audit's "implementation" entry left as
+follow-on work (Consequences/Negative point 3, Decision point 8's
+`#259`-tracking note) are now fixed on this same branch, before the PR
+merges, rather than shipping known gaps into `main`. All three checks were
+verified to actually catch their target regression before being wired into
+CI: `test_ajv_batch.py` asserts exactly one `ajv` subprocess spawn for a
+5-instance batch (was 5); `test_container_context_fidelity.py` was confirmed
+to fail with the predicted content-loss symptom when `extensions` was
+locally reverted to `@container: @index`; `check_container_context_drift.py`
+was confirmed to fail when a shared prefix was locally mismatched.
+`python scripts/validate_container.py examples/container` and all three new
+checks pass on the worked example.
+
+Still `Partial`, not `Compliant`: item 5 (formally requesting `@perlowja`'s
+confirmation on issue #77) remains outstanding, per the prior entry.
+
+**Action Required:** None for the code. Formally request `@perlowja`'s
+confirmation on issue #77 once this branch is ready to open as a PR, then
+re-audit and move `Status` to `Accepted`.
