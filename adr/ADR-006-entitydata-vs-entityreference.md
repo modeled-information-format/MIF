@@ -22,6 +22,7 @@ audience:
 related:
   - ADR-004-three-tier-trait-inheritance.md
   - ADR-002-dual-format-design.md
+  - ADR-021-container-profile.md
 ---
 
 # ADR-006: EntityData vs EntityReference

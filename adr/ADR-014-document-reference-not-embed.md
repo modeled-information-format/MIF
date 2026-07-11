@@ -24,6 +24,7 @@ related:
   - ADR-006-entitydata-vs-entityreference.md
   - ADR-009-okf-compliance-superset.md
   - ADR-010-modeled-information-format-repositioning.md
+  - ADR-021-container-profile.md
 ---
 
 # ADR-014: Source Documents Travel by Reference, Not by Embedded Vendor Schema

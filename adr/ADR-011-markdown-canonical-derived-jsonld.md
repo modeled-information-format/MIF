@@ -25,6 +25,7 @@ related:
   - ADR-009-okf-compliance-superset.md
   - ADR-007-github-raw-urls-for-schema-ids.md
   - ADR-012-okf-conformance-tested-invariant.md
+  - ADR-021-container-profile.md
 ---
 
 # ADR-011: Markdown-Canonical with Derived JSON-LD Projection

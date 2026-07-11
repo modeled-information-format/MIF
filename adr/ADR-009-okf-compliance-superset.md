@@ -27,6 +27,7 @@ related:
   - ADR-012-okf-conformance-tested-invariant.md
   - ADR-001-cognitive-triad-taxonomy.md
   - ADR-008-decay-model-rationale.md
+  - ADR-021-container-profile.md
 ---
 
 # ADR-009: OKF Compliance as a Superset (Pinned OKF v0.1)
