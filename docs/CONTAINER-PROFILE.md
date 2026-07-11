@@ -2,7 +2,7 @@
 
 # Container Profile
 
-**Proposed — see [ADR-021](../adr/ADR-021-container-profile.md).**
+**Accepted and implemented — see [ADR-021](../adr/ADR-021-container-profile.md).**
 
 The Container Profile is an OPTIONAL, single-file JSON artifact
 (`*.corpus.json`) that serializes a Bundle — or a subset of one — into one

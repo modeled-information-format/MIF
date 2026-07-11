@@ -10,7 +10,7 @@ tags:
   - bundle
   - documents
   - provenance
-status: proposed
+status: accepted
 created: 2026-07-10
 updated: 2026-07-11
 author: MIF Maintainers
@@ -34,7 +34,8 @@ related:
 
 ## Status
 
-Proposed
+Accepted (implemented in the same change; accepted by maintainer decision
+2026-07-11, merged with the implementation)
 
 ## Context
 
@@ -613,14 +614,16 @@ Implementation lands in this same change: `schema/container.schema.json`,
 `scripts/validate_container.py`, a `container-validation` job in
 `.github/workflows/validate.yml`, `examples/container/*.corpus.json`, and
 `docs/CONTAINER-PROFILE.md` plus a `SPECIFICATION.md` cross-reference. This
-ADR's `Status` stays **Proposed** rather than moving to `Accepted`: per the
-maintainer's own release-gating statement on discussion #60 ("Once you have
-reviewed the five PRs, confirmed the per-unit concerns are addressed and
-acknowledged that the Container Profile is correctly scoped as separate
-follow-on work, we will tag and release v1.0.0."), full acceptance is tied
-to `@perlowja` confirming on issue #77 that these terms address the
-corpus-envelope concerns — that confirmation has not happened yet. See
-Audit below.
+ADR was drafted `Proposed` rather than `Accepted`: per the maintainer's own
+release-gating statement on discussion #60 ("Once you have reviewed the
+five PRs, confirmed the per-unit concerns are addressed and acknowledged
+that the Container Profile is correctly scoped as separate follow-on work,
+we will tag and release v1.0.0."), full acceptance was tied to `@perlowja`
+confirming on issue #77 that these terms address the corpus-envelope
+concerns. On 2026-07-11 the maintainer accepted the ADR directly, merging
+it with its implementation — `@perlowja`'s feedback on issue #77 remains
+welcome as normal post-acceptance input rather than a gate. See Audit
+below.
 
 ## Related Decisions
 
@@ -743,3 +746,24 @@ confirmation on issue #77) remains outstanding, per the prior entry.
 **Action Required:** None for the code. Formally request `@perlowja`'s
 confirmation on issue #77 once this branch is ready to open as a PR, then
 re-audit and move `Status` to `Accepted`.
+
+### 2026-07-11 (acceptance)
+
+**Audited revision:** `11d92a30f1c784eef32d39240e65c136b3a9cc97`
+
+**Status:** Compliant
+
+**Findings:**
+
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
+| Implementation complete, xhigh review findings addressed (JSON-LD content-loss fixes for document-payload `hash` and provenance ProvNode forms, ajv batch fail-closed hardening, gate coverage extensions), all local gates green | `schema/container-context.jsonld`, `scripts/_ajv_common.py`, `scripts/validate_container.py`, `scripts/check_container_context_drift.py`, `scripts/test_container_context_fidelity.py`, `scripts/test_ajv_batch.py` | commit `11d92a3` | compliant |
+| Status moved `Proposed` → `Accepted` by maintainer decision, merged together with the implementation | `adr/ADR-021-container-profile.md`, `adr/README.md`, `docs/CONTAINER-PROFILE.md`, `CHANGELOG.md`, `SPECIFICATION.md`, `src/content/docs/specification/overview.mdx` | frontmatter `status:`, `## Status`, and each file's Container Profile status reference | compliant |
+
+**Summary:** The maintainer accepted this ADR on 2026-07-11, directing that
+acceptance ride the implementation merge rather than remain gated on
+`@perlowja`'s issue #77 confirmation (which stays welcome as
+post-acceptance feedback). The two prior entries' outstanding item 5 is
+resolved by that decision.
+
+**Action Required:** None.

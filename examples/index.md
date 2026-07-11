@@ -9,6 +9,6 @@ is not itself a concept document.
 - `procedural/rotate-api-keys.md` — how-to knowledge
 
 `container/` holds worked `*.corpus.json` Container Profile transport
-envelopes (ADR-021, proposed). They are not concepts in this bundle's graph —
+envelopes (ADR-021). They are not concepts in this bundle's graph —
 OKF's `*.md` glob never ingests them — and are validated separately by
 `scripts/validate_container.py`.
