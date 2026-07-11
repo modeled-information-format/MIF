@@ -1,0 +1,7 @@
+relationship_types:
+  - name: BreedsWith
+    namespace: farm
+    description: Animal breeding relationship
+    properties:
+      - name: breeding_date
+        type: date
