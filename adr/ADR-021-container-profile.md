@@ -437,6 +437,15 @@ flowchart LR
    That said, the two context files still hand-copy shared prefixes and
    term mappings rather than composing, so nothing prevents them
    silently diverging again the same way — **tracked as issue #259**.
+   **Update, 2026-07-11:** resolved via #259's option (c) — the two files
+   still hand-copy rather than compose (restructuring was rejected: an
+   array `@context` would import `context.jsonld`'s unrelated per-unit
+   vocabulary into the container envelope's root active context, against
+   this point's own "minimal blast radius" driver), but
+   `scripts/check_container_context_drift.py` now fails CI if the shared
+   `mif`/`prov`/`xsd` prefixes or the `extensions`/`wasDerivedFrom` term
+   definitions diverge between the two files, closing the silent-drift gap
+   without restructuring either one. Issue #259 closed.
 9. **CI visibility: an explicit, container-aware validation entry point is
    REQUIRED, not optional.** Because `scripts/mif_convert.py`'s
    `iter_concepts()` only discovers `*.md` files, a `*.corpus.json` file is

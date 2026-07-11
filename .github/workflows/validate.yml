@@ -150,6 +150,9 @@ jobs:
       - name: container-context.jsonld fidelity (real JSON-LD 1.1 expand/compact, issue #257)
         run: python scripts/test_container_context_fidelity.py
 
+      - name: container-context.jsonld / context.jsonld shared-term drift check (issue #259)
+        run: python scripts/check_container_context_drift.py
+
   docs-build:
     name: Build Docs Site (Astro)
     runs-on: ubuntu-latest
