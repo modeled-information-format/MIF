@@ -39,6 +39,9 @@ jobs:
       - name: Install dependencies (hash-pinned)
         run: pip install --require-hashes -r requirements-ci.txt
 
+      - name: Install JSON-LD fidelity test dependencies (hash-pinned)
+        run: pip install --require-hashes -r requirements-jsonld-ci.txt
+
       - name: OKF conformance test (relationship sync + round-trip)
         run: |
           python scripts/okf_validate.py \
@@ -52,6 +55,12 @@ jobs:
             examples \
             profiles/ai-memory/examples \
             docs/examples/memories
+
+      - name: JSON-LD context fidelity (real JSON-LD 1.1 expand/compact)
+        run: python scripts/test_jsonld_context_fidelity.py
+
+      - name: Vocab term coverage (every @type:@vocab enum value is registered)
+        run: python scripts/check_vocab_term_coverage.py
 
   schema-validation:
     name: Validate JSON-LD Projection Against Schema
