@@ -13,7 +13,7 @@
   "additionalProperties": false,
   "properties": {
     "@context": {
-      "description": "JSON-LD context. MUST resolve the container vocabulary (container-context.jsonld), not the bare memory-unit context (schema/context.jsonld) -- enforced below for the string/array forms; an inline object form is a bespoke local context and is the producer's own responsibility to get right (schema validation cannot check its term mappings resolve the right vocabulary).",
+      "description": "JSON-LD context. MUST resolve the container vocabulary (container-context.jsonld), not the bare memory-unit context (https://mif-spec.dev/schema/context.jsonld) -- enforced below for the string/array forms; an inline object form is a bespoke local context and is the producer's own responsibility to get right (schema validation cannot check its term mappings resolve the right vocabulary).",
       "oneOf": [
         {
           "type": "string",
@@ -87,7 +87,7 @@
         "properties": {
           "transferId": {
             "type": "string",
-            "description": "This container transfer's identifier. Deliberately not named `@id` -- these are opaque transport-lineage identifiers, not JSON-LD node identifiers, and must never be subject to relative-IRI resolution on JSON-LD expand (see schema/container-context.jsonld, which maps this term as a plain literal)."
+            "description": "This container transfer's identifier. Deliberately not named `@id` -- these are opaque transport-lineage identifiers, not JSON-LD node identifiers, and must never be subject to relative-IRI resolution on JSON-LD expand (see https://mif-spec.dev/schema/container-context.jsonld, which maps this term as a plain literal)."
           },
           "supersedes": {
             "type": "string",
