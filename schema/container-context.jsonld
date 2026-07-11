@@ -36,10 +36,8 @@
       "@id": "mif:editChain",
       "@container": "@set",
       "@context": {
-        "supersedes": {
-          "@id": "mif:corpusSupersedes",
-          "@type": "@id"
-        },
+        "transferId": "mif:transferId",
+        "supersedes": "mif:corpusSupersedes",
         "createdAt": {
           "@id": "mif:createdAt",
           "@type": "xsd:dateTime"

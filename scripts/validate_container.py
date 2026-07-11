@@ -79,6 +79,9 @@ def validate_corpus(path: Path) -> list[str]:
             errors.append(f"{path}: envelope invalid against container.schema.json: {line}")
 
         for i, record in enumerate(corpus.get("records", [])):
+            if not isinstance(record, dict):
+                errors.append(f"{path}: records[{i}]: expected an object, got {type(record).__name__}")
+                continue
             kind = record.get("kind")
             payload_file = tmp_path / f"record-{i}.json"
             payload_file.write_text(json.dumps(record.get("payload", {})))

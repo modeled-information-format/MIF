@@ -79,7 +79,9 @@ jobs:
           fail=0
           files="mif.schema.json citation.schema.json context.jsonld \
                  definitions/entity-reference.schema.json \
-                 ontology/ontology.schema.json ontology/ontology.context.jsonld"
+                 ontology/ontology.schema.json ontology/ontology.context.jsonld \
+                 container.schema.json container-context.jsonld \
+                 document-reference.schema.json"
           check() { # alias_dir  source_dir
             local a="public/schema/$1" s="$2"
             [ -d "$a" ] || { echo "skip $a (absent)"; return; }
