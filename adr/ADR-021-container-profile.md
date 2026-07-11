@@ -519,9 +519,20 @@ flowchart LR
    reintroduce the exact content-loss defect this ADR exists to prevent,
    and nothing in this repo's CI would catch it. Adding `pyld` as a
    properly hash-pinned CI dependency and a real expand/compact regression
-   check is left as explicit follow-on work — **filed as issue #257** —
+   check was left as explicit follow-on work — **filed as issue #257** —
    rather than adding an unpinned or under-verified new dependency under
-   time pressure.
+   time pressure. **Update, 2026-07-11:** fixed, before this branch's PR
+   merged. `scripts/test_container_context_fidelity.py` now expand/compacts
+   `container-context.jsonld`'s `extensions` term through real `pyld`
+   (reusing the already-hash-pinned `requirements-jsonld-ci.txt` this
+   repo's sibling `context.jsonld` fidelity test already depends on,
+   installed into the `container-validation` job), and asserts it survives
+   as an opaque `@json` literal rather than losing nested-object content the
+   way `@container: @index` would. Confirmed the check actually catches the
+   regression: reverting the term back to `@container: @index` locally made
+   this new test fail with exactly the predicted symptom (a nested value's
+   own keys silently dropped). Wired into `.github/workflows/validate.yml`'s
+   `container-validation` job, issue #257 closed.
 
 ### Neutral
 
