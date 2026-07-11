@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Structural guard for the #230 bug class recurring: a `relationships[].type`
 core term declared in `schema/context.jsonld` but never actually registered
-in `public/ns/vocabulary.jsonld` (or vice versa), so it silently resolves to
-nothing a JSON-LD consumer can dereference.
+in `public/ns/vocabulary.jsonld`, so it silently resolves to nothing a
+JSON-LD consumer can dereference. One-directional by design -- see below.
 
 `check_vocab_term_coverage.py` (#231) proves every `@type:@vocab` property's
 schema `enum` has a matching registered JSON-LD term, by cross-referencing
