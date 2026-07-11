@@ -191,12 +191,17 @@ jobs:
       - name: Check for newly-added raw line-number citations
         env:
           EVENT_NAME: ${{ github.event_name }}
-          BASE_REF: ${{ github.base_ref }}
+          # The PR base SHA, not a branch name: actions/checkout with
+          # fetch-depth: 0 fetches the history needed to reach this exact
+          # commit, but does not reliably create an `origin/<branch>`
+          # remote-tracking ref for it -- diffing against the SHA directly
+          # sidesteps that ref-resolution question entirely.
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
           BEFORE_SHA: ${{ github.event.before }}
         run: |
           NULL_SHA="0000000000000000000000000000000000000000"
           if [ "$EVENT_NAME" = "pull_request" ]; then
-            BASE="origin/$BASE_REF"
+            BASE="$PR_BASE_SHA"
           elif [ "$EVENT_NAME" = "push" ] && [ -n "$BEFORE_SHA" ] && [ "$BEFORE_SHA" != "$NULL_SHA" ]; then
             BASE="$BEFORE_SHA"
           else

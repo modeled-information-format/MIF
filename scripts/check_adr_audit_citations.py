@@ -44,13 +44,24 @@ HUNK_HEADER = re.compile(r"^@@ -\d+(?:,\d+)? \+(\d+)(?:,\d+)? @@")
 
 
 def run_diff(base: str, head: str) -> str:
-    result = subprocess.run(
-        ["git", "diff", "--unified=0", f"{base}...{head}", "--", "adr/*.md"],
-        cwd=ROOT,
-        capture_output=True,
-        text=True,
-        check=True,
-    )
+    # Two pathspecs, not one: 'adr/*.md' alone misses nothing today (ADRs are
+    # flat), but 'adr/**/*.md' alone matches ZERO files against that same flat
+    # layout (git's `**` requires at least one directory level) -- confirmed
+    # via `git ls-files`. Passing both covers flat files today and any future
+    # adr/<subdir>/*.md without silently going blind either way.
+    try:
+        result = subprocess.run(
+            ["git", "diff", "--unified=0", f"{base}...{head}", "--", "adr/*.md", "adr/**/*.md"],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+    except subprocess.CalledProcessError as exc:
+        print(f"FAIL: `git diff {base}...{head}` failed (exit {exc.returncode}).", file=sys.stderr)
+        if exc.stderr:
+            print(exc.stderr, file=sys.stderr)
+        raise SystemExit(1) from None
     return result.stdout
 
 
