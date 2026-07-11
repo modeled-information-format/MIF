@@ -11,7 +11,7 @@ tags:
   - quality-gate
 status: accepted
 created: 2026-06-18
-updated: 2026-06-18
+updated: 2026-07-11
 author: MIF Maintainers
 project: MIF
 technologies:
@@ -181,22 +181,29 @@ v1.0.0 development branch are not silently un-gated.
 
 ## Audit
 
+Findings cite durable anchors (job id / step `name:` / heading / field name),
+not raw line numbers — line numbers in `.github/workflows/validate.yml`
+shift every time a step is added or removed, which had already made four of
+this section's five workflow-line citations stale by the 2026-07-11 audit
+below (see that entry's Summary). `grep -n` for the quoted anchor text to
+find its current line.
+
 ### 2026-06-18
 
 **Status:** Compliant
 
 **Findings:**
 
-| Finding | Files | Lines | Assessment |
-|---------|-------|-------|------------|
-| PR trigger includes `main`, `release/**`, and `develop/**` | `.github/workflows/validate.yml` | L18 | compliant |
-| `okf-conformance` job runs `okf_validate.py` (relationship sync) + lossless round-trip over all three bundle sets | `.github/workflows/validate.yml` | L46-L58 | compliant |
-| `schema-validation` job emits projections and validates against `schema/mif.schema.json` via ajv | `.github/workflows/validate.yml` | L82-L99 | compliant |
-| `docs-build` job builds the Astro site | `.github/workflows/validate.yml` | L101-L116 | compliant |
-| `validate-ontologies` job validates ontology files and namespace consistency | `.github/workflows/validate.yml` | L118-L136 | compliant |
-| Validator enforces type/reserved-filename/relationship-sync/round-trip | `scripts/okf_validate.py` | L7-L16 | compliant |
-| Schema `$id` resolves to the published `mif-spec.dev` URI | `schema/mif.schema.json` | L3 | compliant |
-| Conformance test documented (validator + round-trip, exit 0 = conform) | `docs/okf-conformance.md` | L69-L93 | compliant |
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
+| PR trigger includes `main`, `release/**`, and `develop/**` | `.github/workflows/validate.yml` | the `pull_request:` trigger's `branches:` list | compliant |
+| `okf-conformance` job runs `okf_validate.py` (relationship sync) + lossless round-trip over all three bundle sets | `.github/workflows/validate.yml` | job `okf-conformance`, steps "OKF conformance test (relationship sync + round-trip)" + "Lossless markdown -> json-ld -> markdown round-trip" | compliant |
+| `schema-validation` job emits projections and validates against `schema/mif.schema.json` via ajv | `.github/workflows/validate.yml` | job `schema-validation`, step "Validate every projection against schema/mif.schema.json" | compliant |
+| `docs-build` job builds the Astro site | `.github/workflows/validate.yml` | job `docs-build`, step "Build Astro site" | compliant |
+| `validate-ontologies` job validates ontology files and namespace consistency | `.github/workflows/validate.yml` | job `validate-ontologies`, step "Test subtype_of integrity" | compliant |
+| Validator enforces type/reserved-filename/relationship-sync/round-trip | `scripts/okf_validate.py` | module docstring | compliant |
+| Schema `$id` resolves to the published `mif-spec.dev` URI | `schema/mif.schema.json` | `$id` field | compliant |
+| Conformance test documented (validator + round-trip, exit 0 = conform) | `docs/okf-conformance.md` | "3. The conformance test" heading | compliant |
 
 **Summary:** The conformance, round-trip, schema, ontology/namespace, and docs
 jobs are present and gating; the PR branch filter covers `develop/**` so v1.0.0
@@ -204,3 +211,49 @@ integration PRs are validated. All cited anchors were opened and confirmed in
 this session, and the suite was run locally to green.
 
 **Action Required:** None.
+
+### 2026-07-11
+
+**Status:** Compliant with one discrepancy (`validate-ontologies`, see note; tracked as #240)
+
+**Findings:**
+
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
+| PR trigger includes `main`, `release/**`, and `develop/**` | `.github/workflows/validate.yml` | the `pull_request:` trigger's `branches:` list | compliant |
+| `okf-conformance` job runs `okf_validate.py` (relationship sync) and lossless round-trip over all three bundle sets, plus five bundle-independent structural/fixture checks added since 2026-06-18: JSON-LD context fidelity, vocab-term coverage (`check_vocab_term_coverage.py`, #231), relationship-type vocab coverage (`check_relationship_type_vocab_coverage.py`, #233), the `relationship_types` config registry test (#232, fixture-based, not the three bundle sets), and the temporal/properties pytest suite (#235, fixture-based) | `.github/workflows/validate.yml` | job `okf-conformance`, steps "OKF conformance test (relationship sync + round-trip)" through "Temporal consistency + properties construct regression suite" | compliant |
+| `schema-validation` job emits projections and validates against `schema/mif.schema.json` via ajv | `.github/workflows/validate.yml` | job `schema-validation`, step "Validate every projection against schema/mif.schema.json" | compliant |
+| `docs-build` job builds the Astro site | `.github/workflows/validate.yml` | job `docs-build`, step "Build Astro site" | compliant |
+| `validate-ontologies` job validates ontology files and namespace consistency | `.github/workflows/validate.yml` | job `validate-ontologies`, step "Test subtype_of integrity" | **discrepancy** — see note |
+| Validator enforces type/reserved-filename/relationship-sync/round-trip | `scripts/okf_validate.py` | module docstring | compliant |
+| Schema `$id` resolves to the published `mif-spec.dev` URI | `schema/mif.schema.json` | `$id` field | compliant |
+| Conformance test documented (validator + round-trip, exit 0 = conform) | `docs/okf-conformance.md` | "3. The conformance test" heading | compliant |
+
+**Note on the `validate-ontologies` discrepancy:** as of ADR-018/ADR-019
+(2026-07-01), ontology-content and namespace-consistency validation for this
+repo's own content moved entirely to the `modeled-information-format/ontologies`
+repo — this job's own inline comment says so explicitly ("this repo has
+nothing local for those checks to run against"). The job now runs only
+`scripts/test_subtype_of.py` against hardcoded fixtures: a real regression
+test for the `subtype_of` resolver, but it does not validate ontology files
+or namespace consistency in this repo the way this ADR's own Decision section
+(item 4) still describes. That narrowing is already ratified by ADR-018/019;
+this ADR's Decision text just hasn't been updated to reflect it. Filed as
+#240 rather than amended here, since a formal `## Amendment` (per this repo's
+`adr/README.md` Status-Values convention) is a real editorial decision about
+scope and wording, not a mechanical fix.
+
+**Summary:** Re-audit triggered by #238: the 2026-06-18 entry's raw line-number
+citations had drifted for 4 of its 5 `validate.yml` rows even before this PR
+(#227/#231/#232/#234 each added `okf-conformance` steps without updating this
+ADR), and PR #239's two new steps (#233, #235) widened that drift further.
+Re-verifying against current file state also surfaced the `validate-ontologies`
+discrepancy noted above — not something #238 set out to find, but exactly the
+kind of drift a real re-audit exists to catch. Re-verified every finding
+against the current file state; `okf-conformance` has grown from 2 gating
+checks at the 2026-06-18 audit to 7. No CI-gating regressions found; the one
+discrepancy is a documentation gap (Decision text not updated for an already-
+ratified narrowing), not a test that stopped running.
+
+**Action Required:** #240 (amend ADR-012's Decision section for the
+`validate-ontologies` narrowing already ratified by ADR-018/019).
