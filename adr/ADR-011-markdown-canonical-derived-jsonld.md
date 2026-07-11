@@ -259,10 +259,11 @@ Mitigations:
 Findings cite durable anchors (heading / callout text / function name), not
 raw line numbers — line numbers in `SPECIFICATION.md` and
 `scripts/mif_convert.py` shift as unrelated content is added, which had
-already made every citation in this section's original entry stale (one by
-48 lines, two by landing inside unrelated functions entirely) by the
-2026-07-11 audit below. `grep -n` for the quoted anchor text to find its
-current line.
+already made every citation in this section's original entry stale by the
+2026-07-11 audit below, several of them landing inside unrelated code
+entirely rather than merely drifting a few lines (see that entry's
+Summary for the specific citations and where each now resolves).
+`grep -n` for the quoted anchor text to find its current line.
 
 ### 2026-06-18
 
@@ -323,14 +324,18 @@ domain amendment matches the live `CONTEXT_URL` in `scripts/mif_convert.py`.
 
 What did drift, severely, is the raw line-number citations themselves —
 exactly the problem this retrofit exists to fix. The `SPECIFICATION.md` §6
-callout moved from L624-L629 to L672-L677 (48 lines).
-`scripts/mif_convert.py` drifted even further: the old `L201-L213` citation
-for the round-trip assertion landed inside `jsonld_to_md()`'s
-passthrough-key list — unrelated code — and the old `L294-L297` citation
-for the CLI subparser registrations landed inside `cmd_to_markdown()`'s
-body, also unrelated. Both are concrete demonstrations of exactly why raw
-line-number citations are dangerous: they still resolved to *something*,
-but that something was no longer what the finding was about. This ADR's own
+callout moved from L624-L629 to L672-L677 (48 lines); the Abstract's
+Markdown-canonical bullet moved from L38-L39 to L39-40 (1 line, cosmetically
+fine but still a raw citation). `scripts/mif_convert.py` drifted far more
+severely: the old `L267-L279` citation for the `emit-jsonld` derive now
+lands inside `cmd_roundtrip()`'s reporting logic, the old `L201-L213`
+citation for the round-trip assertion now lands inside `jsonld_to_md()`'s
+passthrough-key list, and the old `L294-L297` citation for the CLI
+subparser registrations now lands inside `cmd_to_markdown()`'s body — all
+three unrelated code, none of it what the original finding cited. These are
+concrete demonstrations of exactly why raw line-number citations are
+dangerous: they still resolved to *something*, but that something was no
+longer what the finding was about. This ADR's own
 `## More Information` `**Source:**` line carried the identical stale
 `L38-L39`/`L624-L629` citations outside the Audit table itself — corrected
 in this same PR alongside the table, since it's the same defect in the same
