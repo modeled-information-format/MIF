@@ -358,10 +358,20 @@ flowchart LR
    equivalence explicitly, but SHOULD set `provenance.wasDerivedFrom` to the
    source Bundle's identifier when one exists, for traceability.
 4. **Corpus-level `provenance` reuses §12.3's PROV shape exactly.** Keys stay
-   plain (no `prov:` prefix) except `@type`; `wasDerivedFrom` (and any other
-   PROV relation) takes object form `{"@id": "..."}`, never a bare string
-   with a prefixed key. This is the identical rule §12.3 already states for
-   memory-unit-level provenance, applied unchanged at the corpus level.
+   plain (no `prov:` prefix) except `@type`. `wasDerivedFrom` (and any other
+   PROV relation) is `schema/mif.schema.json`'s `$defs.ProvNode` — a plain
+   IRI string, or an open node object keyed by `@id` or `id`, or an array of
+   either — referenced directly via `$ref` in `schema/container.schema.json`,
+   not a narrower hand-rolled reimplementation. (An earlier draft of this
+   schema required an object with exactly `@id`, `additionalProperties:
+   false`; that was a bug, not the intent — it rejected shapes §12.3's own
+   `ProvNode` explicitly permits and contradicted this very Decision point's
+   "exactly"/"unchanged" language. Fixed before this ADR's implementation
+   commit landed.) This is the identical, full-latitude rule §12.3 already
+   states for memory-unit-level provenance, applied unchanged at the corpus
+   level — never a prefixed key (`prov:wasDerivedFrom` as a JSON key is
+   wrong either way), but the *value* shape is exactly as permissive as the
+   per-unit rule already is.
 5. **The corpus version field is named `containerProfileVersion`, not
    `mif_version`.** `mif_version` already means something different; an
    implementation's declared spec-conformance version in `.mif/config.yaml`
@@ -484,6 +494,24 @@ flowchart LR
    directory, corpus file); mitigated by the derivation relationship being
    explicit and mechanical (per-record bidirectional JSON-LD/Markdown,
    already-existing tooling), but real nonetheless.
+3. **The `extensions`-losslessness claim (Decision point 8) is verified
+   manually, not CI-gated.** `pyld` is not a dependency anywhere in this
+   repo (`requirements-ci.txt` pins only `pyyaml`), and no script or CI job
+   performs an actual JSON-LD `expand`/`compact` against
+   `schema/container-context.jsonld`. The verification in this Audit's
+   "implementation" entry is real (it was run, by hand, against the actual
+   files being committed) but is not a repeatable regression check —
+   unlike the analogous markdown↔JSON-LD round-trip claim for concept
+   files, which *is* CI-gated (`scripts/mif_convert.py roundtrip`, wired
+   into `okf-conformance`). A future edit to `container-context.jsonld`
+   that reintroduces `@container: @index` for `extensions` (e.g. someone
+   "simplifying" it to match the per-unit pattern) would silently
+   reintroduce the exact content-loss defect this ADR exists to prevent,
+   and nothing in this repo's CI would catch it. Adding `pyld` as a
+   properly hash-pinned CI dependency and a real expand/compact regression
+   check is left as explicit follow-on work, not done here, rather than
+   adding an unpinned or under-verified new dependency under time
+   pressure.
 
 ### Neutral
 
@@ -491,6 +519,28 @@ flowchart LR
    document records (Decision point 2) means air-gapped/offline transport
    scenarios needing actual document bytes inline are not served by this
    ADR; noted as explicitly out of scope rather than silently unaddressed.
+2. **Two pre-existing, out-of-scope defects surfaced during implementation
+   review, in code this ADR does not touch:**
+   - `schema/context.jsonld:297-300` — the **per-unit** `extensions` term
+     (used today by every memory record, e.g. `subcog:domain`) maps
+     `@container: @index`, the exact mapping confirmed (via `pyld`) to
+     silently drop its own value content on JSON-LD expand — the identical
+     defect Decision point 8 fixes for the new corpus-level `extensions`
+     field, still present at the per-unit level this ADR does not modify.
+   - `schema/context.jsonld:128` — the `documentType` term maps
+     `@type: @vocab` with no top-level `@vocab` fallback anywhere in the
+     context, so values like `"pdf"` (used by this ADR's own worked
+     example, `examples/container/ncp-requirements.corpus.json`) expand to
+     a document-relative IRI rather than a stable `mif:`-namespaced one —
+     first exercised end-to-end by this ADR's worked example, but the root
+     cause is pre-existing and unrelated to the Container Profile.
+
+   Neither defect was introduced by this change, and fixing either means
+   editing the core `schema/context.jsonld` every memory unit in
+   production already depends on — real scope beyond this ADR. Per this
+   workspace's own "fix it now or file it" convention, both should become
+   tracked GitHub issues before or when this branch is opened as a PR;
+   that has not happened yet because this work has not been pushed.
 
 ## Decision Outcome
 
@@ -561,10 +611,10 @@ against the actual files/lines.
 
 | Finding | Files | Lines | Assessment |
 |---------|-------|-------|------------|
-| `MemoryCorpus` envelope schema present, `additionalProperties: false`, `kind`-dispatched `if`/`then` on `conceptType`/`@type` | `schema/container.schema.json` | 37 (`@type` const), 133-217 (`Record` `$defs`) | compliant |
+| `MemoryCorpus` envelope schema present, `additionalProperties: false`, `kind`-dispatched `if`/`then` on `conceptType`/`@type` | `schema/container.schema.json` | 37 (`@type` const), 108-170 (`Record` `$defs`) | compliant |
 | Envelope JSON-LD context registered, `extensions` mapped `@type: @json` (not the per-unit `@container: @index` pattern — confirmed via `pyld` that the latter drops content on expand) | `schema/container-context.jsonld` | 49 | compliant |
 | `DocumentReference` wrapper schema for `kind: "document"` validation (`ajv-cli` cannot take a `#/$defs/...` fragment on `-s` directly) | `schema/document-reference.schema.json` | 1-6 | compliant |
-| Container-aware CI validation entry point added, no path filter on `pull_request` | `.github/workflows/validate.yml` | 97-119 | compliant |
+| Container-aware CI validation entry point added, no path filter on `pull_request` | `.github/workflows/validate.yml` | 97-124 | compliant |
 | Dedicated validator: envelope + per-record `kind`-dispatched `ajv` validation, `extensions` deliberately unvalidated | `scripts/validate_container.py` | full file | compliant |
 | Worked example: 2 memory records (fact + event, `namespace`-distinguished, no `memoryCategory`), 1 `DocumentReference` document record, `extensions."mnemos:compressionManifest"` | `examples/container/ncp-requirements.corpus.json` | full file (71 lines) | compliant |
 | Reference documentation | `docs/CONTAINER-PROFILE.md` | full file (135 lines) | compliant |
@@ -572,7 +622,8 @@ against the actual files/lines.
 
 **Summary:** All five Decision Outcome implementation items are complete and
 locally verified: `python scripts/validate_container.py examples/container`
-passes; both new schemas compile clean (`ajv compile --strict=false`); the
+passes; both new schemas compile clean
+(`ajv compile -s <schema> --spec=draft2020 --strict=false`); the
 existing `okf_validate.py`, `mif_convert.py roundtrip`, and the
 `schema-validation` job's `ajv` loop over the pre-existing `.md` example
 trees are all unaffected (still exactly 13 concepts checked, unchanged); the

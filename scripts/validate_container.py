@@ -65,14 +65,17 @@ def _ajv_validate(schema: Path, instance: Path, extra_refs: tuple[Path, ...] = (
 def validate_corpus(path: Path) -> list[str]:
     """Validate one *.corpus.json file. Returns a list of error strings (empty if valid)."""
     errors: list[str] = []
-    corpus = json.loads(path.read_text())
+    try:
+        corpus = json.loads(path.read_text())
+    except json.JSONDecodeError as e:
+        return [f"{path}: invalid JSON: {e}"]
 
     with tempfile.TemporaryDirectory() as tmp:
         tmp_path = Path(tmp)
 
         envelope_file = tmp_path / "envelope.json"
         envelope_file.write_text(json.dumps(corpus))
-        for line in _ajv_validate(CONTAINER_SCHEMA, envelope_file):
+        for line in _ajv_validate(CONTAINER_SCHEMA, envelope_file, extra_refs=(MIF_SCHEMA,)):
             errors.append(f"{path}: envelope invalid against container.schema.json: {line}")
 
         for i, record in enumerate(corpus.get("records", [])):
@@ -91,7 +94,9 @@ def validate_corpus(path: Path) -> list[str]:
 
 
 def main(argv: list[str]) -> int:
-    dirs = argv[1:] or ["examples/container"]
+    # Anchored to REPO_ROOT, not the process CWD, so the documented no-arg
+    # invocation behaves the same regardless of where it is run from.
+    dirs = argv[1:] or [str(REPO_ROOT / "examples" / "container")]
     all_errors: list[str] = []
     checked = 0
     for dir_arg in dirs:
@@ -103,6 +108,14 @@ def main(argv: list[str]) -> int:
         for e in all_errors:
             print(e, file=sys.stderr)
         print(f"Container validation: FAIL ({len(all_errors)} error(s) across {checked} file(s))")
+        return 1
+
+    if checked == 0:
+        # Fail-closed: a gate that finds nothing and reports PASS is the
+        # exact silent-pass failure mode this script exists to prevent
+        # (ADR-021 Decision point 9) -- a typo'd path or an emptied
+        # examples/container/ must not report green.
+        print("Container validation: FAIL (0 file(s) found -- expected at least one *.corpus.json)", file=sys.stderr)
         return 1
 
     print(f"Container validation: PASS ({checked} file(s) checked)")

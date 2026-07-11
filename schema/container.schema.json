@@ -56,16 +56,18 @@
           "const": "prov:Entity"
         },
         "wasDerivedFrom": {
-          "type": "object",
-          "required": [
-            "@id"
-          ],
-          "properties": {
-            "@id": {
-              "type": "string"
+          "description": "Reuses mif.schema.json's ProvNode exactly (ADR-021 Decision point 4: corpus-level provenance follows §12.3's PROV shape unchanged, not a narrower reimplementation) -- a plain IRI string, or an open node object keyed by @id or id, or an array of either.",
+          "oneOf": [
+            {
+              "$ref": "https://mif-spec.dev/schema/mif.schema.json#/$defs/ProvNode"
+            },
+            {
+              "type": "array",
+              "items": {
+                "$ref": "https://mif-spec.dev/schema/mif.schema.json#/$defs/ProvNode"
+              }
             }
-          },
-          "additionalProperties": false
+          ]
         }
       },
       "additionalProperties": true

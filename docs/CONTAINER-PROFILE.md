@@ -66,7 +66,7 @@ applies to every MIF memory outside a container — there is no
 | Field | Meaning |
 | --- | --- |
 | `containerProfileVersion` | The Container Profile schema's own version — independent of `mif_version` (which already means an implementation's declared spec-conformance version in `.mif/config.yaml`, §13.4). |
-| `provenance` | Corpus-level provenance, reusing SPECIFICATION.md §12.3's PROV shape exactly: plain keys except `@type`; `wasDerivedFrom` (and any other PROV relation) takes object form `{"@id": "..."}`. |
+| `provenance` | Corpus-level provenance, reusing SPECIFICATION.md §12.3's PROV shape exactly: plain keys except `@type`; `wasDerivedFrom` (and any other PROV relation) is `schema/mif.schema.json`'s `$defs.ProvNode` — a plain IRI string, an open node object keyed by `@id` or `id`, or an array of either — the same full latitude the per-unit rule already has. |
 | `editChain` | Corpus-transport edit/transfer lineage only — **not** a substitute for a memory record's own `Supersedes`/`SupersededBy` relationship (§8.2). If a record's own relationship disagrees with an `editChain` entry about the same pair, the per-record relationship wins. |
 | `extensions` | See below. |
 
