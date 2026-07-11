@@ -178,6 +178,18 @@ RELATIONSHIP_TYPES = {
 }
 
 
+def _compacted_relationship_field(compacted: dict, field: str) -> object:
+    """compacted["relationships"][0].get(field), tolerant of a context
+    regression that drops or reshapes `relationships` during compaction
+    (an empty/missing list, or a non-dict first element) -- returns a
+    descriptive placeholder instead of raising, so callers can report a
+    clear test failure rather than crashing the whole run."""
+    try:
+        return compacted["relationships"][0].get(field)
+    except (IndexError, KeyError, TypeError) as e:
+        return f"<malformed compaction reaching relationships[0].{field}: {e!r}>"
+
+
 def check_relationship_type_resolves_to_documented_ontology_iri() -> list[str]:
     errors = []
     for kebab, pascal in RELATIONSHIP_TYPES.items():
@@ -199,8 +211,9 @@ def check_relationship_type_resolves_to_documented_ontology_iri() -> list[str]:
         elif iri_a != expected:
             errors.append(f"relationships[].type={kebab!r} resolved to {iri_a!r}, want documented ontology IRI {expected!r}")
         compacted = _compact(expanded_a, CONTEXT)
-        if compacted["relationships"][0].get("type") != kebab:
-            errors.append(f"relationships[].type={kebab!r} did not round-trip: got {compacted['relationships'][0].get('type')!r}")
+        round_tripped = _compacted_relationship_field(compacted, "type")
+        if round_tripped != kebab:
+            errors.append(f"relationships[].type={kebab!r} did not round-trip: got {round_tripped!r}")
     return errors
 
 
@@ -211,8 +224,9 @@ def check_relationship_type_custom_namespace_still_works() -> list[str]:
         "relationships": [{"type": "subcog:custom-rel", "target": "/foo.md"}],
     }
     compacted = _compact(jsonld.expand(doc), CONTEXT)
-    if compacted["relationships"][0].get("type") != "subcog:custom-rel":
-        errors.append(f"custom-namespaced relationships[].type regressed: got {compacted['relationships'][0].get('type')!r}")
+    round_tripped = _compacted_relationship_field(compacted, "type")
+    if round_tripped != "subcog:custom-rel":
+        errors.append(f"custom-namespaced relationships[].type regressed: got {round_tripped!r}")
     return errors
 
 
