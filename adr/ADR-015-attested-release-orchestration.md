@@ -1,6 +1,6 @@
 ---
 title: "Attested Release and Security-Gate Orchestration"
-description: "Every published MIF release attaches SLSA build provenance to two reproducible artifacts (source tarball and schema bundle) keyless via Sigstore OIDC; the source tarball additionally carries a CycloneDX SBOM; publication is fail-closed on in-run re-verification; the full quality-gate suite is wired to the org's central reusable workflows, SHA-pinned at ff8adc6b1267c272beef916af851d9506160354f."
+description: "Every published MIF release attaches SLSA build provenance to two reproducible artifacts (source tarball and schema bundle) keyless via Sigstore OIDC; the source tarball additionally carries a CycloneDX SBOM; publication is fail-closed on in-run re-verification; the full quality-gate suite is wired to the org's central reusable workflows, each reference independently SHA-pinned."
 type: adr
 category: process
 tags:
@@ -12,7 +12,7 @@ tags:
   - security
 status: accepted
 created: 2026-06-27
-updated: 2026-06-27
+updated: 2026-07-11
 author: MIF Maintainers
 project: MIF
 technologies:
@@ -36,7 +36,7 @@ related:
 
 ## Status
 
-Accepted
+Accepted (amended 2026-07-11 — see Amendment section)
 
 ## Context
 
@@ -193,11 +193,13 @@ DAST runs on schedule and `workflow_dispatch` only.
 ## Decision
 
 MIF adopts a purpose-built attested release workflow (`release.yml`) and wires
-the full quality-gate suite to the org's central reusable workflows, SHA-pinned
-at `ff8adc6b1267c272beef916af851d9506160354f`.
+the full quality-gate suite to the org's central reusable workflows, each
+reference independently pinned to a full 40-character commit SHA (see the
+2026-07-11 Amendment for why this ADR no longer names a single shared value).
 
-**Release workflow (`release.yml`):** Triggered on `release: published` (upload
-path) and `workflow_dispatch` (dry-run). Builds two artifacts:
+**Release workflow (`release.yml`):** Triggered on a `v*` tag `push` (upload
+path, draft-first — see Amendment) and `workflow_dispatch` (dry-run). Builds
+two artifacts:
 
 1. `mif-<version>.tar.gz` (reproducible source tarball via `git archive |
    gzip -n`, deterministic from the commit tree).
@@ -206,23 +208,30 @@ path) and `workflow_dispatch` (dry-run). Builds two artifacts:
    closed if the mirror is absent for the tagged version, per ADR-016).
 
 Each artifact is attested with SLSA build provenance
-(`actions/attest-build-provenance@a2bbfa25375fe432b6a289bc6b6cd05ecd0c4c32`,
-v4.1.0) and the source tarball additionally receives a CycloneDX SBOM
+(`actions/attest-build-provenance@0f67c3f4856b2e3261c31976d6725780e5e4c373`,
+v4.1.1) and the source tarball additionally receives a CycloneDX SBOM
 (`anchore/sbom-action@e22c389904149dbc22b58101806040fa8d37a610`, v0.24.0)
 attested via `actions/attest-sbom@c604332985a26aa8cf1bdc465b92731239ec6b9e`
 (v4.1.0). All signing is keyless via the run's OIDC id-token (Sigstore). The
 signer identity (SAN) is the `release.yml` workflow itself:
 `modeled-information-format/MIF/.github/workflows/release.yml`.
 
-Publication is fail-closed: the upload step (`gh release upload`) runs only
-after a dedicated verify step re-checks each artifact's SLSA provenance and
-the SBOM attestation in-run, pinning `--signer-workflow` to `release.yml`. A
-failure in the verify step fails the job, so the upload step never executes
-unverified. On `workflow_dispatch`, the verify step runs but the upload step
-is skipped (guarded by `if: github.event_name == 'release'`).
+Publication is fail-closed and, since the 2026-07-11 Amendment, draft-first:
+a `changelog-check` job gates the release job on the tagged version having a
+real CHANGELOG section, then the release job creates the GitHub release as a
+**draft**, uploads the attested artifacts to that draft only after a
+dedicated verify step re-checks each artifact's SLSA provenance and the SBOM
+attestation in-run (pinning `--signer-workflow` to `release.yml`), and only
+then flips the release to published. A failure in the verify step fails the
+job before any public release exists. On `workflow_dispatch`, the verify
+step runs but the draft-create/upload/publish steps are skipped (guarded by
+`if: github.event_name == 'push'`).
 
-**Quality-gate suite:** Four caller workflows wire to the org central reusable
-workflows at `ff8adc6b1267c272beef916af851d9506160354f`:
+**Quality-gate suite:** Four caller workflows wire to the org's central
+reusable workflows, each reference independently pinned to a full
+40-character commit SHA and updated via routine bump PRs (see Amendment —
+these are no longer, and were never architecturally meant to be, one shared
+frozen value):
 
 - `ci.yml` (push and PR to `main` and `develop/v*`): actionlint, pin-check,
   SCA via OSV Scanner, Trivy (IaC and license), Checkov (github\_actions
@@ -312,8 +321,13 @@ From `sast.yml`: `codeql / analyze`, `semgrep / sast-code`.
 
 From `scorecard.yml`: `scorecard / analysis`.
 
-**Org reusables SHA pin:** `ff8adc6b1267c272beef916af851d9506160354f`
-(all four caller workflows pin this SHA).
+**Org reusables SHA pin policy:** every reusable-workflow reference is
+independently pinned to a full 40-character commit SHA, each updated via its
+own routine bump PR as the org's central reusables release new versions —
+not one shared value across the caller workflows (see the 2026-07-11
+Amendment; the four caller workflows plus `release.yml`'s `changelog-check`
+job currently span several distinct pinned SHAs across their combined
+reusable-workflow references).
 
 **Workflow files introduced:** `.github/workflows/release.yml`,
 `.github/workflows/ci.yml`, `.github/workflows/sast.yml`,
@@ -339,34 +353,138 @@ From `scorecard.yml`: `scorecard / analysis`.
 - **Source:** `.github/workflows/release.yml`, `.github/workflows/ci.yml`, `.github/workflows/sast.yml`, `.github/workflows/scorecard.yml`, `.github/workflows/dast.yml`.
 - **Related ADRs:** ADR-007, ADR-012, ADR-016
 
+## Amendment
+
+### 2026-07-11 — draft-first publication flow + reusable-pin policy correction
+
+**Publication mechanism (PR #212, merged 2026-07-05):** the original Decision
+described `release.yml` triggering on `release: published` and uploading
+attested artifacts directly to that already-published release via
+`gh release upload`. This repo subsequently enabled **immutable releases**,
+under which a published release's assets cannot be appended to after the
+fact. The workflow was rebuilt to trigger on a `v*` tag `push` instead, gate
+the release job on a new `changelog-check` job (fails closed if the tagged
+version has no real CHANGELOG section), and perform draft-create →
+verified-upload → publish in a single step ("Create draft release, upload
+attested artifacts, publish", guarded by `if: github.event_name == 'push'`)
+rather than uploading to an already-public release.
+
+**Rationale for amendment:** the fail-closed invariant this ADR actually
+decided — publication never completes ahead of in-run re-verification — is
+unaffected and, if anything, strengthened: a failed run under the new flow
+leaves no public release at all, where the old model could theoretically
+leave a published-but-unattested release momentarily visible. The change was
+forced by the immutable-releases setting, not a reconsideration of this
+ADR's design; the Decision text above is updated to describe the workflow as
+it now runs.
+
+**Reusable-workflow SHA-pin language (same date, discovered during a routine
+audit re-verification, not a design change):** the original Decision,
+frontmatter `description`, and Implementation section all asserted that
+"all four caller workflows" shared one pinned SHA
+(`ff8adc6b1267c272beef916af851d9506160354f`) for the org's central reusable
+workflows. That was accurate at the 2026-06-27 audit. Since then, eight
+independent, ordinary bump PRs (#175, #176, #177, #188, #190, #197, #217,
+#221 — two of them, #190 and #197, are each the final hop of a short chain
+of superseding bumps to the same reference: shellcheck via #179→#189→#190,
+scorecard via #172→#197) moved each reusable-workflow reference to its own
+SHA independently — the architecturally correct behavior; this ADR's own
+supply-chain concern was always that *every* reference be pinned to a full
+SHA, never that they share one value. The prose above is corrected to
+describe that policy rather than naming a single value doomed to go stale
+on the very next routine bump.
+
 ## Audit
 
+Findings cite durable anchors (job id / step `name:` / trigger key / field
+name), not raw line numbers — line numbers across the five
+`.github/workflows/*.yml` files this ADR spans (`release.yml`, `ci.yml`,
+`sast.yml`, `scorecard.yml`, `dast.yml`) shift on every step added, removed,
+or reordered, and `release.yml` itself was restructured twice since the
+2026-06-27 audit (the SLSA action's v4.1.1 bump; the draft-first
+publication rewrite, see Amendment above). `grep -n` for the quoted anchor
+text (a job id or a step `name:` string) to find its current line in the
+relevant workflow file.
+
 ### 2026-06-27
+
+**Audited revision:** `53a0d8924ef292ce286b87fd07edc830f6776700`
 
 **Status:** Compliant
 
 **Findings:**
 
-| Finding | Files | Lines | Assessment |
-|---------|-------|-------|------------|
-| `release.yml` triggers on `release: published` (upload) and `workflow_dispatch` (dry-run); upload guarded by `if: github.event_name == 'release'` | `.github/workflows/release.yml` | L28-L37, L155-L165 | compliant |
-| Source tarball built via `git archive` piped to `gzip -n` (reproducible); schema bundle assembled from `public/schema/${VERSION}/` with fail-closed check | `.github/workflows/release.yml` | L75-L109 | compliant |
-| SLSA provenance attested via `actions/attest-build-provenance@a2bbfa25375fe432b6a289bc6b6cd05ecd0c4c32` over both artifacts | `.github/workflows/release.yml` | L119-L125 | compliant |
-| CycloneDX SBOM generated by `anchore/sbom-action@e22c389904149dbc22b58101806040fa8d37a610` and attested via `actions/attest-sbom@c604332985a26aa8cf1bdc465b92731239ec6b9e` | `.github/workflows/release.yml` | L111-L130 | compliant |
-| In-run verify step re-checks SLSA provenance (`--predicate-type https://slsa.dev/provenance/v1`) for both artifacts and SBOM (`--predicate-type https://cyclonedx.org/bom`) for the source tarball only, before upload | `.github/workflows/release.yml` | L132-L153 | compliant |
-| Signer identity pinned to `modeled-information-format/MIF/.github/workflows/release.yml` via `--signer-workflow` | `.github/workflows/release.yml` | L141 | compliant |
-| All four caller workflows pin the org reusables at `ff8adc6b1267c272beef916af851d9506160354f` | `.github/workflows/ci.yml`, `sast.yml`, `scorecard.yml`, `dast.yml` | all `uses:` lines | compliant |
-| DAST (`dast.yml`) is opt-in: `workflow_dispatch` and weekly schedule only; no push/PR trigger | `.github/workflows/dast.yml` | L7-L17 | compliant |
-| `ci.yml` gates: actionlint, pin-check, SCA (OSV), Trivy (IaC), Checkov (github\_actions), secrets, ShellCheck | `.github/workflows/ci.yml` | L18-L82 | compliant |
-| `sast.yml` gates: CodeQL (python,javascript-typescript), Semgrep; runs on push, PR, weekly schedule, dispatch | `.github/workflows/sast.yml` | L19-L40 | compliant |
-| `scorecard.yml`: Scorecard with `publish-results: true`; runs on push to main, branch-protection-rule, weekly schedule, dispatch | `.github/workflows/scorecard.yml` | L18-L28 | compliant |
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
+| `release.yml` triggers on `release: published` (upload) and `workflow_dispatch` (dry-run); upload guarded by `if: github.event_name == 'release'` | `.github/workflows/release.yml` | the `on:` trigger block (`release: types: [published]` + `workflow_dispatch`); step "Upload attested artifacts to the release" guarded by `if: github.event_name == 'release'` | compliant (at this revision — see Amendment for the 2026-07-05 rebuild) |
+| Source tarball built via `git archive` piped to `gzip -n` (reproducible); schema bundle assembled from `public/schema/${VERSION}/` with fail-closed check | `.github/workflows/release.yml` | job `attest-release`, steps "Build reproducible source tarball" and "Build schema bundle (the consumer-facing versioned mirror)" | compliant |
+| SLSA provenance attested via `actions/attest-build-provenance@a2bbfa25375fe432b6a289bc6b6cd05ecd0c4c32` over both artifacts | `.github/workflows/release.yml` | job `attest-release`, step "Attest build provenance (SLSA) for both artifacts" | compliant (at this revision — action bumped to v4.1.1 since, see Amendment) |
+| CycloneDX SBOM generated by `anchore/sbom-action@e22c389904149dbc22b58101806040fa8d37a610` and attested via `actions/attest-sbom@c604332985a26aa8cf1bdc465b92731239ec6b9e` | `.github/workflows/release.yml` | job `attest-release`, steps "Generate CycloneDX SBOM (source tree)" and "Attest SBOM against the source tarball" | compliant |
+| In-run verify step re-checks SLSA provenance (`--predicate-type https://slsa.dev/provenance/v1`) for both artifacts and SBOM (`--predicate-type https://cyclonedx.org/bom`) for the source tarball only, before upload | `.github/workflows/release.yml` | job `attest-release`, step "Verify attestations (fail-closed, before publish)" | compliant |
+| Signer identity pinned to `modeled-information-format/MIF/.github/workflows/release.yml` via `--signer-workflow` | `.github/workflows/release.yml` | job `attest-release`, step "Verify attestations (fail-closed, before publish)", the `SIGNER=` assignment | compliant |
+| All four caller workflows pin the org reusables at `ff8adc6b1267c272beef916af851d9506160354f` | `.github/workflows/ci.yml`, `sast.yml`, `scorecard.yml`, `dast.yml` | every job's `uses: modeled-information-format/.github/...` reusable-workflow reference | compliant (at this revision — since diverged into multiple independent pins via routine bumps, see Amendment) |
+| DAST (`dast.yml`) is opt-in: `workflow_dispatch` and weekly schedule only; no push/PR trigger | `.github/workflows/dast.yml` | the `on:` trigger block | compliant |
+| `ci.yml` gates: actionlint, pin-check, SCA (OSV), Trivy (IaC), Checkov (github_actions), secrets, ShellCheck | `.github/workflows/ci.yml` | job ids `actionlint`, `pin-check`, `sca`, `trivy`, `checkov`, `secrets`, `shellcheck` | compliant |
+| `sast.yml` gates: CodeQL (python,javascript-typescript), Semgrep; runs on push, PR, weekly schedule, dispatch | `.github/workflows/sast.yml` | job ids `codeql`, `semgrep`; the `on:` trigger block | compliant |
+| `scorecard.yml`: Scorecard with `publish-results: true`; runs on push to main, branch-protection-rule, weekly schedule, dispatch | `.github/workflows/scorecard.yml` | job `scorecard`, the `on:` trigger block, `with: publish-results: true` | compliant |
 
 **Summary:** The attested release workflow produces two reproducible artifacts,
 attests each with SLSA build provenance keyless via Sigstore (source tarball
 additionally carries a CycloneDX SBOM), and gates publication on in-run
-re-verification. The quality-gate
-suite covers SAST, SCA, secrets, IaC/license, Checkov, ShellCheck, Scorecard,
-and DAST via the org's SHA-pinned central reusable workflows. All workflow
-`uses:` references are pinned to full 40-character SHAs.
+re-verification. The quality-gate suite covers SAST, SCA, secrets,
+IaC/license, Checkov, ShellCheck, Scorecard, and DAST via the org's central
+reusable workflows. All workflow `uses:` references are pinned to full
+40-character SHAs.
+
+**Action Required:** None.
+
+### 2026-07-11
+
+**Audited revision:** `4876ac6fe675f797509e7fedf6736253b8d95dea`
+
+**Status:** Compliant. Two of this ADR's own prose claims had drifted from
+reality (release publication mechanism; single-shared-SHA claim) — both
+corrected in this same PR's Amendment section and Decision-text updates
+above, not deferred. Nothing found here was ever a CI defect.
+
+**Findings:**
+
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
+| `release.yml` trigger and publication mechanics | `.github/workflows/release.yml` | the `on:` trigger block (`push: tags: ["v*"]` + `workflow_dispatch`); step "Create draft release, upload attested artifacts, publish" guarded by `if: github.event_name == 'push'`; job `changelog-check` gating `attest-release` via `needs:` | compliant — Decision text updated to match (Amendment) |
+| Source tarball / schema bundle build steps | `.github/workflows/release.yml` | job `attest-release`, steps "Verify schema mirror is present and byte-identical (fail-closed)", "Build reproducible source tarball", "Build schema bundle (the consumer-facing versioned mirror)" | compliant — a dedicated upstream fail-closed step was added; same guarantee, stronger placement |
+| SLSA provenance attestation | `.github/workflows/release.yml` | job `attest-release`, step "Attest build provenance (SLSA) for both artifacts" | compliant — action bumped to `0f67c3f4856b2e3261c31976d6725780e5e4c373` (v4.1.1); Decision-text SHA updated to match |
+| CycloneDX SBOM generation/attestation | `.github/workflows/release.yml` | job `attest-release`, steps "Generate CycloneDX SBOM (source tree)", "Attest SBOM against the source tarball" | compliant, unchanged |
+| In-run fail-closed verify step | `.github/workflows/release.yml` | job `attest-release`, step "Verify attestations (fail-closed, before publish)" | compliant, unchanged |
+| Signer identity pin | `.github/workflows/release.yml` | job `attest-release`, step "Verify attestations (fail-closed, before publish)", the `SIGNER=` assignment | compliant, unchanged |
+| Org-reusable SHA pin policy across caller workflows | `.github/workflows/ci.yml`, `sast.yml`, `scorecard.yml`, `dast.yml`, `release.yml` | every job's `uses: modeled-information-format/.github/...` reusable-workflow reference | compliant — every reference remains individually pinned to a full 40-character SHA (8 distinct SHAs currently pin the 12 reusable-workflow references across these five files, via 8 independent routine bump PRs plus #212's new `changelog-check` reference); Decision/Implementation text corrected to describe the policy rather than a single shared value (Amendment) |
+| DAST opt-in trigger | `.github/workflows/dast.yml` | the `on:` trigger block | compliant, unchanged |
+| `ci.yml` gates (job set) | `.github/workflows/ci.yml` | job ids `actionlint`, `pin-check`, `sca`, `trivy`, `checkov`, `secrets`, `shellcheck` | compliant, unchanged |
+| `sast.yml` gates (job set) | `.github/workflows/sast.yml` | job ids `codeql`, `semgrep`; the `on:` trigger block | compliant, unchanged |
+| `scorecard.yml` gate | `.github/workflows/scorecard.yml` | job `scorecard`, the `on:` trigger block, `with: publish-results: true` | compliant, unchanged |
+
+**Summary:** Re-verified every 2026-06-27 finding against the current
+revision. The core invariants this ADR decided — keyless SLSA + SBOM
+attestation of both artifacts, fail-closed in-run re-verification gating
+publication, and full quality-gate coverage via org reusables — all still
+hold and are, if anything, executed more robustly than at the original
+audit (draft-first publication closes a gap the original design didn't
+anticipate, forced by this repo's later adoption of immutable releases).
+Two of this ADR's own prose claims had drifted: the release-trigger/
+publication-mechanism description (PR #212, 2026-07-05, draft-first flow)
+and the "one shared reusable-workflow SHA pin" claim (eight independent
+bump PRs — #175, #176, #177, #188, #190, #197, #217, #221, two of them the
+final hop of a short superseding-bump chain — since diverged it into 8
+distinct SHAs across the 12 reusable-workflow references spanning all five
+workflow files, counting #212's new `changelog-check` reference). Both
+corrected in this same PR via a formal `## Amendment` section rather than
+silently rewritten in place, per this repo's Status Values convention.
+Related ADRs (ADR-007, ADR-012, ADR-016) checked: ADR-007 is amended but
+its ADR-015 citation already reflects the amended state; ADR-012 was
+amended the same day (2026-07-11, `validate-ontologies` narrowing) but
+that amendment doesn't touch anything ADR-015 cites; ADR-016 unamended.
+
+**Action Required:** None — both discrepancies found during this audit are
+resolved in this same PR (see Amendment section).
 
 **Action Required:** None.
