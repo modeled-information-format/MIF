@@ -86,11 +86,37 @@
     "Citation": "mif:Citation",
     "citationType": {
       "@id": "mif:citationType",
-      "@type": "@vocab"
+      "@type": "@vocab",
+      "@context": {
+        "article": "mif:CitationTypeArticle",
+        "book": "mif:CitationTypeBook",
+        "paper": "mif:CitationTypePaper",
+        "website": "mif:CitationTypeWebsite",
+        "documentation": "mif:CitationTypeDocumentation",
+        "repository": "mif:CitationTypeRepository",
+        "video": "mif:CitationTypeVideo",
+        "podcast": "mif:CitationTypePodcast",
+        "specification": "mif:CitationTypeSpecification",
+        "dataset": "mif:CitationTypeDataset",
+        "tool": "mif:CitationTypeTool",
+        "other": "mif:CitationTypeOther"
+      }
     },
     "citationRole": {
       "@id": "mif:citationRole",
-      "@type": "@vocab"
+      "@type": "@vocab",
+      "@context": {
+        "supports": "mif:CitationRoleSupports",
+        "refutes": "mif:CitationRoleRefutes",
+        "background": "mif:CitationRoleBackground",
+        "methodology": "mif:CitationRoleMethodology",
+        "contradicts": "mif:CitationRoleContradicts",
+        "extends": "mif:CitationRoleExtends",
+        "derived": "mif:CitationRoleDerived",
+        "source": "mif:CitationRoleSource",
+        "example": "mif:CitationRoleExample",
+        "review": "mif:CitationRoleReview"
+      }
     },
     "url": {
       "@id": "schema:url",
