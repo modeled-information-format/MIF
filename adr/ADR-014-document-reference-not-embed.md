@@ -11,7 +11,7 @@ tags:
   - integrity
 status: accepted
 created: 2026-06-26
-updated: 2026-06-26
+updated: 2026-07-11
 author: MIF Maintainers
 project: MIF
 technologies:
@@ -195,17 +195,27 @@ schema gates (ADR-012) cover the new field.
 
 ## Audit
 
+Findings cite durable anchors (job id / step `name:` / heading / field name /
+enclosing construct name), not raw line numbers — line numbers in
+`scripts/mif_convert.py` and `schema/mif.schema.json` shift as unrelated
+fields are added, which had already made the 2026-06-26 entry's
+`scripts/mif_convert.py` line citations stale by the 2026-07-11 audit below
+(see that entry's Summary). `grep -n` for the quoted anchor text to find its
+current line.
+
 ### 2026-06-26
+
+**Audited revision:** `42eee4b506fb7906d31a50e9a09a7d29262cfcb4`
 
 **Status:** Compliant
 
 **Findings:**
 
-| Finding | Files | Lines | Assessment |
-|---------|-------|-------|------------|
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
 | `$defs.DocumentReference` is vendor-neutral, `@type` const, located by `url` or `id` via `anyOf`, `additionalProperties: false` | `schema/mif.schema.json` | `$defs.DocumentReference` | compliant |
 | Optional top-level `documents` array references `#/$defs/DocumentReference` | `schema/mif.schema.json` | `properties.documents` | compliant |
-| `documents` added to `FRONTMATTER_ORDER` and both passthrough lists | `scripts/mif_convert.py` | L64, L148, L192 | compliant |
+| `documents` added to `FRONTMATTER_ORDER` and both passthrough lists | `scripts/mif_convert.py` | `FRONTMATTER_ORDER` list entry `"documents"`; `md_to_jsonld()`'s `passthrough` list entry `"documents"`; `jsonld_to_md()`'s `passthrough` list entry `"documents"` | compliant |
 | Context maps `documents`, `DocumentReference`, and DocumentReference fields | `schema/context.jsonld` | `documents`/`DocumentReference` block | compliant |
 | Example carries a `documents:` entry that round-trips | `profiles/ai-memory/examples/level-3-citations.md` | `documents:` | compliant |
 
@@ -215,3 +225,57 @@ new terms. The round-trip, OKF, schema-compile, and projection gates were run
 locally to green in this session.
 
 **Action Required:** None.
+
+### 2026-07-11
+
+**Audited revision:** `88b4a8f20d87773286abbc64644f4d5c762f6ce8`
+
+**Status:** Compliant
+
+**Findings:**
+
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
+| `$defs.DocumentReference` is vendor-neutral, `@type` const, located by `url` or `id` via `anyOf`, `additionalProperties: false` | `schema/mif.schema.json` | `$defs.DocumentReference` | compliant |
+| Optional top-level `documents` array references `#/$defs/DocumentReference` | `schema/mif.schema.json` | `properties.documents` | compliant |
+| `documents` added to `FRONTMATTER_ORDER` and both passthrough lists | `scripts/mif_convert.py` | `FRONTMATTER_ORDER` list entry `"documents"`; `md_to_jsonld()`'s `passthrough` list entry `"documents"`; `jsonld_to_md()`'s `passthrough` list entry `"documents"` | compliant |
+| Context maps `documents`, `DocumentReference`, and DocumentReference fields, with `documentType`'s enum values individually resolvable and base-URI-independent | `schema/context.jsonld` | `"documents":` term block; `"DocumentReference": "mif:DocumentReference"`; `documentType`'s scoped `@context` | compliant — see Summary for a since-fixed regression that briefly affected this exact mapping |
+| Example carries a `documents:` entry that round-trips | `profiles/ai-memory/examples/level-3-citations.md` | `documents:` frontmatter key | compliant — `python3 scripts/mif_convert.py roundtrip profiles/ai-memory/examples` run locally this session: `Round-trip: tested 4 concept(s) across 1 bundle(s)` / `Round-trip lossless: PASS` |
+
+**Summary:** All five 2026-06-26 findings were re-verified against current file
+state, not merely re-anchored, and all still hold. Two things changed since
+the original audit:
+
+1. **Line-number drift** — the 2026-06-26 entry's `scripts/mif_convert.py`
+   citations (L64, L148, L192) no longer point at the `documents` entries
+   they claimed; an unrelated later change (the `relationship_types`
+   custom-type registry, #232/#236) shifted the file so those same three
+   list entries now read `"documents"` at L81, L171, L214. The claim itself
+   (documents is present in `FRONTMATTER_ORDER` and both passthrough lists)
+   is unaffected — only the raw line numbers were stale. Re-anchored above to
+   the enclosing construct name (`grep -n '"documents"' scripts/mif_convert.py`
+   finds all three, disambiguated by which function/list they sit in).
+2. **A real, already-fixed regression in the exact JSON-LD mapping finding 4
+   certifies.** `DocumentReference.documentType` used `@type: @vocab` with no
+   registered terms from this construct's introduction (#84) until PR #227
+   (merged 2026-07-10). Under JSON-LD 1.1 `@vocab` expansion, an unregistered
+   enum value falls back to document-base-relative IRI resolution, so the
+   same `documentType` value (e.g. `"video"`) expanded to a different,
+   non-equal IRI depending on the consuming document's base URL — a genuine
+   conformance defect in the construct this ADR introduced, silent for
+   roughly two weeks because this repo's own round-trip/schema checks don't
+   exercise real JSON-LD 1.1 expand/compact semantics (only a real processor
+   like `pyld` sees it). PR #227 fixed it by scoping every `documentType`
+   enum value to an explicit `mif:DocumentType*` term nested in
+   `documentType`'s own `@context`, and added
+   `scripts/test_jsonld_context_fidelity.py` (pyld-driven) plus
+   `scripts/check_vocab_term_coverage.py`, both wired into the
+   `okf-conformance` CI job (ADR-012) — so this regression class is now
+   caught mechanically. At the pinned revision the mapping is fixed and
+   CI-guarded; no open discrepancy remains on this ADR. Related ADRs
+   (ADR-006, ADR-009, ADR-010) were checked and remain `accepted` and
+   unamended — the Related Decisions section is still accurate.
+
+**Action Required:** None. The `documentType` vocab-mapping bug is already
+closed (#224/#225/#227) and gated by CI per ADR-012; no follow-up needed on
+this ADR.
