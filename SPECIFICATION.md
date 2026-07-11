@@ -105,12 +105,12 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 ### 2.1 Dual Representation
 
-MIF defines two equivalent representations:
+MIF defines two representations, related as canonical and derived (Invariant 2):
 
-1. **Markdown Format** (`.md`): Human-readable, plain CommonMark
-2. **JSON-LD Format** (`.jsonld`): Machine-processable, semantically linked
+1. **Markdown Format** (`.md`): Human-readable, plain CommonMark — **canonical**, the source of truth.
+2. **JSON-LD Format** (`.jsonld`): Machine-processable, semantically linked — **derived**, regenerated from the Markdown source (§6).
 
-Both representations MUST be losslessly convertible to each other. A conforming implementation MAY support either or both formats.
+Both representations MUST be losslessly convertible to each other, and if the two ever disagree, the Markdown form wins. A conforming implementation MAY support either or both formats.
 
 ### 2.2 Markdown Conventions
 

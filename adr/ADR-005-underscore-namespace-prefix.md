@@ -45,8 +45,9 @@ not. The base-type directories need to:
 - Sort predictably in file listings, ideally grouping together at a stable
   position.
 - Signal "system" organization versus "user" content.
-- Work cleanly with existing tooling, file browsers, IDEs, and the Obsidian
-  vault compatibility MIF commits to (ADR-003).
+- Work cleanly with existing tooling and every common file browser or IDE —
+  the underscore prefix is an ordinary visible character in all of them,
+  including but not limited to Obsidian (ADR-017).
 
 The architectural question is what naming convention, if any, marks these three
 directories so they read as system-level partitions across every filesystem and
@@ -182,8 +183,9 @@ structural base type only; everything filed beneath it is user content:
 - `_procedural/animal-welfare/`
 
 This convention is applied uniformly across MIF tooling and the mnemonic memory
-system implementation, and it composes with the Obsidian vault compatibility
-guaranteed by ADR-003.
+system implementation, and the underscore prefix is an ordinary visible
+character in every file browser/editor, including but not limited to
+Obsidian, per ADR-017.
 
 ## Consequences
 
@@ -334,3 +336,24 @@ since correcting that prose is an editorial-scope decision.
 
 **Action Required:** None for the findings above. See #251 for the
 ADR-003/ADR-017 prose correction.
+
+### 2026-07-11 (follow-up)
+
+**Status:** Compliant
+
+**Findings:**
+
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
+| Context's Obsidian-compatibility reference no longer cites ADR-003 as a live guarantee | `adr/ADR-005-underscore-namespace-prefix.md` | the bullet "Work cleanly with existing tooling and every common file browser or IDE..." in `## Context` | compliant |
+| Decision's Obsidian-compatibility reference no longer cites ADR-003 as a live guarantee | `adr/ADR-005-underscore-namespace-prefix.md` | the sentence following "This convention is applied uniformly across MIF tooling..." in `## Decision` | compliant |
+
+**Summary:** Both stale ADR-003 references identified in the prior audit
+entry are fixed: each now states the underlying fact directly (the
+underscore prefix is an ordinary visible character in every common file
+browser/editor, Obsidian included) with a pointer to ADR-017, rather than
+citing ADR-003 as a live compatibility commitment ADR-017 already
+superseded. The underlying convention this ADR documents is unaffected.
+Issue #251 closed for this ADR's portion of the work.
+
+**Action Required:** None.
