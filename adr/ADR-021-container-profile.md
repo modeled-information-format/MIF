@@ -417,16 +417,23 @@ flowchart LR
    modified. A container's `@context` therefore points at the
    container-specific context, not the bare memory-unit context.
    `extensions` is mapped as `{"@id": "mif:extensions", "@type": "@json"}`
-   — deliberately **not** the core context's `@container: @index` pattern
-   its per-unit namesake uses (`schema/context.jsonld:297-300`). Verified
-   directly with `pyld`: `@container: @index` silently drops the *value* at
-   each index key on expansion (only the key itself survives — the same
-   class of content-loss defect this whole ADR exists to fix, recurring in
-   a new field), while `@type: @json` carries the entire `extensions`
-   object as an opaque JSON-LD literal, round-tripping 100% of arbitrary
-   vendor content through expand and compact with zero imposed vocabulary —
+   — at the time this ADR was drafted, deliberately **not** the `@container:
+   @index` pattern the per-unit `extensions` term used
+   (`schema/context.jsonld:297-300` as it stood then). Verified directly
+   with `pyld`: `@container: @index` silently drops the *value* at each
+   index key on expansion (only the key itself survives — the same class
+   of content-loss defect this whole ADR exists to fix, recurring in a new
+   field), while `@type: @json` carries the entire `extensions` object as
+   an opaque JSON-LD literal, round-tripping 100% of arbitrary vendor
+   content through expand and compact with zero imposed vocabulary —
    exactly the "unvalidated, vendor-owned" intent of Decision point 7, and
-   still genuinely correct JSON-LD.
+   still genuinely correct JSON-LD. **Update, 2026-07-11:** the per-unit
+   term has since been fixed independently (issue #224, closed COMPLETED)
+   and now also maps `@type: @json` (`schema/context.jsonld:343-346`
+   post-fix) — the two terms' mappings match today, so this point's
+   "deliberately not reusing" framing is now historical context for why
+   the corpus-level term was designed correctly from the start, not a
+   description of a live divergence.
 9. **CI visibility: an explicit, container-aware validation entry point is
    REQUIRED, not optional.** Because `scripts/mif_convert.py`'s
    `iter_concepts()` only discovers `*.md` files, a `*.corpus.json` file is
@@ -520,27 +527,34 @@ flowchart LR
    scenarios needing actual document bytes inline are not served by this
    ADR; noted as explicitly out of scope rather than silently unaddressed.
 2. **Two pre-existing, out-of-scope defects surfaced during implementation
-   review, in code this ADR does not touch:**
-   - `schema/context.jsonld:297-300` — the **per-unit** `extensions` term
-     (used today by every memory record, e.g. `subcog:domain`) maps
-     `@container: @index`, the exact mapping confirmed (via `pyld`) to
-     silently drop its own value content on JSON-LD expand — the identical
-     defect Decision point 8 fixes for the new corpus-level `extensions`
-     field, still present at the per-unit level this ADR does not modify.
-   - `schema/context.jsonld:128` — the `documentType` term maps
-     `@type: @vocab` with no top-level `@vocab` fallback anywhere in the
-     context, so values like `"pdf"` (used by this ADR's own worked
-     example, `examples/container/ncp-requirements.corpus.json`) expand to
-     a document-relative IRI rather than a stable `mif:`-namespaced one —
+   review, in code this ADR does not touch — both since fixed and closed
+   independently:**
+   - The **per-unit** `extensions` term (used by every memory record, e.g.
+     `subcog:domain`) mapped `@container: @index`, confirmed (via `pyld`)
+     to silently drop its own value content on JSON-LD expand — the
+     identical defect Decision point 8 fixes for the new corpus-level
+     `extensions` field, at the time still present at the per-unit level
+     this ADR does not modify. **Filed as issue #224, fixed and closed
+     (COMPLETED) 2026-07-11**; `schema/context.jsonld` now maps the
+     per-unit term `@type: @json` as well, matching the corpus-level term.
+   - The `documentType` term mapped `@type: @vocab` with no top-level
+     `@vocab` fallback anywhere in the context, so values like `"pdf"`
+     (used by this ADR's own worked example,
+     `examples/container/ncp-requirements.corpus.json`) expanded to a
+     document-relative IRI rather than a stable `mif:`-namespaced one —
      first exercised end-to-end by this ADR's worked example, but the root
-     cause is pre-existing and unrelated to the Container Profile.
+     cause was pre-existing and unrelated to the Container Profile. **Filed
+     as issue #225, fixed and closed (COMPLETED) 2026-07-11**;
+     `schema/context.jsonld` now registers an explicit local `@context` for
+     `documentType` covering all 13 known values. (The same class of bug in
+     `citationType`/`citationRole` was filed as #226 and fixed alongside
+     it; general hardening against recurrence was tracked as #228.)
 
-   Neither defect was introduced by this change, and fixing either means
-   editing the core `schema/context.jsonld` every memory unit in
-   production already depends on — real scope beyond this ADR. Per this
-   workspace's own "fix it now or file it" convention, both should become
-   tracked GitHub issues before or when this branch is opened as a PR;
-   that has not happened yet because this work has not been pushed.
+   Neither defect was introduced by this change. Both were caught during
+   this ADR's implementation review, then resolved by unrelated
+   vocab-term-scoping work that landed on `main` the same day — this
+   branch picked up both fixes via its subsequent `merge: sync with main`.
+   No further action is needed for either.
 
 ## Decision Outcome
 
@@ -578,7 +592,7 @@ Audit below.
 ## More Information
 
 - **Date:** 2026-07-10
-- **Source of the constraints this ADR resolves:** `SPECIFICATION.md` §4 (fact/event via namespace), §5.2 (`extensions:` field, provider-namespaced), §8.2 (Supersedes/SupersededBy), §12.3 (PROV provenance shape), §13.4 (`mif_version` in `.mif/config.yaml`); `adr/ADR-014-document-reference-not-embed.md`; `schema/mif.schema.json` (`conceptType` required, `$defs.DocumentReference`, `extensions` with `additionalProperties: true`); `schema/context.jsonld:297-300` (the per-unit `extensions` term's `@container: @index` mapping, which this ADR's corpus-level `extensions` deliberately does not reuse — see Decision point 8).
+- **Source of the constraints this ADR resolves:** `SPECIFICATION.md` §4 (fact/event via namespace), §5.2 (`extensions:` field, provider-namespaced), §8.2 (Supersedes/SupersededBy), §12.3 (PROV provenance shape), §13.4 (`mif_version` in `.mif/config.yaml`); `adr/ADR-014-document-reference-not-embed.md`; `schema/mif.schema.json` (`conceptType` required, `$defs.DocumentReference`, `extensions` with `additionalProperties: true`); `schema/context.jsonld`'s per-unit `extensions` term (its `@container: @index` mapping was the pattern this ADR's corpus-level `extensions` deliberately did not reuse — see Decision point 8; the per-unit term's own instance of that bug was independently fixed as issue #224, see the Neutral consequences above).
 - **Verification performed before drafting:** live `ajv` schema validation and `pyld.jsonld.expand()`/`compact()` against real schema and context files, including empirically confirming the `ajv-cli` `$defs`-fragment limitation and the `@container: @index` content-loss defect this ADR's Decision points 8-9 resolve.
 - **Related ADRs:** ADR-006, ADR-009, ADR-010, ADR-011, ADR-013, ADR-014.
 
