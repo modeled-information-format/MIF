@@ -604,8 +604,8 @@ Audit below.
 
 **Findings:**
 
-| Finding | Files | Lines | Assessment |
-|---------|-------|-------|------------|
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
 | No implementation exists yet; this ADR is Proposed, not Accepted | n/a | n/a | pending |
 | `schema/container.schema.json` / `schema/container-context.jsonld` not yet created | n/a | n/a | pending |
 | Container-aware CI validation entry point not yet added | `.github/workflows/validate.yml` | n/a | pending |
@@ -623,16 +623,16 @@ against the actual files/lines.
 
 **Findings:**
 
-| Finding | Files | Lines | Assessment |
-|---------|-------|-------|------------|
-| `MemoryCorpus` envelope schema present, `additionalProperties: false`, `kind`-dispatched `if`/`then` on `conceptType`/`@type` | `schema/container.schema.json` | 37 (`@type` const), 108-170 (`Record` `$defs`) | compliant |
-| Envelope JSON-LD context registered, `extensions` mapped `@type: @json` (not the per-unit `@container: @index` pattern — confirmed via `pyld` that the latter drops content on expand) | `schema/container-context.jsonld` | 49 | compliant |
-| `DocumentReference` wrapper schema for `kind: "document"` validation (`ajv-cli` cannot take a `#/$defs/...` fragment on `-s` directly) | `schema/document-reference.schema.json` | 1-6 | compliant |
-| Container-aware CI validation entry point added, no path filter on `pull_request` | `.github/workflows/validate.yml` | 97-124 | compliant |
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
+| `MemoryCorpus` envelope schema present, `additionalProperties: false`, `kind`-dispatched `if`/`then` on `conceptType`/`@type` | `schema/container.schema.json` | the top-level `@type` property's `const`, and the `Record` `$defs` block | compliant |
+| Envelope JSON-LD context registered, `extensions` mapped `@type: @json` (not the per-unit `@container: @index` pattern — confirmed via `pyld` that the latter drops content on expand) | `schema/container-context.jsonld` | the `extensions` term mapping | compliant |
+| `DocumentReference` wrapper schema for `kind: "document"` validation (`ajv-cli` cannot take a `#/$defs/...` fragment on `-s` directly) | `schema/document-reference.schema.json` | full file | compliant |
+| Container-aware CI validation entry point added, no path filter on `pull_request` | `.github/workflows/validate.yml` | job `container-validation`, step "Validate Container Profile examples" | compliant |
 | Dedicated validator: envelope + per-record `kind`-dispatched `ajv` validation, `extensions` deliberately unvalidated | `scripts/validate_container.py` | full file | compliant |
-| Worked example: 2 memory records (fact + event, `namespace`-distinguished, no `memoryCategory`), 1 `DocumentReference` document record, `extensions."mnemos:compressionManifest"` | `examples/container/ncp-requirements.corpus.json` | full file (71 lines) | compliant |
-| Reference documentation | `docs/CONTAINER-PROFILE.md` | full file (135 lines) | compliant |
-| Cross-reference from both spec surfaces (source + Starlight mirror) | `SPECIFICATION.md`, `src/content/docs/specification/overview.mdx` | 29, 10 | compliant |
+| Worked example: 2 memory records (fact + event, `namespace`-distinguished, no `memoryCategory`), 1 `DocumentReference` document record, `extensions."mnemos:compressionManifest"` | `examples/container/ncp-requirements.corpus.json` | full file | compliant |
+| Reference documentation | `docs/CONTAINER-PROFILE.md` | full file | compliant |
+| Cross-reference from both spec surfaces (source + Starlight mirror) | `SPECIFICATION.md`, `src/content/docs/specification/overview.mdx` | the Container Profile pointer in each file's domain-profile-scope note | compliant |
 
 **Summary:** All five Decision Outcome implementation items are complete and
 locally verified: `python scripts/validate_container.py examples/container`
