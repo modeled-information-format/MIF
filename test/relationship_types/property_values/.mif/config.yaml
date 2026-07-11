@@ -1,0 +1,11 @@
+relationship_types:
+  - name: Contradicts
+    namespace: farm
+    description: Provides conflicting evidence
+    properties:
+      - name: contradiction_type
+        type: string
+        enum: [direct, indirect, partial]
+      - name: severity
+        type: decimal
+        range: [0.0, 1.0]

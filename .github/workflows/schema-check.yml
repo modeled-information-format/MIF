@@ -60,6 +60,30 @@ jobs:
           done
           exit $fail
 
+      - name: Compile standalone schemas (not part of the mif.schema.json ref bundle)
+        run: |
+          set -uo pipefail
+          fail=0
+          for s in schema/relationship-types-config.schema.json \
+                   public/schema/relationship-types-config.schema.json; do
+            [ -f "$s" ] || continue
+            if npx --no-install ajv compile -s "$s" --spec=draft2020 -c ajv-formats --strict=false; then
+              echo "ok: $s"
+            else
+              echo "::error::$s failed to compile"; fail=1
+            fi
+          done
+          s=schema/relationship-types-config.schema.json
+          p=public/schema/relationship-types-config.schema.json
+          if [ -f "$s" ] && [ ! -f "$p" ]; then
+            echo "::error::missing mirror file $p (present in $s)"; fail=1
+          elif [ ! -f "$s" ] && [ -f "$p" ]; then
+            echo "::error::missing mirror source $s (present in $p)"; fail=1
+          elif [ -f "$s" ] && [ -f "$p" ] && ! diff -q "$s" "$p" >/dev/null 2>&1; then
+            echo "::error::$p does not match $s"; fail=1
+          fi
+          exit $fail
+
       - name: Every JSON-LD context parses
         run: |
           set -uo pipefail

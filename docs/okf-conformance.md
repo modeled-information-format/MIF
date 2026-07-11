@@ -81,6 +81,15 @@ bundle:
    reported as warnings, not failures.
 5. **Lossless projection.** The `markdown → json-ld → markdown` round trip is
    lossless for all conformance-level data (`scripts/mif_convert.py roundtrip`).
+6. **Temporal consistency (warning by default).** A `derived-from` /
+   `supersedes` / `cites` edge's target must not be `created` after the concept
+   that derives from it; `--strict-temporal` promotes this to a hard error.
+7. **Custom relationship type registry (opt-in).** Once a bundle has a
+   `.mif/config.yaml` declaring `relationship_types` (SPECIFICATION.md §8.1/8.3),
+   every namespaced (custom) relationship type used in that bundle must be
+   declared there. Bundles without `.mif/config.yaml` keep the fully-lenient
+   behavior of (5)/(6) unchanged; bare/core types (no `namespace:` prefix) are
+   never gated by this check.
 
 Run it with:
 

@@ -62,6 +62,9 @@ jobs:
       - name: Vocab term coverage (every @type:@vocab enum value is registered)
         run: python scripts/check_vocab_term_coverage.py
 
+      - name: Custom relationship_types registry (.mif/config.yaml)
+        run: python scripts/test_relationship_types_config.py
+
   schema-validation:
     name: Validate JSON-LD Projection Against Schema
     runs-on: ubuntu-latest
