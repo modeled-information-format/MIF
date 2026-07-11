@@ -74,6 +74,13 @@ def check_extensions_round_trip() -> list[str]:
     return errors
 
 
+def _expanded_document_type_id(expanded: list, value: str, base_label: str) -> str | None:
+    try:
+        return expanded[0]["https://mif-spec.dev/ns/documentType"][0]["@id"]
+    except (IndexError, KeyError, TypeError) as e:
+        return f"<malformed expansion for documentType={value!r} ({base_label}): {e!r}>"
+
+
 def check_document_type_base_independence() -> list[str]:
     errors = []
     for value in DOCUMENT_TYPES:
@@ -85,14 +92,14 @@ def check_document_type_base_independence() -> list[str]:
         }
         expanded_a = jsonld.expand(doc, {"base": "https://host-a.example/"})
         expanded_b = jsonld.expand(doc, {"base": "https://host-b.example/"})
-        iri_a = expanded_a[0]["https://mif-spec.dev/ns/documentType"]
-        iri_b = expanded_b[0]["https://mif-spec.dev/ns/documentType"]
+        iri_a = _expanded_document_type_id(expanded_a, value, "host-a")
+        iri_b = _expanded_document_type_id(expanded_b, value, "host-b")
         if iri_a != iri_b:
             errors.append(
                 f"documentType={value!r} is base-URI-dependent: "
                 f"{iri_a!r} (host-a) != {iri_b!r} (host-b)"
             )
-        elif not iri_a[0]["@id"].startswith("https://mif-spec.dev/ns/"):
+        elif iri_a is None or not iri_a.startswith("https://mif-spec.dev/ns/"):
             errors.append(
                 f"documentType={value!r} did not expand to a stable mif: IRI: {iri_a!r}"
             )
