@@ -141,6 +141,9 @@ jobs:
       - name: Validate Container Profile examples
         run: python scripts/validate_container.py examples/container
 
+      - name: ajv batching regression (issue #260 -- one spawn per kind, not per record)
+        run: python scripts/test_ajv_batch.py
+
   docs-build:
     name: Build Docs Site (Astro)
     runs-on: ubuntu-latest

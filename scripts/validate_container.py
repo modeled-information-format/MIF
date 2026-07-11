@@ -31,10 +31,10 @@ from __future__ import annotations
 
 import json
 import sys
-import tempfile
+from collections.abc import Mapping
 from pathlib import Path
 
-from _ajv_common import ajv_validate
+from _ajv_common import ajv_validate, ajv_validate_batch
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 MIF_SCHEMA = REPO_ROOT / "schema" / "mif.schema.json"
@@ -42,12 +42,28 @@ CONTAINER_SCHEMA = REPO_ROOT / "schema" / "container.schema.json"
 DOCUMENT_REFERENCE_SCHEMA = REPO_ROOT / "schema" / "document-reference.schema.json"
 DEFS_GLOB = str(REPO_ROOT / "schema" / "definitions" / "*.schema.json")
 
+# kind -> (schema, extra_refs) for the records[] validated here. `extensions`
+# content is deliberately excluded: per ADR-021 Decision point 7, it is
+# unvalidated, vendor-owned data.
+_KIND_SCHEMAS: dict[str, tuple[Path, tuple[Path, ...]]] = {
+    "memory": (MIF_SCHEMA, ()),
+    "document": (DOCUMENT_REFERENCE_SCHEMA, (MIF_SCHEMA,)),
+}
+
 
 def _ajv_validate(schema: Path, instance: Path, extra_refs: tuple[Path | str, ...] = ()) -> list[str]:
     """Validate `instance` against `schema`, always resolving DEFS_GLOB in
     addition to any caller-supplied `extra_refs` (e.g. document-reference.
     schema.json's $ref onto mif.schema.json)."""
     return ajv_validate(schema, instance, extra_refs=(*extra_refs, DEFS_GLOB))
+
+
+def _ajv_validate_batch(
+    schema: Path, instances: Mapping[str, Path | dict], extra_refs: tuple[Path | str, ...] = ()
+) -> dict[str, list[str]]:
+    """Batched counterpart to `_ajv_validate`: one ajv-cli invocation for all
+    `instances`, still always resolving DEFS_GLOB."""
+    return ajv_validate_batch(schema, instances, extra_refs=(*extra_refs, DEFS_GLOB))
 
 
 def validate_corpus(path: Path) -> list[str]:
@@ -58,28 +74,29 @@ def validate_corpus(path: Path) -> list[str]:
     except json.JSONDecodeError as e:
         return [f"{path}: invalid JSON: {e}"]
 
-    with tempfile.TemporaryDirectory() as tmp:
-        tmp_path = Path(tmp)
+    for line in _ajv_validate(CONTAINER_SCHEMA, corpus, extra_refs=(MIF_SCHEMA,)):
+        errors.append(f"{path}: envelope invalid against container.schema.json: {line}")
 
-        envelope_file = tmp_path / "envelope.json"
-        envelope_file.write_text(json.dumps(corpus))
-        for line in _ajv_validate(CONTAINER_SCHEMA, envelope_file, extra_refs=(MIF_SCHEMA,)):
-            errors.append(f"{path}: envelope invalid against container.schema.json: {line}")
+    # Group same-kind records so each kind gets one ajv invocation (one
+    # schema compile) instead of one invocation per record (#260).
+    groups: dict[str, dict[int, dict]] = {kind: {} for kind in _KIND_SCHEMAS}
+    for i, record in enumerate(corpus.get("records", [])):
+        if not isinstance(record, dict):
+            errors.append(f"{path}: records[{i}]: expected an object, got {type(record).__name__}")
+            continue
+        kind = record.get("kind")
+        if kind in groups:
+            groups[kind][i] = record.get("payload", {})
 
-        for i, record in enumerate(corpus.get("records", [])):
-            if not isinstance(record, dict):
-                errors.append(f"{path}: records[{i}]: expected an object, got {type(record).__name__}")
-                continue
-            kind = record.get("kind")
-            payload_file = tmp_path / f"record-{i}.json"
-            payload_file.write_text(json.dumps(record.get("payload", {})))
-
-            if kind == "memory":
-                for line in _ajv_validate(MIF_SCHEMA, payload_file):
-                    errors.append(f"{path}: records[{i}] (kind=memory) invalid: {line}")
-            elif kind == "document":
-                for line in _ajv_validate(DOCUMENT_REFERENCE_SCHEMA, payload_file, extra_refs=(MIF_SCHEMA,)):
-                    errors.append(f"{path}: records[{i}] (kind=document) invalid: {line}")
+    for kind, indexed_payloads in groups.items():
+        if not indexed_payloads:
+            continue
+        schema, extra_refs = _KIND_SCHEMAS[kind]
+        instances: dict[str, Path | dict] = {f"idx-{i}": payload for i, payload in indexed_payloads.items()}
+        results = _ajv_validate_batch(schema, instances, extra_refs=extra_refs)
+        for i in indexed_payloads:
+            for line in results[f"idx-{i}"]:
+                errors.append(f"{path}: records[{i}] (kind={kind}) invalid: {line}")
 
     return errors
 
