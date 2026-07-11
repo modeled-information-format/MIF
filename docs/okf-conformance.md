@@ -90,6 +90,12 @@ bundle:
    declared there. Bundles without `.mif/config.yaml` keep the fully-lenient
    behavior of (5)/(6) unchanged; bare/core types (no `namespace:` prefix) are
    never gated by this check.
+8. **Declared property value constraints (opt-in).** A declared custom type's
+   relationship metadata values are checked against that type's declared
+   `properties[]` (`type`/`enum`/`range`), when present in the metadata — e.g.
+   a property declared `range: [0.0, 1.0]` rejects a metadata value of `5.0`.
+   `inverse`/`symmetric` are declaration-only and not checked (they describe a
+   cross-relationship graph shape, not a single relationship's own values).
 
 Run it with:
 
