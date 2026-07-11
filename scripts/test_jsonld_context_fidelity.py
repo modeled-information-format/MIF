@@ -37,6 +37,25 @@ cross-referencing `schema/context.jsonld` against `schema/mif.schema.json`.
 This file proves the registered terms actually behave correctly under a real
 JSON-LD 1.1 processor -- static presence and runtime semantics are two
 different failure modes, so both checks are needed.
+
+- `relationships[].type` (`@type: @vocab`, nested inside the `relationships`
+  container's own scoped `@context`): registered the SPECIFICATION.md 8.2
+  "Core Relationship Types" under their PascalCase display names
+  (`RelatesTo`, `DerivedFrom`, ...) as term KEYS, but `Relationship.type`'s
+  actual schema constraint is a free-form lowercase-kebab-case pattern (e.g.
+  `derived-from`), and real documents use exactly that kebab-case form.
+  JSON-LD term lookup is exact-string-match, so no schema-valid value ever
+  matched a registered term -- unlike `documentType`/`citationType`/etc,
+  this wasn't a MISSING registration, it was a registration under the wrong
+  key entirely, silently doing nothing for every real document. The
+  `relationships` container's own ambient `@vocab` default masked the
+  symptom: unregistered values still resolved to a stable-looking `mif:`
+  IRI (base-URI-independent, unlike the documentType/citationType bugs),
+  so this looked fine at a glance -- the real loss was landing on the
+  wrong IRI, `mif:derived-from` instead of the documented, ontology-
+  registered `mif:DerivedFrom`. Fixed by re-keying the scoped `@context`
+  to the real kebab-case values, mapped to the existing `mif:`-namespaced
+  PascalCase IRIs already published in `public/ns/vocabulary.jsonld`.
 """
 import json
 import sys
@@ -143,6 +162,99 @@ def check_vocab_custom_namespace_still_works() -> list[str]:
     return errors
 
 
+# SPECIFICATION.md 8.2 "Core Relationship Types" -- kebab-case value (the
+# schema-valid, real-world form) mapped to the documented ontology IRI's
+# local name (published in public/ns/vocabulary.jsonld).
+RELATIONSHIP_TYPES = {
+    "relates-to": "RelatesTo",
+    "derived-from": "DerivedFrom",
+    "supersedes": "Supersedes",
+    "conflicts-with": "ConflictsWith",
+    "part-of": "PartOf",
+    "implements": "Implements",
+    "uses": "Uses",
+    "created": "Created",
+    "mentioned-in": "MentionedIn",
+}
+
+
+def check_relationship_type_resolves_to_documented_ontology_iri() -> list[str]:
+    errors = []
+    for kebab, pascal in RELATIONSHIP_TYPES.items():
+        doc = {
+            "@context": CONTEXT, "@type": "Memory", "@id": "urn:mif:test", "conceptType": "semantic",
+            "relationships": [{"type": kebab, "target": "/foo.md"}],
+        }
+        expanded_a = jsonld.expand(doc, {"base": "https://host-a.example/"})
+        expanded_b = jsonld.expand(doc, {"base": "https://host-b.example/"})
+        try:
+            iri_a = expanded_a[0]["https://mif-spec.dev/ns/relationships"][0]["https://mif-spec.dev/ns/relationshipType"][0]["@id"]
+            iri_b = expanded_b[0]["https://mif-spec.dev/ns/relationships"][0]["https://mif-spec.dev/ns/relationshipType"][0]["@id"]
+        except (IndexError, KeyError, TypeError) as e:
+            errors.append(f"relationships[].type={kebab!r}: malformed expansion: {e!r}")
+            continue
+        expected = f"https://mif-spec.dev/ns/{pascal}"
+        if iri_a != iri_b:
+            errors.append(f"relationships[].type={kebab!r} is base-URI-dependent: {iri_a!r} != {iri_b!r}")
+        elif iri_a != expected:
+            errors.append(f"relationships[].type={kebab!r} resolved to {iri_a!r}, want documented ontology IRI {expected!r}")
+        compacted = _compact(expanded_a, CONTEXT)
+        if compacted["relationships"][0].get("type") != kebab:
+            errors.append(f"relationships[].type={kebab!r} did not round-trip: got {compacted['relationships'][0].get('type')!r}")
+    return errors
+
+
+def check_relationship_type_custom_namespace_still_works() -> list[str]:
+    errors = []
+    doc = {
+        "@context": CONTEXT, "@type": "Memory", "@id": "urn:mif:test", "conceptType": "semantic",
+        "relationships": [{"type": "subcog:custom-rel", "target": "/foo.md"}],
+    }
+    compacted = _compact(jsonld.expand(doc), CONTEXT)
+    if compacted["relationships"][0].get("type") != "subcog:custom-rel":
+        errors.append(f"custom-namespaced relationships[].type regressed: got {compacted['relationships'][0].get('type')!r}")
+    return errors
+
+
+def check_strength_shared_by_relationship_and_decay() -> list[str]:
+    """`strength` is a plain (non-@vocab) xsd:decimal term shared by two
+    unrelated schema objects: Relationship.strength (relationships[].strength)
+    and TemporalMetadata.decay.strength ("alias for currentStrength"). It must
+    stay a single, shared top-level term -- an earlier version of this fix
+    moved it into relationships[]'s own scoped @context exclusively, which
+    silently dropped decay.strength from expansion entirely (no error), since
+    that scope is inaccessible outside the relationships array. Confirmed
+    against a real fixture (profiles/ai-memory/examples/level-3-citations.md's
+    `decay: {model: none, strength: 1.0}`) before this test existed."""
+    errors = []
+    doc = {
+        "@context": CONTEXT, "@type": "Memory", "@id": "urn:mif:test", "conceptType": "semantic",
+        "temporal": {"decay": {"model": "none", "currentStrength": 0.8, "strength": 1.0}},
+        "relationships": [{"type": "derived-from", "target": "/foo.md", "strength": 0.9}],
+    }
+    expanded = jsonld.expand(doc)
+    try:
+        decay = expanded[0]["https://mif-spec.dev/ns/temporal"][0]["https://mif-spec.dev/ns/decay"][0]
+    except (IndexError, KeyError, TypeError) as e:
+        errors.append(f"malformed expansion reaching temporal.decay: {e!r}")
+        return errors
+    if "https://mif-spec.dev/ns/strength" not in decay:
+        errors.append("temporal.decay.strength was dropped from expansion entirely (no error) -- decay: " + repr(decay))
+    try:
+        rel_strength = expanded[0]["https://mif-spec.dev/ns/relationships"][0]["https://mif-spec.dev/ns/strength"]
+    except (IndexError, KeyError, TypeError) as e:
+        errors.append(f"malformed expansion reaching relationships[].strength: {e!r}")
+        return errors
+    if not rel_strength:
+        errors.append("relationships[].strength was dropped from expansion entirely (no error)")
+    compacted = _compact(expanded, CONTEXT)
+    if compacted.get("temporal", {}).get("decay", {}).get("strength") != 1.0:
+        errors.append(f"temporal.decay.strength did not round-trip: got {compacted.get('temporal', {}).get('decay', {})!r}")
+    if compacted.get("relationships", [{}])[0].get("strength") != 0.9:
+        errors.append(f"relationships[].strength did not round-trip: got {compacted.get('relationships', [{}])[0]!r}")
+    return errors
+
+
 def check_document_type_citation_type_no_cross_contamination() -> list[str]:
     """documentType and citationType share enum values (video/dataset/other);
     each must resolve within its own vocab, never the other's."""
@@ -168,6 +280,9 @@ CHECKS = [
     ("every scoped vocab property is base-URI-independent for all enum values (#225, #226, #228)", check_vocab_base_independence),
     ("every scoped vocab property's custom-namespaced escape hatch still resolves", check_vocab_custom_namespace_still_works),
     ("documentType and citationType don't contaminate each other's shared enum values", check_document_type_citation_type_no_cross_contamination),
+    ("relationships[].type resolves to its documented ontology IRI, not mif:<kebab-value> (#230)", check_relationship_type_resolves_to_documented_ontology_iri),
+    ("relationships[].type custom-namespaced escape hatch still resolves", check_relationship_type_custom_namespace_still_works),
+    ("strength stays shared by relationships[].strength and temporal.decay.strength", check_strength_shared_by_relationship_and_decay),
 ]
 
 
