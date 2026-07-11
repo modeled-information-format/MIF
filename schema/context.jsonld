@@ -32,11 +32,21 @@
     },
     "conceptType": {
       "@id": "mif:conceptType",
-      "@type": "@vocab"
+      "@type": "@vocab",
+      "@context": {
+        "semantic": "mif:SemanticType",
+        "episodic": "mif:EpisodicType",
+        "procedural": "mif:ProceduralType"
+      }
     },
     "memoryType": {
       "@id": "mif:memoryType",
-      "@type": "@vocab"
+      "@type": "@vocab",
+      "@context": {
+        "semantic": "mif:SemanticType",
+        "episodic": "mif:EpisodicType",
+        "procedural": "mif:ProceduralType"
+      }
     },
     "title": "dc:title",
     "namespace": "mif:namespace",
@@ -269,7 +279,14 @@
     "provenance": "mif:provenance",
     "sourceType": {
       "@id": "mif:sourceType",
-      "@type": "@vocab"
+      "@type": "@vocab",
+      "@context": {
+        "user_explicit": "mif:UserExplicit",
+        "user_implicit": "mif:UserImplicit",
+        "agent_inferred": "mif:AgentInferred",
+        "external_import": "mif:ExternalImport",
+        "system_generated": "mif:SystemGenerated"
+      }
     },
     "sourceRef": {
       "@id": "mif:sourceRef",
@@ -283,7 +300,15 @@
     },
     "trustLevel": {
       "@id": "mif:trustLevel",
-      "@type": "@vocab"
+      "@type": "@vocab",
+      "@context": {
+        "verified": "mif:Verified",
+        "user_stated": "mif:UserStated",
+        "high_confidence": "mif:HighConfidence",
+        "moderate_confidence": "mif:ModerateConfidence",
+        "low_confidence": "mif:LowConfidence",
+        "uncertain": "mif:Uncertain"
+      }
     },
 
     "wasGeneratedBy": {
@@ -302,19 +327,6 @@
       "@id": "prov:wasAssociatedWith",
       "@type": "@id"
     },
-
-    "user_explicit": "mif:UserExplicit",
-    "user_implicit": "mif:UserImplicit",
-    "agent_inferred": "mif:AgentInferred",
-    "external_import": "mif:ExternalImport",
-    "system_generated": "mif:SystemGenerated",
-
-    "verified": "mif:Verified",
-    "user_stated": "mif:UserStated",
-    "high_confidence": "mif:HighConfidence",
-    "moderate_confidence": "mif:ModerateConfidence",
-    "low_confidence": "mif:LowConfidence",
-    "uncertain": "mif:Uncertain",
 
     "embedding": "mif:embedding",
     "modelVersion": "mif:modelVersion",
@@ -338,10 +350,6 @@
     "extensions": {
       "@id": "mif:extensions",
       "@type": "@json"
-    },
-
-    "semantic": "mif:SemanticType",
-    "episodic": "mif:EpisodicType",
-    "procedural": "mif:ProceduralType"
+    }
   }
 }
