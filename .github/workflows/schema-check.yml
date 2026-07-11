@@ -73,6 +73,25 @@ jobs:
               echo "::error::$s failed to compile"; fail=1
             fi
           done
+          # Container Profile schemas (ADR-021) $ref into the mif.schema.json
+          # set, so they need the same -r bundle to compile. public/ copies
+          # first appear when a release is snapshotted (docs/RELEASING.md);
+          # absent copies are skipped, present ones must compile.
+          for d in schema public/schema \
+                   public/schema/latest public/schema/v0 public/schema/v1; do
+            for f in container.schema.json document-reference.schema.json; do
+              s="$d/$f"
+              [ -f "$s" ] || continue
+              if npx --no-install ajv compile -s "$s" \
+                   -r "$d/mif.schema.json" -r "$d"/definitions/*.schema.json \
+                   -r "$d/citation.schema.json" \
+                   --spec=draft2020 -c ajv-formats --strict=false; then
+                echo "ok: $s"
+              else
+                echo "::error::$s failed to compile"; fail=1
+              fi
+            done
+          done
           s=schema/relationship-types-config.schema.json
           p=public/schema/relationship-types-config.schema.json
           if [ -f "$s" ] && [ ! -f "$p" ]; then
@@ -103,7 +122,9 @@ jobs:
           fail=0
           files="mif.schema.json citation.schema.json context.jsonld \
                  definitions/entity-reference.schema.json \
-                 ontology/ontology.schema.json ontology/ontology.context.jsonld"
+                 ontology/ontology.schema.json ontology/ontology.context.jsonld \
+                 container.schema.json container-context.jsonld \
+                 document-reference.schema.json"
           check() { # alias_dir  source_dir
             local a="public/schema/$1" s="$2"
             [ -d "$a" ] || { echo "skip $a (absent)"; return; }

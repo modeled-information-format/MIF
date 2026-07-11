@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Container Profile (ADR-021)** — an OPTIONAL, single-file `*.corpus.json`
+  transport envelope that serializes a Bundle (or a subset of one) for wire
+  transport: `schema/container.schema.json`, `schema/container-context.jsonld`,
+  `schema/document-reference.schema.json`, `scripts/validate_container.py`,
+  a `container-validation` CI job, a worked example under
+  `examples/container/`, and `docs/CONTAINER-PROFILE.md`. Vendor-specific
+  corpus metadata (compression manifests, version DAGs) routes through a
+  generalized `extensions` mechanism rather than becoming native MIF
+  vocabulary. Accepted and implemented in the same change (reframes
+  issue #77).
 - **[Tooling]**: `scripts/check_relationship_type_vocab_coverage.py` — cross-checks
   `schema/context.jsonld`'s `relationships.type.@context` term mapping against
   `public/ns/vocabulary.jsonld`'s registered `rdfs:Class` terms, guarding against

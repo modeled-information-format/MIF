@@ -26,6 +26,7 @@ related:
   - ADR-009-okf-compliance-superset.md
   - ADR-011-markdown-canonical-derived-jsonld.md
   - ADR-002-dual-format-design.md
+  - ADR-021-container-profile.md
 ---
 
 # ADR-013: Provenance: Lightweight Core + Optional W3C-PROV Layer

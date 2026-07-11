@@ -27,6 +27,7 @@ related:
   - ADR-012-okf-conformance-tested-invariant.md
   - ADR-001-cognitive-triad-taxonomy.md
   - ADR-008-decay-model-rationale.md
+  - ADR-021-container-profile.md
 ---
 
 # ADR-009: OKF Compliance as a Superset (Pinned OKF v0.1)
@@ -157,9 +158,9 @@ specification with its own identity model and governance.
 
 MIF takes **no normative dependency** on OKF's evolving draft. It pins OKF v0.1's
 conformance criteria in `docs/okf-conformance.md`, which is **normative within
-MIF** (SPECIFICATION.md, Invariant 5 — "No floating dependency on OKF"). A future
-MIF revision MAY replace that pinned section with newer upstream text, but only
-as a deliberate, reviewed act.
+MIF** ([SPECIFICATION.md, Invariant 5](../SPECIFICATION.md#invariants) — "No
+floating dependency on OKF"). A future MIF revision MAY replace that pinned
+section with newer upstream text, but only as a deliberate, reviewed act.
 
 The superset relationship is made concrete by the MIF → OKF mapping
 (`docs/okf-conformance.md §2`): concept files map to OKF concepts, the
@@ -197,8 +198,9 @@ The superset-with-pinned-v0.1 approach achieves the primary drivers:
 determinism (frozen criteria), interoperability (generic OKF legibility), and
 independence (own governance). Mitigations:
 
-- The "no floating dependency" rule (Invariant 5) is documented at the top of
-  `docs/okf-conformance.md` and in SPECIFICATION.md's Abstract.
+- The "no floating dependency" rule ([Invariant 5](../SPECIFICATION.md#invariants))
+  is documented at the top of `docs/okf-conformance.md` and in
+  SPECIFICATION.md's Abstract.
 - The relationship is enforced mechanically by `scripts/okf_validate.py` and the
   lossless round-trip, gated in CI (ADR-012).
 
@@ -297,3 +299,22 @@ is a gap in what the citation points at, not in this ADR.
 
 **Action Required:** None for this ADR. See #252 for the separately-tracked
 "Invariant 5 cited but not enumerated" gap.
+
+### 2026-07-11 (follow-up)
+
+**Audited revision:** `252767a724a20771555942afc25a622c5b7ab1a9`
+
+**Status:** Compliant
+
+**Findings:**
+
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
+| Canonical enumerated Invariants list now exists; this ADR's Invariant 5 citations link to it | `SPECIFICATION.md`, `adr/ADR-009-okf-compliance-superset.md` | `SPECIFICATION.md`'s `### Invariants` section; the two Invariant 5 citations in this ADR's Decision Outcome and Consequences/Negative sections | compliant |
+
+**Summary:** #252 is fixed: `SPECIFICATION.md` now has a `### Invariants`
+section enumerating Invariants 2-6 (no citation anywhere in the repo names
+an Invariant 1 or 7+), and this ADR's own Invariant 5 references now link to
+it. Issue #252 closed.
+
+**Action Required:** None.

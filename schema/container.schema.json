@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mif-spec.dev/schema/container.schema.json",
+  "title": "MIF Container Profile: Corpus Envelope",
+  "description": "JSON Schema for validating a MIF Container Profile artifact (*.corpus.json): a derived transport serialization of a Bundle, per ADR-021.",
+  "type": "object",
+  "required": [
+    "@context",
+    "@type",
+    "containerProfileVersion",
+    "records"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "@context": {
+      "description": "JSON-LD context. MUST resolve the container vocabulary (container-context.jsonld), not the bare memory-unit context (schema/context.jsonld) -- enforced below for the string/array forms; an inline object form is a bespoke local context and is the producer's own responsibility to get right (schema validation cannot check its term mappings resolve the right vocabulary).",
+      "oneOf": [
+        {
+          "type": "string",
+          "const": "https://mif-spec.dev/schema/container-context.jsonld"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": [
+              "string",
+              "object"
+            ]
+          },
+          "contains": {
+            "const": "https://mif-spec.dev/schema/container-context.jsonld"
+          }
+        },
+        {
+          "type": "object"
+        }
+      ]
+    },
+    "@type": {
+      "const": "MemoryCorpus"
+    },
+    "containerProfileVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Container Profile schema version (independent of mif_version; see ADR-021 Decision point 5)"
+    },
+    "records": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "$ref": "#/$defs/Record"
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "description": "Corpus-level provenance, following SPECIFICATION.md §12.3's PROV shape exactly (plain keys except @type; wasDerivedFrom etc. take object form)",
+      "properties": {
+        "@type": {
+          "const": "prov:Entity"
+        },
+        "wasDerivedFrom": {
+          "description": "Reuses mif.schema.json's ProvNode exactly (ADR-021 Decision point 4: corpus-level provenance follows §12.3's PROV shape unchanged, not a narrower reimplementation) -- a plain IRI string, or an open node object keyed by @id or id, or an array of either.",
+          "oneOf": [
+            {
+              "$ref": "https://mif-spec.dev/schema/mif.schema.json#/$defs/ProvNode"
+            },
+            {
+              "type": "array",
+              "items": {
+                "$ref": "https://mif-spec.dev/schema/mif.schema.json#/$defs/ProvNode"
+              }
+            }
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "editChain": {
+      "type": "array",
+      "description": "Corpus-transport edit/transfer lineage only. NOT a substitute for a memory record's own Supersedes/SupersededBy relationship (ADR-021 Decision point 6). On disagreement, the per-record relationship wins.",
+      "items": {
+        "type": "object",
+        "required": [
+          "transferId",
+          "supersedes"
+        ],
+        "properties": {
+          "transferId": {
+            "type": "string",
+            "description": "This container transfer's identifier. Deliberately not named `@id` -- these are opaque transport-lineage identifiers, not JSON-LD node identifiers, and must never be subject to relative-IRI resolution on JSON-LD expand (see schema/container-context.jsonld, which maps this term as a plain literal)."
+          },
+          "supersedes": {
+            "type": "string",
+            "description": "The prior container transfer's identifier this one supersedes. Same opaque-identifier caveat as transferId."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "extensions": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Provider-specific corpus-level extensions, generalizing the per-unit `extensions` field in schema/mif.schema.json to the envelope. Keys are namespaced per implementation (e.g. `mnemos:compressionManifest`, `mnemos:versionDag`). MIF does not validate the contents; that is the owning implementation's responsibility. A concept is promoted out of `extensions` into a native top-level field only once a second, independent implementation needs the identical shape (ADR-021 Decision point 7)."
+    }
+  },
+  "$defs": {
+    "Record": {
+      "type": "object",
+      "required": [
+        "kind",
+        "payload"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "memory",
+            "document"
+          ]
+        },
+        "payload": {
+          "description": "For kind:memory, MUST validate against https://mif-spec.dev/schema/mif.schema.json (conceptType required; see ADR-021 Decision point 1). For kind:document, MUST validate against https://mif-spec.dev/schema/mif.schema.json#/$defs/DocumentReference (ADR-014 / ADR-021 Decision point 2) via schema/document-reference.schema.json. This schema does not duplicate either definition beyond the two minimal kind-discrimination anchors asserted in the allOf below (payload.conceptType required for kind:memory; payload.@type const for kind:document -- keep those in sync with mif.schema.json if its requirements ever change); scripts/validate_container.py dispatches on `kind` and validates payload against the correct external schema.",
+          "type": "object"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "memory"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": [
+                  "conceptType"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "document"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": [
+                  "@type"
+                ],
+                "properties": {
+                  "@type": {
+                    "const": "DocumentReference"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

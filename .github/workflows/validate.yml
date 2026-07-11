@@ -113,6 +113,58 @@ jobs:
               -d "$json" --spec=draft2020 -c ajv-formats
           done
 
+  container-validation:
+    # Validates *.corpus.json Container Profile artifacts (ADR-021).
+    # scripts/mif_convert.py's iter_concepts() only discovers *.md files, so
+    # a *.corpus.json envelope is invisible to okf-conformance/schema-validation
+    # above by construction -- this job is the dedicated validation path
+    # ADR-021 Decision point 9 requires. No path filter on pull_request, same
+    # rationale as the other required jobs in this workflow.
+    name: Validate Container Profile Examples
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Setup Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: |
+            requirements-ci.txt
+            requirements-jsonld-ci.txt
+
+      - name: Install dependencies (hash-pinned)
+        # requirements-ci.txt provides pyyaml: test_container_context_fidelity.py
+        # imports mif_convert (for CONTEXT_URL), which needs it.
+        run: |
+          pip install --require-hashes -r requirements-ci.txt
+          pip install --require-hashes -r requirements-jsonld-ci.txt
+
+      - name: Setup Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Install pinned dependencies (ajv-cli via lockfile)
+        run: npm ci
+
+      - name: Validate Container Profile examples
+        # examples/, docs/, and profiles/ rather than just examples/container,
+        # so a *.corpus.json sample added anywhere plausible is gated too --
+        # not repo root, which would sweep node_modules.
+        run: python scripts/validate_container.py examples docs profiles
+
+      - name: ajv batching regression (issue #260 -- one spawn per kind, not per record)
+        run: python scripts/test_ajv_batch.py
+
+      - name: container-context.jsonld fidelity (real JSON-LD 1.1 expand/compact, issue #257)
+        run: python scripts/test_container_context_fidelity.py
+
+      - name: container-context.jsonld / context.jsonld shared-term drift check (issue #259)
+        run: python scripts/check_container_context_drift.py
+
   docs-build:
     name: Build Docs Site (Astro)
     runs-on: ubuntu-latest

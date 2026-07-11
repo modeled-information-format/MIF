@@ -1,4 +1,7 @@
 ---
+id: 5f3c1a86-2b74-4e0d-9c5a-8d1f42e6b790
+type: procedural
+created: 2026-06-27T00:00:00Z
 diataxis_type: how-to
 ---
 
@@ -78,7 +81,13 @@ Unreleased section, move its items into the new header:
 
 ### 1c. Snapshot the schema mirror
 
-Run the snapshot script to create the immutable per-version schema mirror under
+**First, sync changed canonical files from `schema/` into `public/schema/`** —
+the snapshot script copies *from* `public/schema/` (the served canonical
+surface), which deliberately lags the `schema/` source between releases. Any
+schema file added or changed under `schema/` since the last release must be
+copied to the same relative path under `public/schema/` now, or the script
+fails closed with `canonical source missing` / stale-copy drift. Then run the
+snapshot script to create the immutable per-version schema mirror under
 `public/schema/X.Y.Z/` and refresh the `latest/` and `vN/` aliases. Pass the
 bare version string (no leading `v`):
 

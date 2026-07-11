@@ -24,6 +24,7 @@ related:
   - ADR-003-obsidian-compatibility.md
   - ADR-007-github-raw-urls-for-schema-ids.md
   - ADR-011-markdown-canonical-derived-jsonld.md
+  - ADR-017-revert-obsidian-compatibility.md
 ---
 
 # ADR-002: Dual-Format Design (Markdown + JSON-LD)
@@ -273,20 +274,21 @@ derived. Mitigations:
 
 ## Related Decisions
 
-- [ADR-003: Obsidian Compatibility](ADR-003-obsidian-compatibility.md) — the Markdown format is designed to be valid Obsidian notes, which is the constraint that makes Markdown the natural human-authoring surface here.
+- [ADR-003: Obsidian Compatibility](ADR-003-obsidian-compatibility.md) (superseded by [ADR-017](ADR-017-revert-obsidian-compatibility.md)) — originally made the Markdown format valid Obsidian notes; ADR-017 reverted the Obsidian-specific conventions (wiki-links, `@[[entity]]` references, block references, embeds) while keeping the parts that were never Obsidian-specific (YAML frontmatter, plain-text/local-first storage, folder-as-namespace).
+- [ADR-017: Revert Obsidian Compatibility](ADR-017-revert-obsidian-compatibility.md) — the Markdown format's human-authoring surface today is vendor-neutral CommonMark plus standard markdown-link relationships and frontmatter entity references, not Obsidian compatibility.
 - [ADR-007: GitHub Raw URLs for Schema IDs](ADR-007-github-raw-urls-for-schema-ids.md) — the JSON-LD projection requires resolvable schema `$id` / `@context` URIs, the scheme that ADR establishes.
 - [ADR-011: Markdown-Canonical with Derived JSON-LD](ADR-011-markdown-canonical-derived-jsonld.md) — refines this decision: Markdown is the canonical source of truth and JSON-LD is a derived projection, replacing the original co-equality framing.
 
 ## Links
 
 - [JSON-LD 1.1](https://www.w3.org/TR/json-ld11/) — the linked-data serialization MIF projects to.
-- [Obsidian](https://obsidian.md/) — the knowledge-management tool the Markdown format targets (ADR-003).
+- [Obsidian](https://obsidian.md/) — the tool ADR-003 originally targeted; ADR-017 reverted that Obsidian-specific compatibility, so the Markdown format's human-authoring surface is vendor-neutral CommonMark today, not Obsidian-specific.
 
 ## More Information
 
 - **Date:** 2026-01-27 (original); refined by ADR-011
 - **Source:** SPECIFICATION.md §2.1 "Dual Representation"; `scripts/mif_convert.py` (markdown ↔ JSON-LD converter).
-- **Related ADRs:** ADR-003, ADR-007, ADR-011
+- **Related ADRs:** ADR-003, ADR-007, ADR-011, ADR-017
 
 ## Amendment
 
@@ -407,3 +409,27 @@ for its own filed-not-amended discrepancy (#240).
 ADR-011 canonical/derived framing already used elsewhere in the same
 document; update this ADR's Related Decisions bullet for ADR-003 and its
 `related:` frontmatter to reflect ADR-003's supersession by ADR-017).
+
+### 2026-07-11 (follow-up)
+
+**Audited revision:** `252767a724a20771555942afc25a622c5b7ab1a9`
+
+**Status:** Compliant
+
+**Findings:**
+
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
+| `SPECIFICATION.md` §2.1's prose reconciled with the ADR-011 canonical/derived framing already used in the Abstract and §6 | `SPECIFICATION.md` | heading `### 2.1 Dual Representation` | compliant |
+| `related:` frontmatter now includes ADR-017, making the ADR-002↔ADR-017 cross-reference bidirectional (ADR-017's own `related:` already listed ADR-002) | `adr/ADR-002-dual-format-design.md` | frontmatter `related:` list | compliant |
+| Related Decisions / Links / More Information all updated to reflect ADR-003's supersession by ADR-017, rather than citing ADR-003 as a live Obsidian-compatibility commitment | `adr/ADR-002-dual-format-design.md` | `## Related Decisions`, `## Links`, `## More Information` sections | compliant |
+
+**Summary:** Both documentation-drift findings from the 2026-07-11 audit
+above are fixed: §2.1 now reads "MIF defines two representations, related as
+canonical and derived (Invariant 2)," naming Markdown canonical and JSON-LD
+derived, matching the Abstract and §6; the dual-representation and lossless-
+convertibility claims this ADR's Findings table cites are unchanged. Issue
+#251 closed for this ADR's portion of the work (SPECIFICATION.md §2.1 and
+ADR-005's stale references also fixed as part of the same issue).
+
+**Action Required:** None.

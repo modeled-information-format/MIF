@@ -107,6 +107,21 @@
         "1.2.1": "https://mif-spec.dev/schema/1.2.1/ontology/ontology.context.jsonld",
         "1.2.2": "https://mif-spec.dev/schema/1.2.2/ontology/ontology.context.jsonld"
       }
+    },
+    {
+      "id": "container",
+      "canonical": "https://mif-spec.dev/schema/container.schema.json",
+      "versioned": {}
+    },
+    {
+      "id": "container-context",
+      "canonical": "https://mif-spec.dev/schema/container-context.jsonld",
+      "versioned": {}
+    },
+    {
+      "id": "document-reference",
+      "canonical": "https://mif-spec.dev/schema/document-reference.schema.json",
+      "versioned": {}
     }
   ]
 }
