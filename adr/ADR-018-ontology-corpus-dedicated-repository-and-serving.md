@@ -12,7 +12,7 @@ tags:
   - serving
 status: accepted
 created: 2026-06-30
-updated: 2026-06-30
+updated: 2026-07-11
 author: MIF Maintainers
 project: MIF
 technologies:
@@ -37,7 +37,7 @@ related:
 
 ## Status
 
-Accepted (amendment proposed 2026-06-30 — see Amendment section)
+Accepted (amended 2026-07-02 — see Amendment section)
 
 This ADR resolves the precursor recorded as org discussion #168
 ("House the Ontologies in a Dedicated modeled-information-format/ontologies
@@ -254,6 +254,12 @@ mirrors keeping their canonical `$id` (ADR-016) while pinning bytes per release.
 
 ### Propagation
 
+> **Superseded 2026-07-02 by ADR-019** — preserved below as historical
+> record of the original decision, not current behavior. The actual
+> propagation mechanism today is ADR-019's deploy-time fetch/verify/untar
+> (`scripts/vendor-ontologies.py`), not the PR-mirror mechanism this section
+> describes. See the Amendment section below.
+
 The `ontologies` repo is the source of record. On a corpus release `vX.Y.Z`, the
 released corpus is mirrored into MIF's `public/ontologies/`, the catalog and the
 human index are regenerated, and MIF deploys `mif-spec.dev`. The
@@ -306,6 +312,14 @@ and mitigated by reusing the ADR-016 snapshot tooling and its fail-closed gate.
 
 ## Implementation
 
+> **Superseded 2026-07-02 by ADR-019** — preserved below as historical
+> record of the original decision, not current behavior. `scripts/
+> snapshot-ontology-version.py` no longer exists (deleted by ADR-019's
+> implementation; its logic was ported into `scripts/vendor-ontologies.py`)
+> and `public/ontologies/` is no longer a committed directory in this repo
+> (gitignored, populated at deploy time). See the Amendment section below
+> and ADR-019 for the mechanism actually in force today.
+
 - `scripts/snapshot-ontology-version.py X.Y.Z` builds the version mirror, the
   `index.json` catalog, and the human `index.html` from the canonical files;
   `--check` verifies they are present and current (the release gate, as in
@@ -328,8 +342,8 @@ and mitigated by reusing the ADR-016 snapshot tooling and its fail-closed gate.
 
 - Precursor discussion: https://github.com/orgs/modeled-information-format/discussions/168
 - Source of record: `modeled-information-format/ontologies`
-- [`scripts/snapshot-ontology-version.py`](../scripts/snapshot-ontology-version.py) -- the release-prep tool.
-- [`public/ontologies/index.json`](../public/ontologies/index.json) -- the machine-readable ontology catalog.
+- `scripts/snapshot-ontology-version.py` -- the original release-prep tool (deleted by ADR-019's implementation, 2026-07-01; logic ported into `scripts/vendor-ontologies.py`).
+- `public/ontologies/index.json` -- the machine-readable ontology catalog (no longer a committed path since ADR-019; populated at deploy time into the gitignored `public/ontologies/` directory).
 
 ## More Information
 
@@ -348,8 +362,12 @@ MIF merges and deploys." [ADR-019](ADR-019-deploy-time-attested-ontology-vendori
 (proposed, not yet accepted) would replace that unbuilt mechanism with a
 deploy-time fetch of the `ontologies` repo's signed release tarball, verified
 fail-closed with `gh attestation verify`, in place of a committed mirror and a
-bot-opened PR. The propagation mechanism recorded above remains this ADR's
-decision until ADR-019 is accepted.
+bot-opened PR. The propagation mechanism recorded above **was** this ADR's
+decision until ADR-019 was accepted (2026-07-02) — see the Update note
+immediately below and ADR-019's own Decision/Implementation sections for
+the mechanism actually in force today; the "Propagation" and
+"Implementation" sections above this Amendment describe the pre-ADR-019
+mechanism and are preserved as historical record, not current behavior.
 
 **Update, 2026-07-02:** ADR-019 is now Accepted and implemented; the
 deploy-time fetch/verify mechanism it describes has replaced the

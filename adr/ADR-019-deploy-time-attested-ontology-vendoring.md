@@ -12,7 +12,7 @@ tags:
   - registry
 status: accepted
 created: 2026-06-30
-updated: 2026-07-02
+updated: 2026-07-11
 author: MIF Maintainers
 project: MIF
 technologies:
@@ -323,18 +323,35 @@ from the attested tarball's `index.json`, this decision has been violated.
 
 ## Audit
 
+Findings cite durable anchors (module docstring, trigger key, heading text,
+git-tracked status), not raw line numbers. The 2026-06-30 entry below
+originally used a `Lines` column of bare numbers (`23`, `1`, `4-7`,
+`315-317` — no `L` prefix at all), a different citation style from every
+other ADR in this repo's audit-citation retrofit. That's exactly why the
+diff-scoped guardrail (`scripts/check_adr_audit_citations.py`, added by
+#243/#244) never flagged this file: its raw-line pattern only matches
+`\bL\d+(?:-L\d+)?\b`. Converted below to the same durable-anchor convention
+ADR-012 established and `adr/README.md`'s "Creating New ADRs" section
+documents.
+
 ### 2026-06-30
+
+**Audited revision:** `898c03bbcacf30f64013bc6abffa0fed0ab80a59` — the
+commit that made the 2026-07-01 base-ownership correction below; used here
+because none of this entry's four findings concern that correction and all
+four verify identically at this revision or at this ADR's own original
+introduction commit.
 
 **Status:** Pending — not yet implemented.
 
 **Findings:**
 
-| Finding | Files | Lines | Assessment |
-|---------|-------|-------|------------|
-| Served surface is still built from a committed, hand-vendored snapshot | `scripts/snapshot-ontology-version.py` | 23 | confirmed: instructs running the script and committing the result before tagging |
-| `public/ontologies/index.json` is a committed file, not build output | `public/ontologies/index.json` | 1 | confirmed present as committed source |
-| Deploy has no `repository_dispatch` trigger for `ontologies` releases | `.github/workflows/deploy.yml` | 4-7 | confirmed: only `push`/`workflow_dispatch` triggers exist |
-| ADR-018's named PR-propagation follow-up was never built | `adr/ADR-018-ontology-corpus-dedicated-repository-and-serving.md` | 315-317 | confirmed absent; no propagation workflow exists anywhere under `.github/workflows/` |
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
+| Served surface is still built from a committed, hand-vendored snapshot | `scripts/snapshot-ontology-version.py` | module docstring, "Run it as a release-prep step BEFORE tagging and commit the result." | confirmed: instructs running the script and committing the result before tagging |
+| `public/ontologies/index.json` is a committed file, not build output | `public/ontologies/index.json` | tracked in the git tree at this revision; no `.gitignore` entry for `public/ontologies/` existed yet | confirmed present as committed source |
+| Deploy has no `repository_dispatch` trigger for `ontologies` releases | `.github/workflows/deploy.yml` | the `"on":` trigger's `push`/`workflow_dispatch` keys | confirmed: only `push`/`workflow_dispatch` triggers exist |
+| ADR-018's named PR-propagation follow-up was never built | `adr/ADR-018-ontology-corpus-dedicated-repository-and-serving.md` | the `## Implementation` section's "Follow-up" bullet | confirmed absent; no propagation workflow exists anywhere under `.github/workflows/` |
 
 **Summary:** This ADR captures the design agreed in cross-repo ideation and
 amends ADR-018's unbuilt propagation follow-up. The fetch/verify/untar job,
@@ -345,6 +362,9 @@ snapshot are all open implementation work.
 this ADR can move to Accepted.
 
 ### 2026-07-01
+
+**Audited revision:** `898c03bbcacf30f64013bc6abffa0fed0ab80a59` — the
+commit that made this correction.
 
 **Status:** Correction.
 
@@ -362,6 +382,10 @@ ADR. The corresponding Implementation item (base-compatibility check) is
 removed as no longer applicable.
 
 ### 2026-07-01 — Implemented
+
+**Audited revision:** `19d3c5324a6bcda3aa97493c58cc0a6af85656b1` — the
+squash-merge commit for MIF#203, implementing every item this entry
+describes.
 
 **Status:** Implemented (Option 2, all five Implementation items complete).
 
@@ -413,6 +437,10 @@ them at the vendored `public/ontologies/` corpus.
 
 ### 2026-07-02 — Merged and closed out
 
+**Audited revision:** `9e78eba1b86cf558ba819e0368d6c70fc8c38b13` — the
+commit (MIF#204) that recorded this ADR's status flip to Accepted and this
+close-out entry.
+
 **Status:** Merged and closed out.
 
 modeled-information-format/MIF#203 merged alongside the companion
@@ -448,3 +476,75 @@ pre-existing `subtype_of` substitutability violations in four ontologies
 that this check had never actually run against before. Filed as
 modeled-information-format/ontologies#26; out of scope for this ADR,
 tracked separately.
+
+### 2026-07-11
+
+**Audited revision:** `0415f2a70fe6b0184acd8da7167e83184761c483`
+
+**Status:** Compliant — static mechanism and CI wiring unchanged since
+implementation; one documentation discrepancy found in ADR-018 (not this
+ADR), fixed in the same PR that lands this entry.
+
+**Scope note:** this is a static-file re-audit of the pinned worktree, not
+a live-pipeline run. It re-verifies that the vendoring mechanism and its CI
+wiring are unchanged from what the 2026-07-01/07-02 entries recorded. It
+does not re-run `vendor-ontologies.py` or re-fetch
+`https://mif-spec.dev/ontologies/index.json`, so it cannot re-confirm the
+specific invariant the 2026-07-02 entry confirmed against the live site
+(the served `{version, file, sha256, extends[]}` core byte-matching the
+attested tarball) — that requires re-running the pipeline or re-checking
+the live site, not a static read.
+
+**Findings:**
+
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
+| `scripts/vendor-ontologies.py` remains the sole vendoring mechanism; `scripts/snapshot-ontology-version.py` stays deleted | `scripts/vendor-ontologies.py` | module docstring, "Vendor the ontology corpus from a signed, attested `ontologies` release." | compliant |
+| `public/ontologies/` stays gitignored and untracked, not committed | `.gitignore` | the "Ontology corpus (ADR-019)" comment block's `public/ontologies/` entry | compliant — confirmed empty `git ls-tree` and no directory present on disk |
+| `deploy.yml` still fetches/verifies/untars via a `repository_dispatch` receiver plus a scheduled backstop, ahead of the Astro build | `.github/workflows/deploy.yml` | the `"on":` trigger's `repository_dispatch: types: [ontology-corpus-released]` and `schedule:` keys; step "Vendor the ontology corpus (ADR-019)" | compliant |
+| `validate.yml`'s "Validate Ontology Files" required check still runs only `test_subtype_of.py`, no corpus-content or namespace validation | `.github/workflows/validate.yml` | job `validate-ontologies`, step "Test subtype_of integrity" | compliant — cross-checked against ADR-012's own 2026-07-11 audit entry (same finding, independently re-verified here, not copied) |
+| ADR-018 ↔ ADR-019 cross-reference is bidirectional | `adr/ADR-018-ontology-corpus-dedicated-repository-and-serving.md`, `adr/ADR-019-deploy-time-attested-ontology-vendoring.md` | ADR-018 frontmatter `related:` list + `## Amendment` section; ADR-019 frontmatter `related:` list + `## Related Decisions` | compliant — the link exists in both directions |
+| ADR-018's own body text (not just its `related:`/Amendment section) accurately describes the current mechanism | `adr/ADR-018-ontology-corpus-dedicated-repository-and-serving.md` | `## Status` line; `### Propagation`; `## Implementation`; `## Links` | **was a discrepancy — fixed in this same PR** (see note) |
+| `adr/README.md` index rows for ADR-018 and ADR-019 reflect current status | `adr/README.md` | the ADR-018 and ADR-019 table rows | compliant |
+| Companion `ontologies` repo ADR-0004 still exists and matches | `modeled-information-format/ontologies` repo, `docs/decisions/0004-build-time-attested-ontology-vendoring.md` | file present, `## Status` heading | compliant |
+
+**Note on the ADR-018 discrepancy:** measured against this repo's own
+precedent for how an amended ADR should read (ADR-012, amended
+2026-07-11), ADR-018 fell short in two specific ways: its `## Status` line
+still read "Accepted (amendment proposed 2026-06-30 — see Amendment
+section)" — "proposed" was stale, since the Amendment section's own
+"Update, 2026-07-02" note already says ADR-019 is now Accepted and
+implemented, but that update never propagated back up to the Status line;
+and its `### Propagation`/`## Implementation`/`## Links` sections described
+the pre-ADR-019 mechanism with no inline pointer to the Amendment section
+(unlike ADR-012's inline pointer at its own superseded Decision item).
+Fixed in this same PR: ADR-018's Status line updated to match the
+ADR-012-established pattern, and an inline pointer added at the point
+those sections describe the superseded mechanism. This was a
+documentation-accuracy gap, not a design or code defect — the underlying
+mechanism was already correctly superseded and the Amendment section
+already contained the correct, dated update.
+
+**Corpus growth as supporting evidence, not a re-verified claim:** the
+`ontologies` repo's `ontologies/index.json` currently lists more entries
+than the 20 the 2026-07-02 entry's live-site check recorded, confirming
+the corpus has grown and the vendoring mechanism's own logic is generic to
+that growth (no count-based assertion anywhere in `vendor-ontologies.py`'s
+actual fetch/verify/untar code) — but this is not a re-confirmation that
+the currently-served `mif-spec.dev/ontologies/index.json` reflects that
+growth correctly; that would require the live-pipeline check the Scope
+note above says this entry did not perform. Separately, and fixed in this
+same PR: `vendor-ontologies.py`'s own module docstring had drifted into
+asserting the stale "20 ontologies" count in prose — corrected to not name
+a specific count, the same class of fragile literal-value claim this whole
+retrofit exists to eliminate from the ADRs themselves.
+
+**Summary:** The vendoring mechanism, its `deploy.yml` wiring, and
+`validate.yml`'s narrowed `validate-ontologies` job are all unchanged from
+what the 2026-07-01/07-02 entries recorded and remain exactly as this
+ADR's Decision and Implementation sections describe. `adr/README.md`'s
+index rows for both ADR-018 and ADR-019 are accurate. The one real
+discrepancy found — ADR-018's own body text lagging its Amendment section
+— is fixed in this same PR, not deferred.
+
+**Action Required:** None.
