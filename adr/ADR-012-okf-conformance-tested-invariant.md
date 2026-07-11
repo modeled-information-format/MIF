@@ -192,11 +192,13 @@ The original Decision (item 4) stated that the `validate-ontologies` job
 "validates ontology files and namespace consistency." That was accurate on
 2026-06-18. ADR-018 and ADR-019 (2026-07-01) subsequently moved ontology
 corpus content to the dedicated `modeled-information-format/ontologies`
-repository — this repo no longer has local ontology content for that
-validation to run against. The `validate-ontologies` job's own inline
-comment in `.github/workflows/validate.yml` (job `validate-ontologies`)
-already says so explicitly: "this repo has nothing local for those checks to
-run against."
+repository — this repo no longer has a local ontology *corpus* for that
+corpus-scanning validation to run against (the `test/subtype_of/` fixtures
+used by `scripts/test_subtype_of.py` are a separate, small, hand-authored set
+for resolver unit testing, not the corpus). The `validate-ontologies` job's
+own inline comment in `.github/workflows/validate.yml` (job
+`validate-ontologies`) already says so explicitly: "this repo has nothing
+local for those checks to run against."
 
 The job was not removed: it still runs `scripts/test_subtype_of.py`, a real
 regression test for the `subtype_of`/subsumption resolver against hardcoded
@@ -226,8 +228,10 @@ as [#240](https://github.com/modeled-information-format/MIF/issues/240), and
 corrects Decision item 4 to describe the job's actual, current scope rather
 than its pre-ADR-018/019 scope. The job's `name:` field
 ("Validate Ontology Files") is deliberately left unchanged — it is a required
-branch-protection status check on `main`, and renaming it would make that
-check permanently unsatisfiable.
+branch-protection status check on `main`, and renaming it would require a
+matching branch-protection configuration change or every subsequent PR would
+be blocked (unable to satisfy a required check that no job any longer
+produces) until that update is made.
 
 **Rationale for amendment:** ADR-018/ADR-019 already ratified the corpus
 relocation; this ADR's own Decision text simply hadn't been updated to match,
@@ -299,7 +303,8 @@ touches).
 | Schema `$id` resolves to the published `mif-spec.dev` URI | `schema/mif.schema.json` | `$id` field | compliant |
 | Conformance test documented (validator + round-trip, exit 0 = conform) | `docs/okf-conformance.md` | "3. The conformance test" heading | compliant |
 
-**Note on the `validate-ontologies` discrepancy:** as of ADR-018/ADR-019
+**Note on the `validate-ontologies` discrepancy (as originally written, before
+the same-day correction/amendment below):** as of ADR-018/ADR-019
 (2026-07-01), ontology-content and namespace-consistency validation for this
 repo's own content moved entirely to the `modeled-information-format/ontologies`
 repo — this job's own inline comment says so explicitly ("this repo has
@@ -307,17 +312,26 @@ nothing local for those checks to run against"). The job now runs only
 `scripts/test_subtype_of.py` against hardcoded fixtures: a real regression
 test for the `subtype_of` resolver, but it does not validate ontology files
 or namespace consistency in this repo the way this ADR's own Decision section
-(item 4) still describes. That narrowing is already ratified by ADR-018/019;
-this ADR's Decision text just hasn't been updated to reflect it. Filed as
-#240 rather than amended here, since a formal `## Amendment` (per this repo's
-`adr/README.md` Status-Values convention) is a real editorial decision about
-scope and wording, not a mechanical fix.
+(item 4) *at the time this audit entry was written* still described. That
+narrowing is already ratified by ADR-018/019; this ADR's Decision text just
+hadn't been updated to reflect it. Filed as #240 rather than amended in this
+same PR, since a formal `## Amendment` (per this repo's `adr/README.md`
+Status-Values convention) is a real editorial decision about scope and
+wording, not a mechanical fix.
 
-**Correction (added same day, resolving #240):** "moved entirely to" above
-overstates what actually happened — verified against the `ontologies` repo's
-own CI, no equivalent schema/namespace-consistency check runs there either.
-The validation did not move, it stopped running; see the Amendment section
-above and [ontologies#51](https://github.com/modeled-information-format/ontologies/issues/51).
+**Correction and resolution (added same day, resolving #240):** two things
+changed since the paragraph above was written, both addressed elsewhere in
+this same file — read those, not the paragraph above, for current state.
+First, "moved entirely to" overstates what actually happened: verified
+against the `ontologies` repo's own CI, no equivalent schema/namespace-
+consistency check runs there either. The validation did not move, it stopped
+running; see the Amendment section above and
+[ontologies#51](https://github.com/modeled-information-format/ontologies/issues/51).
+Second, #240 *was* in fact amended in this same PR (see the Amendment section
+and the current Decision item 4 above) rather than deferred as the paragraph
+above originally anticipated — this dated audit entry is left otherwise
+unedited as a historical record of what the 2026-07-11 re-audit found before
+that same-day amendment landed.
 
 **Summary:** Re-audit triggered by #238: the 2026-06-18 entry's raw line-number
 citations had drifted for 4 of its 5 `validate.yml` rows even before this PR
