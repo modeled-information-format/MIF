@@ -429,11 +429,14 @@ flowchart LR
    exactly the "unvalidated, vendor-owned" intent of Decision point 7, and
    still genuinely correct JSON-LD. **Update, 2026-07-11:** the per-unit
    term has since been fixed independently (issue #224, closed COMPLETED)
-   and now also maps `@type: @json` (`schema/context.jsonld:343-346`
-   post-fix) — the two terms' mappings match today, so this point's
-   "deliberately not reusing" framing is now historical context for why
-   the corpus-level term was designed correctly from the start, not a
-   description of a live divergence.
+   and now also maps `@type: @json` (the same `extensions` term mapping
+   in `schema/context.jsonld`, post-fix) — the two terms' mappings match
+   today, so this point's "deliberately not reusing" framing is now
+   historical context for why the corpus-level term was designed
+   correctly from the start, not a description of a live divergence.
+   That said, the two context files still hand-copy shared prefixes and
+   term mappings rather than composing, so nothing prevents them
+   silently diverging again the same way — **tracked as issue #259**.
 9. **CI visibility: an explicit, container-aware validation entry point is
    REQUIRED, not optional.** Because `scripts/mif_convert.py`'s
    `iter_concepts()` only discovers `*.md` files, a `*.corpus.json` file is
@@ -516,9 +519,9 @@ flowchart LR
    reintroduce the exact content-loss defect this ADR exists to prevent,
    and nothing in this repo's CI would catch it. Adding `pyld` as a
    properly hash-pinned CI dependency and a real expand/compact regression
-   check is left as explicit follow-on work, not done here, rather than
-   adding an unpinned or under-verified new dependency under time
-   pressure.
+   check is left as explicit follow-on work — **filed as issue #257** —
+   rather than adding an unpinned or under-verified new dependency under
+   time pressure.
 
 ### Neutral
 
