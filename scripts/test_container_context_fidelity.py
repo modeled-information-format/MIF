@@ -18,22 +18,53 @@ import sys
 from pathlib import Path
 
 from pyld import jsonld
+from pyld.jsonld import JsonLdError
 
 ROOT = Path(__file__).parent.parent
 CONTAINER_CONTEXT = json.loads((ROOT / "schema" / "container-context.jsonld").read_text())["@context"]
 
+# `payload`'s own term definition in container-context.jsonld points at the
+# remote schema/context.jsonld -- and JSON-LD 1.1 context processing resolves
+# EVERY term-scoped @context reachable from an expanded @type's active
+# context up front, not lazily only for properties actually present in the
+# document. So even a test document with no `payload` key still triggers
+# resolution of that URL on every expand() call. A live network fetch in a
+# test is fragile (flaky, needs egress, and this repo's CI image has no
+# default pyld document loader configured at all -- confirmed the hard way:
+# this test failed in CI with "No default document loader configured" the
+# first time it ran, despite passing locally where a document loader
+# happened to be available). This loader makes the test fully hermetic by
+# resolving that one known URL to the real local file, and refusing
+# everything else.
+_CORE_CONTEXT_URL = "https://mif-spec.dev/schema/context.jsonld"
+_CORE_CONTEXT_DOC = json.loads((ROOT / "schema" / "context.jsonld").read_text())
+
+
+def _offline_loader(url: str, _options: dict | None = None) -> dict:
+    if url == _CORE_CONTEXT_URL:
+        return {"contentType": "application/ld+json", "contextUrl": None, "documentUrl": url, "document": _CORE_CONTEXT_DOC}
+    raise JsonLdError(
+        f"unexpected remote fetch in offline test: {url}",
+        "jsonld.LoadDocumentError",
+        {"url": url},
+        code="loading document failed",
+    )
+
+
+_OPTS = {"documentLoader": _offline_loader}
+
+
+def _expand(doc: dict) -> list:
+    return jsonld.expand(doc, _OPTS)
+
 
 def _compact(expanded: object, ctx: dict) -> dict:
-    result = jsonld.compact(expanded, ctx)
+    result = jsonld.compact(expanded, ctx, _OPTS)
     assert isinstance(result, dict), f"jsonld.compact returned {type(result)}, expected dict"
     return result
 
 
 def check_extensions_round_trip() -> list[str]:
-    """No `payload` key here deliberately: `payload`'s own `@context` points
-    at the remote `schema/context.jsonld`, which this offline test must not
-    depend on fetching -- `extensions` and `records` are envelope-level
-    terms and don't need it."""
     errors = []
     doc = {
         "@context": CONTAINER_CONTEXT,
@@ -45,7 +76,7 @@ def check_extensions_round_trip() -> list[str]:
             "mnemos:tag": "nightly",
         },
     }
-    expanded = jsonld.expand(doc)
+    expanded = _expand(doc)
     compacted = _compact(expanded, CONTAINER_CONTEXT)
     if compacted.get("extensions") != doc["extensions"]:
         errors.append(
@@ -68,7 +99,7 @@ def check_extensions_scalar_and_nested_survive_expand() -> list[str]:
         "records": [],
         "extensions": {"mnemos:manifest": {"deep": {"deeper": "value"}}},
     }
-    expanded = jsonld.expand(doc)
+    expanded = _expand(doc)
     try:
         ext = expanded[0]["https://mif-spec.dev/ns/extensions"]
     except (IndexError, KeyError, TypeError) as e:
@@ -93,7 +124,7 @@ def check_provenance_wasderivedfrom_round_trip() -> list[str]:
         "records": [],
         "provenance": {"wasDerivedFrom": "urn:mif:corpus:previous"},
     }
-    compacted = _compact(jsonld.expand(doc), CONTAINER_CONTEXT)
+    compacted = _compact(_expand(doc), CONTAINER_CONTEXT)
     if compacted.get("provenance", {}).get("wasDerivedFrom") != "urn:mif:corpus:previous":
         errors.append(f"provenance.wasDerivedFrom did not round-trip: got {compacted.get('provenance')!r}")
     return errors
