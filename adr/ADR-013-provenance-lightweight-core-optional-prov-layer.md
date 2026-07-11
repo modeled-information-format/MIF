@@ -228,10 +228,10 @@ schema-validation CI gates.
 Findings cite durable anchors (`$defs` name / property name / heading text /
 list entry), not raw line numbers — line numbers in the files this ADR
 touches (`schema/mif.schema.json`, `schema/context.jsonld`,
-`SPECIFICATION.md`, `README.md`) shift every time an unrelated `$def` or
-section is added elsewhere in the file, which is exactly what happened
+`SPECIFICATION.md`, `README.md`) shift every time an unrelated `$defs` entry
+or section is added elsewhere in the file, which is exactly what happened
 between the two entries below: `schema/mif.schema.json` gained the
-`DocumentReference` `$def` (#84, landed the day after this ADR's own #85)
+`DocumentReference` `$defs` entry (#84, landed the day after this ADR's own #85)
 and other unrelated additions, shifting `$defs.Provenance` from L375-L440 to
 L466-L541 with zero change to its actual content. `grep -n` for the quoted
 anchor text to find its current line.

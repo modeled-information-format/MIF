@@ -486,5 +486,3 @@ that amendment doesn't touch anything ADR-015 cites; ADR-016 unamended.
 
 **Action Required:** None — both discrepancies found during this audit are
 resolved in this same PR (see Amendment section).
-
-**Action Required:** None.
