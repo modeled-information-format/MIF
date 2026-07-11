@@ -32,7 +32,7 @@ related:
 
 ## Status
 
-Accepted
+Accepted (amended 2026-07-11 — see Amendment section)
 
 ## Context
 
@@ -120,8 +120,13 @@ OKF conformance is enforced by `.github/workflows/validate.yml` as gating jobs:
 2. **`schema-validation`** — emits derived JSON-LD projections and validates each
    against `schema/mif.schema.json` with `ajv` (draft 2020-12, ajv-formats).
 3. **`docs-build`** — builds the Astro documentation site.
-4. **`validate-ontologies`** — validates ontology files and namespace
-   consistency.
+4. **`validate-ontologies`** — runs `scripts/test_subtype_of.py`, a regression
+   test for the `subtype_of`/subsumption resolver against hardcoded fixtures
+   (see the 2026-07-11 amendment: this repo's own ontology content moved to
+   the `modeled-information-format/ontologies` repo per ADR-018/ADR-019, and
+   this job no longer validates ontology files or namespace consistency here
+   — that check did not follow the content; see the amendment for the
+   coverage-gap this leaves open).
 
 All bundle sets — `examples`, `profiles/ai-memory/examples`, and
 `docs/examples/memories` — are passed to the conformance, round-trip, and
@@ -178,6 +183,64 @@ v1.0.0 development branch are not silently un-gated.
 - **Date:** 2026-06-18
 - **Source:** `.github/workflows/validate.yml`; `docs/okf-conformance.md §3` (the conformance test).
 - **Related ADRs:** ADR-009, ADR-011, ADR-002
+
+## Amendment
+
+### 2026-07-11 — `validate-ontologies` narrowed to `subtype_of` regression only
+
+The original Decision (item 4) stated that the `validate-ontologies` job
+"validates ontology files and namespace consistency." That was accurate on
+2026-06-18. ADR-018 and ADR-019 (2026-07-01) subsequently moved ontology
+corpus content to the dedicated `modeled-information-format/ontologies`
+repository — this repo no longer has a local ontology *corpus* for that
+corpus-scanning validation to run against (the `test/subtype_of/` fixtures
+used by `scripts/test_subtype_of.py` are a separate, small, hand-authored set
+for resolver unit testing, not the corpus). The `validate-ontologies` job's
+own inline comment in `.github/workflows/validate.yml` (job
+`validate-ontologies`) already says so explicitly: "this repo has nothing
+local for those checks to run against."
+
+The job was not removed: it still runs `scripts/test_subtype_of.py`, a real
+regression test for the `subtype_of`/subsumption resolver against hardcoded
+fixtures, unaffected by the corpus move since it never depended on this
+repo's (now-nonexistent) local corpus. What changed is scope, not presence —
+the job validates the resolver's logic, not "ontology files and namespace
+consistency" in this repository.
+
+**Correction to an earlier draft of this amendment:** the schema/namespace
+validation did **not** follow the content to the `ontologies` repo. Verified
+directly against that repo's CI (2026-07-11, not merely inferred from this
+ADR's own prior claim): none of its workflows (`ci.yml`, `quality-gates.yml`,
+`release.yml`) or `lefthook.yml` run any check that validates a
+`*.ontology.yaml` file against `ontology.schema.json` or checks namespace
+consistency across ontology terms; `scripts/merge-ontology.py` is the only
+place that repo references the ontology schema, and it is a manual
+reconciliation tool, not a CI gate. MIF's deploy-time
+`scripts/vendor-ontologies.py` (the ADR-019 mechanism) only runs
+`gh attestation verify` for supply-chain provenance, not content validation.
+This is a real, currently-open CI coverage gap, not a relocation — filed as
+[ontologies#51](https://github.com/modeled-information-format/ontologies/issues/51)
+rather than silently characterized as "moved" here.
+
+This amendment was discovered as a side effect of the 2026-07-11 Audit
+re-verification below (`Action Required` on that entry pointed here), tracked
+as [#240](https://github.com/modeled-information-format/MIF/issues/240), and
+corrects Decision item 4 to describe the job's actual, current scope rather
+than its pre-ADR-018/019 scope. The job's `name:` field
+("Validate Ontology Files") is deliberately left unchanged — it is a required
+branch-protection status check on `main`, and renaming it would require a
+matching branch-protection configuration change or every subsequent PR would
+be blocked (unable to satisfy a required check that no job any longer
+produces) until that update is made.
+
+**Rationale for amendment:** ADR-018/ADR-019 already ratified the corpus
+relocation; this ADR's own Decision text simply hadn't been updated to match,
+and an initial draft of this very amendment repeated the same "moved to
+`ontologies`" assumption without independently verifying it — corrected
+above once that assumption was checked against the `ontologies` repo's
+actual CI and found false. Editorial accuracy to what the job runs, plus an
+honest accounting of the resulting coverage gap — not a design change to
+`validate.yml` itself, which this amendment does not touch.
 
 ## Audit
 
@@ -240,7 +303,8 @@ touches).
 | Schema `$id` resolves to the published `mif-spec.dev` URI | `schema/mif.schema.json` | `$id` field | compliant |
 | Conformance test documented (validator + round-trip, exit 0 = conform) | `docs/okf-conformance.md` | "3. The conformance test" heading | compliant |
 
-**Note on the `validate-ontologies` discrepancy:** as of ADR-018/ADR-019
+**Note on the `validate-ontologies` discrepancy (as originally written, before
+the same-day correction/amendment below):** as of ADR-018/ADR-019
 (2026-07-01), ontology-content and namespace-consistency validation for this
 repo's own content moved entirely to the `modeled-information-format/ontologies`
 repo — this job's own inline comment says so explicitly ("this repo has
@@ -248,11 +312,26 @@ nothing local for those checks to run against"). The job now runs only
 `scripts/test_subtype_of.py` against hardcoded fixtures: a real regression
 test for the `subtype_of` resolver, but it does not validate ontology files
 or namespace consistency in this repo the way this ADR's own Decision section
-(item 4) still describes. That narrowing is already ratified by ADR-018/019;
-this ADR's Decision text just hasn't been updated to reflect it. Filed as
-#240 rather than amended here, since a formal `## Amendment` (per this repo's
-`adr/README.md` Status-Values convention) is a real editorial decision about
-scope and wording, not a mechanical fix.
+(item 4) *at the time this audit entry was written* still described. That
+narrowing is already ratified by ADR-018/019; this ADR's Decision text just
+hadn't been updated to reflect it. Filed as #240 rather than amended in this
+same PR, since a formal `## Amendment` (per this repo's `adr/README.md`
+Status-Values convention) is a real editorial decision about scope and
+wording, not a mechanical fix.
+
+**Correction and resolution (added same day, resolving #240):** two things
+changed since the paragraph above was written, both addressed elsewhere in
+this same file — read those, not the paragraph above, for current state.
+First, "moved entirely to" overstates what actually happened: verified
+against the `ontologies` repo's own CI, no equivalent schema/namespace-
+consistency check runs there either. The validation did not move, it stopped
+running; see the Amendment section above and
+[ontologies#51](https://github.com/modeled-information-format/ontologies/issues/51).
+Second, #240 *was* in fact amended in this same PR (see the Amendment section
+and the current Decision item 4 above) rather than deferred as the paragraph
+above originally anticipated — this dated audit entry is left otherwise
+unedited as a historical record of what the 2026-07-11 re-audit found before
+that same-day amendment landed.
 
 **Summary:** Re-audit triggered by #238: the 2026-06-18 entry's raw line-number
 citations had drifted for 4 of its 5 `validate.yml` rows even before this PR
@@ -262,9 +341,13 @@ Re-verifying against current file state also surfaced the `validate-ontologies`
 discrepancy noted above — not something #238 set out to find, but exactly the
 kind of drift a real re-audit exists to catch. Re-verified every finding
 against the current file state; `okf-conformance` has grown from 2 gating
-checks at the 2026-06-18 audit to 7. No CI-gating regressions found; the one
-discrepancy is a documentation gap (Decision text not updated for an already-
-ratified narrowing), not a test that stopped running.
+checks at the 2026-06-18 audit to 7. No regression in what this repo's own
+CI gates on; the discrepancy is a documentation gap in this ADR's Decision
+text plus (per the same-day correction above) a real, separately-tracked CI
+coverage gap in the `ontologies` repo.
 
 **Action Required:** #240 (amend ADR-012's Decision section for the
-`validate-ontologies` narrowing already ratified by ADR-018/019).
+`validate-ontologies` narrowing) — resolved by this ADR's own 2026-07-11
+Amendment section and Decision item 4 update, in the same PR that closes
+#240. The coverage gap the correction above surfaced is tracked separately
+as ontologies#51 and remains open.
