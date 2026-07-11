@@ -42,16 +42,8 @@ CONTAINER_SCHEMA = REPO_ROOT / "schema" / "container.schema.json"
 DOCUMENT_REFERENCE_SCHEMA = REPO_ROOT / "schema" / "document-reference.schema.json"
 DEFS_GLOB = str(REPO_ROOT / "schema" / "definitions" / "*.schema.json")
 
-# kind -> (schema, extra_refs) for the records[] validated here. `extensions`
-# content is deliberately excluded: per ADR-021 Decision point 7, it is
-# unvalidated, vendor-owned data.
-_KIND_SCHEMAS: dict[str, tuple[Path, tuple[Path, ...]]] = {
-    "memory": (MIF_SCHEMA, ()),
-    "document": (DOCUMENT_REFERENCE_SCHEMA, (MIF_SCHEMA,)),
-}
 
-
-def _ajv_validate(schema: Path, instance: Path, extra_refs: tuple[Path | str, ...] = ()) -> list[str]:
+def _ajv_validate(schema: Path, instance: object, extra_refs: tuple[Path | str, ...] = ()) -> list[str]:
     """Validate `instance` against `schema`, always resolving DEFS_GLOB in
     addition to any caller-supplied `extra_refs` (e.g. document-reference.
     schema.json's $ref onto mif.schema.json)."""
@@ -59,7 +51,7 @@ def _ajv_validate(schema: Path, instance: Path, extra_refs: tuple[Path | str, ..
 
 
 def _ajv_validate_batch(
-    schema: Path, instances: Mapping[str, Path | dict], extra_refs: tuple[Path | str, ...] = ()
+    schema: Path, instances: Mapping[str, object], extra_refs: tuple[Path | str, ...] = ()
 ) -> dict[str, list[str]]:
     """Batched counterpart to `_ajv_validate`: one ajv-cli invocation for all
     `instances`, still always resolving DEFS_GLOB."""
@@ -77,26 +69,39 @@ def validate_corpus(path: Path) -> list[str]:
     for line in _ajv_validate(CONTAINER_SCHEMA, corpus, extra_refs=(MIF_SCHEMA,)):
         errors.append(f"{path}: envelope invalid against container.schema.json: {line}")
 
-    # Group same-kind records so each kind gets one ajv invocation (one
-    # schema compile) instead of one invocation per record (#260).
-    groups: dict[str, dict[int, dict]] = {kind: {} for kind in _KIND_SCHEMAS}
+    # Only two kinds are ever defined (ADR-021 Decision point 3); one batched
+    # ajv-cli call per kind present, instead of one call per record (#260).
+    # `str(i)` keys the batch by plain record index; `kind == "..."` string
+    # comparison (not a dict-membership test) so a malformed, unhashable
+    # `kind` value (a list or object) is skipped like any other unrecognized
+    # kind, not a crash.
+    memory: dict[str, dict] = {}
+    document: dict[str, dict] = {}
+    order: list[tuple[int, str]] = []
     for i, record in enumerate(corpus.get("records", [])):
         if not isinstance(record, dict):
             errors.append(f"{path}: records[{i}]: expected an object, got {type(record).__name__}")
             continue
         kind = record.get("kind")
-        if kind in groups:
-            groups[kind][i] = record.get("payload", {})
+        payload = record.get("payload", {})
+        if kind == "memory":
+            memory[str(i)] = payload
+            order.append((i, "memory"))
+        elif kind == "document":
+            document[str(i)] = payload
+            order.append((i, "document"))
 
-    for kind, indexed_payloads in groups.items():
-        if not indexed_payloads:
-            continue
-        schema, extra_refs = _KIND_SCHEMAS[kind]
-        instances: dict[str, Path | dict] = {f"idx-{i}": payload for i, payload in indexed_payloads.items()}
-        results = _ajv_validate_batch(schema, instances, extra_refs=extra_refs)
-        for i in indexed_payloads:
-            for line in results[f"idx-{i}"]:
-                errors.append(f"{path}: records[{i}] (kind={kind}) invalid: {line}")
+    results: dict[str, dict[str, list[str]]] = {}
+    if memory:
+        results["memory"] = _ajv_validate_batch(MIF_SCHEMA, memory)
+    if document:
+        results["document"] = _ajv_validate_batch(DOCUMENT_REFERENCE_SCHEMA, document, extra_refs=(MIF_SCHEMA,))
+
+    # Emit in original records[] order, not grouped by kind, so error output
+    # still reads top-to-bottom the way the source file does.
+    for i, kind in order:
+        for line in results[kind][str(i)]:
+            errors.append(f"{path}: records[{i}] (kind={kind}) invalid: {line}")
 
     return errors
 

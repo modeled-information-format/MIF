@@ -302,6 +302,8 @@ is a gap in what the citation points at, not in this ADR.
 
 ### 2026-07-11 (follow-up)
 
+**Audited revision:** `252767a724a20771555942afc25a622c5b7ab1a9`
+
 **Status:** Compliant
 
 **Findings:**

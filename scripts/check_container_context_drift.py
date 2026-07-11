@@ -41,23 +41,24 @@ def _wasderivedfrom_in_container() -> object:
         return f"<not found: {e!r}>"
 
 
+# (label, core_value, container_value) -- computed eagerly at import time,
+# since CORE_CONTEXT/CONTAINER_CONTEXT are already fully loaded above.
 CHECKS = [
     (f"prefix {p!r} matches between context.jsonld and container-context.jsonld",
-     lambda p=p: (CORE_CONTEXT.get(p), CONTAINER_CONTEXT.get(p)))
+     CORE_CONTEXT.get(p), CONTAINER_CONTEXT.get(p))
     for p in SHARED_PREFIXES
 ] + [
     ("extensions term definition matches between context.jsonld and container-context.jsonld",
-     lambda: (CORE_CONTEXT.get("extensions"), CONTAINER_CONTEXT.get("extensions"))),
+     CORE_CONTEXT.get("extensions"), CONTAINER_CONTEXT.get("extensions")),
     ("wasDerivedFrom term definition matches (top-level in context.jsonld, "
      "nested under provenance in container-context.jsonld)",
-     lambda: (CORE_CONTEXT.get("wasDerivedFrom"), _wasderivedfrom_in_container())),
+     CORE_CONTEXT.get("wasDerivedFrom"), _wasderivedfrom_in_container()),
 ]
 
 
 def main() -> int:
     failed = []
-    for label, get_pair in CHECKS:
-        core_val, container_val = get_pair()
+    for label, core_val, container_val in CHECKS:
         if core_val == container_val:
             print(f"PASS: {label}")
         else:

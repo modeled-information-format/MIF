@@ -7,8 +7,10 @@ with a neighbor's result.
 """
 from __future__ import annotations
 
+import json
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).parent.parent
@@ -26,11 +28,9 @@ _SCHEMA = {
 
 def main() -> int:
     failed: list[str] = []
-    tmp_schema = ROOT / "scripts" / "_test_ajv_batch_schema.json"
-    import json
-
-    tmp_schema.write_text(json.dumps(_SCHEMA))
-    try:
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp_schema = Path(tmp) / "schema.json"
+        tmp_schema.write_text(json.dumps(_SCHEMA))
         # Case 1: mixed valid/invalid batch -- attribution must not cross-wire.
         instances = {
             "good-a": {"name": "alice"},
@@ -70,8 +70,6 @@ def main() -> int:
         print(f"{verdict}: 5 instances -> {spawn_count} ajv subprocess spawn(s) (expected 1)")
         if not ok:
             failed.append("subprocess spawn count")
-    finally:
-        tmp_schema.unlink(missing_ok=True)
 
     if failed:
         print(f"\najv batch validation test FAILED: {failed}")
