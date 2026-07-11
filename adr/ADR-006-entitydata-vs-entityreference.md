@@ -10,7 +10,7 @@ tags:
   - json-ld
 status: accepted
 created: 2026-01-27
-updated: 2026-06-18
+updated: 2026-07-11
 author: MIF Maintainers
 project: MIF
 technologies:
@@ -329,3 +329,56 @@ therefore describes the `ontology` reference as the accompanying, EntityData-
 defining artifact rather than a schema-enforced requirement.
 
 **Action Required:** None.
+
+### 2026-07-11
+
+**Audited revision:** 88b4a8f20d87773286abbc64644f4d5c762f6ce8
+
+**Status:** Compliant
+
+**Findings:**
+
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
+| EntityReference is a closed schema (`additionalProperties: false`), required `["@type", "entity"]`, fields `entityType`/`name`/`role`, with an `entity.@id` matching `^urn:mif:entity:` | `schema/definitions/entity-reference.schema.json` | the top-level `"required": ["@type", "entity"]` array; the `entity.properties["@id"].pattern` field (`^urn:mif:entity:`); the schema's closing `"additionalProperties": false` (root object, immediately after the `role` property) | compliant |
+| EntityReference core types are the closed set Person/Organization/Technology/Concept/File, plus a lowercase-kebab custom-type pattern | `schema/definitions/entity-reference.schema.json` | the `entityType.oneOf` enum (`["Person", "Organization", "Technology", "Concept", "File"]`) and its sibling custom-type `"pattern": "^[a-z][a-z0-9-]*$"` | compliant |
+| EntityData is an open schema (`additionalProperties: true`), requires only `name`, offers lowercase-kebab `entity_type` and `entity_id` | `schema/mif.schema.json` | the `"EntityData":` `$def` — `"required": ["name"]` plus its `entity_type`/`entity_id` properties and trailing `"additionalProperties": true` | compliant |
+| The two shapes occupy distinct top-level slots: singular `entity` (EntityData) alongside the `ontology` reference, and `entities[]` (array of EntityReference) | `schema/mif.schema.json` | the top-level `"ontology":`, `"entity":` (`"$ref": "#/$defs/EntityData"`), and `"entities":` (`items.$ref: "#/$defs/EntityReference"`) properties | compliant |
+| The main schema's `EntityReference` `$def` delegates to the dedicated definition file | `schema/mif.schema.json` | the `"EntityReference":` `$def` (`"$ref": "./definitions/entity-reference.schema.json"`) | compliant |
+
+**Summary:** Re-verified every finding against current file state, not just
+re-anchored at today's line numbers. All five findings' underlying claims are
+still true and unchanged in substance since 2026-06-18: EntityReference's
+closed shape and core-type enum, EntityData's open shape, the two shapes'
+distinct top-level slots, and the `$ref` delegation all hold. What changed is
+only *position*: `schema/mif.schema.json` grew as new `$defs` (vendor-neutral
+`DocumentReference` #84, the W3C-PROV provenance layer #85, and
+temporal-consistency/scalar-property additions #79 — all landed between
+2026-06-18 and this audit) were inserted ahead of `EntityData`/`EntityReference`
+in the `$defs` block. That pushed `EntityData` from L452-L472 to L597-L617 and
+the `EntityReference` delegation `$def` from L244-L246 to L348-L350 — both raw
+citations in the 2026-06-18 entry are now stale, exactly the failure mode this
+durable-anchor retrofit exists to prevent. `schema/definitions/entity-reference.schema.json`
+is untouched since 2026-06-18 (its two findings' old line ranges still happen
+to resolve correctly). The top-level `entity`/`entities`/`ontology` properties
+in `mif.schema.json` haven't moved either, since they sit in the `properties`
+block near the top of the file, ahead of the growing `$defs` section.
+
+Also checked ADR-006's two related ADRs for drift: ADR-004 (Three-Tier Trait
+Inheritance) is unchanged — still `accepted`, no amendment, still correctly
+cross-references ADR-006. ADR-002 (Dual-Format Design) was refined by ADR-011
+after ADR-006 was written: the "co-equal formats" framing ADR-006's Related
+Decisions section leans on ("both entity representations carry through the
+Markdown and JSON-LD projections") is now more precisely "JSON-LD is a derived
+projection of canonical Markdown, lossless on round-trip" per ADR-002's own
+Amendment section. This doesn't break ADR-006's claim — both EntityReference
+and EntityData still carry through the derived projection without
+special-casing — but ADR-006 doesn't cite ADR-011 anywhere, which is a minor
+staleness in its own right.
+
+**Action Required:** None blocking. One cosmetic, non-blocking suggestion:
+consider adding ADR-011 to ADR-006's `related:` frontmatter / Related
+Decisions, since the "both formats carry through" claim it relies on was
+refined there. Left as an editorial call rather than fixed inline here, per
+the same reasoning ADR-012's audit used for its own filed-not-amended
+discrepancy (#240).

@@ -10,7 +10,7 @@ tags:
   - composition
 status: accepted
 created: 2026-01-27
-updated: 2026-06-18
+updated: 2026-07-11
 author: MIF Maintainers
 project: MIF
 technologies:
@@ -22,6 +22,8 @@ audience:
 related:
   - ADR-006-entitydata-vs-entityreference.md
   - ADR-001-cognitive-triad-taxonomy.md
+  - ADR-018-ontology-corpus-dedicated-repository-and-serving.md
+  - ADR-019-deploy-time-attested-ontology-vendoring.md
 ---
 
 # ADR-004: Three-Tier Trait Inheritance
@@ -171,7 +173,7 @@ field; entity types compose individual traits through a `traits` array.
 - The three-tier limit is a deliberate constraint; a domain that wants a fourth
   conceptual layer must fold it into Tier 3.
 - Trait conflicts still require a documented resolution strategy
-  (see SPECIFICATION.md Section 6.3).
+  (see SPECIFICATION.md Section 10.8.6).
 
 **Risk Assessment**:
 
@@ -239,7 +241,7 @@ entity_types:
    must collapse it into Tier 3 rather than extend the chain.
 2. **Conflict resolution required**: Composing traits from multiple tiers can
    surface field conflicts, which need a documented resolution strategy
-   (SPECIFICATION.md Section 6.3).
+   (SPECIFICATION.md Section 10.8.6).
 3. **Chain literacy required**: Readers must understand the three-tier chain to
    know where a given field originates.
 
@@ -258,7 +260,7 @@ ontologies extending both base tiers). The fixed depth keeps the secondary
 driver of reasoning simplicity intact. Mitigations:
 
 - Trait conflicts are handled by the documented resolution strategy in
-  SPECIFICATION.md Section 6.3.
+  SPECIFICATION.md Section 10.8.6.
 - The `extends`/`traits` split is consistent across all shipped ontologies, so
   the declaration model is uniform for tooling and authors alike.
 
@@ -266,6 +268,8 @@ driver of reasoning simplicity intact. Mitigations:
 
 - [ADR-006: EntityData vs EntityReference](ADR-006-entitydata-vs-entityreference.md) — EntityData relies on the trait system to give structured entities their field schemas.
 - [ADR-001: Cognitive Triad Taxonomy](ADR-001-cognitive-triad-taxonomy.md) — the base knowledge types that traits extend and enrich.
+- [ADR-018: Ontology Corpus: Dedicated Repository, Flat Layout, and Versioned Serving](ADR-018-ontology-corpus-dedicated-repository-and-serving.md) — relocated `mif-base`/`shared-traits` and every domain ontology this ADR's traits live in to the dedicated `ontologies` repo as sole source of record.
+- [ADR-019: Deploy-Time, Attestation-Verified Ontology Vendoring](ADR-019-deploy-time-attested-ontology-vendoring.md) — the mechanism by which this repo consumes the relocated ontology content at deploy time.
 
 ## Links
 
@@ -274,7 +278,7 @@ None.
 ## More Information
 
 - **Date:** 2026-06-18
-- **Source:** `ontologies/mif-base.ontology.yaml` (Tier 1), `ontologies/shared-traits.ontology.yaml` (Tier 2), `ontologies/examples/csi-5w1h.ontology.yaml` (Tier 3 example); SPECIFICATION.md Section 6.3 (Trait Conflict Resolution).
+- **Source:** `ontologies/mif-base.ontology.yaml` (Tier 1), `ontologies/shared-traits.ontology.yaml` (Tier 2), `ontologies/examples/csi-5w1h.ontology.yaml` (Tier 3 example); SPECIFICATION.md Section 10.8.6 (Trait Conflict Resolution).
 - **Related ADRs:** ADR-006, ADR-001
 
 ## Audit
@@ -302,3 +306,47 @@ this conversion cites the file-accurate names. The three-tier *model* — the
 substance of the decision — is fully compliant.
 
 **Action Required:** None.
+
+### 2026-07-11
+
+**Audited revision:** `88b4a8f20d87773286abbc64644f4d5c762f6ce8` (this repo); `bfed8cc17e08da4091e9b6c483cf03a150983cff` (`modeled-information-format/ontologies`, the external repo all four ontology-content findings now depend on — see note)
+
+**Status:** Compliant. The specific Tier 3 exemplar this ADR originally cited was deleted, but the three-tier pattern it illustrated is independently confirmed and now more widely used.
+
+**Findings:**
+
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
+| Tier 1 `mif-base` defines the MIF-core reusable traits (`timestamped`, `confidence`, `provenance`) | `mif-base.ontology.yaml` (`modeled-information-format/ontologies`) | the `traits:` block's `timestamped`, `confidence`, and `provenance` keys | compliant |
+| Tier 2 `shared-traits` extends `mif-base` via the `extends` field | `shared-traits.ontology.yaml` (`modeled-information-format/ontologies`) | the `ontology.extends:` list (`- mif-base`) | compliant |
+| Tier 2 cross-domain mixins present (`lifecycle`, `auditable`, `certified`, `located`, `bounded`, `owned`, `scheduled`, `transactional`, `measured`) | `shared-traits.ontology.yaml` (`modeled-information-format/ontologies`) | the `traits:` block's nine keys: `lifecycle`, `auditable`, `certified`, `located`, `bounded`, `owned`, `transactional`, `scheduled`, `measured` | compliant |
+| Tier 3 domain ontology extends both base tiers (`extends: [mif-base, shared-traits]`) | previously `ontologies/examples/csi-5w1h.ontology.yaml` — **that file no longer exists** (see note); now cited via any of 7 current exemplars, e.g. `biology-research-lab.ontology.yaml` | the `ontology.extends:` list (`- mif-base`, `- shared-traits`) | compliant, via a different (and now more numerous) exemplar than originally cited |
+
+**Note on the deleted Tier 3 exemplar:** `ontologies/examples/csi-5w1h.ontology.yaml`, the file this ADR's finding 4 originally cited, was permanently removed from the `modeled-information-format/ontologies` repo in commit `90975d9` ("refactor: flatten ontology corpus and add JSON-LD projections"), which deleted the entire `ontologies/examples/` tree. This is a real, confirmed discrepancy in the *citation* — the named file is gone, not merely moved. It is **not** a discrepancy in the *finding*: re-verified directly against the ontologies repo's current `main` (`bfed8cc17e08da4091e9b6c483cf03a150983cff`), 7 domain ontologies now extend both `mif-base` and `shared-traits` directly (`agriculture`, `biology-research-lab`, `engineering-base`, `market-research`, `regulatory-legal`, `research`, `trend-analysis`) — up from the single illustrative example this ADR originally pointed at. The three-tier pattern is more heavily used today than when this ADR was written, just no longer demonstrated by the specific file name in the audit trail.
+
+**Summary:** Re-verified all four findings against current state — three (Tier 1
+traits, Tier 2 `extends`, Tier 2 mixins) directly in `modeled-information-format/ontologies`,
+which now holds sole source-of-record for ontology content per ADR-018/ADR-019
+(2026-07-01/07-02); this repo (`MIF`) has no local ontology corpus for these
+to be re-verified against (the only local ontology YAML is
+`test/subtype_of/`'s small synthetic fixture set for resolver unit testing,
+unrelated to this ADR's real corpus). All three remain true. The fourth
+finding's cited file was deleted in the ontologies repo's "flatten ontology
+corpus" refactor; re-verified via 7 current exemplars instead, confirming the
+pattern itself is intact and now more widely adopted.
+
+Also found: this ADR's body text cited "SPECIFICATION.md Section 6.3" for
+trait-conflict resolution in four places (Option 4 Disadvantages, Consequences
+Negative #2, Decision Outcome, More Information Source line) — that content
+now lives at `#### 10.8.6 Trait Inheritance and Conflict Resolution` (content
+unchanged, only the section number moved). Fixed inline in this same PR as a
+mechanical citation-number correction, not an editorial change. This ADR's
+`related:` frontmatter (previously ADR-006, ADR-001 only) is updated in this
+same PR to add ADR-018 and ADR-019, since those are what relocated the source
+of record for the traits this ADR defines — ADR-018 already names ADR-004 as
+related in the other direction.
+
+**Action Required:** None. The deleted-exemplar citation is corrected above;
+the stale section-number citations and the one-way `related:` link are both
+fixed in this same PR (not deferred), since both are mechanical corrections
+rather than editorial-scope decisions.
