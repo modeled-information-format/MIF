@@ -72,6 +72,9 @@ jobs:
       - name: Temporal consistency + properties construct regression suite
         run: python -m pytest scripts/test_temporal_and_properties.py -q
 
+      - name: conceptType/memoryType alias regression suite
+        run: python -m pytest scripts/test_concept_type_alias.py -q
+
   schema-validation:
     name: Validate JSON-LD Projection Against Schema
     runs-on: ubuntu-latest

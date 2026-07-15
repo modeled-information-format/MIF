@@ -4,7 +4,11 @@
   "title": "MIF — Modeled Information Format (v1.0)",
   "description": "JSON Schema for validating the derived JSON-LD projection of a MIF v1.0 concept",
   "type": "object",
-  "required": ["@context", "@type", "@id", "conceptType", "content", "created"],
+  "required": ["@context", "@type", "@id", "content", "created"],
+  "anyOf": [
+    { "required": ["conceptType"] },
+    { "required": ["memoryType"] }
+  ],
   "properties": {
     "@context": {
       "description": "JSON-LD context",
