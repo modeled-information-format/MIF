@@ -1,0 +1,22 @@
+# pyld + transitive deps: real JSON-LD 1.1 expand/compact processor, used by
+# scripts/test_jsonld_context_fidelity.py to catch term-definition semantics
+# that a custom serializer's own round-trip (okf_validate.py / mif_convert.py)
+# can't see. Kept separate from requirements-ci.txt so schema-validation and
+# validate-ontologies (which never import pyld/lxml) don't pay to install a
+# compiled C-extension dependency they don't use.
+#
+# Hashes pinned for the CI job's env (ubuntu-latest, cp312,
+# manylinux_2_28-compatible x86_64 -- confirmed via
+# `docker run --rm --platform linux/amd64 python:3.12-slim pip download`,
+# not just `pip download` on a non-matching host, since pip prefers the
+# highest manylinux tag the runner's glibc supports and manylinux2014 is NOT
+# what a real cp312/glibc>=2.28 resolution selects for lxml); regenerate via
+# pip download as above if any version changes.
+cachetools==7.1.4 \
+    --hash=sha256:323dc4127934744db5b54eb4924482d7edafbf9554e820d1531c2e08c0e4ef54
+frozendict==2.4.7 \
+    --hash=sha256:972af65924ea25cf5b4d9326d549e69a9a4918d8a76a9d3a7cd174d98b237550
+lxml==6.1.1 \
+    --hash=sha256:ebe6af670449830d6d9b752c256a983291c766a1365ba5d5460048f9e33a7818
+pyld==3.1.0 \
+    --hash=sha256:bb6418dfdc159e354b8cb42673086c86ce928023559742366e84109723932ef3

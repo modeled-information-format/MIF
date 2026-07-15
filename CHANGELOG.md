@@ -7,6 +7,76 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-07-11
+
+### Added
+
+- **Container Profile (ADR-021)** — an OPTIONAL, single-file `*.corpus.json`
+  transport envelope that serializes a Bundle (or a subset of one) for wire
+  transport: `schema/container.schema.json`, `schema/container-context.jsonld`,
+  `schema/document-reference.schema.json`, `scripts/validate_container.py`,
+  a `container-validation` CI job, a worked example under
+  `examples/container/`, and `docs/CONTAINER-PROFILE.md`. Vendor-specific
+  corpus metadata (compression manifests, version DAGs) routes through a
+  generalized `extensions` mechanism rather than becoming native MIF
+  vocabulary. Accepted and implemented in the same change (reframes
+  issue #77).
+- **[Tooling]**: `scripts/check_relationship_type_vocab_coverage.py` — cross-checks
+  `schema/context.jsonld`'s `relationships.type.@context` term mapping against
+  `public/ns/vocabulary.jsonld`'s registered `rdfs:Class` terms, guarding against
+  the #230 defect class (a relationship-type term declared in one file but never
+  wired to the other) recurring. Wired into the `okf-conformance` CI job. (#233)
+- **[Tooling]**: `scripts/test_temporal_and_properties.py` (temporal-consistency
+  and `properties`-construct regression suite) is now run in the `okf-conformance`
+  CI job via `pytest`; previously it only ran if a contributor had `pytest`
+  installed locally and remembered to invoke it by hand. (#235)
+
+## [1.2.2] - 2026-07-04
+
+### Fixed
+
+- **Release workflow: draft-first publication** — the workflow now triggers
+  on the version tag push, creates the release itself as a draft after all
+  attestations verify fail-closed, uploads the attested artifacts to the
+  draft, and publishes last via the release App identity. Under the repo's
+  immutable-releases setting the previous publish-then-upload flow could
+  never attach assets (HTTP 422 at upload); the v1.2.0 and v1.2.1 release
+  slots remain published but assetless for this reason. v1.2.2 is the first
+  release carrying its attested artifacts.
+
+## [1.2.1] - 2026-07-04
+
+### Fixed
+
+- **JSON-LD context: `accessed` typed `xsd:date`** — the context declared
+  `xsd:dateTime` while both `citation.schema.json` and `mif.schema.json`
+  constrain `accessed` to `format: date` (YYYY-MM-DD, not a valid
+  `xsd:dateTime` lexical form); the context now agrees with the schemas,
+  matching the sibling `date` term.
+- **Release workflow: SBOM release attach removed** (#210) — the SBOM
+  generation action attempted to attach the raw SBOM file to the release
+  under the job's read-only `GITHUB_TOKEN` and failed every
+  release-published run; the verified App-token upload step already
+  publishes the SBOM alongside the attested artifacts. No attestation or
+  verification step changed.
+- The v1.2.0 GitHub release object was deleted during failure recovery
+  and cannot be recreated (immutable releases); the `v1.2.0` tag and its
+  content remain. v1.2.1 is the attested release for the 1.2 line.
+
+## [1.2.0] - 2026-07-04
+
+### Added
+
+- **Entity-type classification fields** (ADR-020) — the ontology schema's
+  `entity_type` definition gains three optional, additive string-array
+  fields supporting confidence-tiered embedding-based classification:
+  `aliases` (synonyms/label variations, `skos:altLabel`), `exemplars`
+  (curated canonical examples, `skos:example`), and `negative_examples`
+  (curated near-misses from confusable type pairs,
+  `https://mif-spec.dev/ns/ontology#negativeExample`). Ontology schema version
+  1.0.0 -> 1.1.0; `yaml2jsonld.py` projects the new fields; existing
+  ontologies carrying only `description` remain valid.
+
 ## [1.1.0] - 2026-06-30
 
 ### Breaking Changes
@@ -269,7 +339,11 @@ See [MIGRATION.md](MIGRATION.md) and run
 - MIF specification draft v0.1
 - Market research framework
 
-[Unreleased]: https://github.com/modeled-information-format/MIF/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/modeled-information-format/MIF/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/modeled-information-format/MIF/compare/v1.2.2...v1.3.0
+[1.2.2]: https://github.com/modeled-information-format/MIF/compare/v1.2.1...v1.2.2
+[1.2.1]: https://github.com/modeled-information-format/MIF/compare/v1.2.0...v1.2.1
+[1.2.0]: https://github.com/modeled-information-format/MIF/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/modeled-information-format/MIF/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/modeled-information-format/MIF/compare/v0.1.0...v1.0.0
 [0.1.0]: https://github.com/modeled-information-format/MIF/releases/tag/v0.1.0

@@ -11,7 +11,7 @@ tags:
   - governance
 status: accepted
 created: 2026-06-18
-updated: 2026-06-18
+updated: 2026-07-11
 author: MIF Maintainers
 project: MIF
 technologies:
@@ -27,6 +27,7 @@ related:
   - ADR-012-okf-conformance-tested-invariant.md
   - ADR-001-cognitive-triad-taxonomy.md
   - ADR-008-decay-model-rationale.md
+  - ADR-021-container-profile.md
 ---
 
 # ADR-009: OKF Compliance as a Superset (Pinned OKF v0.1)
@@ -157,9 +158,9 @@ specification with its own identity model and governance.
 
 MIF takes **no normative dependency** on OKF's evolving draft. It pins OKF v0.1's
 conformance criteria in `docs/okf-conformance.md`, which is **normative within
-MIF** (SPECIFICATION.md, Invariant 5 — "No floating dependency on OKF"). A future
-MIF revision MAY replace that pinned section with newer upstream text, but only
-as a deliberate, reviewed act.
+MIF** ([SPECIFICATION.md, Invariant 5](../SPECIFICATION.md#invariants) — "No
+floating dependency on OKF"). A future MIF revision MAY replace that pinned
+section with newer upstream text, but only as a deliberate, reviewed act.
 
 The superset relationship is made concrete by the MIF → OKF mapping
 (`docs/okf-conformance.md §2`): concept files map to OKF concepts, the
@@ -197,8 +198,9 @@ The superset-with-pinned-v0.1 approach achieves the primary drivers:
 determinism (frozen criteria), interoperability (generic OKF legibility), and
 independence (own governance). Mitigations:
 
-- The "no floating dependency" rule (Invariant 5) is documented at the top of
-  `docs/okf-conformance.md` and in SPECIFICATION.md's Abstract.
+- The "no floating dependency" rule ([Invariant 5](../SPECIFICATION.md#invariants))
+  is documented at the top of `docs/okf-conformance.md` and in
+  SPECIFICATION.md's Abstract.
 - The relationship is enforced mechanically by `scripts/okf_validate.py` and the
   lossless round-trip, gated in CI (ADR-012).
 
@@ -222,22 +224,97 @@ independence (own governance). Mitigations:
 
 ## Audit
 
+Findings cite durable anchors (heading text), not raw line numbers — line
+numbers in `SPECIFICATION.md` and `docs/okf-conformance.md` shift as
+unrelated content is added, which had already made this entry's original
+citations stale by the 2026-07-11 audit below (see that entry's Summary).
+`grep -n` for the quoted anchor text to find its current line.
+
 ### 2026-06-18
+
+**Audited revision:** `7f8d2de6c671cf5f354e4034b1524c0c112ddf1f`
 
 **Status:** Compliant
 
 **Findings:**
 
-| Finding | Files | Lines | Assessment |
-|---------|-------|-------|------------|
-| Superset-not-subordination and "no normative dependency / pin OKF v0.1" stated normatively | `SPECIFICATION.md` | L29-L34 | compliant |
-| Invariant 5 ("normative within MIF") pinned criteria document present | `docs/okf-conformance.md` | L3-L19 | compliant |
-| Pinned OKF v0.1 criteria enumerated (bundle shape, required `type`, reserved filenames, concept graph, broken-links-tolerated) | `docs/okf-conformance.md` | L25-L41 | compliant |
-| MIF → OKF mapping (typed relationships overlay OKF links; `.jsonld` outside `*.md` glob) | `docs/okf-conformance.md` | L52-L65 | compliant |
-| "MIF answers OKF's open questions" positioning table | `SPECIFICATION.md` | L49-L57 | compliant |
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
+| Superset-not-subordination and "no normative dependency / pin OKF v0.1" stated normatively | `SPECIFICATION.md` | the Abstract paragraph beginning "OKF compliance is achieved as a **superset, not by subordination**" | compliant |
+| Invariant 5 ("normative within MIF") pinned criteria document present | `docs/okf-conformance.md` | document heading "# OKF Conformance (pinned)" plus the phrase "**normative within MIF**" in the sentence following it | compliant |
+| Pinned OKF v0.1 criteria enumerated (bundle shape, required `type`, reserved filenames, concept graph, broken-links-tolerated) | `docs/okf-conformance.md` | heading "## 1. Pinned OKF v0.1 criteria" | compliant |
+| MIF → OKF mapping (typed relationships overlay OKF links; `.jsonld` outside `*.md` glob) | `docs/okf-conformance.md` | heading "## 2. MIF → OKF mapping" | compliant |
+| "MIF answers OKF's open questions" positioning table | `SPECIFICATION.md` | heading "### MIF answers OKF's open questions" | compliant |
 
 **Summary:** The superset relationship, the pinned-v0.1 / no-floating-dependency
 rule (Invariant 5), and the MIF→OKF mapping are all present and normative in the
 specification and the pinned conformance document.
+
+**Action Required:** None.
+
+### 2026-07-11
+
+**Audited revision:** `88b4a8f20d87773286abbc64644f4d5c762f6ce8`
+
+**Status:** Compliant
+
+**Findings:**
+
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
+| Superset-not-subordination and "no normative dependency / pin OKF v0.1" stated normatively | `SPECIFICATION.md` | the Abstract paragraph beginning "OKF compliance is achieved as a **superset, not by subordination**" | compliant |
+| Invariant 5 ("normative within MIF") pinned criteria document present | `docs/okf-conformance.md` | document heading "# OKF Conformance (pinned)" plus the phrase "**normative within MIF**" in the sentence following it | compliant |
+| Pinned OKF v0.1 criteria enumerated (bundle shape, required `type`, reserved filenames, concept graph, broken-links-tolerated) | `docs/okf-conformance.md` | heading "## 1. Pinned OKF v0.1 criteria" | compliant |
+| MIF → OKF mapping (typed relationships overlay OKF links; `.jsonld` outside `*.md` glob) | `docs/okf-conformance.md` | heading "## 2. MIF → OKF mapping" | compliant |
+| "MIF answers OKF's open questions" positioning table | `SPECIFICATION.md` | heading "### MIF answers OKF's open questions" | compliant |
+
+**Summary:** Re-verified every finding against current file content, not just
+against a resolving citation. Both cited source files (`SPECIFICATION.md`,
+`docs/okf-conformance.md`) are functionally unchanged since 2026-06-18.
+`SPECIFICATION.md` still self-declares "**Last Updated**: 2026-06-18";
+`docs/okf-conformance.md` carries no such field (it instead self-declares
+"Conforms to OKF v0.1, criteria copied 2026-06"), but its content is likewise
+unchanged since the 2026-06-18 audit. The only observed drift is line-number
+shift from unrelated edits elsewhere in the same files (e.g. the positioning
+table moved from ~L49-57 to ~L50-58), exactly the class of churn durable
+anchors are meant to survive. The pinned-OKF-v0.1 criteria (§1), the
+MIF→OKF mapping (§2), and the positioning table's row content (`Supersedes`/
+`ConflictsWith`, `sourceType`/`trustLevel`, TTL/freshness) were spot-checked
+against SPECIFICATION.md §8 and the schema, not just re-cited — all still
+match. All five related ADRs (ADR-010, ADR-011, ADR-012, ADR-001, ADR-008)
+remain `status: accepted`; none have been superseded or renumbered, so no
+update to this ADR's `related:` frontmatter or Related Decisions section is
+needed. ADR-012's own 2026-07-11 re-audit found one real discrepancy
+(`validate-ontologies` job scope, tracked as #240), but that finding is
+scoped to `.github/workflows/validate.yml`, which this ADR does not cite —
+it does not affect any finding here. One pre-existing, non-blocking gap
+independently confirmed during this audit (not a change since 2026-06-18):
+"Invariant 5" and "Invariant 2" (and others, 1-6, cited across the repo) are
+referenced by number in prose throughout `SPECIFICATION.md` and several
+ADRs, but no enumerated invariants list exists anywhere defining them
+collectively — filed as
+[#252](https://github.com/modeled-information-format/MIF/issues/252). This
+doesn't invalidate the finding above (the citation itself resolves fine); it
+is a gap in what the citation points at, not in this ADR.
+
+**Action Required:** None for this ADR. See #252 for the separately-tracked
+"Invariant 5 cited but not enumerated" gap.
+
+### 2026-07-11 (follow-up)
+
+**Audited revision:** `252767a724a20771555942afc25a622c5b7ab1a9`
+
+**Status:** Compliant
+
+**Findings:**
+
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
+| Canonical enumerated Invariants list now exists; this ADR's Invariant 5 citations link to it | `SPECIFICATION.md`, `adr/ADR-009-okf-compliance-superset.md` | `SPECIFICATION.md`'s `### Invariants` section; the two Invariant 5 citations in this ADR's Decision Outcome and Consequences/Negative sections | compliant |
+
+**Summary:** #252 is fixed: `SPECIFICATION.md` now has a `### Invariants`
+section enumerating Invariants 2-6 (no citation anywhere in the repo names
+an Invariant 1 or 7+), and this ADR's own Invariant 5 references now link to
+it. Issue #252 closed.
 
 **Action Required:** None.

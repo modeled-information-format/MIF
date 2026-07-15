@@ -32,11 +32,21 @@
     },
     "conceptType": {
       "@id": "mif:conceptType",
-      "@type": "@vocab"
+      "@type": "@vocab",
+      "@context": {
+        "semantic": "mif:SemanticType",
+        "episodic": "mif:EpisodicType",
+        "procedural": "mif:ProceduralType"
+      }
     },
     "memoryType": {
       "@id": "mif:memoryType",
-      "@type": "@vocab"
+      "@type": "@vocab",
+      "@context": {
+        "semantic": "mif:SemanticType",
+        "episodic": "mif:EpisodicType",
+        "procedural": "mif:ProceduralType"
+      }
     },
     "title": "dc:title",
     "namespace": "mif:namespace",
@@ -86,11 +96,37 @@
     "Citation": "mif:Citation",
     "citationType": {
       "@id": "mif:citationType",
-      "@type": "@vocab"
+      "@type": "@vocab",
+      "@context": {
+        "article": "mif:CitationTypeArticle",
+        "book": "mif:CitationTypeBook",
+        "paper": "mif:CitationTypePaper",
+        "website": "mif:CitationTypeWebsite",
+        "documentation": "mif:CitationTypeDocumentation",
+        "repository": "mif:CitationTypeRepository",
+        "video": "mif:CitationTypeVideo",
+        "podcast": "mif:CitationTypePodcast",
+        "specification": "mif:CitationTypeSpecification",
+        "dataset": "mif:CitationTypeDataset",
+        "tool": "mif:CitationTypeTool",
+        "other": "mif:CitationTypeOther"
+      }
     },
     "citationRole": {
       "@id": "mif:citationRole",
-      "@type": "@vocab"
+      "@type": "@vocab",
+      "@context": {
+        "supports": "mif:CitationRoleSupports",
+        "refutes": "mif:CitationRoleRefutes",
+        "background": "mif:CitationRoleBackground",
+        "methodology": "mif:CitationRoleMethodology",
+        "contradicts": "mif:CitationRoleContradicts",
+        "extends": "mif:CitationRoleExtends",
+        "derived": "mif:CitationRoleDerived",
+        "source": "mif:CitationRoleSource",
+        "example": "mif:CitationRoleExample",
+        "review": "mif:CitationRoleReview"
+      }
     },
     "url": {
       "@id": "schema:url",
@@ -103,7 +139,7 @@
     },
     "accessed": {
       "@id": "mif:accessed",
-      "@type": "xsd:dateTime"
+      "@type": "xsd:date"
     },
     "relevance": {
       "@id": "mif:relevance",
@@ -127,7 +163,22 @@
     "DocumentReference": "mif:DocumentReference",
     "documentType": {
       "@id": "mif:documentType",
-      "@type": "@vocab"
+      "@type": "@vocab",
+      "@context": {
+        "pdf": "mif:DocumentTypePdf",
+        "html": "mif:DocumentTypeHtml",
+        "markdown": "mif:DocumentTypeMarkdown",
+        "text": "mif:DocumentTypeText",
+        "transcript": "mif:DocumentTypeTranscript",
+        "dataset": "mif:DocumentTypeDataset",
+        "spreadsheet": "mif:DocumentTypeSpreadsheet",
+        "presentation": "mif:DocumentTypePresentation",
+        "image": "mif:DocumentTypeImage",
+        "audio": "mif:DocumentTypeAudio",
+        "video": "mif:DocumentTypeVideo",
+        "email": "mif:DocumentTypeEmail",
+        "other": "mif:DocumentTypeOther"
+      }
     },
     "contentType": "mif:contentType",
     "byteLength": {
@@ -146,7 +197,18 @@
         "@vocab": "https://mif-spec.dev/ns/",
         "type": {
           "@id": "mif:relationshipType",
-          "@type": "@vocab"
+          "@type": "@vocab",
+          "@context": {
+            "relates-to": "mif:RelatesTo",
+            "derived-from": "mif:DerivedFrom",
+            "supersedes": "mif:Supersedes",
+            "conflicts-with": "mif:ConflictsWith",
+            "part-of": "mif:PartOf",
+            "implements": "mif:Implements",
+            "uses": "mif:Uses",
+            "created": "mif:Created",
+            "mentioned-in": "mif:MentionedIn"
+          }
         },
         "target": {
           "@id": "mif:target",
@@ -158,28 +220,10 @@
         }
       }
     },
-    "relationshipType": {
-      "@id": "mif:relationshipType",
-      "@type": "@vocab"
-    },
-    "target": {
-      "@id": "mif:target",
-      "@type": "@id"
-    },
     "strength": {
       "@id": "mif:strength",
       "@type": "xsd:decimal"
     },
-
-    "RelatesTo": "mif:RelatesTo",
-    "DerivedFrom": "mif:DerivedFrom",
-    "Supersedes": "mif:Supersedes",
-    "ConflictsWith": "mif:ConflictsWith",
-    "PartOf": "mif:PartOf",
-    "Implements": "mif:Implements",
-    "Uses": "mif:Uses",
-    "Created": "mif:Created",
-    "MentionedIn": "mif:MentionedIn",
 
     "temporal": "mif:temporal",
     "validFrom": {
@@ -228,7 +272,14 @@
     "provenance": "mif:provenance",
     "sourceType": {
       "@id": "mif:sourceType",
-      "@type": "@vocab"
+      "@type": "@vocab",
+      "@context": {
+        "user_explicit": "mif:UserExplicit",
+        "user_implicit": "mif:UserImplicit",
+        "agent_inferred": "mif:AgentInferred",
+        "external_import": "mif:ExternalImport",
+        "system_generated": "mif:SystemGenerated"
+      }
     },
     "sourceRef": {
       "@id": "mif:sourceRef",
@@ -242,7 +293,15 @@
     },
     "trustLevel": {
       "@id": "mif:trustLevel",
-      "@type": "@vocab"
+      "@type": "@vocab",
+      "@context": {
+        "verified": "mif:Verified",
+        "user_stated": "mif:UserStated",
+        "high_confidence": "mif:HighConfidence",
+        "moderate_confidence": "mif:ModerateConfidence",
+        "low_confidence": "mif:LowConfidence",
+        "uncertain": "mif:Uncertain"
+      }
     },
 
     "wasGeneratedBy": {
@@ -261,19 +320,6 @@
       "@id": "prov:wasAssociatedWith",
       "@type": "@id"
     },
-
-    "user_explicit": "mif:UserExplicit",
-    "user_implicit": "mif:UserImplicit",
-    "agent_inferred": "mif:AgentInferred",
-    "external_import": "mif:ExternalImport",
-    "system_generated": "mif:SystemGenerated",
-
-    "verified": "mif:Verified",
-    "user_stated": "mif:UserStated",
-    "high_confidence": "mif:HighConfidence",
-    "moderate_confidence": "mif:ModerateConfidence",
-    "low_confidence": "mif:LowConfidence",
-    "uncertain": "mif:Uncertain",
 
     "embedding": "mif:embedding",
     "modelVersion": "mif:modelVersion",
@@ -296,11 +342,7 @@
 
     "extensions": {
       "@id": "mif:extensions",
-      "@container": "@index"
-    },
-
-    "semantic": "mif:SemanticType",
-    "episodic": "mif:EpisodicType",
-    "procedural": "mif:ProceduralType"
+      "@type": "@json"
+    }
   }
 }

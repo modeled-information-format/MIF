@@ -1,0 +1,6 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mif-spec.dev/schema/document-reference.schema.json",
+  "description": "Standalone pointer onto mif.schema.json's DocumentReference $defs entry, so ajv-cli (which cannot take a #/$defs/... fragment appended to -s directly) can validate a bare DocumentReference payload against it. See ADR-021 Decision point 9.",
+  "$ref": "https://mif-spec.dev/schema/mif.schema.json#/$defs/DocumentReference"
+}

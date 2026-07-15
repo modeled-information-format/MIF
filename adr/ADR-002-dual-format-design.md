@@ -10,7 +10,7 @@ tags:
   - interoperability
 status: accepted
 created: 2026-01-27
-updated: 2026-06-18
+updated: 2026-07-11
 author: MIF Maintainers
 project: MIF
 technologies:
@@ -24,6 +24,7 @@ related:
   - ADR-003-obsidian-compatibility.md
   - ADR-007-github-raw-urls-for-schema-ids.md
   - ADR-011-markdown-canonical-derived-jsonld.md
+  - ADR-017-revert-obsidian-compatibility.md
 ---
 
 # ADR-002: Dual-Format Design (Markdown + JSON-LD)
@@ -273,20 +274,21 @@ derived. Mitigations:
 
 ## Related Decisions
 
-- [ADR-003: Obsidian Compatibility](ADR-003-obsidian-compatibility.md) — the Markdown format is designed to be valid Obsidian notes, which is the constraint that makes Markdown the natural human-authoring surface here.
+- [ADR-003: Obsidian Compatibility](ADR-003-obsidian-compatibility.md) (superseded by [ADR-017](ADR-017-revert-obsidian-compatibility.md)) — originally made the Markdown format valid Obsidian notes; ADR-017 reverted the Obsidian-specific conventions (wiki-links, `@[[entity]]` references, block references, embeds) while keeping the parts that were never Obsidian-specific (YAML frontmatter, plain-text/local-first storage, folder-as-namespace).
+- [ADR-017: Revert Obsidian Compatibility](ADR-017-revert-obsidian-compatibility.md) — the Markdown format's human-authoring surface today is vendor-neutral CommonMark plus standard markdown-link relationships and frontmatter entity references, not Obsidian compatibility.
 - [ADR-007: GitHub Raw URLs for Schema IDs](ADR-007-github-raw-urls-for-schema-ids.md) — the JSON-LD projection requires resolvable schema `$id` / `@context` URIs, the scheme that ADR establishes.
 - [ADR-011: Markdown-Canonical with Derived JSON-LD](ADR-011-markdown-canonical-derived-jsonld.md) — refines this decision: Markdown is the canonical source of truth and JSON-LD is a derived projection, replacing the original co-equality framing.
 
 ## Links
 
 - [JSON-LD 1.1](https://www.w3.org/TR/json-ld11/) — the linked-data serialization MIF projects to.
-- [Obsidian](https://obsidian.md/) — the knowledge-management tool the Markdown format targets (ADR-003).
+- [Obsidian](https://obsidian.md/) — the tool ADR-003 originally targeted; ADR-017 reverted that Obsidian-specific compatibility, so the Markdown format's human-authoring surface is vendor-neutral CommonMark today, not Obsidian-specific.
 
 ## More Information
 
 - **Date:** 2026-01-27 (original); refined by ADR-011
 - **Source:** SPECIFICATION.md §2.1 "Dual Representation"; `scripts/mif_convert.py` (markdown ↔ JSON-LD converter).
-- **Related ADRs:** ADR-003, ADR-007, ADR-011
+- **Related ADRs:** ADR-003, ADR-007, ADR-011, ADR-017
 
 ## Amendment
 
@@ -318,19 +320,28 @@ changed from peer-equivalence to source-and-projection.
 
 ## Audit
 
+Findings cite durable anchors (heading / field name / enclosing construct),
+not raw line numbers — line numbers in `SPECIFICATION.md` and
+`scripts/mif_convert.py` shift as unrelated content is added, which had
+already made this entry's original citations stale by the 2026-07-11 audit
+below (see that entry's Summary). `grep -n` for the quoted anchor text to
+find its current line.
+
 ### 2026-06-18
+
+**Audited revision:** `7f8d2de6c671cf5f354e4034b1524c0c112ddf1f`
 
 **Status:** Compliant
 
 **Findings:**
 
-| Finding | Files | Lines | Assessment |
-|---------|-------|-------|------------|
-| Dual representation (`.md` human-readable, `.jsonld` machine-processable) defined as first-class | `SPECIFICATION.md` | L103-L108 | compliant |
-| "Both representations MUST be losslessly convertible to each other" (the convertibility claim this ADR makes) | `SPECIFICATION.md` | L110 | compliant |
-| Refinement: Markdown is the source of truth (Invariant 2) and JSON-LD is a *derived* projection — basis for the ADR-011 amendment | `scripts/mif_convert.py` | L2-L9 | compliant |
-| Converter implements `to-jsonld` / `to-markdown` and lossless `roundtrip` over bundles | `scripts/mif_convert.py` | L19-L22, L286-L295 | compliant |
-| Derived-projection emitter (`emit-jsonld`) regenerates `.jsonld` from canonical `.md` | `scripts/mif_convert.py` | L267-L279 | compliant |
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
+| Dual representation (`.md` human-readable, `.jsonld` machine-processable) defined as first-class | `SPECIFICATION.md` | heading `### 2.1 Dual Representation` and its enumerated list (`1. **Markdown Format** (`.md`)`, `2. **JSON-LD Format** (`.jsonld`)`) | compliant |
+| "Both representations MUST be losslessly convertible to each other" (the convertibility claim this ADR makes) | `SPECIFICATION.md` | sentence "Both representations MUST be losslessly convertible to each other." immediately under `### 2.1 Dual Representation` | compliant |
+| Refinement: Markdown is the source of truth (Invariant 2) and JSON-LD is a *derived* projection — basis for the ADR-011 amendment | `scripts/mif_convert.py` | module docstring, bullets "The `.md` concept file is the source of truth (Invariant 2)." and "JSON-LD is a *derived* projection, reproducible by running this converter (Invariant 2) and lossless on a `markdown -> json-ld -> markdown` round trip for all conformance-level data (Invariant 4)." | compliant |
+| Converter implements `to-jsonld` / `to-markdown` and lossless `roundtrip` over bundles | `scripts/mif_convert.py` | functions `cmd_to_jsonld`, `cmd_to_markdown`, `cmd_roundtrip`; CLI subcommands `to-jsonld`, `to-markdown`, `roundtrip` registered via `add_parser(...)` in `main()` | compliant |
+| Derived-projection emitter (`emit-jsonld`) regenerates `.jsonld` from canonical `.md` | `scripts/mif_convert.py` | function `cmd_emit_jsonld`; CLI subcommand `emit-jsonld` registered via `add_parser("emit-jsonld", ...)` in `main()` | compliant |
 
 **Summary:** The dual-representation design and the lossless-convertibility
 requirement are both stated normatively in SPECIFICATION.md §2.1. The
@@ -339,5 +350,86 @@ directly evidenced by the converter's own module docstring (".md concept file is
 the source of truth (Invariant 2)"; "JSON-LD is a *derived* projection"), and
 the converter implements both the round-trip verification and the derived-JSON-LD
 emitter described in this ADR.
+
+**Action Required:** None.
+
+### 2026-07-11
+
+**Audited revision:** `88b4a8f20d87773286abbc64644f4d5c762f6ce8`
+
+**Status:** Compliant, with two documentation-drift notes (see Summary) — neither is a CI-gating regression
+
+**Findings:**
+
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
+| Dual representation (`.md` human-readable, `.jsonld` machine-processable) defined as first-class | `SPECIFICATION.md` | heading `### 2.1 Dual Representation` and its enumerated list (`1. **Markdown Format** (`.md`)`, `2. **JSON-LD Format** (`.jsonld`)`) | compliant — but see Summary: this section's own prose ("MIF defines two equivalent representations") was never reconciled with ADR-011's canonical/derived refinement, unlike the Abstract and §6 heading in the same file |
+| "Both representations MUST be losslessly convertible to each other" (the convertibility claim this ADR makes) | `SPECIFICATION.md` | sentence "Both representations MUST be losslessly convertible to each other." immediately under `### 2.1 Dual Representation` | compliant |
+| Refinement: Markdown is the source of truth (Invariant 2) and JSON-LD is a *derived* projection — basis for the ADR-011 amendment | `scripts/mif_convert.py` | module docstring, bullets "The `.md` concept file is the source of truth (Invariant 2)." and "JSON-LD is a *derived* projection, reproducible by running this converter (Invariant 2) and lossless on a `markdown -> json-ld -> markdown` round trip for all conformance-level data (Invariant 4)." | compliant |
+| Converter implements `to-jsonld` / `to-markdown` and lossless `roundtrip` over bundles | `scripts/mif_convert.py` | functions `cmd_to_jsonld`, `cmd_to_markdown`, `cmd_roundtrip`; CLI subcommands `to-jsonld`, `to-markdown`, `roundtrip` registered via `add_parser(...)` in `main()` | compliant |
+| Derived-projection emitter (`emit-jsonld`) regenerates `.jsonld` from canonical `.md` | `scripts/mif_convert.py` | function `cmd_emit_jsonld`; CLI subcommand `emit-jsonld` registered via `add_parser("emit-jsonld", ...)` in `main()` | compliant |
+
+**Summary:** Re-verified all five findings against current file state rather
+than just re-anchoring the 2026-06-18 line numbers. All five claims still hold:
+`SPECIFICATION.md` §2.1 still defines the dual representation and the lossless-
+convertibility requirement verbatim (the requirement sentence is unchanged word
+for word since 2026-06-18), and `scripts/mif_convert.py` still carries the
+canonical/derived module docstring and still implements `to-jsonld`,
+`to-markdown`, `roundtrip`, and `emit-jsonld` (the file gained an unrelated
+`bundle_namespaces()` feature — merging a bundle's custom relationship-type
+namespaces into `@context` — between the two audits, but none of the cited
+behavior changed).
+
+Two documentation-drift issues surfaced during re-verification that the
+2026-06-18 audit's narrower line-citation scope didn't catch, neither of which
+touches this ADR's own Findings-table claims:
+
+1. `SPECIFICATION.md` §2.1's own prose ("MIF defines two equivalent
+   representations") still reflects the original ADR-002 co-equal framing and
+   was never updated for ADR-011, even though the Abstract ("Markdown-canonical
+   ... Invariant 2") and §6's heading ("JSON-LD Projection (derived)") in the
+   same document were. Low-severity internal inconsistency, not a broken
+   invariant.
+2. This ADR's own `## Related Decisions` entry for ADR-003 ("the Markdown
+   format is designed to be valid Obsidian notes...") is now factually stale:
+   ADR-003 was superseded by ADR-017 (commit `f353268`), which is also the
+   commit that changed `SPECIFICATION.md` §2.1 item 1 from
+   "Obsidian-compatible" to "plain CommonMark". ADR-002's `related:`
+   frontmatter also doesn't list ADR-017, even though ADR-017's `related:`
+   list does list ADR-002 (a one-way link, not the bidirectional link
+   `adr/README.md` point 5 asks for).
+
+Filed as [#251](https://github.com/modeled-information-format/MIF/issues/251)
+rather than fixed inline here, since correcting ADR-002's own body prose and
+frontmatter is a real editorial decision about wording and scope, not a
+mechanical citation-format change — the same reasoning ADR-012's audit used
+for its own filed-not-amended discrepancy (#240).
+
+**Action Required:** #251 (reconcile `SPECIFICATION.md` §2.1's prose with the
+ADR-011 canonical/derived framing already used elsewhere in the same
+document; update this ADR's Related Decisions bullet for ADR-003 and its
+`related:` frontmatter to reflect ADR-003's supersession by ADR-017).
+
+### 2026-07-11 (follow-up)
+
+**Audited revision:** `252767a724a20771555942afc25a622c5b7ab1a9`
+
+**Status:** Compliant
+
+**Findings:**
+
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
+| `SPECIFICATION.md` §2.1's prose reconciled with the ADR-011 canonical/derived framing already used in the Abstract and §6 | `SPECIFICATION.md` | heading `### 2.1 Dual Representation` | compliant |
+| `related:` frontmatter now includes ADR-017, making the ADR-002↔ADR-017 cross-reference bidirectional (ADR-017's own `related:` already listed ADR-002) | `adr/ADR-002-dual-format-design.md` | frontmatter `related:` list | compliant |
+| Related Decisions / Links / More Information all updated to reflect ADR-003's supersession by ADR-017, rather than citing ADR-003 as a live Obsidian-compatibility commitment | `adr/ADR-002-dual-format-design.md` | `## Related Decisions`, `## Links`, `## More Information` sections | compliant |
+
+**Summary:** Both documentation-drift findings from the 2026-07-11 audit
+above are fixed: §2.1 now reads "MIF defines two representations, related as
+canonical and derived (Invariant 2)," naming Markdown canonical and JSON-LD
+derived, matching the Abstract and §6; the dual-representation and lossless-
+convertibility claims this ADR's Findings table cites are unchanged. Issue
+#251 closed for this ADR's portion of the work (SPECIFICATION.md §2.1 and
+ADR-005's stale references also fixed as part of the same issue).
 
 **Action Required:** None.

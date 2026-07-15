@@ -1,11 +1,19 @@
 # Valid: security-control is a declared subtype of a locally-declared control, and its
 # required set includes the parent's (control_name) plus more — schema-compatible.
+# `control` also carries the v1.1 classification fields (aliases/exemplars/
+# negative_examples) so the resolver is exercised with them present.
 ontology:
   id: valid-subtype
   version: "0.1.0"
 entity_types:
   - name: control
     base: semantic
+    aliases: [safeguard, countermeasure]
+    exemplars:
+      - "Enforce MFA for all administrative access"
+      - "Encrypt data at rest with AES-256"
+    negative_examples:
+      - "A security incident report describing a control failure"
     schema:
       required: [control_name]
   - name: security-control
