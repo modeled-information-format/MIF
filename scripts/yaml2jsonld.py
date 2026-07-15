@@ -82,6 +82,12 @@ def transform_entity_type(et_data: Dict[str, Any]) -> Dict[str, Any]:
 
     if "description" in et_data:
         result["description"] = et_data["description"]
+    if "aliases" in et_data:
+        result["aliases"] = et_data["aliases"]
+    if "exemplars" in et_data:
+        result["exemplars"] = et_data["exemplars"]
+    if "negative_examples" in et_data:
+        result["negative_examples"] = et_data["negative_examples"]
     if "traits" in et_data:
         result["traits"] = [f"mif:trait/{t}" for t in et_data["traits"]]
     if "subtype_of" in et_data:

@@ -25,6 +25,7 @@ audience:
 related:
   - ADR-009-okf-compliance-superset.md
   - ADR-001-cognitive-triad-taxonomy.md
+  - ADR-021-container-profile.md
 ---
 
 # ADR-010: Repositioning to Modeled Information Format

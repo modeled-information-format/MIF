@@ -39,6 +39,9 @@ MIRRORED_FILES = [
     "definitions/entity-reference.schema.json",
     "ontology/ontology.schema.json",
     "ontology/ontology.context.jsonld",
+    "container.schema.json",
+    "container-context.jsonld",
+    "document-reference.schema.json",
 ]
 
 SEMVER = re.compile(r"^\d+\.\d+\.\d+$")

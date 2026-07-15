@@ -1,127 +1,100 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640" width="1280" height="640">
+<svg width="1280" height="640" viewBox="0 0 1280 640" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="MIF — the Modeled Information Format specification. The canonical schema every conformant tool implements against: one document, read losslessly as human Markdown and machine JSON-LD.">
+  <title>MIF — the specification, the keystone of the org</title>
+  <desc>Dark field. The chevron-M MIF mark and wordmark. Title "The Specification". Three pillars — canonical schema, two readers one document, fail-closed conformance — beside the one-artifact-two-readers motif: a single source document fans out to a human-readable Markdown panel (amber) and a machine-parseable JSON-LD panel (cyan), joined by a lossless round-trip and a mif-validate conformance badge.</desc>
   <defs>
-    <!-- Warm gradient for illustrated style -->
-    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#fef9f3"/>
-      <stop offset="50%" style="stop-color:#fdf4e7"/>
-      <stop offset="100%" style="stop-color:#fef6ed"/>
+    <linearGradient id="field" x1="0" y1="0" x2="1280" y2="640" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0A0D13"/>
+      <stop offset="1" stop-color="#0E121B"/>
     </linearGradient>
-
-    <!-- Organic blob filter -->
-    <filter id="goo">
-      <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur"/>
-      <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7"/>
-    </filter>
-
-    <!-- Soft shadow -->
-    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#c9a87c" flood-opacity="0.15"/>
-    </filter>
-
-    <!-- Memory node gradient -->
-    <linearGradient id="memoryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#e8d5b7"/>
-      <stop offset="100%" style="stop-color:#d4bc94"/>
-    </linearGradient>
-
-    <!-- Connection gradient -->
-    <linearGradient id="connGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#c9a87c;stop-opacity:0.6"/>
-      <stop offset="50%" style="stop-color:#b8956a;stop-opacity:0.8"/>
-      <stop offset="100%" style="stop-color:#c9a87c;stop-opacity:0.6"/>
+    <linearGradient id="mif-spine" x1="0" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#E8EEF6" stop-opacity="0"/>
+      <stop offset="1" stop-color="#7C8AA0" stop-opacity="0.6"/>
     </linearGradient>
   </defs>
 
-  <!-- Background -->
-  <rect width="1280" height="640" fill="url(#bgGradient)"/>
+  <!-- Field -->
+  <rect width="1280" height="640" fill="url(#field)"/>
+  <rect x="36" y="36" width="1208" height="568" rx="20" fill="none" stroke="#222C3C" stroke-width="2"/>
 
-  <!-- Decorative organic shapes (hand-drawn aesthetic) -->
-  <!-- Top left flowing curve -->
-  <path d="M0,120 Q80,80 160,100 Q240,120 280,80 Q320,40 400,60"
-        fill="none" stroke="#e8d5b7" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+  <!-- ===== Identity lockup (top-left): chevron-M mark + wordmark ===== -->
+  <g transform="translate(84 66) scale(1.15)" fill="none" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M6 42 L6 6 L24 29" stroke="#34D3E8"/>
+    <path d="M24 29 L42 6 L42 42" stroke="#F5B642"/>
+    <path d="M24 25.6 L27.4 29 L24 32.4 L20.6 29 Z" fill="#E8EEF6" stroke="none"/>
+  </g>
+  <text x="150" y="112" font-family="Menlo, 'SF Mono', 'JetBrains Mono', monospace"
+        font-size="30" font-weight="700" letter-spacing="0.04em" fill="#E8EEF6">MIF</text>
+  <text x="222" y="112" font-family="Menlo, 'SF Mono', 'JetBrains Mono', monospace"
+        font-size="15" fill="#7C8AA0" letter-spacing="0.05em">Modeled Information Format</text>
 
-  <!-- Bottom right flowing curve -->
-  <path d="M1280,520 Q1200,560 1120,540 Q1040,520 1000,560 Q960,600 880,580"
-        fill="none" stroke="#d4bc94" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+  <!-- ===== Title block (left column) ===== -->
+  <text x="84" y="214" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"
+        font-size="60" font-weight="700" letter-spacing="-0.02em" fill="#E8EEF6">The Specification</text>
+  <text x="86" y="254" font-family="Menlo, 'SF Mono', 'JetBrains Mono', monospace"
+        font-size="17" fill="#AEBCCF" letter-spacing="0.01em">The schema every conformant tool implements against.</text>
 
-  <!-- Modeled information visualization -->
-  <g transform="translate(640, 280)" filter="url(#softShadow)">
-    <!-- Central hub - larger organic shape -->
-    <ellipse cx="0" cy="0" rx="90" ry="85" fill="url(#memoryGrad)" opacity="0.9"/>
-    <ellipse cx="0" cy="0" rx="70" ry="65" fill="#fef9f3" opacity="0.5"/>
+  <!-- ===== Three pillars ===== -->
+  <!-- 1 · Canonical schema (machine-cyan square = the structure a parser validates) -->
+  <rect x="86" y="316" width="16" height="16" rx="2" fill="#34D3E8"/>
+  <text x="122" y="324" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"
+        font-size="24" font-weight="600" fill="#E8EEF6">Canonical schema</text>
+  <text x="122" y="350" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"
+        font-size="16" fill="#7C8AA0">mif.schema.json — one resolvable $id every implementation targets.</text>
 
-    <!-- Connection lines (curved, organic) -->
-    <!-- Left connections -->
-    <path d="M-90,0 Q-160,-30 -220,-60" fill="none" stroke="url(#connGrad)" stroke-width="4" stroke-linecap="round"/>
-    <path d="M-85,-30 Q-140,20 -200,60" fill="none" stroke="url(#connGrad)" stroke-width="3" stroke-linecap="round"/>
-    <path d="M-80,40 Q-150,80 -210,100" fill="none" stroke="url(#connGrad)" stroke-width="3" stroke-linecap="round"/>
+  <!-- 2 · Two readers, one document (light vertex node = the single artifact both converge on) -->
+  <path d="M94 398 L100.4 404.4 L94 410.8 L87.6 404.4 Z" fill="#E8EEF6"/>
+  <text x="122" y="406" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"
+        font-size="24" font-weight="600" fill="#E8EEF6">Two readers, one document</text>
+  <text x="122" y="432" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"
+        font-size="16" fill="#7C8AA0">Markdown a person reads; JSON-LD a parser resolves — losslessly.</text>
 
-    <!-- Right connections -->
-    <path d="M90,0 Q160,30 220,60" fill="none" stroke="url(#connGrad)" stroke-width="4" stroke-linecap="round"/>
-    <path d="M85,30 Q140,-20 200,-60" fill="none" stroke="url(#connGrad)" stroke-width="3" stroke-linecap="round"/>
-    <path d="M80,-40 Q150,-80 210,-100" fill="none" stroke="url(#connGrad)" stroke-width="3" stroke-linecap="round"/>
+  <!-- 3 · Fail-closed conformance (human-amber dot = the meaning proven to survive) -->
+  <circle cx="94" cy="488" r="9" fill="#F5B642"/>
+  <text x="122" y="496" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"
+        font-size="24" font-weight="600" fill="#E8EEF6">Fail-closed conformance</text>
+  <text x="122" y="522" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"
+        font-size="16" fill="#7C8AA0">mif-validate proves the round-trip before a bundle ships.</text>
 
-    <!-- Memory nodes (left side - sources) -->
-    <g transform="translate(-240, -80)">
-      <ellipse cx="0" cy="0" rx="35" ry="32" fill="#c9a87c" opacity="0.8"/>
-      <text x="0" y="5" font-family="Georgia, serif" font-size="14" fill="#5c4a32" text-anchor="middle">Mem0</text>
+  <!-- ===== One-artifact-two-readers motif (right column), reused at scale from the doc-suite's own hero ===== -->
+  <g transform="translate(671.2 60.56) scale(0.96)">
+    <text x="280" y="114" text-anchor="middle" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12" letter-spacing="0.1em" fill="#7C8AA0">ONE ARTIFACT, TWO READERS</text>
+    <rect x="206" y="124" width="148" height="30" rx="7" fill="#151B27" stroke="#2E3A4D"/>
+    <text x="280" y="143" text-anchor="middle" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12.5" fill="#AEBCCF">--- frontmatter ---</text>
+    <path d="M280 154 L280 188" stroke="url(#mif-spine)" stroke-width="2"/>
+    <path d="M280 188 C 280 206, 145 196, 145 214 M280 188 C 280 206, 415 196, 415 214" stroke="#3C4B63" stroke-width="1.5" stroke-dasharray="3 4"/>
+    <g>
+      <rect x="34" y="214" width="222" height="150" rx="12" fill="#0E121B" stroke="#2E3A4D"/>
+      <path d="M34 226 a12 12 0 0 1 12 -12 h198 a12 12 0 0 1 12 12 v10 h-222 z" fill="#2A2110"/>
+      <circle cx="52" cy="231" r="5" fill="#F5B642"/>
+      <text x="66" y="235" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="13" font-weight="700" fill="#F5B642">human-readable</text>
+      <text x="48" y="272" font-family="system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#E8EEF6"># A decision, in prose</text>
+      <rect x="48" y="285" width="180" height="7" rx="3.5" fill="#3C4B63"/>
+      <rect x="48" y="299" width="194" height="7" rx="3.5" fill="#2E3A4D"/>
+      <rect x="48" y="313" width="150" height="7" rx="3.5" fill="#2E3A4D"/>
+      <text x="48" y="346" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="11.5" letter-spacing="0.04em" fill="#7C8AA0">Markdown · a person reads</text>
     </g>
-    <g transform="translate(-220, 50)">
-      <ellipse cx="0" cy="0" rx="32" ry="30" fill="#d4bc94" opacity="0.8"/>
-      <text x="0" y="5" font-family="Georgia, serif" font-size="13" fill="#5c4a32" text-anchor="middle">Zep</text>
+    <g>
+      <rect x="304" y="214" width="222" height="150" rx="12" fill="#0E121B" stroke="#2E3A4D"/>
+      <path d="M304 226 a12 12 0 0 1 12 -12 h198 a12 12 0 0 1 12 12 v10 h-222 z" fill="#0A2630"/>
+      <circle cx="322" cy="231" r="5" fill="#34D3E8"/>
+      <text x="336" y="235" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="13" font-weight="700" fill="#34D3E8">machine-parseable</text>
+      <text x="318" y="270" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12.5" fill="#7C8AA0">{</text>
+      <text x="332" y="288" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12.5" xml:space="preserve"><tspan fill="#34D3E8">"@type"</tspan><tspan fill="#7C8AA0">: </tspan><tspan fill="#F5B642">"Decision"</tspan><tspan fill="#7C8AA0">,</tspan></text>
+      <text x="332" y="306" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12.5" xml:space="preserve"><tspan fill="#34D3E8">"entity"</tspan><tspan fill="#7C8AA0">: </tspan><tspan fill="#AEBCCF">{ … }</tspan></text>
+      <text x="318" y="324" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12.5" fill="#7C8AA0">}</text>
+      <text x="318" y="346" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="11.5" letter-spacing="0.04em" fill="#7C8AA0">JSON-LD · a parser resolves</text>
     </g>
-    <g transform="translate(-230, 120)">
-      <ellipse cx="0" cy="0" rx="30" ry="28" fill="#e8d5b7" opacity="0.8"/>
-      <text x="0" y="5" font-family="Georgia, serif" font-size="12" fill="#5c4a32" text-anchor="middle">Letta</text>
-    </g>
-
-    <!-- Memory nodes (right side - targets) -->
-    <g transform="translate(240, 80)">
-      <ellipse cx="0" cy="0" rx="38" ry="35" fill="#c9a87c" opacity="0.8"/>
-      <text x="0" y="5" font-family="Georgia, serif" font-size="14" fill="#5c4a32" text-anchor="middle">JSON-LD</text>
-    </g>
-    <g transform="translate(220, -50)">
-      <ellipse cx="0" cy="0" rx="40" ry="32" fill="#d4bc94" opacity="0.8"/>
-      <text x="0" y="5" font-family="Georgia, serif" font-size="13" fill="#5c4a32" text-anchor="middle">Markdown</text>
-    </g>
-    <g transform="translate(230, -120)">
-      <ellipse cx="0" cy="0" rx="36" ry="30" fill="#e8d5b7" opacity="0.8"/>
-      <text x="0" y="5" font-family="Georgia, serif" font-size="12" fill="#5c4a32" text-anchor="middle">Any editor</text>
-    </g>
-
-    <!-- Central text -->
-    <text x="0" y="-5" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#5c4a32" text-anchor="middle">MIF</text>
-    <text x="0" y="18" font-family="Georgia, serif" font-size="11" fill="#7a6548" text-anchor="middle">modeled</text>
+    <path d="M256 300 L304 300" stroke="#7C8AA0" stroke-width="1.5"/>
+    <path d="M268 294 L256 300 L268 306" stroke="#F5B642" stroke-width="1.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M292 294 L304 300 L292 306" stroke="#34D3E8" stroke-width="1.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+    <rect x="98" y="386" width="364" height="30" rx="15" fill="#0B2618" stroke="#34C77B" stroke-opacity="0.5"/>
+    <circle cx="116" cy="401" r="4.5" fill="#34C77B"/>
+    <text x="132" y="405" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="12.5" letter-spacing="0.02em" xml:space="preserve"><tspan fill="#34C77B">mif-validate</tspan><tspan fill="#AEBCCF"> · lossless round-trip · L1→L3</tspan></text>
   </g>
 
-  <!-- Title -->
-  <text x="640" y="80" font-family="Georgia, serif" font-size="48" font-weight="bold" fill="#4a3c28" text-anchor="middle">
-    Modeled Information Format
-  </text>
-
-  <!-- Tagline -->
-  <text x="640" y="125" font-family="Georgia, serif" font-size="22" fill="#7a6548" text-anchor="middle">
-    Open Standard for Portable AI Memory
-  </text>
-
-  <!-- Features at bottom -->
-  <g transform="translate(640, 540)">
-    <text x="-320" y="0" font-family="Georgia, serif" font-size="16" fill="#8b7355" text-anchor="middle">JSON-LD</text>
-    <text x="-160" y="0" font-family="Georgia, serif" font-size="16" fill="#8b7355" text-anchor="middle">Bi-Temporal</text>
-    <text x="0" y="0" font-family="Georgia, serif" font-size="16" fill="#8b7355" text-anchor="middle">W3C PROV</text>
-    <text x="160" y="0" font-family="Georgia, serif" font-size="16" fill="#8b7355" text-anchor="middle">Plain Markdown</text>
-    <text x="320" y="0" font-family="Georgia, serif" font-size="16" fill="#8b7355" text-anchor="middle">Open Source</text>
-
-    <!-- Decorative dots between features -->
-    <circle cx="-240" cy="-3" r="3" fill="#c9a87c" opacity="0.6"/>
-    <circle cx="-80" cy="-3" r="3" fill="#c9a87c" opacity="0.6"/>
-    <circle cx="80" cy="-3" r="3" fill="#c9a87c" opacity="0.6"/>
-    <circle cx="240" cy="-3" r="3" fill="#c9a87c" opacity="0.6"/>
-  </g>
-
-  <!-- Subtle decorative elements -->
-  <circle cx="100" cy="580" r="40" fill="#e8d5b7" opacity="0.3"/>
-  <circle cx="1180" cy="60" r="35" fill="#d4bc94" opacity="0.3"/>
-  <circle cx="1220" cy="600" r="25" fill="#e8d5b7" opacity="0.2"/>
-  <circle cx="60" cy="80" r="20" fill="#d4bc94" opacity="0.2"/>
+  <!-- ===== Footer locators ===== -->
+  <text x="84" y="572" font-family="Menlo, 'SF Mono', 'JetBrains Mono', monospace"
+        font-size="15" fill="#7C8AA0" letter-spacing="0.01em">modeled-information-format/MIF</text>
+  <text x="1192" y="572" text-anchor="end" font-family="Menlo, 'SF Mono', 'JetBrains Mono', monospace"
+        font-size="15" fill="#7C8AA0" letter-spacing="0.02em">mif-spec.dev</text>
 </svg>

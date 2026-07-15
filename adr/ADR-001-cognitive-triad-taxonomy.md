@@ -9,7 +9,7 @@ tags:
   - cognitive-science
 status: accepted
 created: 2026-01-27
-updated: 2026-06-18
+updated: 2026-07-11
 author: MIF Maintainers
 project: MIF
 technologies:
@@ -174,8 +174,8 @@ keeping the base set fixed at three while permitting local vocabulary.
 
 - Encoded as the `conceptType` enum `["semantic", "episodic", "procedural"]` in
   the JSON Schema, with `memoryType` retained as a deprecated v0.1 alias.
-- Each base type carries a namespace hint (`semantic/*`, `episodic/*`,
-  `procedural/*`) that downstream conventions build on.
+- Each base type carries a namespace hint (`_semantic/*`, `_episodic/*`,
+  `_procedural/*`) that downstream conventions build on.
 - Each typed concept remains a valid OKF concept: the `type` value satisfies
   OKF's required field while supplying meaning OKF leaves open.
 
@@ -281,25 +281,74 @@ Mitigations:
 
 ## Audit
 
+Findings cite durable anchors (heading / field name), not raw line numbers —
+line numbers in `SPECIFICATION.md` and the schema files shift as unrelated
+content is added. `grep -n` for the quoted anchor text to find its current
+line.
+
 ### 2026-06-18
+
+**Audited revision:** `7f8d2de6c671cf5f354e4034b1524c0c112ddf1f`
 
 **Status:** Compliant
 
 **Findings:**
 
-| Finding | Files | Lines | Assessment |
-|---------|-------|-------|------------|
-| Base concept-type enum `["semantic", "episodic", "procedural"]` is normative in the schema (`conceptType`) | `schema/mif.schema.json` | L30-L34 | compliant |
-| `memoryType` retained as a deprecated v0.1 alias of `conceptType` (same triad enum) | `schema/mif.schema.json` | L35-L38 | compliant |
-| Same triad enum enforced in the ontology schema | `schema/ontology/ontology.schema.json` | L122, L154 | compliant |
-| Three base memory types defined with descriptions and namespace hints | `SPECIFICATION.md` | L234-L250 | compliant |
-| Ontology-extended types specialize a declared `base` (keeps base set fixed at three) | `SPECIFICATION.md` | L252-L263 | compliant |
-| "MIF answers OKF's open questions" table: triad is MIF's answer to OKF's absent concept-type taxonomy | `SPECIFICATION.md` | L49-L51 | compliant |
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
+| Base concept-type enum `["semantic", "episodic", "procedural"]` is normative in the schema (`conceptType`) | `schema/mif.schema.json` | the `conceptType` property definition | compliant |
+| `memoryType` retained as a deprecated v0.1 alias of `conceptType` (same triad enum) | `schema/mif.schema.json` | the `memoryType` property definition | compliant |
+| Same triad enum enforced in the ontology schema | `schema/ontology/ontology.schema.json` | `$defs.namespace` field `type_hint`; `$defs.entityType` field `base` | compliant |
+| Three base memory types defined with descriptions and namespace hints | `SPECIFICATION.md` | heading `### 4.2 Memory Types` | compliant |
+| Ontology-extended types specialize a declared `base` (keeps base set fixed at three) | `SPECIFICATION.md` | heading `#### 4.2.1 Ontology-Extended Types` | compliant |
+| "MIF answers OKF's open questions" table: triad is MIF's answer to OKF's absent concept-type taxonomy | `SPECIFICATION.md` | heading `### MIF answers OKF's open questions` | compliant |
 
 **Summary:** The cognitive triad is present and normative as the `conceptType`
 enum in `schema/mif.schema.json`, mirrored in the ontology schema, defined with
 namespace hints and extension rules in SPECIFICATION.md §4.2 / §4.2.1, and
 positioned in the SPECIFICATION's "MIF answers OKF's open questions" table as
 MIF's answer to OKF's deliberately-absent concept-type system.
+
+**Action Required:** None.
+
+### 2026-07-11
+
+**Audited revision:** `d2b0c577f59b30beadb12ffc45bf8e303b602377`
+
+**Status:** Compliant
+
+**Findings:**
+
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
+| Base concept-type enum `["semantic", "episodic", "procedural"]` is normative in the schema | `schema/mif.schema.json` | the `conceptType` property definition | compliant |
+| `memoryType` retained as a deprecated v0.1 alias of `conceptType` (same triad enum) | `schema/mif.schema.json` | the `memoryType` property definition | compliant |
+| Same triad enum enforced in the ontology schema (namespace `type_hint` default and entity-type `base`) | `schema/ontology/ontology.schema.json` | `$defs.namespace` field `type_hint`; `$defs.entityType` field `base` | compliant |
+| Three base memory types defined with descriptions and namespace hints | `SPECIFICATION.md` | headings `### 4.2 Memory Types` and `#### Base Type Descriptions` | compliant |
+| Ontology-extended types specialize a declared `base` (keeps base set fixed at three) | `SPECIFICATION.md` | heading `#### 4.2.1 Ontology-Extended Types` | compliant |
+| "MIF answers OKF's open questions" table: triad is MIF's answer to OKF's absent concept-type taxonomy | `SPECIFICATION.md` | heading `### MIF answers OKF's open questions`, table row "No concept-type taxonomy" | compliant |
+| Base-type triad still in live downstream use in ontology-corpus content (post ADR-018/019 relocation) | `ontologies/*.ontology.yaml` (`modeled-information-format/ontologies` repo) | `base:` field values (`semantic`/`episodic`/`procedural`) across ontology entity-type definitions | compliant |
+
+**Summary:** No material change since 2026-06-18. All six original findings
+re-verified against current file content and remain accurate; this entry
+re-anchors them to durable field names/headings rather than re-citing raw
+line numbers. ADR-018/ADR-019 (2026-07-01/07-02) does not affect this ADR:
+they relocated ontology *corpus* content, not the normative
+`ontology.schema.json`/JSON-LD context, which stay in this repo — so the
+schema finding above is unaffected. Added a seventh finding this pass,
+confirming the triad is still in live use in the relocated ontology corpus
+(spot-checked via `ontologies/health.ontology.yaml`'s `base:` field values).
+All five related ADRs (ADR-004, ADR-005, ADR-008, ADR-009, ADR-010) remain
+`status: accepted`, none renumbered or superseded.
+
+A real discrepancy was found and fixed in this same PR, not in this ADR's
+Audit table but in its own Decision text: Option 4's "Technical
+Characteristics" bullet stated the namespace hint as `semantic/*`,
+`episodic/*`, `procedural/*` — missing the underscore prefix that both
+`SPECIFICATION.md`'s §4.2 table and
+[ADR-005: Underscore Namespace Prefix](ADR-005-underscore-namespace-prefix.md)
+(listed in this ADR's own `related:` frontmatter) establish as the actual
+convention (`_semantic/*`, `_episodic/*`, `_procedural/*`). Corrected inline
+in this PR — a one-line, mechanical fix, not an editorial-scope decision.
 
 **Action Required:** None.

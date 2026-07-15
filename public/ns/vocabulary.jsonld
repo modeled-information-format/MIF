@@ -267,7 +267,7 @@
       "rdfs:label": "accessed",
       "rdfs:comment": "When the citation was last accessed.",
       "rdfs:range": {
-        "@id": "xsd:dateTime"
+        "@id": "xsd:date"
       }
     },
     {

@@ -1,5 +1,10 @@
 <!-- diataxis_type: explanation -->
 
+<p align="center">
+  <img src=".github/social-preview.png" width="860"
+       alt="MIF — the Modeled Information Format specification. Three pillars: canonical schema, two readers one document, fail-closed conformance. The motif: a single source document fans out to a human-readable Markdown panel (amber) and a machine-parseable JSON-LD panel (cyan), joined by a lossless round-trip and a mif-validate conformance badge.">
+</p>
+
 # MIF — Modeled Information Format
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -218,6 +223,11 @@ criteria and the MIF → OKF mapping.
 The [examples/](./examples/) directory is a generalized (non-memory) core bundle
 demonstrating the three base types with body-link relationships. Memory-flavored
 examples live under [profiles/ai-memory/examples/](./profiles/ai-memory/examples/).
+The one exception is [examples/container/](./examples/container/): worked
+`*.corpus.json` Container Profile transport envelopes (ADR-021) —
+not part of the bundle's concept graph (they are invisible to the `*.md`
+gates by construction) and validated by `scripts/validate_container.py`
+instead.
 
 ## AI Memory profile
 

@@ -24,20 +24,22 @@ semantics.
 > **MIF is the opinionated, OKF-compliant content model that fills OKF's
 > deliberately empty envelope.** OKF is the transport surface; MIF supplies the
 > concrete type system. AI memory is the first domain profile of MIF, not its
-> identity (see `profiles/ai-memory/`).
+> identity (see `profiles/ai-memory/`). Moving many memory units as one
+> wire artifact is a separate, transport-layer concern (see the
+> Container Profile, `docs/CONTAINER-PROFILE.md`), not a domain profile.
 
 OKF compliance is achieved as a **superset, not by subordination**: every MIF
 bundle MUST validate as a conformant OKF bundle, but MIF remains an independent
 specification with its own identity model and governance. MIF takes **no
 normative dependency** on OKF's evolving draft — it pins OKF v0.1's conformance
 criteria in [`docs/okf-conformance.md`](docs/okf-conformance.md), which is
-normative within MIF (Invariant 5).
+normative within MIF ([Invariant 5](#invariants)).
 
 MIF is designed to be:
 
 - **OKF-compliant**: every bundle is a valid OKF bundle (a tested invariant).
 - **Markdown-canonical**: the `.md` file is the source of truth; JSON-LD is a
-  derived projection (Invariant 2).
+  derived projection ([Invariant 2](#invariants)).
 - **Human-Readable**: valid CommonMark notes in any Markdown editor.
 - **Machine-Processable**: JSON-LD with semantic web compatibility.
 - **Extensible**: domain profiles extend the base without breaking compatibility.
@@ -56,6 +58,40 @@ question OKF leaves open.
 | Stale-vs-live left to process | Validity windows + TTL/freshness |
 | No provenance | Lightweight provenance core + optional W3C-PROV-aligned layer |
 | Markdown only | First-class JSON-LD projection |
+
+### Invariants
+
+SPECIFICATION.md, `adr/`, `MIGRATION.md`, and `docs/okf-conformance.md` all
+cite specific "Invariant N" numbers in prose. This is the canonical
+enumerated list they refer back to.
+
+- **Invariant 2 — Markdown is canonical; JSON-LD is a derived projection.**
+  The `.md` file is the source of truth; the `.jsonld` form is regenerated
+  from it and MUST round-trip losslessly (Abstract; §2.1; §6; ADR-011).
+- **Invariant 3 — OKF consumers must see every edge as a standard markdown
+  link.** Typed relationships are authoritative in frontmatter `relationships[]`
+  but MUST also be mirrored in the body as standard markdown links, so an
+  OKF-only consumer (which understands markdown links but not frontmatter
+  relationship types) still sees the edge (§5.3; `MIGRATION.md`).
+- **Invariant 4 — lossless round-trip for conformance-level data.** A
+  `markdown → json-ld → markdown` round trip through `scripts/mif_convert.py`
+  MUST NOT lose any conformance-level data (ADR-002's Audit;
+  `scripts/mif_convert.py`'s `roundtrip` subcommand).
+- **Invariant 5 — no floating dependency on OKF.** MIF pins OKF v0.1's
+  conformance criteria in `docs/okf-conformance.md` and conforms to that
+  pinned copy, not to whatever OKF publishes next; updates are adopted only
+  by an explicit MIF revision (Abstract; ADR-009; `docs/okf-conformance.md`).
+- **Invariant 6 — memory is a profile, not the core.** The core spec is a
+  general knowledge model; AI-memory-specific framing (e.g. the
+  "forgetting curve" origin of the temporal model) lives in
+  `profiles/ai-memory/`, not here (`MIGRATION.md`).
+
+The list enumerates the invariant numbers existing citations use
+(Invariants 2-6). The Abstract's "OKF-compliant: every bundle is a valid
+OKF bundle (a tested invariant)" bullet is deliberately left unnumbered:
+no citation numbers it, and assigning it a number here would introduce a
+new normative claim rather than consolidate existing ones. New invariants
+are added to this list when a normative citation first needs a number.
 
 ---
 
@@ -103,12 +139,12 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 ### 2.1 Dual Representation
 
-MIF defines two equivalent representations:
+MIF defines two representations, related as canonical and derived ([Invariant 2](#invariants)):
 
-1. **Markdown Format** (`.md`): Human-readable, plain CommonMark
-2. **JSON-LD Format** (`.jsonld`): Machine-processable, semantically linked
+1. **Markdown Format** (`.md`): Human-readable, plain CommonMark — **canonical**, the source of truth.
+2. **JSON-LD Format** (`.jsonld`): Machine-processable, semantically linked — **derived**, regenerated from the Markdown source (§6).
 
-Both representations MUST be losslessly convertible to each other. A conforming implementation MAY support either or both formats.
+Both representations MUST be losslessly convertible to each other, and if the two ever disagree, the Markdown form wins. A conforming implementation MAY support either or both formats.
 
 ### 2.2 Markdown Conventions
 
@@ -671,7 +707,7 @@ Implementations MAY apply compression when memories meet these criteria:
 
 ## 6. JSON-LD Projection (derived)
 
-> **Markdown is canonical (Invariant 2).** The JSON-LD form below is a *derived*
+> **Markdown is canonical ([Invariant 2](#invariants)).** The JSON-LD form below is a *derived*
 > projection: regenerate it from the `.md` source with `scripts/mif_convert.py`.
 > It MUST NOT use the `.md` extension (so OKF's `*.md` glob never ingests it) and
 > MUST round-trip losslessly back to markdown. If the two disagree, markdown wins.

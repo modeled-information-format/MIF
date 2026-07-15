@@ -9,7 +9,7 @@ tags:
   - filesystem
 status: accepted
 created: 2026-01-27
-updated: 2026-06-18
+updated: 2026-07-11
 author: MIF Maintainers
 project: MIF
 technologies:
@@ -20,6 +20,7 @@ audience:
 related:
   - ADR-001-cognitive-triad-taxonomy.md
   - ADR-003-obsidian-compatibility.md
+  - ADR-018-ontology-corpus-dedicated-repository-and-serving.md
 ---
 
 # ADR-005: Underscore Namespace Prefix Convention
@@ -44,8 +45,9 @@ not. The base-type directories need to:
 - Sort predictably in file listings, ideally grouping together at a stable
   position.
 - Signal "system" organization versus "user" content.
-- Work cleanly with existing tooling, file browsers, IDEs, and the Obsidian
-  vault compatibility MIF commits to (ADR-003).
+- Work cleanly with existing tooling and every common file browser or IDE —
+  the underscore prefix is an ordinary visible character in all of them,
+  including but not limited to Obsidian (ADR-017).
 
 The architectural question is what naming convention, if any, marks these three
 directories so they read as system-level partitions across every filesystem and
@@ -181,8 +183,9 @@ structural base type only; everything filed beneath it is user content:
 - `_procedural/animal-welfare/`
 
 This convention is applied uniformly across MIF tooling and the mnemonic memory
-system implementation, and it composes with the Obsidian vault compatibility
-guaranteed by ADR-003.
+system implementation, and the underscore prefix is an ordinary visible
+character in every file browser/editor, including but not limited to
+Obsidian, per ADR-017.
 
 ## Consequences
 
@@ -230,6 +233,7 @@ burden:
 
 - [ADR-001: Cognitive Triad Taxonomy](ADR-001-cognitive-triad-taxonomy.md) — the prefix convention exists because the three base types it names are the cognitive-triad categories.
 - [ADR-003: Obsidian Compatibility](ADR-003-obsidian-compatibility.md) — the underscore prefix stays visible and well-behaved inside Obsidian vaults, where a dot prefix would not.
+- [ADR-018: Ontology Corpus: Dedicated Repository, Flat Layout, and Versioned Serving](ADR-018-ontology-corpus-dedicated-repository-and-serving.md) — the corpus layout this convention applies to now lives in the dedicated `ontologies` repo.
 
 ## Links
 
@@ -243,24 +247,115 @@ burden:
 
 ## Audit
 
+Findings cite durable anchors (field values / function name / comment
+text), not raw line numbers, and — for ontology content — the external
+`modeled-information-format/ontologies` repo (source of record since
+ADR-018/ADR-019) rather than paths inside this repo. `grep -n` for the
+quoted anchor text to find its current line.
+
 ### 2026-06-18
+
+**Audited revision:** `7f8d2de6c671cf5f354e4034b1524c0c112ddf1f`
 
 **Status:** Compliant
 
 **Findings:**
 
-| Finding | Files | Lines | Assessment |
-|---------|-------|-------|------------|
-| Underscore-prefixed `_semantic/...` base type used in domain ontology `suggest_namespace` values | `ontologies/examples/regenerative-agriculture.ontology.jsonld` | L1487, L1494 | compliant |
-| Underscore-prefixed `_episodic/...` base type used in domain ontology `suggest_namespace` values | `ontologies/examples/software-engineering.ontology.jsonld` | L850 | compliant |
-| Underscore-prefixed `_procedural/...` base type used in domain ontology `suggest_namespace` values | `ontologies/examples/software-engineering.ontology.jsonld` | L815 | compliant |
-| Domain sub-namespaces stay unprefixed beneath the prefixed base type (`_semantic/land`, `_procedural/animal-welfare`) | `ontologies/examples/regenerative-agriculture.ontology.jsonld` | L1487, L1522 | compliant |
-| Namespace validator treats `_semantic`/`_episodic`/`_procedural` base types as always-available parents that domain sub-namespaces inherit from | `scripts/validate-namespaces.py` | L92-L116 | compliant |
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
+| Underscore-prefixed `_semantic/...` base type used in domain ontology `suggest_namespace` values | `ontologies/examples/regenerative-agriculture.ontology.jsonld` (path as it existed in this repo at this date) | `discovery.patterns[]` entries with `"suggest_namespace": "_semantic/land"` | compliant |
+| Underscore-prefixed `_episodic/...` base type used in domain ontology `suggest_namespace` values | `ontologies/examples/software-engineering.ontology.jsonld` (path as it existed in this repo at this date) | `discovery.patterns[]` entry with `"suggest_namespace": "_episodic/incidents"` | compliant |
+| Underscore-prefixed `_procedural/...` base type used in domain ontology `suggest_namespace` values | `ontologies/examples/software-engineering.ontology.jsonld` (path as it existed in this repo at this date) | `discovery.patterns[]` entries with `"suggest_namespace": "_procedural/runbooks"` | compliant |
+| Domain sub-namespaces stay unprefixed beneath the prefixed base type (`_semantic/land`, `_procedural/animal-welfare`) | `ontologies/examples/regenerative-agriculture.ontology.jsonld` (path as it existed in this repo at this date) | `discovery.patterns[]` entries `"suggest_namespace": "_semantic/land"` and `"suggest_namespace": "_procedural/animal-welfare"` | compliant |
+| Namespace validator treats `_semantic`/`_episodic`/`_procedural` base types as always-available parents that domain sub-namespaces inherit from | `scripts/validate-namespaces.py` | function `validate_memory_namespace`, the `if parent in mif_base_namespaces:` block | compliant |
 
 **Summary:** The underscore-prefix convention is applied uniformly across the
 shipped ontology examples — base types carry the `_` prefix and domain
 sub-namespaces beneath them do not — and `scripts/validate-namespaces.py`
 encodes the same base-type-versus-domain distinction when resolving a memory's
 declared namespace.
+
+**Action Required:** None.
+
+### 2026-07-11
+
+**Audited revision:** `d2b0c577f59b30beadb12ffc45bf8e303b602377` (this repo);
+`bfed8cc17e08da4091e9b6c483cf03a150983cff` (`modeled-information-format/ontologies`,
+verified current against `origin/main` tip `99c984c78c5153f9ec697db8818e01adac42674f`
+— the intervening commits touch only CI/dependency pins, not ontology content)
+
+**Status:** Compliant
+
+**Findings:**
+
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
+| Underscore-prefixed `_semantic/...` base type used in domain ontology `suggest_namespace` values | `regenerative-agriculture.ontology.jsonld` (`modeled-information-format/ontologies` repo) | `discovery.patterns[]` entries with `"suggest_namespace": "_semantic/land"` | compliant |
+| Underscore-prefixed `_episodic/...` base type used in domain ontology `suggest_namespace` values | `software-engineering.ontology.jsonld` (`ontologies` repo) | `discovery.patterns[]` entry `"suggest_namespace": "_episodic/incidents"` | compliant |
+| Underscore-prefixed `_procedural/...` base type used in domain ontology `suggest_namespace` values | `software-engineering.ontology.jsonld` (`ontologies` repo) | `discovery.patterns[]` entries `"suggest_namespace": "_procedural/runbooks"` | compliant |
+| Domain sub-namespaces stay unprefixed beneath the prefixed base type (`_semantic/land`, `_procedural/animal-welfare`) | `regenerative-agriculture.ontology.jsonld` (`ontologies` repo) | `discovery.patterns[]` entries `"suggest_namespace": "_semantic/land"` and `"suggest_namespace": "_procedural/animal-welfare"` | compliant |
+| Namespace validator treats `_semantic`/`_episodic`/`_procedural` base types as always-available parents that domain sub-namespaces inherit from | `scripts/validate-namespaces.py` | function `validate_memory_namespace`, the `if parent in mif_base_namespaces:` block (comment `# Check parent namespace (e.g., _semantic from _semantic/preferences)`) | compliant — see Summary for a tooling-wiring change since 2026-06-18 |
+
+**Summary:** Two material changes since 2026-06-18, neither breaking the
+underlying convention:
+
+1. **Ontology example content moved cross-repo.** `ontologies/examples/` no
+   longer exists in this repo — per ADR-018/ADR-019, ontology corpus content
+   is now sourced-of-record in `modeled-information-format/ontologies`.
+   Re-verified the underscore-prefix claim directly against that repo. The
+   convention is not just intact but more uniformly applied than the
+   original 2-file sample showed: swept all `*.ontology.jsonld` files in
+   that repo's current corpus and every `suggest_namespace` value across
+   all of them is underscore-prefixed at the base-type level with domain
+   sub-namespaces unprefixed beneath it, zero exceptions found. That repo
+   has also since documented its own parallel decision record for the same
+   convention (`docs/decisions/0001-underscore-prefixed-base-namespaces.md`,
+   accepted 2026-06-30) — corroborating, not superseding, this ADR.
+2. **`validate-namespaces.py` dropped from CI gating (logic unaffected).**
+   The script's `validate_memory_namespace` logic is unchanged in intent and
+   still correctly treats `_semantic`/`_episodic`/`_procedural` as
+   always-available parent namespaces. Per ADR-019's own 2026-07-02 audit
+   entry, this script was removed from `.github/workflows/validate.yml`'s
+   required check that same day: it hardcoded a scan path that no longer
+   exists in this repo. It is now a standalone script requiring an explicit
+   `--path` pointed at a real ontology corpus. This ADR's Decision Outcome
+   only ever claimed the script encodes the distinction in tooling — not
+   that it is CI-gating — so this finding stays compliant; already tracked
+   in ADR-019's own audit trail, no separate action needed here.
+
+Two related-decision linkage issues were found during this audit and are
+fixed in this same PR, not deferred: this ADR's `related:` frontmatter and
+Related Decisions section were missing a backlink to ADR-018 (which lists
+this ADR as related — "the corpus model the layout serves" — a one-way
+link `adr/README.md` requires be bidirectional), added above. Separately,
+this ADR's Context and Decision sections both cited ADR-003 as a live
+Obsidian-compatibility guarantee, stale since ADR-017 superseded ADR-003 —
+filed as [#251](https://github.com/modeled-information-format/MIF/issues/251)
+(shared with the identical issue found on ADR-002) rather than fixed inline,
+since correcting that prose is an editorial-scope decision.
+
+**Action Required:** None for the findings above. See #251 for the
+ADR-003/ADR-017 prose correction.
+
+### 2026-07-11 (follow-up)
+
+**Audited revision:** `252767a724a20771555942afc25a622c5b7ab1a9`
+
+**Status:** Compliant
+
+**Findings:**
+
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
+| Context's Obsidian-compatibility reference no longer cites ADR-003 as a live guarantee | `adr/ADR-005-underscore-namespace-prefix.md` | the bullet "Work cleanly with existing tooling and every common file browser or IDE..." in `## Context` | compliant |
+| Decision's Obsidian-compatibility reference no longer cites ADR-003 as a live guarantee | `adr/ADR-005-underscore-namespace-prefix.md` | the sentence following "This convention is applied uniformly across MIF tooling..." in `## Decision` | compliant |
+
+**Summary:** Both stale ADR-003 references identified in the prior audit
+entry are fixed: each now states the underlying fact directly (the
+underscore prefix is an ordinary visible character in every common file
+browser/editor, Obsidian included) with a pointer to ADR-017, rather than
+citing ADR-003 as a live compatibility commitment ADR-017 already
+superseded. The underlying convention this ADR documents is unaffected.
+Issue #251 closed for this ADR's portion of the work.
 
 **Action Required:** None.

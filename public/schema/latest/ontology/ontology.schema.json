@@ -169,6 +169,33 @@
             "type": "string"
           }
         },
+        "aliases": {
+          "type": "array",
+          "description": "Synonyms and label variations for this entity type (SKOS altLabel analog), as a structured field distinct from description. Embedding-based classifiers concatenate aliases into the type's positive embedding document alongside description and exemplars.",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "exemplars": {
+          "type": "array",
+          "description": "Curated canonical example phrases or instances of this entity type (SKOS example analog; 2-5 recommended), distinct from description. A second, example-grounded positive embedding signal for classifiers.",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "negative_examples": {
+          "type": "array",
+          "description": "Curated near-miss examples drawn from this ontology's most confusable type pairs: texts that resemble this entity type but do NOT denote it. For decision-boundary sharpening only; never concatenated into the positive embedding document. Must be human-curated, not auto-mined.",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
         "schema": {
           "type": "object",
           "description": "JSON Schema for entity fields",
