@@ -11,7 +11,7 @@ tags:
   - lossless
 status: accepted
 created: 2026-06-18
-updated: 2026-06-18
+updated: 2026-07-11
 author: MIF Maintainers
 project: MIF
 technologies:
@@ -25,6 +25,7 @@ related:
   - ADR-009-okf-compliance-superset.md
   - ADR-007-github-raw-urls-for-schema-ids.md
   - ADR-012-okf-conformance-tested-invariant.md
+  - ADR-021-container-profile.md
 ---
 
 # ADR-011: Markdown-Canonical with Derived JSON-LD Projection
@@ -251,29 +252,94 @@ Mitigations:
 ## More Information
 
 - **Date:** 2026-06-18
-- **Source:** SPECIFICATION.md L38-L39 (Markdown-canonical / Invariant 2) and §6 "JSON-LD Projection (derived)" L624-L629; `scripts/mif_convert.py` (`emit-jsonld`, `roundtrip`).
+- **Source:** SPECIFICATION.md's **Markdown-canonical** design-goal bullet (Abstract, Invariant 2) and its `## 6. JSON-LD Projection (derived)` heading/callout; `scripts/mif_convert.py` (`emit-jsonld`, `roundtrip`).
 - **Related ADRs:** ADR-002, ADR-009, ADR-007, ADR-012
 
 ## Audit
 
+Findings cite durable anchors (heading / callout text / function name), not
+raw line numbers — line numbers in `SPECIFICATION.md` and
+`scripts/mif_convert.py` shift as unrelated content is added, which had
+already made every citation in this section's original entry stale by the
+2026-07-11 audit below, several of them landing inside unrelated code
+entirely rather than merely drifting a few lines (see that entry's
+Summary for the specific citations and where each now resolves).
+`grep -n` for the quoted anchor text to find its current line.
+
 ### 2026-06-18
+
+**Audited revision:** `7f8d2de6c671cf5f354e4034b1524c0c112ddf1f`
 
 **Status:** Compliant
 
 **Findings:**
 
-| Finding | Files | Lines | Assessment |
-|---------|-------|-------|------------|
-| Markdown-canonical stated normatively: ".md file is the source of truth; JSON-LD is a derived projection (Invariant 2)" | `SPECIFICATION.md` | L38-L39 | compliant |
-| JSON-LD section titled "JSON-LD Projection (derived)" and callout "Markdown is canonical (Invariant 2)... If the two disagree, markdown wins" | `SPECIFICATION.md` | L624-L629 | compliant |
-| Projection MUST NOT use the `.md` extension so OKF's `*.md` glob never ingests it; MUST round-trip losslessly | `SPECIFICATION.md` | L628-L629 | compliant |
-| One-directional derive: `emit-jsonld` reads each concept `.md` and writes a `.jsonld` projection (never hand-authored) | `scripts/mif_convert.py` | L267-L279 | compliant |
-| Lossless `markdown → json-ld → markdown` round-trip asserted by the `roundtrip` subcommand | `scripts/mif_convert.py` | L201-L213 | compliant |
-| `roundtrip` and `emit-jsonld` registered as CLI subcommands | `scripts/mif_convert.py` | L294-L297 | compliant |
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
+| Markdown-canonical stated normatively: ".md file is the source of truth; JSON-LD is a derived projection (Invariant 2)" | `SPECIFICATION.md` | the `**Markdown-canonical**` bullet in the "MIF is designed to be:" list (Abstract section) | compliant |
+| JSON-LD section titled "JSON-LD Projection (derived)" and callout "Markdown is canonical (Invariant 2)... If the two disagree, markdown wins" | `SPECIFICATION.md` | heading `## 6. JSON-LD Projection (derived)`, callout opener "Markdown is canonical (Invariant 2)." | compliant |
+| Projection MUST NOT use the `.md` extension so OKF's `*.md` glob never ingests it; MUST round-trip losslessly | `SPECIFICATION.md` | same callout under `## 6. JSON-LD Projection (derived)`, sentence "MUST NOT use the `.md` extension ... If the two disagree, markdown wins." | compliant |
+| One-directional derive: `emit-jsonld` reads each concept `.md` and writes a `.jsonld` projection (never hand-authored) | `scripts/mif_convert.py` | function `cmd_emit_jsonld` | compliant |
+| Lossless `markdown → json-ld → markdown` round-trip asserted by the `roundtrip` subcommand | `scripts/mif_convert.py` | function `cmd_roundtrip` (calls `roundtrip_file`) | compliant |
+| `roundtrip` and `emit-jsonld` registered as CLI subcommands | `scripts/mif_convert.py` | `main()`, `sub.add_parser("roundtrip", ...)` and `sub.add_parser("emit-jsonld", ...)` calls | compliant |
 
 **Summary:** The Markdown-canonical / derived-JSON-LD relationship (Invariant 2),
 the `.jsonld` (never `.md`) extension rule, the lossless round-trip requirement, and
 the one-directional `emit-jsonld` derive plus the `roundtrip` losslessness assertion
 are all present and normative in the specification and the conversion tooling.
+
+**Action Required:** None.
+
+### 2026-07-11
+
+**Audited revision:** `d2b0c577f59b30beadb12ffc45bf8e303b602377`
+
+**Status:** Compliant
+
+**Findings:**
+
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
+| Markdown-canonical stated normatively: ".md file is the source of truth; JSON-LD is a derived projection (Invariant 2)" | `SPECIFICATION.md` | the `**Markdown-canonical**` bullet in the "MIF is designed to be:" list (Abstract section) | compliant |
+| JSON-LD section titled "JSON-LD Projection (derived)" and callout "Markdown is canonical (Invariant 2)... If the two disagree, markdown wins" | `SPECIFICATION.md` | heading `## 6. JSON-LD Projection (derived)`, callout opener "Markdown is canonical (Invariant 2)." | compliant |
+| Projection MUST NOT use the `.md` extension so OKF's `*.md` glob never ingests it; MUST round-trip losslessly | `SPECIFICATION.md` | same callout under `## 6. JSON-LD Projection (derived)`, sentence "MUST NOT use the `.md` extension ... If the two disagree, markdown wins." | compliant |
+| One-directional derive: `emit-jsonld` reads each concept `.md` and writes a `.jsonld` projection (never hand-authored) | `scripts/mif_convert.py` | function `cmd_emit_jsonld` | compliant |
+| Lossless `markdown → json-ld → markdown` round-trip asserted by the `roundtrip` subcommand | `scripts/mif_convert.py` | function `cmd_roundtrip` (calls `roundtrip_file`, which performs the `md → jsonld → md` diff) | compliant |
+| `roundtrip` and `emit-jsonld` registered as CLI subcommands | `scripts/mif_convert.py` | `main()`, the `sub.add_parser("roundtrip", ...)` and `sub.add_parser("emit-jsonld", ...)` calls | compliant |
+
+**Summary:** Re-verified every 2026-06-18 finding against current file
+content, not just re-anchored at today's line numbers — all six still hold
+true with no material drift in behavior: `scripts/mif_convert.py`'s module
+docstring still states ".md concept file is the source of truth (Invariant 2)"
+and JSON-LD as "derived"; `roundtrip_file`
+still genuinely converts md → jsonld → md and diffs the result;
+`cmd_emit_jsonld` still writes only `.jsonld` (never `.md`) via
+`Path.with_suffix(".jsonld")`; both `roundtrip` and `emit-jsonld` are still
+wired into `.github/workflows/validate.yml`'s `okf-conformance` and
+`schema-validation` jobs (cross-checked against ADR-012's own 2026-07-11
+audit of that same workflow). Nothing renumbered/superseded among the
+related ADRs: ADR-002's `## Amendment` ("Refined by ADR-011") matches
+ADR-011's own "refines and amends ADR-002" framing with no contradiction;
+ADR-007 and ADR-009 are both still `accepted`, and ADR-007's `mif-spec.dev`
+domain amendment matches the live `CONTEXT_URL` in `scripts/mif_convert.py`.
+
+What did drift, severely, is the raw line-number citations themselves —
+exactly the problem this retrofit exists to fix. The `SPECIFICATION.md` §6
+callout moved from L624-L629 to L672-L677 (48 lines); the Abstract's
+Markdown-canonical bullet moved from L38-L39 to L39-40 (1 line, cosmetically
+fine but still a raw citation). `scripts/mif_convert.py` drifted far more
+severely: the old `L267-L279` citation for the `emit-jsonld` derive now
+lands inside `cmd_roundtrip()`'s reporting logic, the old `L201-L213`
+citation for the round-trip assertion now lands inside `jsonld_to_md()`'s
+passthrough-key list, and the old `L294-L297` citation for the CLI
+subparser registrations now lands inside `cmd_to_markdown()`'s body — all
+three unrelated code, none of it what the original finding cited. These are
+concrete demonstrations of exactly why raw line-number citations are
+dangerous: they still resolved to *something*, but that something was no
+longer what the finding was about. This ADR's own
+`## More Information` `**Source:**` line carried the identical stale
+`L38-L39`/`L624-L629` citations outside the Audit table itself — corrected
+in this same PR alongside the table, since it's the same defect in the same
+file.
 
 **Action Required:** None.

@@ -1,0 +1,31 @@
+relationship_types:
+  # Core types (SPECIFICATION.md 8.2), listed here for documentation only --
+  # they're always recognized regardless of what's declared in this file.
+  - name: RelatesTo
+    description: General semantic relationship
+    symmetric: true
+    icon: "🔗"
+  - name: DerivedFrom
+    description: Memory created based on source
+    inverse: Derives
+    icon: "⬅️"
+
+  # Custom types (SPECIFICATION.md 8.1/8.3), namespaced under farm:. Once this
+  # file exists, every farm:* relationship type used in this bundle must be
+  # declared here -- scripts/okf_validate.py enforces it.
+  - name: BreedsWith
+    namespace: farm
+    description: Animal breeding relationship
+    symmetric: false
+    properties:
+      - name: breeding_date
+        type: date
+      - name: success
+        type: boolean
+
+# Maps each custom namespace prefix above to the IRI it expands to (SPECIFICATION.md
+# 8.3's own JSON-LD representation example). Merged into every JSON-LD projection's
+# @context by scripts/mif_convert.py so farm:breeds-with resolves to a real IRI on
+# expansion instead of staying an opaque compact-IRI-looking string.
+namespaces:
+  farm: "https://example.org/farm/"

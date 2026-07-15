@@ -25,7 +25,7 @@ jobs:
 
       - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
-          node-version: 'lts/*'
+          node-version: '24'
 
       - name: Install pinned dependencies (ajv-cli via lockfile)
         run: npm ci
@@ -60,6 +60,49 @@ jobs:
           done
           exit $fail
 
+      - name: Compile standalone schemas (not part of the mif.schema.json ref bundle)
+        run: |
+          set -uo pipefail
+          fail=0
+          for s in schema/relationship-types-config.schema.json \
+                   public/schema/relationship-types-config.schema.json; do
+            [ -f "$s" ] || continue
+            if npx --no-install ajv compile -s "$s" --spec=draft2020 -c ajv-formats --strict=false; then
+              echo "ok: $s"
+            else
+              echo "::error::$s failed to compile"; fail=1
+            fi
+          done
+          # Container Profile schemas (ADR-021) $ref into the mif.schema.json
+          # set, so they need the same -r bundle to compile. public/ copies
+          # first appear when a release is snapshotted (docs/RELEASING.md);
+          # absent copies are skipped, present ones must compile.
+          for d in schema public/schema \
+                   public/schema/latest public/schema/v0 public/schema/v1; do
+            for f in container.schema.json document-reference.schema.json; do
+              s="$d/$f"
+              [ -f "$s" ] || continue
+              if npx --no-install ajv compile -s "$s" \
+                   -r "$d/mif.schema.json" -r "$d"/definitions/*.schema.json \
+                   -r "$d/citation.schema.json" \
+                   --spec=draft2020 -c ajv-formats --strict=false; then
+                echo "ok: $s"
+              else
+                echo "::error::$s failed to compile"; fail=1
+              fi
+            done
+          done
+          s=schema/relationship-types-config.schema.json
+          p=public/schema/relationship-types-config.schema.json
+          if [ -f "$s" ] && [ ! -f "$p" ]; then
+            echo "::error::missing mirror file $p (present in $s)"; fail=1
+          elif [ ! -f "$s" ] && [ -f "$p" ]; then
+            echo "::error::missing mirror source $s (present in $p)"; fail=1
+          elif [ -f "$s" ] && [ -f "$p" ] && ! diff -q "$s" "$p" >/dev/null 2>&1; then
+            echo "::error::$p does not match $s"; fail=1
+          fi
+          exit $fail
+
       - name: Every JSON-LD context parses
         run: |
           set -uo pipefail
@@ -79,7 +122,9 @@ jobs:
           fail=0
           files="mif.schema.json citation.schema.json context.jsonld \
                  definitions/entity-reference.schema.json \
-                 ontology/ontology.schema.json ontology/ontology.context.jsonld"
+                 ontology/ontology.schema.json ontology/ontology.context.jsonld \
+                 container.schema.json container-context.jsonld \
+                 document-reference.schema.json"
           check() { # alias_dir  source_dir
             local a="public/schema/$1" s="$2"
             [ -d "$a" ] || { echo "skip $a (absent)"; return; }

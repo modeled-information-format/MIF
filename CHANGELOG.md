@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-07-11
+
+### Added
+
+- **Container Profile (ADR-021)** — an OPTIONAL, single-file `*.corpus.json`
+  transport envelope that serializes a Bundle (or a subset of one) for wire
+  transport: `schema/container.schema.json`, `schema/container-context.jsonld`,
+  `schema/document-reference.schema.json`, `scripts/validate_container.py`,
+  a `container-validation` CI job, a worked example under
+  `examples/container/`, and `docs/CONTAINER-PROFILE.md`. Vendor-specific
+  corpus metadata (compression manifests, version DAGs) routes through a
+  generalized `extensions` mechanism rather than becoming native MIF
+  vocabulary. Accepted and implemented in the same change (reframes
+  issue #77).
+- **[Tooling]**: `scripts/check_relationship_type_vocab_coverage.py` — cross-checks
+  `schema/context.jsonld`'s `relationships.type.@context` term mapping against
+  `public/ns/vocabulary.jsonld`'s registered `rdfs:Class` terms, guarding against
+  the #230 defect class (a relationship-type term declared in one file but never
+  wired to the other) recurring. Wired into the `okf-conformance` CI job. (#233)
+- **[Tooling]**: `scripts/test_temporal_and_properties.py` (temporal-consistency
+  and `properties`-construct regression suite) is now run in the `okf-conformance`
+  CI job via `pytest`; previously it only ran if a contributor had `pytest`
+  installed locally and remembered to invoke it by hand. (#235)
+
 ## [1.2.2] - 2026-07-04
 
 ### Fixed
@@ -315,7 +339,11 @@ See [MIGRATION.md](MIGRATION.md) and run
 - MIF specification draft v0.1
 - Market research framework
 
-[Unreleased]: https://github.com/modeled-information-format/MIF/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/modeled-information-format/MIF/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/modeled-information-format/MIF/compare/v1.2.2...v1.3.0
+[1.2.2]: https://github.com/modeled-information-format/MIF/compare/v1.2.1...v1.2.2
+[1.2.1]: https://github.com/modeled-information-format/MIF/compare/v1.2.0...v1.2.1
+[1.2.0]: https://github.com/modeled-information-format/MIF/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/modeled-information-format/MIF/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/modeled-information-format/MIF/compare/v0.1.0...v1.0.0
 [0.1.0]: https://github.com/modeled-information-format/MIF/releases/tag/v0.1.0

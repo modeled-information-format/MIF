@@ -42,6 +42,23 @@ CONTEXT_URL = "https://mif-spec.dev/schema/context.jsonld"
 FRONTMATTER_RE = re.compile(r"^---\n(.*?)\n---\n?(.*)$", re.DOTALL)
 RESERVED_FILENAMES = {"index.md", "log.md"}
 
+
+def bundle_namespaces(bundle: Path) -> dict[str, str]:
+    """Read bundle/.mif/config.yaml's `namespaces` map, if present (schema/
+    relationship-types-config.schema.json). Best-effort: an absent or
+    malformed file yields {} -- okf_validate.py is the enforcement point for
+    config.yaml's correctness; this just needs a mapping to merge into
+    @context, or nothing to merge if there isn't one."""
+    config_path = bundle / ".mif" / "config.yaml"
+    try:
+        config = yaml.safe_load(config_path.read_text())
+    except (OSError, yaml.YAMLError):
+        return {}
+    if not isinstance(config, dict):
+        return {}
+    namespaces = config.get("namespaces", {})
+    return namespaces if isinstance(namespaces, dict) else {}
+
 # Canonical frontmatter key order for deterministic, lossless serialization.
 FRONTMATTER_ORDER = [
     "id",
@@ -115,11 +132,18 @@ def serialize_markdown(frontmatter: dict, body: str) -> str:
     return f"---\n{yaml_text}\n---\n\n{body}"
 
 
-def md_to_jsonld(frontmatter: dict, body: str) -> dict:
-    """Project frontmatter + body into a derived JSON-LD document."""
+def md_to_jsonld(frontmatter: dict, body: str, namespaces: dict[str, str] | None = None) -> dict:
+    """Project frontmatter + body into a derived JSON-LD document.
+
+    `namespaces` (a bundle's .mif/config.yaml `namespaces` map, see
+    bundle_namespaces()) is merged into @context as a second array entry,
+    matching SPECIFICATION.md 8.3's own JSON-LD representation example --
+    without this, a custom relationship type's "farm:breeds-with" stays an
+    unexpanded compact-IRI-looking string on JSON-LD expansion rather than
+    resolving to a real IRI, silently."""
     fm = stringify_datetimes(frontmatter)
     jsonld: dict[str, Any] = {
-        "@context": CONTEXT_URL,
+        "@context": [CONTEXT_URL, namespaces] if namespaces else CONTEXT_URL,
         "@type": "Concept",
     }
     if "id" in fm:
@@ -208,7 +232,12 @@ def normalize(md_text: str) -> str:
 
 
 def roundtrip_file(md_path: Path) -> str | None:
-    """Return an error string if md -> jsonld -> md is not lossless, else None."""
+    """Return an error string if md -> jsonld -> md is not lossless, else None.
+
+    No ``namespaces`` parameter: jsonld_to_md() never reads ``@context`` (it
+    only consumes @id/conceptType/the fixed passthrough key list), so a
+    bundle's namespace map cannot affect this check's outcome either way.
+    """
     original = md_path.read_text()
     frontmatter, body = parse_markdown(original)
     jsonld = md_to_jsonld(frontmatter, body)
@@ -249,9 +278,10 @@ def cmd_roundtrip(bundles: list[Path]) -> int:
     return 0
 
 
-def cmd_to_jsonld(src: Path, out: Path | None) -> int:
+def cmd_to_jsonld(src: Path, out: Path | None, bundle: Path | None = None) -> int:
     frontmatter, body = parse_markdown(src.read_text())
-    jsonld = md_to_jsonld(frontmatter, body)
+    namespaces = bundle_namespaces(bundle) if bundle else None
+    jsonld = md_to_jsonld(frontmatter, body, namespaces)
     text = json.dumps(jsonld, indent=2, ensure_ascii=False)
     if out:
         out.write_text(text + "\n")
@@ -276,9 +306,10 @@ def cmd_to_markdown(src: Path, out: Path | None) -> int:
 def cmd_emit_jsonld(bundles: list[Path], out_dir: Path) -> int:
     count = 0
     for bundle in bundles:
+        namespaces = bundle_namespaces(bundle)
         for md_path in iter_concepts(bundle):
             frontmatter, body = parse_markdown(md_path.read_text())
-            jsonld = md_to_jsonld(frontmatter, body)
+            jsonld = md_to_jsonld(frontmatter, body, namespaces)
             rel = md_path.relative_to(bundle).with_suffix(".jsonld")
             dest = out_dir / bundle.name / rel
             dest.parent.mkdir(parents=True, exist_ok=True)
@@ -295,6 +326,12 @@ def main() -> None:
     p_j = sub.add_parser("to-jsonld", help="Convert one .md concept to JSON-LD")
     p_j.add_argument("input")
     p_j.add_argument("output", nargs="?")
+    p_j.add_argument(
+        "--bundle",
+        help="Bundle root to resolve .mif/config.yaml's custom namespaces from "
+        "(optional; omit to convert with no namespace resolution, matching "
+        "today's behavior).",
+    )
 
     p_m = sub.add_parser("to-markdown", help="Convert one .jsonld back to markdown")
     p_m.add_argument("input")
@@ -310,7 +347,11 @@ def main() -> None:
     args = parser.parse_args()
 
     if args.command == "to-jsonld":
-        sys.exit(cmd_to_jsonld(Path(args.input), Path(args.output) if args.output else None))
+        sys.exit(cmd_to_jsonld(
+            Path(args.input),
+            Path(args.output) if args.output else None,
+            Path(args.bundle) if args.bundle else None,
+        ))
     if args.command == "to-markdown":
         sys.exit(cmd_to_markdown(Path(args.input), Path(args.output) if args.output else None))
     if args.command == "roundtrip":

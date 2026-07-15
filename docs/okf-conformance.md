@@ -7,8 +7,9 @@
 This document is **normative within MIF**. It embeds a pinned copy of Google's
 Open Knowledge Format (OKF) v0.1 conformance criteria. MIF conforms to *this
 pinned copy*, not to whatever OKF publishes next. Updates to OKF are reviewed
-deliberately and adopted only by an explicit MIF revision (see SPECIFICATION.md,
-Invariant 5 — "No floating dependency on OKF").
+deliberately and adopted only by an explicit MIF revision (see
+[SPECIFICATION.md, Invariant 5](../SPECIFICATION.md#invariants) — "No floating
+dependency on OKF").
 
 > **Provenance note.** The criteria below are reconstructed from the OKF v0.1
 > interoperability surface (a directory of markdown files with YAML frontmatter,
@@ -81,6 +82,21 @@ bundle:
    reported as warnings, not failures.
 5. **Lossless projection.** The `markdown → json-ld → markdown` round trip is
    lossless for all conformance-level data (`scripts/mif_convert.py roundtrip`).
+6. **Temporal consistency (warning by default).** A `derived-from` /
+   `supersedes` / `cites` edge's target must not be `created` after the concept
+   that derives from it; `--strict-temporal` promotes this to a hard error.
+7. **Custom relationship type registry (opt-in).** Once a bundle has a
+   `.mif/config.yaml` declaring `relationship_types` (SPECIFICATION.md §8.1/8.3),
+   every namespaced (custom) relationship type used in that bundle must be
+   declared there. Bundles without `.mif/config.yaml` keep the fully-lenient
+   behavior of (5)/(6) unchanged; bare/core types (no `namespace:` prefix) are
+   never gated by this check.
+8. **Declared property value constraints (opt-in).** A declared custom type's
+   relationship metadata values are checked against that type's declared
+   `properties[]` (`type`/`enum`/`range`), when present in the metadata — e.g.
+   a property declared `range: [0.0, 1.0]` rejects a metadata value of `5.0`.
+   `inverse`/`symmetric` are declaration-only and not checked (they describe a
+   cross-relationship graph shape, not a single relationship's own values).
 
 Run it with:
 
