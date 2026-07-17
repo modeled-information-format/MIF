@@ -233,17 +233,18 @@ def _data_to_record(data_row: Any, dataset: Any) -> Dict[str, Any]:
         }
 
     doc_id = str(data_dict.get("id"))
-    ds_name = getattr(dataset, "name", None) or str(getattr(dataset, "id", ""))
-    owner = str(data_dict.get("owner_id") or getattr(dataset, "owner_id", "") or "")
-    tenant = str(data_dict.get("tenant_id") or getattr(dataset, "tenant_id", "") or "")
     mif_id = mif_uuid(COGNEE_NS, f"document:{doc_id}", restore=doc_id)
 
+    # DocumentReference (schema/mif.schema.json#/$defs/DocumentReference) is
+    # additionalProperties:false and carries no extensions mechanism (unlike
+    # Memory), so none of @id/namespace/created/extensions is representable
+    # here -- this cognee-specific metadata (dataset_id, token_count,
+    # owner/tenant, updated_at, ...) has no schema-conformant home on a
+    # document record and is intentionally dropped, not preserved elsewhere.
     payload: Dict[str, Any] = {
         "@type": "DocumentReference",
-        "@id": mif_id,
         "id": mif_id,
         "title": data_dict.get("name") or f"cognee-doc-{doc_id}",
-        "namespace": f"_semantic/{ns_component(ds_name)}",
     }
     if data_dict.get("raw_data_location"):
         payload["url"] = str(data_dict["raw_data_location"])
@@ -251,22 +252,6 @@ def _data_to_record(data_row: Any, dataset: Any) -> Dict[str, Any]:
         payload["hash"] = {"algorithm": "sha256", "value": str(data_dict["content_hash"])}
     if data_dict.get("mime_type"):
         payload["contentType"] = str(data_dict["mime_type"])
-    created = iso(data_dict.get("created_at"))
-    if created:
-        payload["created"] = created
-    payload["extensions"] = {
-        "cognee": {
-            "data_id": doc_id,
-            "dataset_id": str(getattr(dataset, "id", "")),
-            "dataset_name": ds_name,
-            "extension": data_dict.get("extension"),
-            "token_count": data_dict.get("token_count"),
-            "data_size": data_dict.get("data_size"),
-            "owner_id": owner or None,
-            "tenant_id": tenant or None,
-            "updated_at": data_dict.get("updated_at"),
-        }
-    }
     return {"kind": "document", "payload": payload}
 
 

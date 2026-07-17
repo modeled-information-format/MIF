@@ -3,7 +3,7 @@
 # MIF Reference Converters
 
 Reference converters that read a source AI-memory system and emit a MIF
-**[Container Profile](../SPECIFICATION.md#container-profile-corpus-envelope--proposed)**
+**[Container Profile](../docs/CONTAINER-PROFILE.md)**
 corpus (`*.corpus.json`) — many MIF memory units (and, where applicable, their
 source `document` records) as one transportable artifact.
 

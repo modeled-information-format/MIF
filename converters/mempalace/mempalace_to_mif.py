@@ -40,8 +40,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Iterator, List, Optional, Tuple
 
+# Shared MIF-facing helpers (converters/_mif_common.py).
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from _mif_common import build_corpus  # noqa: E402
+
 MIF_CONTEXT = "https://mif-spec.dev/schema/context.jsonld"
-MIF_VERSION = "1.2.2"
 SOURCE_SYSTEM = "mempalace"
 
 # Fixed MemPalace namespace UUID for deterministic UUIDv5 derivation of memory
@@ -205,23 +208,7 @@ def build_container(
 ) -> Dict[str, Any]:
     """Assemble a MIF Container Profile corpus from a palace snapshot."""
     records = list(iter_memory_records(palace_path, restore_original_ids=restore_original_ids))
-    corpus: Dict[str, Any] = {
-        "@context": MIF_CONTEXT,
-        "@type": "MemoryCorpus",
-        "mif_version": MIF_VERSION,
-        "records": records,
-        "provenance": {
-            "@type": "prov:Entity",
-            "prov:wasGeneratedBy": {
-                "@type": "prov:Activity",
-                "prov:used": SOURCE_SYSTEM,
-                "prov:generatedAtTime": datetime.now(timezone.utc).isoformat(),
-            },
-        },
-    }
-    if source_instance:
-        corpus["provenance"]["prov:wasDerivedFrom"] = source_instance
-    return corpus
+    return build_corpus(records, source_system=SOURCE_SYSTEM, source_instance=source_instance)
 
 
 def main(argv: Optional[List[str]] = None) -> int:

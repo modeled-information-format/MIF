@@ -1,36 +1,20 @@
 {
-  "@context": "https://mif-spec.dev/schema/context.jsonld",
+  "@context": "https://mif-spec.dev/schema/container-context.jsonld",
   "@type": "MemoryCorpus",
-  "mif_version": "1.2.2",
+  "containerProfileVersion": "0.1.0",
   "records": [
     {
       "kind": "document",
       "payload": {
         "@type": "DocumentReference",
-        "@id": "urn:mif:11111111-1111-4111-8111-111111111111",
         "id": "urn:mif:11111111-1111-4111-8111-111111111111",
         "title": "quantum_computing_intro.pdf",
-        "namespace": "_semantic/research_notes",
         "url": "file:///data/quantum_computing_intro.pdf",
         "hash": {
           "algorithm": "sha256",
           "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
         },
-        "contentType": "application/pdf",
-        "created": "2026-05-01T09:15:00Z",
-        "extensions": {
-          "cognee": {
-            "data_id": "11111111-1111-4111-8111-111111111111",
-            "dataset_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-            "dataset_name": "research_notes",
-            "extension": "pdf",
-            "token_count": 3120,
-            "data_size": 40213,
-            "owner_id": "user-42",
-            "tenant_id": "tenant-1",
-            "updated_at": "2026-05-01T09:20:00Z"
-          }
-        }
+        "contentType": "application/pdf"
       }
     },
     {
@@ -126,11 +110,11 @@
   ],
   "provenance": {
     "@type": "prov:Entity",
-    "prov:wasGeneratedBy": {
+    "wasGeneratedBy": {
       "@type": "prov:Activity",
-      "prov:used": "cognee",
-      "prov:generatedAtTime": "2026-07-08T17:35:02.088191+00:00"
+      "used": "cognee",
+      "generatedAtTime": "2026-07-08T17:35:02.088191+00:00"
     },
-    "prov:wasDerivedFrom": "cognee://synthetic-example"
+    "wasDerivedFrom": "cognee://synthetic-example"
   }
 }

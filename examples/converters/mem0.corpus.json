@@ -1,7 +1,7 @@
 {
-  "@context": "https://mif-spec.dev/schema/context.jsonld",
+  "@context": "https://mif-spec.dev/schema/container-context.jsonld",
   "@type": "MemoryCorpus",
-  "mif_version": "1.2.2",
+  "containerProfileVersion": "0.1.0",
   "records": [
     {
       "kind": "memory",
@@ -87,11 +87,11 @@
   ],
   "provenance": {
     "@type": "prov:Entity",
-    "prov:wasGeneratedBy": {
+    "wasGeneratedBy": {
       "@type": "prov:Activity",
-      "prov:used": "mem0",
-      "prov:generatedAtTime": "2026-07-08T00:00:00Z"
+      "used": "mem0",
+      "generatedAtTime": "2026-07-08T00:00:00Z"
     },
-    "prov:wasDerivedFrom": "synthetic-mem0-example"
+    "wasDerivedFrom": "synthetic-mem0-example"
   }
 }

@@ -19,7 +19,8 @@ from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
 MIF_CONTEXT = "https://mif-spec.dev/schema/context.jsonld"
-MIF_VERSION = "1.2.2"
+CONTAINER_CONTEXT = "https://mif-spec.dev/schema/container-context.jsonld"
+CONTAINER_PROFILE_VERSION = "0.1.0"
 CONCEPT_TYPES = ("semantic", "episodic", "procedural")
 
 _EPOCH = datetime(1970, 1, 1, tzinfo=timezone.utc).isoformat()
@@ -95,19 +96,19 @@ def build_corpus(
     """Wrap `records` (each `{"kind": "memory"|"document", "payload": ...}`) in a
     MIF Container Profile corpus."""
     corpus: Dict[str, Any] = {
-        "@context": MIF_CONTEXT,
+        "@context": CONTAINER_CONTEXT,
         "@type": "MemoryCorpus",
-        "mif_version": MIF_VERSION,
+        "containerProfileVersion": CONTAINER_PROFILE_VERSION,
         "records": records,
         "provenance": {
             "@type": "prov:Entity",
-            "prov:wasGeneratedBy": {
+            "wasGeneratedBy": {
                 "@type": "prov:Activity",
-                "prov:used": source_system,
-                "prov:generatedAtTime": generated_at or datetime.now(timezone.utc).isoformat(),
+                "used": source_system,
+                "generatedAtTime": generated_at or datetime.now(timezone.utc).isoformat(),
             },
         },
     }
     if source_instance:
-        corpus["provenance"]["prov:wasDerivedFrom"] = source_instance
+        corpus["provenance"]["wasDerivedFrom"] = source_instance
     return corpus

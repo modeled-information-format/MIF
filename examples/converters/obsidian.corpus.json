@@ -1,7 +1,7 @@
 {
-  "@context": "https://mif-spec.dev/schema/context.jsonld",
+  "@context": "https://mif-spec.dev/schema/container-context.jsonld",
   "@type": "MemoryCorpus",
-  "mif_version": "1.2.2",
+  "containerProfileVersion": "0.1.0",
   "records": [
     {
       "kind": "memory",
@@ -12,23 +12,12 @@
         "conceptType": "semantic",
         "namespace": "_semantic/Concepts",
         "content": "MIF is a vendor-neutral memory interchange format. See [[Container Profile]].",
-        "created": "2026-06-25",
+        "created": "2026-06-25T00:00:00Z",
         "title": "MIF",
         "tags": [
           "format",
           "obsidian",
           "spec"
-        ],
-        "relationships": [
-          {
-            "type": "links-to",
-            "target": "urn:mif:d5845a39-f8d4-5d6d-a3d7-5f96889acd99",
-            "metadata": {
-              "obsidian": {
-                "wikilink": "Container Profile"
-              }
-            }
-          }
         ],
         "extensions": {
           "obsidian": {
@@ -68,7 +57,7 @@
         "relationships": [
           {
             "type": "links-to",
-            "target": "urn:mif:7c6c78d3-3cc8-5ce0-ad41-2239a87c4cd0",
+            "target": "urn:mif:5ca40cb6-cb96-5846-b078-c1a27238c5ec",
             "metadata": {
               "obsidian": {
                 "wikilink": "MIF"
@@ -92,10 +81,10 @@
   ],
   "provenance": {
     "@type": "prov:Entity",
-    "prov:wasGeneratedBy": {
+    "wasGeneratedBy": {
       "@type": "prov:Activity",
-      "prov:used": "obsidian",
-      "prov:generatedAtTime": "2026-07-08T17:40:36.682663+00:00"
+      "used": "obsidian",
+      "generatedAtTime": "2026-07-08T17:40:36.682663+00:00"
     }
   }
 }
