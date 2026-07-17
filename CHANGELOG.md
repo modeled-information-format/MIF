@@ -7,14 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added (proposed)
-
-- **[Container Profile]**: corpus envelope (`*.corpus.json`) wrapping many MIF
-  memory units + source `document` records for transport (issue #77). Editorial
-  spec section + `examples/container-profile.corpus.json`. Reference converters
-  (Mem0, Letta, Cognee, Graphiti, MemPalace) that emit this envelope are in
-  progress (#77). PROPOSED — pending
-  v1.0.0 incorporation.
 ## [1.3.0] - 2026-07-11
 
 ### Added
