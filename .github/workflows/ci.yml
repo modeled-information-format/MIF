@@ -19,7 +19,7 @@ jobs:
     name: actionlint
     permissions:
       contents: read
-    uses: modeled-information-format/.github/.github/workflows/reusable-actionlint.yml@93f0c3a4cb0cc4883b808d2f843a5005aa01dd24
+    uses: modeled-information-format/.github/.github/workflows/reusable-actionlint.yml@55bb7629147965895d480ed94b08b098ff431a35
 
   pin-check:
     name: pin-check
