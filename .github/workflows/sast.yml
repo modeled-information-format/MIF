@@ -24,7 +24,7 @@ jobs:
       contents: read
       actions: read
       packages: read
-    uses: modeled-information-format/.github/.github/workflows/reusable-sast-codeql.yml@08f06af29dfb1877e2dcfaaa90bf773a63261139
+    uses: modeled-information-format/.github/.github/workflows/reusable-sast-codeql.yml@55bb7629147965895d480ed94b08b098ff431a35
     with:
       languages: "python,javascript-typescript"
 
