@@ -1,0 +1,126 @@
+{
+  "@context": "https://mif-spec.dev/schema/container-context.jsonld",
+  "@type": "MemoryCorpus",
+  "containerProfileVersion": "0.1.0",
+  "records": [
+    {
+      "kind": "memory",
+      "payload": {
+        "@context": "https://mif-spec.dev/schema/context.jsonld",
+        "@type": "Memory",
+        "@id": "urn:mif:ae8e1186-14bf-5607-aa91-ca6f14daf27d",
+        "conceptType": "semantic",
+        "namespace": "_semantic/blocks/agent-42",
+        "content": "The user is Jason, an engineer who prefers concise answers and works on agent-memory formats.",
+        "created": "2026-05-01T09:15:00Z",
+        "title": "human",
+        "tags": [
+          "core-block",
+          "human",
+          "letta"
+        ],
+        "extensions": {
+          "letta": {
+            "kind": "core_block",
+            "block_id": "block-1a2b3c",
+            "label": "human",
+            "char_limit": 2000,
+            "template_name": null,
+            "is_template": false,
+            "read_only": false,
+            "description": "Facts about the human the agent is talking to.",
+            "agent_id": "agent-42",
+            "organization_id": "org-default",
+            "project_id": "proj-mif",
+            "native_metadata": {
+              "source": "core_memory_append"
+            },
+            "created_at": "2026-05-01T09:15:00Z",
+            "updated_at": "2026-06-30T12:00:00Z"
+          }
+        }
+      }
+    },
+    {
+      "kind": "memory",
+      "payload": {
+        "@context": "https://mif-spec.dev/schema/context.jsonld",
+        "@type": "Memory",
+        "@id": "urn:mif:af7bf6bf-a1e1-54a2-9e87-59a44d45723a",
+        "conceptType": "semantic",
+        "namespace": "_semantic/archival/agent-42",
+        "content": "MIF (Modeled Information Format) is a vendor-neutral portable format for AI agent memory, with semantic, episodic, and procedural concept types.",
+        "created": "2026-06-15T14:30:00Z",
+        "tags": [
+          "archival",
+          "letta",
+          "mif",
+          "reference"
+        ],
+        "extensions": {
+          "letta": {
+            "kind": "archival_passage",
+            "passage_id": "passage-77xyz",
+            "archive_id": "archive-9",
+            "agent_id": "agent-42",
+            "organization_id": "org-default",
+            "native_metadata": {
+              "ingested_by": "web-import"
+            },
+            "created_at": "2026-06-15T14:30:00Z",
+            "updated_at": "2026-06-15T14:30:00Z"
+          }
+        }
+      }
+    },
+    {
+      "kind": "memory",
+      "payload": {
+        "@context": "https://mif-spec.dev/schema/context.jsonld",
+        "@type": "Memory",
+        "@id": "urn:mif:772583a5-c36f-56de-a672-7f0da54a7f4a",
+        "conceptType": "episodic",
+        "namespace": "_episodic/messages/agent-42",
+        "content": "Can you convert my Letta memories into the MIF container profile?",
+        "created": "2026-07-02T08:45:00Z",
+        "tags": [
+          "letta",
+          "message",
+          "user"
+        ],
+        "extensions": {
+          "letta": {
+            "kind": "recall_message",
+            "message_id": "message-abc123",
+            "agent_id": "agent-42",
+            "role": "user",
+            "model": "gpt-4o",
+            "name": null,
+            "sequence_id": 17,
+            "conversation_id": "conv-5",
+            "step_id": null,
+            "run_id": null,
+            "sender_id": null,
+            "group_id": null,
+            "tool_calls": null,
+            "tool_call_id": null,
+            "tool_returns": null,
+            "content_parts": null,
+            "organization_id": "org-default",
+            "created_at": "2026-07-02T08:45:00Z",
+            "updated_at": "2026-07-02T08:45:00Z"
+          }
+        }
+      }
+    }
+  ],
+  "provenance": {
+    "@type": "prov:Entity",
+    "wasGeneratedBy": {
+      "@type": "prov:Activity",
+      "used": "letta",
+      "generatedAtTime": "2026-07-08T00:00:00Z"
+    },
+    "wasDerivedFrom": "~/.letta/sqlite.db"
+  }
+}

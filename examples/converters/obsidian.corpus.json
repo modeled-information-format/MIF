@@ -1,0 +1,90 @@
+{
+  "@context": "https://mif-spec.dev/schema/container-context.jsonld",
+  "@type": "MemoryCorpus",
+  "containerProfileVersion": "0.1.0",
+  "records": [
+    {
+      "kind": "memory",
+      "payload": {
+        "@context": "https://mif-spec.dev/schema/context.jsonld",
+        "@type": "Memory",
+        "@id": "urn:mif:5ca40cb6-cb96-5846-b078-c1a27238c5ec",
+        "conceptType": "semantic",
+        "namespace": "_semantic/Concepts",
+        "content": "MIF is a vendor-neutral memory interchange format. See [[Container Profile]].",
+        "created": "2026-06-25T00:00:00Z",
+        "title": "MIF",
+        "tags": [
+          "format",
+          "obsidian",
+          "spec"
+        ],
+        "extensions": {
+          "obsidian": {
+            "vault_path": "Concepts/MIF.md",
+            "frontmatter": {
+              "tags": [
+                "spec",
+                "format"
+              ],
+              "created": "2026-06-25",
+              "aliases": [
+                "Modeled Information Format"
+              ]
+            },
+            "aliases": [
+              "Modeled Information Format"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "kind": "memory",
+      "payload": {
+        "@context": "https://mif-spec.dev/schema/context.jsonld",
+        "@type": "Memory",
+        "@id": "urn:mif:d8e420d5-5a1e-5e7d-acd3-6a585c5b4014",
+        "conceptType": "episodic",
+        "namespace": "_episodic/journal/Journal",
+        "content": "Debugged the Phoenix rate spike; added a sliding-window limit. Ref [[MIF]].",
+        "created": "2026-07-08T17:40:36.461903+00:00",
+        "title": "2026-01-15",
+        "tags": [
+          "incident",
+          "obsidian"
+        ],
+        "relationships": [
+          {
+            "type": "links-to",
+            "target": "urn:mif:5ca40cb6-cb96-5846-b078-c1a27238c5ec",
+            "metadata": {
+              "obsidian": {
+                "wikilink": "MIF"
+              }
+            }
+          }
+        ],
+        "extensions": {
+          "obsidian": {
+            "vault_path": "Journal/2026-01-15.md",
+            "frontmatter": {
+              "tags": [
+                "incident"
+              ]
+            },
+            "aliases": null
+          }
+        }
+      }
+    }
+  ],
+  "provenance": {
+    "@type": "prov:Entity",
+    "wasGeneratedBy": {
+      "@type": "prov:Activity",
+      "used": "obsidian",
+      "generatedAtTime": "2026-07-08T17:40:36.682663+00:00"
+    }
+  }
+}
