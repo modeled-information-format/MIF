@@ -14,6 +14,7 @@
 [![CI](https://github.com/modeled-information-format/MIF/actions/workflows/validate.yml/badge.svg)](https://github.com/modeled-information-format/MIF/actions/workflows/validate.yml)
 [![JSON-LD](https://img.shields.io/badge/format-JSON--LD-orange.svg)](https://json-ld.org/)
 [![PROV-aligned](https://img.shields.io/badge/provenance-PROV--aligned-green.svg)](https://www.w3.org/TR/prov-dm/)
+[![OKF BundleDex](https://bundledex.net/static-badge.svg)](https://bundledex.net)
 
 **MIF is the opinionated, OKF-compliant content model that fills OKF's
 deliberately empty envelope.** [OKF](https://github.com/google/open-knowledge-format)
