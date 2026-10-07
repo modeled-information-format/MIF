@@ -243,6 +243,13 @@ independent of the frontmatter `namespace`: `semantic/rate-limit-policy.md` may
 declare `namespace: _semantic/policies`. A bundle has no `memories/` root and
 contains no `.jsonld` concept files.
 
+Keys in `.mif/` configuration files (`config.yaml`, namespace and entity
+definition files) use snake_case, e.g. `relationship_types`, `default_ttl`,
+`conformance_level`. Concept frontmatter fields use camelCase, e.g.
+`validFrom`, `sourceType`, `compressedAt`. The keys inside the free-form
+`extensions` and relationship `metadata` objects are not constrained by
+either convention.
+
 ---
 
 ## 4. Data Model
