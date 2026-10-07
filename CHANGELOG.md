@@ -7,6 +7,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **[Spec]**: §4.1 and §5.6 name the compression timestamp `compressedAt`,
+  matching `schema/mif.schema.json` (was `compressed_at`).
+- **[Spec]**: Concept relationship targets in §6.2 and §8.4 use
+  `urn:mif:<uuid>` (was `urn:mif:memory:<slug>`, a form no concept `@id`
+  can take); `docs/SCHEMA-REFERENCE.md` updated to match.
+- **[Spec]**: The §15.3 conversion example uses a full UUID (was the
+  truncated `urn:mif:550e8400`).
+- **[Spec]**: §8.3's custom-type example declares `BreedsWith`, matching
+  its JSON-LD `farm:breeds-with`; the old comment named the schema-invalid
+  token `farm:Contradicts`.
+- **[Spec]**: Appendix B and `docs/SCHEMA-REFERENCE.md` list the core type
+  `created` (the term `schema/context.jsonld` registers), not its inverse
+  `created-by`.
+- **[Schema]**: `$defs.Relationship.description` cites spec §5.3/§8 (was
+  §4.4, *Categorizing Memories*). Description-only; no `$id` or validation
+  change.
+
+### Changed
+
+- **[Spec]**: §3.2/§3.3 describe the OKF bundle layout used by `examples/`
+  (`/<type>/<slug>.md`, no `memories/` root); JSON-LD is emitted output
+  (`mif_convert.py emit-jsonld --out-dir`), not a file committed beside its
+  source. `docs/GETTING-STARTED.md` updated to match.
+- **[Spec]**: §6.1 defines a concept URN as `urn:mif:<uuid>` and reserves the
+  `urn:mif:entity:`, `agent:`, `activity:`, `conversation:` and `vector:`
+  sub-namespaces.
+- **[Spec]**: §4.1 and §13.1 state that `content` is the Markdown body, a
+  named property only in the JSON-LD projection.
+- **[Spec]**: New §8.1.1 defines how a configured relationship `name` becomes
+  its stored token (kebab-case, `ns:` prefix for a `namespace`, inverses
+  likewise).
+- **[Spec]**: §3.3 states the key casing convention: snake_case in `.mif/`
+  configuration, camelCase in concept frontmatter.
+- **[Spec]**: §5.3 and §8.4 RECOMMEND bundle-relative path targets for
+  same-bundle concepts, reserving `urn:mif:` targets for out-of-bundle ones.
+
 ## [1.3.0] - 2026-07-11
 
 ### Added
