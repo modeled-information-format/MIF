@@ -148,7 +148,7 @@ Ontologies can define extended types that map to these base types via namespace 
 | `part-of` | Component of larger whole |
 | `implements` | Realizes a concept/pattern |
 | `uses` | Utilizes a technology/tool |
-| `created-by` | Authored by entity |
+| `created` | Authored by entity |
 | `mentioned-in` | Referenced in memory |
 
 #### Temporal Metadata

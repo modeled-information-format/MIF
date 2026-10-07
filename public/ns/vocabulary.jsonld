@@ -322,6 +322,15 @@
       "rdfs:comment": "Collection of citations."
     },
     {
+      "@id": "mif:compressedAt",
+      "@type": "rdf:Property",
+      "rdfs:label": "compressedAt",
+      "rdfs:comment": "When compression was applied to a concept (Level 3).",
+      "rdfs:range": {
+        "@id": "xsd:dateTime"
+      }
+    },
+    {
       "@id": "mif:conceptType",
       "@type": "rdf:Property",
       "rdfs:label": "conceptType",
@@ -614,6 +623,15 @@
       }
     },
     {
+      "@id": "mif:summary",
+      "@type": "rdf:Property",
+      "rdfs:label": "summary",
+      "rdfs:comment": "Compressed summary of a concept's content (Level 3, at most 500 characters).",
+      "rdfs:range": {
+        "@id": "xsd:string"
+      }
+    },
+    {
       "@id": "mif:tags",
       "@type": "rdf:Property",
       "rdfs:label": "tags",
@@ -630,6 +648,15 @@
       "@type": "rdf:Property",
       "rdfs:label": "temporal",
       "rdfs:comment": "Temporal metadata container."
+    },
+    {
+      "@id": "mif:timestamp",
+      "@type": "rdf:Property",
+      "rdfs:label": "timestamp",
+      "rdfs:comment": "OKF-recommended mirror of modified (or created when never modified).",
+      "rdfs:range": {
+        "@id": "xsd:dateTime"
+      }
     },
     {
       "@id": "mif:trustLevel",

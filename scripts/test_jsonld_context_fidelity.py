@@ -289,6 +289,33 @@ def check_document_type_citation_type_no_cross_contamination() -> list[str]:
     return errors
 
 
+def check_mirror_and_compression_fields_round_trip() -> list[str]:
+    """`timestamp`/`description` (OKF mirror fields mif_convert always emits)
+    and `summary`/`compressedAt` (Level 3 compression) are schema properties.
+    With no context term they silently vanish on expand."""
+    errors = []
+    fields = {
+        "timestamp": "2026-01-02T00:00:00Z",
+        "description": "Short summary.",
+        "summary": "Short summary.",
+        "compressedAt": "2026-01-03T00:00:00Z",
+    }
+    doc = {
+        "@context": CONTEXT,
+        "@type": "Concept",
+        "@id": "urn:mif:test",
+        "conceptType": "semantic",
+        "content": "x",
+        "created": "2026-01-01T00:00:00Z",
+        **fields,
+    }
+    compacted = _compact(jsonld.expand(doc), CONTEXT)
+    for key, value in fields.items():
+        if compacted.get(key) != value:
+            errors.append(f"{key} did not round-trip: got {compacted.get(key)!r}, want {value!r}")
+    return errors
+
+
 CHECKS = [
     ("extensions round-trips losslessly through @type:@json (#224)", check_extensions_round_trip),
     ("every scoped vocab property is base-URI-independent for all enum values (#225, #226, #228)", check_vocab_base_independence),
@@ -297,6 +324,7 @@ CHECKS = [
     ("relationships[].type resolves to its documented ontology IRI, not mif:<kebab-value> (#230)", check_relationship_type_resolves_to_documented_ontology_iri),
     ("relationships[].type custom-namespaced escape hatch still resolves", check_relationship_type_custom_namespace_still_works),
     ("strength stays shared by relationships[].strength and temporal.decay.strength", check_strength_shared_by_relationship_and_decay),
+    ("timestamp, description, summary, compressedAt survive expand/compact", check_mirror_and_compression_fields_round_trip),
 ]
 
 
