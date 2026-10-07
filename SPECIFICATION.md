@@ -1127,6 +1127,29 @@ relationship_types:
         type: boolean
 ```
 
+#### 8.1.1 Type Tokens
+
+A declared `name` (and `inverse`) is a PascalCase display name, as
+`schema/relationship-types-config.schema.json` requires. The token that is
+stored in frontmatter `relationships[].type`, written in the body mirror
+(§5.3), and emitted in JSON-LD is derived from it mechanically:
+
+1. Insert a hyphen before every uppercase letter except the first character,
+   then lowercase the result: `DerivedFrom` → `derived-from`,
+   `ConflictsWith` → `conflicts-with`, `Uses` → `uses`.
+2. If the declaration has a `namespace`, prefix the token with
+   `<namespace>:`. For example, `name: BreedsWith` with `namespace: farm`
+   becomes `farm:breeds-with`. Core types have no namespace and no prefix.
+3. An `inverse` maps by the same rule, under the same namespace prefix as its
+   type: `Derives` (inverse of `DerivedFrom`) becomes `derives`, and
+   `ReinforcedBy` (inverse of `subcog`'s `Reinforces`) becomes
+   `subcog:reinforced-by`. A symmetric type is its own inverse.
+
+Every token produced this way matches the schema's `Relationship.type`
+pattern, `^[a-z0-9][a-z0-9-]*(:[a-z0-9][a-z0-9-]*)?$`. Rule 1 splits at every
+capital, so names SHOULD NOT contain consecutive capitals: write `HttpProxy`
+(→ `http-proxy`), not `HTTPProxy` (→ `h-t-t-p-proxy`).
+
 ### 8.2 Core Relationship Types (Recommended)
 
 For maximum interoperability, implementations SHOULD recognize these nine core types:
@@ -1150,17 +1173,15 @@ Providers MAY define additional relationship types using namespaced URIs:
 ```yaml
 # Custom relationship type definition
 relationship_types:
-  - name: Contradicts
-    namespace: farm           # Results in URI: farm:Contradicts
-    description: Provides conflicting evidence
-    inverse: ContradictedBy
+  - name: BreedsWith
+    namespace: farm           # Results in type token: farm:breeds-with (§8.1.1)
+    description: Animal breeding relationship
+    symmetric: false
     properties:
-      - name: contradiction_type
-        type: string
-        enum: [direct, indirect, partial]
-      - name: severity
-        type: decimal
-        range: [0.0, 1.0]
+      - name: breeding_date
+        type: date
+      - name: success
+        type: boolean
 ```
 
 #### JSON-LD representation of custom relationship types
@@ -1201,7 +1222,7 @@ Relationships are mirrored in the body as standard markdown links under a `## Re
 - part-of [Parent Memory](/semantic/parent-memory.md)
 ```
 
-Each line is `- <type> [Text](<target>)`. The type is a kebab-case token; the target is a bundle-relative path to the target concept or a `urn:mif:` identifier. The frontmatter `relationships[]` array is authoritative; the body links are its OKF-legible mirror.
+Each line is `- <type> [Text](<target>)`. The type is a kebab-case token derived from the configured type name (§8.1.1); the target is a bundle-relative path to the target concept or a `urn:mif:` identifier. The frontmatter `relationships[]` array is authoritative; the body links are its OKF-legible mirror.
 
 #### JSON-LD schema
 
@@ -2171,7 +2192,7 @@ extensions:
 | `- part-of [X](<target>)` | `part-of` | Component of |
 | `- implements [X](<target>)` | `implements` | Realizes |
 | `- uses [X](<target>)` | `uses` | Utilizes |
-| `- created-by [X](<target>)` | `created-by` | Authored by |
+| `- created [X](<target>)` | `created` | Authored by |
 | `- mentioned-in [X](<target>)` | `mentioned-in` | Referenced in |
 
 ---
