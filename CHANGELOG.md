@@ -13,7 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   matching `schema/mif.schema.json` (was `compressed_at`).
 - **[Spec]**: Concept relationship targets in §6.2 and §8.4 use
   `urn:mif:<uuid>` (was `urn:mif:memory:<slug>`, a form no concept `@id`
-  can take); `docs/SCHEMA-REFERENCE.md` updated to match.
+  can take); `docs/SCHEMA-REFERENCE.md` and ADR-002's JSON-LD snapshot
+  updated to match.
 - **[Spec]**: The §15.3 conversion example uses a full UUID (was the
   truncated `urn:mif:550e8400`).
 - **[Spec]**: §8.3's custom-type example declares `BreedsWith`, matching
@@ -31,7 +32,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **[Spec]**: §3.2/§3.3 describe the OKF bundle layout used by `examples/`
   (`/<type>/<slug>.md`, no `memories/` root); JSON-LD is emitted output
   (`mif_convert.py emit-jsonld --out-dir`), not a file committed beside its
-  source. `docs/GETTING-STARTED.md` updated to match.
+  source. `docs/GETTING-STARTED.md` updated to match, and the
+  `memories/*.json` validation globs in `docs/MIGRATION-GUIDE.md` and
+  `docs/SCHEMA-REFERENCE.md` now validate emitted JSON-LD instead.
 - **[Spec]**: §6.1 defines a concept URN as `urn:mif:<uuid>` and reserves the
   `urn:mif:entity:`, `agent:`, `activity:`, `conversation:` and `vector:`
   sub-namespaces.
