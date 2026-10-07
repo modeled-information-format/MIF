@@ -525,6 +525,13 @@ Typed relationships are authoritative in the frontmatter `relationships[]` array
 
 Each line is `- <type> [Text](<target>)`, where `<type>` is a kebab-case relationship type and `<target>` is a bundle-relative path to the target concept or a `urn:mif:` identifier (see 8). Entity references are declared in the frontmatter `entities[]` array (see 7.5).
 
+When the target is a concept in the same bundle, `target` SHOULD be its
+bundle-relative path, not its `urn:mif:<uuid>`. The body mirror then carries a
+link that OKF consumers and Markdown tools can follow
+([Invariant 3](#invariants)). `urn:mif:` targets SHOULD be reserved for
+concepts outside the bundle. The frontmatter entry and its body line carry the
+same target, so this choice is made once, in frontmatter.
+
 ### 5.4 Citations (Level 3)
 
 Citations provide structured references to external sources that inform, support, or relate to the memory content. Citations are a Level 3 (Full) optional feature.
@@ -1230,6 +1237,8 @@ Relationships are mirrored in the body as standard markdown links under a `## Re
 ```
 
 Each line is `- <type> [Text](<target>)`. The type is a kebab-case token derived from the configured type name (§8.1.1); the target is a bundle-relative path to the target concept or a `urn:mif:` identifier. The frontmatter `relationships[]` array is authoritative; the body links are its OKF-legible mirror.
+
+Same-bundle targets SHOULD be bundle-relative paths, with `urn:mif:` targets reserved for out-of-bundle concepts (§5.3).
 
 #### JSON-LD schema
 
