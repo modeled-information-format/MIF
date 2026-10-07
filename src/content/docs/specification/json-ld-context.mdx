@@ -1,152 +1,26 @@
 ---
-title: JSON-LD Context
-description: The MIF JSON-LD context definition and namespace mappings.
+title: "JSON-LD Context"
+description: "The MIF JSON-LD context definition and namespace mappings."
 ---
+
+{/* GENERATED from SPECIFICATION.md by scripts/build_spec_pages.py. Do not edit; edit SPECIFICATION.md and re-run the script. */}
 
 ### Context URL
 
-```
+```text
 https://mif-spec.dev/schema/context.jsonld
 ```
 
 ### Context Definition
 
-The following is a representative subset of `schema/context.jsonld`; the full context includes additional term definitions.
+The canonical JSON-LD context is maintained in `schema/context.jsonld` at the
+root of this repository and is served at:
 
-```json
-{
-  "@context": {
-    "@version": 1.1,
-    "mif": "https://mif-spec.dev/ns/",
-    "schema": "https://schema.org/",
-    "dc": "http://purl.org/dc/terms/",
-    "prov": "http://www.w3.org/ns/prov#",
-    "xsd": "http://www.w3.org/2001/XMLSchema#",
-
-    "Memory": "mif:Memory",
-    "Entity": "mif:Entity",
-    "Relationship": "mif:Relationship",
-    "TemporalMetadata": "mif:TemporalMetadata",
-    "EmbeddingReference": "mif:EmbeddingReference",
-    "EntityReference": "mif:EntityReference",
-    "OntologyReference": "mif:OntologyReference",
-
-    "Person": "mif:Person",
-    "Organization": "mif:Organization",
-    "Technology": "mif:Technology",
-    "Concept": "mif:Concept",
-    "File": "mif:File",
-
-    "id": "@id",
-    "type": "@type",
-    "content": "mif:content",
-    "conceptType": { "@id": "mif:conceptType", "@type": "@vocab" },
-    "memoryType": { "@id": "mif:memoryType", "@type": "@vocab" },
-    "title": "dc:title",
-    "namespace": "mif:namespace",
-    "tags": "mif:tags",
-    "aliases": "mif:aliases",
-
-    "created": {
-      "@id": "dc:created",
-      "@type": "xsd:dateTime"
-    },
-    "modified": {
-      "@id": "dc:modified",
-      "@type": "xsd:dateTime"
-    },
-
-    "ontology": "mif:ontology",
-    "entities": "mif:entities",
-    "relationships": {
-      "@id": "mif:relationships",
-      "@container": "@set",
-      "@context": {
-        "@vocab": "https://mif-spec.dev/ns/",
-        "type": { "@id": "mif:relationshipType", "@type": "@vocab" },
-        "target": { "@id": "mif:target", "@type": "@id" }
-      }
-    },
-    "temporal": "mif:temporal",
-    "provenance": "mif:provenance",
-    "embedding": "mif:embedding",
-    "extensions": "mif:extensions",
-
-    "relationshipType": "mif:relationshipType",
-    "target": "mif:target",
-    "strength": "mif:strength",
-
-    "validFrom": {
-      "@id": "mif:validFrom",
-      "@type": "xsd:dateTime"
-    },
-    "validUntil": {
-      "@id": "mif:validUntil",
-      "@type": "xsd:dateTime"
-    },
-    "recordedAt": {
-      "@id": "mif:recordedAt",
-      "@type": "xsd:dateTime"
-    },
-    "ttl": "mif:ttl",
-    "decay": "mif:decay",
-    "accessCount": "mif:accessCount",
-    "lastAccessed": {
-      "@id": "mif:lastAccessed",
-      "@type": "xsd:dateTime"
-    },
-
-    "sourceType": "mif:sourceType",
-    "sourceRef": "mif:sourceRef",
-    "agent": "mif:agent",
-    "confidence": "mif:confidence",
-    "trustLevel": "mif:trustLevel",
-
-    "model": "mif:model",
-    "modelVersion": "mif:modelVersion",
-    "dimensions": "mif:dimensions",
-    "sourceText": "mif:sourceText",
-    "vectorUri": "mif:vectorUri",
-
-    "citations": {
-      "@id": "mif:citations",
-      "@container": "@set"
-    },
-    "Citation": "mif:Citation",
-    "citationType": {
-      "@id": "mif:citationType",
-      "@type": "@vocab"
-    },
-    "citationRole": {
-      "@id": "mif:citationRole",
-      "@type": "@vocab"
-    },
-    "url": {
-      "@id": "schema:url",
-      "@type": "@id"
-    },
-    "author": "schema:author",
-    "date": {
-      "@id": "schema:datePublished",
-      "@type": "xsd:date"
-    },
-    "relevance": {
-      "@id": "mif:relevance",
-      "@type": "xsd:decimal"
-    },
-    "accessed": {
-      "@id": "mif:accessed",
-      "@type": "xsd:dateTime"
-    },
-    "note": "mif:note",
-
-    "summary": "mif:summary",
-    "compressedAt": {
-      "@id": "mif:compressedAt",
-      "@type": "xsd:dateTime"
-    }
-  }
-}
+```text
+https://mif-spec.dev/schema/context.jsonld
 ```
 
-The canonical terms are `conceptType` (the knowledge taxonomy) and, inside each `relationships[]` entry, `type` (the kebab-case relationship type, scoped to `mif:relationshipType`) and `target`. The legacy terms `memoryType`, the document `@type` value `Memory`, `relationshipType`, and the PascalCase relationship terms (`RelatesTo`, `DerivedFrom`, and so on) are retained as deprecated aliases so existing documents continue to expand.
+That file defines the JSON-LD term mappings for MIF documents. Implementations
+MUST dereference the context URL rather than inlining a local copy. The context
+is versioned alongside the schema; breaking changes to term mappings require a
+new major version of the specification.

@@ -1,9 +1,12 @@
 ---
-title: Security
-description: Security considerations and IANA media type registrations.
+title: "Security"
+description: "Security considerations and IANA media type registrations."
 ---
 
+{/* GENERATED from SPECIFICATION.md by scripts/build_spec_pages.py. Do not edit; edit SPECIFICATION.md and re-run the script. */}
+
 ## Security Considerations
+
 
 ### Data Privacy
 
@@ -24,26 +27,28 @@ description: Security considerations and IANA media type registrations.
 - Implementations SHOULD NOT elevate trust levels on import
 - External sources SHOULD be marked as `external_import`
 
----
-
 ## IANA Considerations
+
 
 ### Media Type Registration
 
-**Markdown Format:**
+#### Markdown Format
+
 - Type name: text
 - Subtype name: markdown
 - Required parameters: variant=mif
 - Optional parameters: version
 
-**JSON-LD Format:**
+#### JSON-LD Format
+
 - Type name: application
 - Subtype name: ld+json
-- Required parameters: profile="https://mif-spec.dev"
+- Required parameters: `profile="https://mif-spec.dev"`
 
 ### URI Scheme
 
 MIF URIs use the `mif:` scheme:
-```
+
+```text
 mif://{authority}/{namespace}/{memory-id}
 ```

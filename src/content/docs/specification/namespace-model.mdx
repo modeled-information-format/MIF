@@ -1,28 +1,36 @@
 ---
-title: Namespace Model
-description: Namespace hierarchy, reserved prefixes, and organizational patterns for concepts.
+title: "Namespace Model"
+description: "Namespace hierarchy, reserved prefixes, and organizational patterns for concepts."
 ---
+
+{/* GENERATED from SPECIFICATION.md by scripts/build_spec_pages.py. Do not edit; edit SPECIFICATION.md and re-run the script. */}
 
 ### Namespace Structure
 
 Namespaces use a flexible scoping model with reserved prefixes for cross-organization sharing:
 
-```
+```text
 {root}/{scope}+[/{session}]
 ```
 
 Where `{root}` is either:
+
 - **Organization name** - private to that organization
-- **Reserved prefix** - special namespace with defined semantics. Two kinds of reserved prefixes exist (both begin with `_`): **visibility prefixes** that control sharing scope, and **base-type prefixes** that name the cognitive memory type.
+- **Reserved prefix** - special namespace with defined semantics. Two kinds of
+  reserved prefixes exist (both begin with `_`): **visibility prefixes** that
+  control sharing scope, and **base-type prefixes** that name the cognitive
+  memory type. Both are defined in [Reserved Namespace Prefixes](#reserved-namespace-prefixes).
 
 ### Reserved Namespace Prefixes
 
-Names beginning with underscore (`_`) are reserved for special namespaces. Two kinds exist: **visibility prefixes** that control sharing scope, and **base-type prefixes** that name the cognitive memory type.
+Names beginning with underscore (`_`) are reserved for special namespaces. Two
+kinds exist: **visibility prefixes** that control sharing scope, and
+**base-type prefixes** that name the cognitive memory type.
 
 #### Visibility Prefixes
 
 | Prefix | Visibility | Description |
-|--------|------------|-------------|
+| --- | --- | --- |
 | `_public` | Global | Publicly accessible by anyone |
 | `_shared` | Negotiated | Cross-organization sharing with explicit agreements |
 | `_local` | Local only | Never synchronized or exported |
@@ -30,17 +38,22 @@ Names beginning with underscore (`_`) are reserved for special namespaces. Two k
 
 #### Base-Type Prefixes
 
-Namespace paths use an underscore prefix (`_semantic`, `_episodic`, `_procedural`) to distinguish base-type namespaces from domain-specific namespaces. This convention ensures consistent namespace identification across implementations. Each base-type prefix corresponds to a base memory `type` and is the top-level root of the base ontology's namespace hierarchy.
+Namespace paths use an underscore prefix (`_semantic`, `_episodic`,
+`_procedural`) to distinguish base-type namespaces from domain-specific
+namespaces. This convention ensures consistent namespace identification across
+implementations. Each base-type prefix corresponds to a base memory `type`
+(see [Memory Types](/specification/data-model/#memory-types)) and is the top-level root of the base ontology's namespace hierarchy
+(see [Base Type Hierarchy](#base-type-hierarchy)).
 
 | Prefix | Base type | Description |
-|--------|-----------|-------------|
+| --- | --- | --- |
 | `_semantic` | `semantic` | Facts, concepts, relationships - declarative knowledge |
 | `_episodic` | `episodic` | Events, experiences, timelines - time-bound records |
 | `_procedural` | `procedural` | Step-by-step processes - how-to knowledge |
 
-**Examples:**
+#### Examples
 
-```
+```text
 # Public knowledge (globally accessible)
 _public/python/async-patterns
 _public/react/hooks-best-practices
@@ -61,7 +74,7 @@ acme-corp/team-frontend/patterns
 
 Within an organization, scopes are **peer-level** - users, projects, teams, and other organizational units are treated equally:
 
-```
+```text
 {organization}/{scope}+
 
 Examples:
@@ -136,11 +149,12 @@ reserved_prefixes:
 
 Full URI form for cross-system references:
 
-```
+```text
 mif://{domain}/{namespace}/{memory-id}
 ```
 
 Examples:
+
 - `mif://github.com/modeled-information-format/acme-corp/project-x/550e8400...`
 - `mif://registry/_public/python/async-patterns/abc123...`
 - `mif://local/_local/scratch/memory-123`
@@ -172,7 +186,7 @@ They enable domain-specific customization while maintaining MIF compatibility.
 
 Ontologies are defined in YAML files with optional JSON-LD export:
 
-```
+```text
 .mif/ontologies/
 ├── mif-base.ontology.yaml       # Base ontology (semantic/episodic/procedural)
 ├── mif-base.ontology.jsonld     # JSON-LD export for semantic web
@@ -182,7 +196,8 @@ Ontologies are defined in YAML files with optional JSON-LD export:
 
 #### Base Type Hierarchy
 
-The base ontology uses a three-tier hierarchy based on the base knowledge types:
+The base ontology uses a three-tier hierarchy based on cognitive memory types.
+Its three top-level roots are the base-type prefixes defined in [Reserved Namespace Prefixes](#reserved-namespace-prefixes):
 
 ```yaml
 namespaces:
@@ -245,7 +260,7 @@ discovery:
 Ontologies are loaded from multiple sources with precedence:
 
 1. MIF base ontology (built-in)
-2. User ontology (`~/.claude/mnemonic/ontology.yaml`)
+2. User ontology (`${MNEMONIC_ROOT}/ontology.yaml`)
 3. Project ontology (`./.claude/mnemonic/ontology.yaml`)
 
 Later sources can extend or override earlier definitions.
@@ -273,18 +288,18 @@ traits:
       status: { type: string, enum: [draft, active, archived] }
 ```
 
-**Conflict Resolution Strategy:**
+##### Conflict Resolution Strategy
 
 When multiple traits define the same field (e.g., both `auditable` and `lifecycle` inherit `created` from `timestamped`), implementations MUST apply the following resolution rules:
 
 | Scenario | Resolution | Rationale |
-|----------|------------|-----------|
+| --- | --- | --- |
 | Same field inherited via different paths | Use shared ancestor definition | Diamond inheritance resolved to common base |
 | Same field defined in multiple independent traits | Error at composition time | Ambiguous definition requires explicit resolution |
 | Field in trait overrides inherited field | Child definition wins | Explicit override is intentional |
 | Field in entity overrides trait field | Entity definition wins | Most specific wins |
 
-**Example - Diamond Inheritance:**
+##### Example - Diamond Inheritance
 
 ```yaml
 # Both auditable and lifecycle inherit timestamped
@@ -293,7 +308,7 @@ entity_types:
     traits: [auditable, lifecycle]  # No conflict: `created` from shared `timestamped`
 ```
 
-**Example - Conflict Requiring Resolution:**
+##### Example - Conflict Requiring Resolution
 
 ```yaml
 traits:
@@ -315,7 +330,7 @@ entity_types:
         status: { type: string, enum: [draft, open, published, closed] }
 ```
 
-**Implementation Guidance:**
+##### Implementation Guidance
 
 1. **Validation**: Implementations SHOULD detect conflicts at ontology load time
 2. **Error Messages**: Include both conflicting definitions and their sources

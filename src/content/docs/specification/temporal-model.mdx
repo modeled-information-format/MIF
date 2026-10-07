@@ -1,17 +1,19 @@
 ---
-title: Temporal Model
-description: Validity windows and freshness — bi-temporal tracking and decay models.
+title: "Temporal Model"
+description: "Validity windows and freshness — bi-temporal tracking and decay models."
 ---
 
-MIF's temporal model answers OKF's open "live vs. stale" question with **validity windows and freshness**. It uses a bi-temporal model distinguishing between:
+{/* GENERATED from SPECIFICATION.md by scripts/build_spec_pages.py. Do not edit; edit SPECIFICATION.md and re-run the script. */}
 
-1. **Transaction Time**: When the concept was recorded in the system
-2. **Valid Time**: When the fact represented by the concept is true
+MIF uses a bi-temporal model distinguishing between:
+
+1. **Transaction Time**: When the memory was recorded in the system
+2. **Valid Time**: When the fact represented by the memory is true
 
 ### Temporal Properties
 
 | Property | Type | Description |
-|----------|------|-------------|
+| --- | --- | --- |
 | `validFrom` | DateTime | When fact becomes valid |
 | `validUntil` | DateTime | When fact expires (null = indefinite) |
 | `recordedAt` | DateTime | When recorded (transaction time) |
@@ -23,35 +25,48 @@ MIF's temporal model answers OKF's open "live vs. stale" question with **validit
 ### Decay Models
 
 | Model | Formula | Use Case |
-|-------|---------|----------|
-| `none` | No decay | Permanent concepts |
+| --- | --- | --- |
+| `none` | No decay | Permanent memories |
 | `linear` | strength = 1 - (t / ttl) | Simple linear decay |
 | `exponential` | strength = e^(-t/halfLife) | Gradual freshness decay |
 | `step` | strength = 1 if t < ttl else 0 | Hard expiration |
 
 ### Freshness Rationale
 
-In the core model, the temporal decay function expresses **freshness** — how current a piece of knowledge is — and answers OKF's open "live vs. stale" question. The decay half-life defaults (P7D, P14D, P30D) are **pragmatic defaults** for how quickly knowledge of a given kind loses currency; they are not prescriptive.
+In the core model, the temporal decay function expresses **freshness** — how
+current a piece of knowledge is — and answers OKF's open "live vs. stale"
+question. The decay half-life defaults (P7D, P14D, P30D) are **pragmatic
+defaults** for how quickly knowledge of a given kind loses currency; they are
+not prescriptive.
 
-The `strength = e^(-t/halfLife)` curve models a value that is fully current when recorded and decays gradually toward stale, with `validFrom`/`validUntil` windows bounding the interval in which a fact is asserted to hold.
+The `strength = e^(-t/halfLife)` curve models a value that is fully current when
+recorded and decays gradually toward stale, with `validFrom`/`validUntil`
+windows bounding the interval in which a fact is asserted to hold.
 
-#### Half-Life Defaults
+#### Why These Specific Values?
 
 | Half-Life | Use Case | Rationale |
-|-----------|----------|-----------|
+| --- | --- | --- |
 | **P7D** | Short-term context | Aligns with weekly work cycles |
 | **P14D** | Medium-term projects | Spans typical sprint/iteration boundaries |
 | **P30D** | Long-term knowledge | Corresponds to monthly review cycles |
 | **P90D** | Default TTL | Quarterly relevance for most organizational knowledge |
 
 Implementations SHOULD tune these based on:
+
 - Knowledge kind (`episodic` records go stale faster than `semantic` facts)
 - Organizational context (high-velocity vs. stable environments)
 - Access patterns (frequently accessed knowledge can reinforce slower decay)
 
-The `lastAccessed` and `accessCount` fields let implementations model reinforcement — each access can reset or slow the freshness decay.
+The `lastAccessed` and `accessCount` fields let implementations model
+reinforcement — each access can reset or slow the freshness decay.
 
-The cognitive-memory rationale that originally motivated this exponential curve — including the underlying experimental references and decay tuning for retrieval-oriented systems — lives in the AI Memory profile (`profiles/ai-memory/`), keeping the core framed purely as freshness.
+> **Cognitive-memory origin.** This exponential curve originates in the
+> cognitive-science account of human memory decay. That rationale — including
+> the underlying experimental references and decay tuning for retrieval-oriented
+> systems — now lives in the **AI Memory profile**
+> (`profiles/ai-memory/SPECIFICATION.md`), keeping the core framed purely as
+> freshness.
 
 ### Example
 

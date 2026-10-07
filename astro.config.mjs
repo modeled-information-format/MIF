@@ -132,6 +132,7 @@ export default defineConfig({
                   slug: "specification/json-ld-context",
                 },
                 { label: "Conversion Rules", slug: "specification/conversion" },
+                { label: "Examples", slug: "specification/examples" },
                 { label: "Security", slug: "specification/security" },
                 { label: "Appendices", slug: "specification/appendices" },
                 { label: "Namespace", slug: "ns" },

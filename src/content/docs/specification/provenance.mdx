@@ -1,14 +1,29 @@
 ---
-title: Provenance
-description: W3C PROV-based provenance tracking for memory origins.
+title: "Provenance"
+description: "Provenance metadata and the optional W3C PROV-aligned provenance layer."
 ---
 
-MIF uses W3C PROV vocabulary for provenance tracking.
+{/* GENERATED from SPECIFICATION.md by scripts/build_spec_pages.py. Do not edit; edit SPECIFICATION.md and re-run the script. */}
+
+MIF provenance has two layers. The **core** is a lightweight, always-available
+set of fields — `sourceType`, `confidence`, `trustLevel`, plus optional
+`sourceRef` / `agent` / `agentVersion` — that captures how a unit came to exist
+and how much to trust it. Layered on top is an **optional W3C-PROV-aligned** set
+of fields (`wasGeneratedBy`, `wasAttributedTo`, `wasDerivedFrom`) that lets a
+unit carry a real PROV entity/activity/agent lineage when richer provenance is
+needed. The entity/activity/agent roles are expressed through the `@type`
+values (`prov:Entity`, `prov:Activity`, `prov:SoftwareAgent`) on the provenance
+object and its nested nodes.
+
+Both layers are OPTIONAL and additive: a conforming unit MAY omit provenance
+entirely, MAY use only the lightweight core, or MAY include the PROV-aligned
+fields. The PROV fields project to the W3C PROV vocabulary (`prov:`) through the
+JSON-LD context, so a full PROV graph is expressible but never required.
 
 ### Source Types
 
 | Type | Description | Confidence Range |
-|------|-------------|------------------|
+| --- | --- | --- |
 | `user_explicit` | User directly stated | 0.90 - 1.00 |
 | `user_implicit` | Inferred from user actions | 0.70 - 0.89 |
 | `agent_inferred` | AI reasoning from context | 0.50 - 0.69 |
@@ -18,7 +33,7 @@ MIF uses W3C PROV vocabulary for provenance tracking.
 ### Trust Levels
 
 | Level | Description |
-|-------|-------------|
+| --- | --- |
 | `verified` | Confirmed by multiple sources |
 | `user_stated` | User explicitly provided |
 | `high_confidence` | Strong inference |
@@ -28,15 +43,36 @@ MIF uses W3C PROV vocabulary for provenance tracking.
 
 ### Provenance Schema
 
+The lightweight core (all fields here are OPTIONAL within an OPTIONAL block):
+
 ```yaml
 provenance:
+  sourceType: user_explicit                 # how the unit was created
+  sourceRef: conversation:conv-456          # reference to the originating source
+  agent: claude-3-opus                      # creating agent
+  agentVersion: "20240229"                  # creating-agent version
+  confidence: 0.95                          # confidence score (0-1)
+  trustLevel: user_stated                   # trust classification
+```
+
+To attach a W3C-PROV-aligned lineage, add the OPTIONAL PROV fields. Keys stay
+plain (no `prov:` prefix) and are mapped to the W3C PROV vocabulary by the
+JSON-LD context; the `@type` values use the `prov:` prefix:
+
+```yaml
+provenance:
+  '@type': prov:Entity
   sourceType: user_explicit
-  sourceRef: conversation:conv-456
-  agent: claude-3-opus
-  agentVersion: "20240229"
   confidence: 0.95
   trustLevel: user_stated
-  wasDerivedFrom:
-    - memory:parent-memory-id
-  wasAttributedTo: entity:person:jane-doe
+  wasGeneratedBy:                           # prov:wasGeneratedBy
+    '@id': urn:mif:activity:extraction:mem-001
+    '@type': prov:Activity
+    wasAssociatedWith:                      # prov:wasAssociatedWith
+      '@id': urn:mif:agent:claude-3-opus
+      '@type': prov:SoftwareAgent
+  wasAttributedTo:                          # prov:wasAttributedTo
+    '@id': urn:mif:entity:person:jane-doe
+  wasDerivedFrom:                           # prov:wasDerivedFrom
+    '@id': urn:mif:conversation:conv-456
 ```

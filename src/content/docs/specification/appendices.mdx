@@ -1,9 +1,12 @@
 ---
-title: Appendices
-description: Quick references for YAML frontmatter, relationship types, entity syntax, and citations.
+title: "Appendices"
+description: "Quick references for YAML frontmatter, relationship types, entity syntax, and citations."
 ---
 
+{/* GENERATED from SPECIFICATION.md by scripts/build_spec_pages.py. Do not edit; edit SPECIFICATION.md and re-run the script. */}
+
 ## Appendix A: YAML Frontmatter Quick Reference
+
 
 ```yaml
 ---
@@ -43,6 +46,7 @@ provenance:
   agent: string
   confidence: 0.0-1.0
   trustLevel: verified|user_stated|high_confidence|moderate_confidence|low_confidence|uncertain
+  # Optional W3C-PROV-aligned layer (see §12.3): wasGeneratedBy, wasAttributedTo, wasDerivedFrom
 
 embedding:
   model: string
@@ -56,32 +60,28 @@ extensions:
 ---
 ```
 
----
-
 ## Appendix B: Relationship Types Quick Reference
 
-Relationships appear in a `## Relationships` body section as `- <type> [Text](/path/target.md)`, mirroring the authoritative frontmatter `relationships[]`.
 
-| Body Markdown Syntax | JSON-LD `type` | Description |
-|----------------------|----------------|-------------|
-| `- relates-to [X](/path/x.md)` | `relates-to` | General relationship |
-| `- derived-from [X](/path/x.md)` | `derived-from` | Created from source |
-| `- supersedes [X](/path/x.md)` | `supersedes` | Replaces older |
-| `- conflicts-with [X](/path/x.md)` | `conflicts-with` | Contradicts |
-| `- part-of [X](/path/x.md)` | `part-of` | Component of |
-| `- implements [X](/path/x.md)` | `implements` | Realizes |
-| `- uses [X](/path/x.md)` | `uses` | Utilizes |
-| `- created-by [X](/path/x.md)` | `created-by` | Authored by |
-| `- mentioned-in [X](/path/x.md)` | `mentioned-in` | Referenced in |
-
----
+| Markdown Syntax | JSON-LD `type` | Description |
+| --- | --- | --- |
+| `- relates-to [X](<target>)` | `relates-to` | General relationship |
+| `- derived-from [X](<target>)` | `derived-from` | Created from source |
+| `- supersedes [X](<target>)` | `supersedes` | Replaces older |
+| `- conflicts-with [X](<target>)` | `conflicts-with` | Contradicts |
+| `- part-of [X](<target>)` | `part-of` | Component of |
+| `- implements [X](<target>)` | `implements` | Realizes |
+| `- uses [X](<target>)` | `uses` | Utilizes |
+| `- created-by [X](<target>)` | `created-by` | Authored by |
+| `- mentioned-in [X](<target>)` | `mentioned-in` | Referenced in |
 
 ## Appendix C: Entity Reference Syntax
+
 
 Entity references are declared in the frontmatter `entities[]` array as `EntityReference` objects:
 
 | Field | Required | Meaning |
-|-------|----------|---------|
+| --- | --- | --- |
 | `@type` | REQUIRED | Always `EntityReference` |
 | `entity.@id` | REQUIRED | Entity URN (`urn:mif:entity:<type>:<slug>`) |
 | `entityType` | OPTIONAL | `Person`, `Organization`, `Technology`, `Concept`, `File`, or a custom ontology type |
@@ -97,14 +97,13 @@ entities:
     role: mentions
 ```
 
----
-
 ## Appendix D: Citations Quick Reference
+
 
 ### Citation Types
 
 | Type | Description |
-|------|-------------|
+| --- | --- |
 | `article` | Journal article, blog post |
 | `book` | Published book |
 | `paper` | Conference/research paper |
@@ -121,7 +120,7 @@ entities:
 ### Citation Roles
 
 | Role | Description |
-|------|-------------|
+| --- | --- |
 | `supports` | Provides supporting evidence |
 | `refutes` | Contradicts or disputes |
 | `background` | General context/reference |
@@ -142,7 +141,7 @@ citations:
     title: "Citation Title"    # REQUIRED
     url: https://example.com   # REQUIRED
     citationRole: supports     # REQUIRED
-    author: "Author Name"      # OPTIONAL (string, EntityReference, or array of EntityReference)
+    author: "Author Name"      # OPTIONAL (string, EntityReference, or array)
     date: 2024-06-15           # OPTIONAL
     accessed: 2026-01-20       # OPTIONAL
     relevance: 0.95            # OPTIONAL (0-1)
@@ -161,9 +160,8 @@ citations:
   - Long-form annotation here.
 ```
 
----
-
 ## References
+
 
 - [RFC 2119: Key words for use in RFCs](https://www.rfc-editor.org/rfc/rfc2119)
 - [JSON-LD 1.1](https://www.w3.org/TR/json-ld11/)
@@ -171,3 +169,4 @@ citations:
 - [W3C PROV-DM](https://www.w3.org/TR/prov-dm/)
 - [ISO 8601: Date and Time Format](https://www.iso.org/iso-8601-date-and-time-format.html)
 - [CommonMark Specification](https://spec.commonmark.org/)
+- [JSON Canvas Specification](https://jsoncanvas.org/)

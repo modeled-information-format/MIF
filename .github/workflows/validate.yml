@@ -13,6 +13,7 @@ name: Validate MIF Bundles and Schemas
       - 'docs/**'
       - 'src/content/docs/**'
       - 'adr/**'
+      - 'SPECIFICATION.md'
       - 'package.json'
       - 'astro.config.mjs'
     # No path filter on PRs: this is a required branch-protection gate, so it
@@ -74,6 +75,12 @@ jobs:
 
       - name: conceptType/memoryType alias regression suite
         run: python -m pytest scripts/test_concept_type_alias.py -q
+
+      - name: Spec site pages are generated from SPECIFICATION.md (drift check)
+        run: python scripts/build_spec_pages.py --check
+
+      - name: Spec page generator regression suite
+        run: python -m pytest scripts/test_build_spec_pages.py -q
 
   schema-validation:
     name: Validate JSON-LD Projection Against Schema
