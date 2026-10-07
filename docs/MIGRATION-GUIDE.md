@@ -683,10 +683,14 @@ def map_langmem_relation(relation: str) -> str:
 After migrating, validate your MIF documents:
 
 ```bash
-# Validate all migrated memories (requires: npm install -g ajv-cli ajv-formats)
-for f in memories/*.json; do
+# Validate every migrated document (requires: npm install -g ajv-cli ajv-formats).
+# OUTPUT_DIR is the output_dir you passed to the migration function above.
+# ajv-cli does not recognise .jsonld, so validate a .json copy of each file.
+OUTPUT_DIR=mif-output
+for f in "$OUTPUT_DIR"/*.jsonld; do
+  cp "$f" "${f%.jsonld}.json"
   npx ajv validate -s schema/mif.schema.json -r "schema/definitions/*.schema.json" \
-    -d "$f" --spec=draft2020 -c ajv-formats || echo "FAILED: $f"
+    -d "${f%.jsonld}.json" --spec=draft2020 -c ajv-formats || echo "FAILED: $f"
 done
 ```
 

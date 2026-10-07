@@ -488,9 +488,12 @@ npx ajv validate -s schema/mif.schema.json -r "schema/definitions/*.schema.json"
 npx ajv validate -s schema/mif.schema.json -r "schema/definitions/*.schema.json" \
   -d memory.json --spec=draft2020 -c ajv-formats --verbose
 
-# Validate multiple files
+# Validate a whole bundle: emit its JSON-LD projections, copy each to .json,
+# then validate the copies
+python scripts/mif_convert.py emit-jsonld my-bundle --out-dir dist/jsonld
+find dist/jsonld -name '*.jsonld' -exec sh -c 'cp "$1" "${1%.jsonld}.json"' _ {} \;
 npx ajv validate -s schema/mif.schema.json -r "schema/definitions/*.schema.json" \
-  -d "memories/*.json" --spec=draft2020 -c ajv-formats
+  -d "dist/jsonld/**/*.json" --spec=draft2020 -c ajv-formats
 ```
 
 ### Using Python
