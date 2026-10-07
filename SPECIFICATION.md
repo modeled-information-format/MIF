@@ -259,7 +259,7 @@ A Memory Unit is the atomic element of MIF. It contains:
 | `embedding` | OPTIONAL | Object | Embedding reference |
 | `citations` | OPTIONAL | Array | Citation references (Level 3) |
 | `summary` | OPTIONAL | String | Compressed content summary (Level 3) |
-| `compressed_at` | OPTIONAL | DateTime | When compression was applied (Level 3) |
+| `compressedAt` | OPTIONAL | DateTime | When compression was applied (Level 3) |
 | `extensions` | OPTIONAL | Object | Provider-specific data |
 
 ### 4.2 Memory Types
@@ -669,14 +669,14 @@ Compression allows large memories to be summarized while preserving the original
 | Field | Required | Type | Description |
 | --- | --- | --- | --- |
 | `summary` | OPTIONAL | String | Concise 2-3 sentence summary (max 500 characters) |
-| `compressed_at` | OPTIONAL | DateTime | When compression was applied (ISO 8601) |
+| `compressedAt` | OPTIONAL | DateTime | When compression was applied (ISO 8601) |
 
 ##### Frontmatter Schema
 
 ```yaml
 # === OPTIONAL: Compression (Level 3) ===
 summary: "User prefers dark mode for reduced eye strain during extended coding sessions. Applies to IDE, terminal, and web applications."
-compressed_at: 2026-01-24T10:00:00Z
+compressedAt: 2026-01-24T10:00:00Z
 ```
 
 #### 5.6.2 Compression Criteria
@@ -693,7 +693,7 @@ Implementations MAY apply compression when memories meet these criteria:
 - The `content` field SHOULD be replaced with the compressed summary
 - The original `content` MAY be preserved in `extensions.original_content`
 - The `summary` field contains the generated summary text
-- The `compressed_at` timestamp indicates when compression occurred
+- The `compressedAt` timestamp indicates when compression occurred
 - Compressed memories retain all other metadata (relationships, entities, etc.)
 
 #### 5.6.4 Compression Validation
@@ -701,7 +701,7 @@ Implementations MAY apply compression when memories meet these criteria:
 | Field | Constraint |
 | --- | --- |
 | `summary` | MUST be 500 characters or fewer |
-| `compressed_at` | MUST be ISO 8601 datetime format |
+| `compressedAt` | MUST be ISO 8601 datetime format |
 
 ---
 
