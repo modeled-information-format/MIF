@@ -191,25 +191,26 @@ MIF is designed for local-first storage:
 
 ### 3.2 File Naming
 
-Files SHOULD be named using the memory's identifier:
+A concept's OKF identity is its bundle-relative path minus the `.md`
+extension, so concept files SHOULD use human-readable, path-meaningful slugs.
+The stable UUID lives in the frontmatter `id` (§4.1), not in the filename:
 
 ```text
-{id}.md
-{id}.jsonld
+semantic/dark-mode-preference.md
 ```
 
-Example:
+A UUID filename (`550e8400-e29b-41d4-a716-446655440000.md`) MAY be used, but
+it adds nothing the frontmatter `id` does not already carry.
 
-```text
-550e8400-e29b-41d4-a716-446655440000.md
-550e8400-e29b-41d4-a716-446655440000.jsonld
+The JSON-LD projection is not stored beside its source. It is derived output
+([Invariant 2](#invariants)), emitted on demand into a separate directory:
+
+```bash
+python scripts/mif_convert.py emit-jsonld <bundle> --out-dir dist/jsonld
 ```
 
-Human-readable names MAY be used when the `id` is specified in frontmatter:
-
-```text
-dark-mode-preference.md
-```
+which writes `dist/jsonld/<bundle>/<type>/<slug>.jsonld`, mirroring each
+source path. Emitted `.jsonld` files SHOULD NOT be committed to the bundle.
 
 ### 3.3 Directory Structure
 
@@ -226,13 +227,21 @@ bundle/
 │       ├── technology/
 │       ├── concept/
 │       └── file/
-├── memories/                       # Memory files
-│   ├── {namespace}/               # Namespace directories
-│   │   ├── {id}.md
-│   │   └── {id}.jsonld
-│   └── ...
+├── index.md                        # OKF reserved filename (optional)
+├── semantic/                       # One directory per base type
+│   └── {slug}.md
+├── episodic/
+│   └── {slug}.md
+├── procedural/
+│   └── {slug}.md
 └── README.md                       # Bundle documentation
 ```
+
+Concepts MAY be nested in subdirectories below their type directory (for
+example `semantic/preferences/dark-mode-preference.md`). Directory placement is
+independent of the frontmatter `namespace`: `semantic/rate-limit-policy.md` may
+declare `namespace: _semantic/policies`. A bundle has no `memories/` root and
+contains no `.jsonld` concept files.
 
 ---
 
