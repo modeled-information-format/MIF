@@ -354,7 +354,7 @@
     },
     "Relationship": {
       "type": "object",
-      "description": "v1.0 typed relationship: authoritative in frontmatter, mirrored as an OKF-legible body markdown link (SPECIFICATION.md 4.4)",
+      "description": "v1.0 typed relationship: authoritative in frontmatter, mirrored as an OKF-legible body markdown link (SPECIFICATION.md §5.3, §8)",
       "required": ["type", "target"],
       "properties": {
         "type": {
