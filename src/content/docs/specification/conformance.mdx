@@ -1,13 +1,15 @@
 ---
-title: Conformance Levels
-description: Level 1, 2, and 3 conformance requirements for MIF implementations.
+title: "Conformance Levels"
+description: "Level 1, 2, and 3 conformance requirements for MIF implementations."
 ---
+
+{/* GENERATED from SPECIFICATION.md by scripts/build_spec_pages.py. Do not edit; edit SPECIFICATION.md and re-run the script. */}
 
 ### Level 1: Core (REQUIRED for conformance)
 
-- `id` (UUID), `type`, `content`, `created` fields
-- Valid OKF bundle shape (a directory of `.md` concept files)
-- Markdown-link relationship edges in a `## Relationships` section
+- `id`, `type`, `content`, `created` fields
+- Valid Markdown or JSON-LD structure
+- Standard markdown-link relationship syntax
 
 ### Level 2: Standard (RECOMMENDED)
 
@@ -22,7 +24,7 @@ description: Level 1, 2, and 3 conformance requirements for MIF implementations.
 - All Level 2 requirements
 - Bi-temporal model
 - Decay functions
-- W3C PROV provenance
+- Optional W3C-PROV-aligned provenance layer
 - Embedding references
 - Citations with rich metadata
 - Compression support

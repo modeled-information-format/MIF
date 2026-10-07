@@ -1,62 +1,130 @@
 ---
-title: Overview
-description: Abstract, terminology, and design principles of the Modeled Information Format.
+title: "Overview"
+description: "Abstract, terminology, design principles, and migration path of the Modeled Information Format."
 ---
+
+{/* GENERATED from SPECIFICATION.md by scripts/build_spec_pages.py. Do not edit; edit SPECIFICATION.md and re-run the script. */}
 
 ## Abstract
 
-MIF (Modeled Information Format) is an opinionated, OKF-compliant content model for agent-readable knowledge. The Open Knowledge Format (OKF) defines a minimal interoperability surface — a directory of `.md` concept files with YAML frontmatter, one required `type` field, and a concept graph of standard markdown links — and deliberately refuses to define a content model. MIF fills that envelope: it supplies a concrete type system, typed relationships, provenance/trust tiers, and validity/freshness semantics.
 
-Markdown is the canonical representation; JSON-LD is a derived, regenerable projection. AI memory is the first domain profile of MIF, not its identity (see [`profiles/ai-memory/`](https://github.com/modeled-information-format/MIF/tree/main/profiles/ai-memory)). Moving many memory units as one wire artifact is a separate, transport-layer concern (see the [Container Profile](https://github.com/modeled-information-format/MIF/blob/main/docs/CONTAINER-PROFILE.md)), not a domain profile.
+MIF (Modeled Information Format) is an opinionated, OKF-compliant content model
+for agent-readable knowledge. The Open Knowledge Format (OKF) defines a minimal
+interoperability surface — a directory of markdown files with YAML frontmatter,
+one required `type` field, a concept graph of standard markdown links, and the
+reserved filenames `index.md` and `log.md` — and **deliberately refuses to
+define a content model**. MIF fills that envelope: it supplies a concrete type
+system, typed relationships, provenance/trust tiers, and validity/freshness
+semantics.
 
-OKF compliance is achieved as a **superset, not by subordination**: every MIF bundle validates as a conformant OKF bundle, but MIF remains an independent specification with its own identity model and governance, pinned to OKF v0.1.
+> **MIF is the opinionated, OKF-compliant content model that fills OKF's
+> deliberately empty envelope.** OKF is the transport surface; MIF supplies the
+> concrete type system. AI memory is the first domain profile of MIF, not its
+> identity (see `profiles/ai-memory/`). Moving many memory units as one
+> wire artifact is a separate, transport-layer concern (see the
+> Container Profile, `docs/CONTAINER-PROFILE.md`), not a domain profile.
+
+OKF compliance is achieved as a **superset, not by subordination**: every MIF
+bundle MUST validate as a conformant OKF bundle, but MIF remains an independent
+specification with its own identity model and governance. MIF takes **no
+normative dependency** on OKF's evolving draft — it pins OKF v0.1's conformance
+criteria in [`docs/okf-conformance.md`](https://github.com/modeled-information-format/MIF/blob/main/docs/okf-conformance.md), which is
+normative within MIF ([Invariant 5](#invariants)).
 
 MIF is designed to be:
-- **OKF-compliant**: every bundle is a valid OKF bundle (a tested invariant)
-- **Markdown-canonical**: the `.md` file is the source of truth; JSON-LD is a derived projection
-- **Human-Readable**: valid CommonMark notes that work in any Markdown editor
-- **Machine-Processable**: JSON-LD with semantic web compatibility
-- **Extensible**: domain profiles extend the base without breaking compatibility
 
----
+- **OKF-compliant**: every bundle is a valid OKF bundle (a tested invariant).
+- **Markdown-canonical**: the `.md` file is the source of truth; JSON-LD is a
+  derived projection ([Invariant 2](#invariants)).
+- **Human-Readable**: valid CommonMark notes in any Markdown editor.
+- **Machine-Processable**: JSON-LD with semantic web compatibility.
+- **Extensible**: domain profiles extend the base without breaking compatibility.
+
+### MIF answers OKF's open questions
+
+This table is the positioning thesis: it states what MIF supplies for each
+question OKF leaves open.
+
+| OKF open design space | MIF's opinionated answer |
+| --- | --- |
+| No concept-type taxonomy | `semantic` / `episodic` / `procedural` base types |
+| Untyped markdown-link edges | Typed relationships (overlay on OKF links) |
+| No merge / contradiction semantics | `Supersedes`, `ConflictsWith` |
+| No trust tiers | Provenance `sourceType` + `trustLevel` |
+| Stale-vs-live left to process | Validity windows + TTL/freshness |
+| No provenance | Lightweight provenance core + optional W3C-PROV-aligned layer |
+| Markdown only | First-class JSON-LD projection |
+
+### Invariants
+
+SPECIFICATION.md, `adr/`, `MIGRATION.md`, and `docs/okf-conformance.md` all
+cite specific "Invariant N" numbers in prose. This is the canonical
+enumerated list they refer back to.
+
+- **Invariant 2 — Markdown is canonical; JSON-LD is a derived projection.**
+  The `.md` file is the source of truth; the `.jsonld` form is regenerated
+  from it and MUST round-trip losslessly (Abstract; [Dual Representation](#dual-representation); [JSON-LD Projection (derived)](/specification/json-ld-format/); ADR-011).
+- **Invariant 3 — OKF consumers must see every edge as a standard markdown
+  link.** Typed relationships are authoritative in frontmatter `relationships[]`
+  but MUST also be mirrored in the body as standard markdown links, so an
+  OKF-only consumer (which understands markdown links but not frontmatter
+  relationship types) still sees the edge ([Relationship Syntax](/specification/markdown-format/#relationship-syntax); `MIGRATION.md`).
+- **Invariant 4 — lossless round-trip for conformance-level data.** A
+  `markdown → json-ld → markdown` round trip through `scripts/mif_convert.py`
+  MUST NOT lose any conformance-level data (ADR-002's Audit;
+  `scripts/mif_convert.py`'s `roundtrip` subcommand).
+- **Invariant 5 — no floating dependency on OKF.** MIF pins OKF v0.1's
+  conformance criteria in `docs/okf-conformance.md` and conforms to that
+  pinned copy, not to whatever OKF publishes next; updates are adopted only
+  by an explicit MIF revision (Abstract; ADR-009; `docs/okf-conformance.md`).
+- **Invariant 6 — memory is a profile, not the core.** The core spec is a
+  general knowledge model; AI-memory-specific framing (e.g. the
+  "forgetting curve" origin of the temporal model) lives in
+  `profiles/ai-memory/`, not here (`MIGRATION.md`).
+
+The list enumerates the invariant numbers existing citations use
+(Invariants 2-6). The Abstract's "OKF-compliant: every bundle is a valid
+OKF bundle (a tested invariant)" bullet is deliberately left unnumbered:
+no citation numbers it, and assigning it a number here would introduce a
+new normative claim rather than consolidate existing ones. New invariants
+are added to this list when a normative citation first needs a number.
 
 ## Terminology
+
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119).
 
 ### Definitions
 
-- **Concept**: A discrete unit of knowledge — a single `.md` file in a bundle, including its content, metadata, relationships, and provenance. The atomic element of MIF.
-- **Bundle**: A directory tree of `.md` concept files; a valid OKF bundle.
+- **Memory**: A discrete unit of information captured from or about an AI interaction, including its content, metadata, relationships, and provenance.
+- **Memory Unit**: The atomic element of MIF; a single memory with its associated data.
 - **Entity**: A named thing (person, organization, technology, concept, or file) that can participate in relationships.
-- **Relationship**: A typed, directed connection between two concepts, or between a concept and an entity.
-- **Namespace**: A hierarchical scope for organizing concepts (e.g., `org/user/project/session`).
-- **Provider**: An implementation that can import or export MIF format.
-
----
+- **Relationship**: A typed, directed connection between two entities or between a memory and an entity.
+- **Namespace**: A hierarchical scope for organizing memories (e.g., `org/user/project/session`).
+- **Bundle**: A collection of MIF files organized as a unit.
+- **Provider**: An AI memory system that can import or export MIF format.
 
 ## Design Principles
 
+
 ### Dual Representation
 
-MIF defines two representations, with markdown as the canonical source:
+MIF defines two representations, related as canonical and derived ([Invariant 2](#invariants)):
 
-1. **Markdown Format** (`.md`): Canonical, human-readable, plain CommonMark
-2. **JSON-LD Format** (`.jsonld`): Derived, machine-processable, semantically linked
+1. **Markdown Format** (`.md`): Human-readable, plain CommonMark — **canonical**, the source of truth.
+2. **JSON-LD Format** (`.jsonld`): Machine-processable, semantically linked — **derived**, regenerated from the Markdown source ([JSON-LD Projection (derived)](/specification/json-ld-format/)).
 
-The `.md` file is the source of truth; the JSON-LD form is a derived projection, regenerable from markdown with `scripts/mif_convert.py`. The round trip MUST be lossless. A conforming implementation MAY support either or both formats; if the two disagree, markdown wins.
+Both representations MUST be losslessly convertible to each other, and if the two ever disagree, the Markdown form wins. A conforming implementation MAY support either or both formats.
 
 ### Markdown Conventions
 
-The Markdown format is plain, vendor-neutral CommonMark — readable in any text editor or Markdown processor, and tied to no single tool. Concept relationships are expressed as standard bundle-relative markdown links, so any generic OKF consumer sees every edge.
-
-**Markdown conventions:**
+The Markdown format is plain, vendor-neutral CommonMark — readable in any text editor or Markdown processor, and tied to no single tool. It uses a small set of conventions:
 
 - **YAML Frontmatter**: Structured metadata at the top of files, enclosed in `---` delimiters, supporting typed fields (text, number, date, list).
 
-- **Standard Markdown Links**: Concept-graph edges use bundle-relative markdown links, `[text](/path/to/target.md)`, in a `## Relationships` section — the OKF-legible representation of relationships.
+- **Relationships**: Typed relationships are authoritative in frontmatter `relationships[]` and mirrored in the body as standard markdown links (see [Relationship Syntax](/specification/markdown-format/#relationship-syntax)).
 
-- **Aliases**: The `aliases` frontmatter property lets a concept be referred to by alternative names.
+- **Aliases**: The `aliases` frontmatter property lets a memory be referred to by alternative names.
 
 - **Tags**: Both inline `#tags` and frontmatter `tags: [a, b]` are supported, with hierarchical tags using forward slashes (`#category/subcategory`).
 
@@ -65,6 +133,7 @@ The Markdown format is plain, vendor-neutral CommonMark — readable in any text
 ### Semantic Web Compatibility
 
 The JSON-LD format MUST be valid JSON-LD 1.1:
+
 - Use `@context` for vocabulary mapping
 - Use `@id` for unique identifiers
 - Use `@type` for entity classification
@@ -73,7 +142,21 @@ The JSON-LD format MUST be valid JSON-LD 1.1:
 ### Local-First
 
 MIF is designed for local-first storage:
+
 - No required network dependencies
 - Files can be read with any text editor
 - No proprietary database required
 - Full user data ownership
+
+## Migration
+
+
+MIF v1.0.0 ships a complete upgrade path from `0.1.0-draft`. The mechanical
+transform (drops the legacy `.memory` infix to plain `.md`, adds UUID identity, wiki-links → OKF-legible body
+markdown links + frontmatter `relationships`, ISO 8601 timestamps) is automated
+by `scripts/migrate_0_1_to_1_0.py` and documented in
+[`MIGRATION.md`](https://github.com/modeled-information-format/MIF/blob/main/MIGRATION.md).
+
+System-specific migration guides for individual AI-memory providers are part
+of the AI Memory profile, not the core model:
+see [`profiles/ai-memory/SPECIFICATION.md`](https://github.com/modeled-information-format/MIF/blob/main/profiles/ai-memory/SPECIFICATION.md).

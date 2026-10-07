@@ -1,0 +1,91 @@
+---
+title: "Examples"
+description: "Complete MIF concept examples at each conformance level."
+---
+
+{/* GENERATED from SPECIFICATION.md by scripts/build_spec_pages.py. Do not edit; edit SPECIFICATION.md and re-run the script. */}
+
+### Minimal Memory (Level 1)
+
+#### Markdown
+
+```markdown
+---
+id: 550e8400-e29b-41d4-a716-446655440000
+type: semantic
+created: 2026-01-15T10:30:00Z
+---
+
+User prefers dark mode for all applications.
+```
+
+#### JSON-LD
+
+```json
+{
+  "@context": "https://mif-spec.dev/schema/context.jsonld",
+  "@type": "Concept",
+  "@id": "urn:mif:550e8400-e29b-41d4-a716-446655440000",
+  "conceptType": "semantic",
+  "content": "User prefers dark mode for all applications.",
+  "created": "2026-01-15T10:30:00Z"
+}
+```
+
+### Decision Memory (Level 2)
+
+#### Markdown
+
+```markdown
+---
+id: decision-react-over-vue
+type: semantic
+created: 2026-01-10T09:00:00Z
+modified: 2026-01-12T14:30:00Z
+namespace: _semantic/decisions
+tags:
+  - frontend
+  - architecture
+entities:
+  - "@type": EntityReference
+    entity: { "@id": urn:mif:entity:technology:react }
+    entityType: Technology
+    name: React
+  - "@type": EntityReference
+    entity: { "@id": urn:mif:entity:technology:vuejs }
+    entityType: Technology
+    name: Vue.js
+  - "@type": EntityReference
+    entity: { "@id": urn:mif:entity:organization:project-x }
+    entityType: Organization
+    name: Project X
+---
+
+# Use React over Vue for the dashboard
+
+## Context
+
+We need to choose a frontend framework for the new dashboard.
+
+## Decision
+
+We will use React because:
+- Team has more React experience
+- Better TypeScript integration
+- Larger ecosystem for our needs
+
+## Consequences
+
+- Need to set up Create React App or Vite
+- Will use React Query for data fetching
+- Component library: Radix UI
+
+## Relationships
+
+- relates-to [Frontend Architecture](/semantic/frontend-architecture.md)
+- supersedes [Vue Exploration](/semantic/vue-exploration.md)
+```
+
+### Full Memory (Level 3)
+
+See [Full Example](/specification/json-ld-format/#full-example) for a complete Level 3 example.

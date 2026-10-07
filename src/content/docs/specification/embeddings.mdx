@@ -1,7 +1,9 @@
 ---
-title: Embeddings
-description: Embedding reference specifications for vector search integration.
+title: "Embeddings"
+description: "Embedding reference specifications for vector search integration."
 ---
+
+{/* GENERATED from SPECIFICATION.md by scripts/build_spec_pages.py. Do not edit; edit SPECIFICATION.md and re-run the script. */}
 
 ### Model-Agnostic Approach
 
@@ -14,9 +16,11 @@ embedding:
   dimensions: 1536
   sourceText: "The text that was embedded"
   normalized: true
+  quantization: null  # or "float16", "int8"
 ```
 
 This allows:
+
 - Re-embedding on import with different models
 - Smaller file sizes
 - Model migration without data loss
@@ -25,7 +29,8 @@ This allows:
 
 For providers that need vector portability:
 
-**External Reference:**
+#### External Reference
+
 ```yaml
 embedding:
   model: text-embedding-3-small
@@ -33,11 +38,16 @@ embedding:
   vectorUri: "urn:mif:vector:550e8400-e29b-41d4-a716-446655440000"
 ```
 
-**JSON-LD with external vector URI:**
+#### Inline (JSON-LD only)
+
 ```json
 "embedding": {
   "model": "text-embedding-3-small",
   "sourceText": "...",
-  "vectorUri": "urn:mif:vector:550e8400-e29b-41d4-a716-446655440000"
+  "vector": {
+    "@type": "Vector",
+    "encoding": "base64-float32",
+    "data": "SGVsbG8gV29ybGQh..."
+  }
 }
 ```

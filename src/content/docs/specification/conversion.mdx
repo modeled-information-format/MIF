@@ -1,13 +1,13 @@
 ---
-title: Conversion Rules
-description: Rules for converting between Markdown and JSON-LD formats.
+title: "Conversion Rules"
+description: "Rules for converting between Markdown and JSON-LD formats."
 ---
 
-Markdown is canonical; the JSON-LD projection is regenerated from it. The round trip MUST be lossless.
+{/* GENERATED from SPECIFICATION.md by scripts/build_spec_pages.py. Do not edit; edit SPECIFICATION.md and re-run the script. */}
 
 ### Markdown to JSON-LD
 
-1. Parse the YAML frontmatter, including the authoritative `relationships[]`, and map each property into the JSON-LD projection: `id` becomes `@id` (`urn:mif:<id>`), `type` becomes `conceptType`, and the remaining fields pass through under the context.
+1. Parse the YAML frontmatter, including the authoritative `relationships[]` and `entities[]`, and map each property into the JSON-LD projection: `id` becomes `@id` (`urn:mif:<id>`), `type` becomes `conceptType`, and the remaining fields pass through under the context.
 2. Take the full Markdown body, verbatim, as the `content` field. The OKF-legible `## Relationships` body mirror is part of the body, so it is carried inside `content`.
 3. Add the projection mirror fields the converter always emits: `timestamp` (= `modified`, else `created`) and, when `summary` is present, `description` (= `summary`).
 
@@ -18,15 +18,16 @@ Markdown is canonical; the JSON-LD projection is regenerated from it. The round 
 
 ### Example Conversion
 
-**Input (JSON-LD):**
+#### Input (JSON-LD)
+
 ```json
 {
   "@context": "https://mif-spec.dev/schema/context.jsonld",
   "@type": "Concept",
+  "@id": "urn:mif:550e8400",
   "conceptType": "semantic",
-  "@id": "urn:mif:550e8400-e29b-41d4-a716-446655440000",
   "title": "Dark Mode",
-  "content": "User prefers dark mode\n\n## Relationships\n\n- relates-to [UI Preferences](/semantic/ui-prefs.md)",
+  "content": "# Dark Mode\n\nUser prefers dark mode\n\n## Relationships\n\n- relates-to [UI Preferences](/semantic/ui-prefs.md)",
   "created": "2026-01-15T10:30:00Z",
   "relationships": [
     {"type": "relates-to", "target": "/semantic/ui-prefs.md"}
@@ -34,17 +35,22 @@ Markdown is canonical; the JSON-LD projection is regenerated from it. The round 
 }
 ```
 
-**Output (Markdown):**
+#### Output (Markdown)
+
+The `content` field is written back verbatim as the body; `relationships[]` passes through to frontmatter. The round trip is lossless:
+
 ```markdown
 ---
-id: 550e8400-e29b-41d4-a716-446655440000
+id: 550e8400
 type: semantic
-created: 2026-01-15T10:30:00Z
 title: Dark Mode
+created: 2026-01-15T10:30:00Z
 relationships:
   - type: relates-to
     target: /semantic/ui-prefs.md
 ---
+
+# Dark Mode
 
 User prefers dark mode
 
@@ -55,19 +61,51 @@ User prefers dark mode
 
 ### Citations Conversion
 
-`citations` is authored in frontmatter in its final shape and passes through to the JSON-LD projection verbatim (it is part of the converter's passthrough set, so the frontmatter and projection forms are identical). Each entry is a `Citation` object: `@type`, `citationType`, `citationRole`, `title`, and `url` are required; `author`, `date`, `accessed`, `relevance`, and `note` are optional. The `author` value is plain text, an `EntityReference`, or an array of `EntityReference` (for multiple authors), and is preserved as written. Any `## Citations` body mirror is authored content carried inside `content`.
+#### Markdown to JSON-LD
 
-**Example (frontmatter, identical in the JSON-LD projection):**
+1. Parse the frontmatter `citations` array. Each entry is already a `Citation`
+   object authored in its final shape (`@type: Citation`, `citationType`,
+   `citationRole`, `title`, `url`, ...).
+2. Pass each citation through to the JSON-LD projection verbatim — the converter
+   performs no field renaming. Author values are preserved as written (plain
+   text or an `EntityReference`).
+3. Any `## Citations` body section is authored content carried inside `content`;
+   the frontmatter `citations` array remains authoritative.
+
+#### JSON-LD to Markdown
+
+1. Write the `citations` array back to frontmatter verbatim — each entry is already a `Citation` object (`@type: Citation`, `citationType`, `citationRole`, ...) with `author` as plain text or an `EntityReference`; the converter performs no rewriting.
+2. Any `## Citations` body section is authored content carried inside `content` and is preserved unchanged.
+
+#### Example
 
 ```yaml
+# Frontmatter
 citations:
   - "@type": Citation
     citationType: article
-    citationRole: supports
     title: "Research Paper"
     url: https://example.com/paper
-    author: "Jane Smith"
-    date: "2025-11-15"
-    accessed: "2026-01-18"
-    relevance: 0.92
+    citationRole: supports
+    author:
+      "@type": EntityReference
+      entity: { "@id": urn:mif:entity:person:jane-smith }
+      entityType: Person
+      name: Jane Smith
+```
+
+Converts to:
+
+```json
+"citations": [{
+  "@type": "Citation",
+  "citationType": "article",
+  "citationRole": "supports",
+  "title": "Research Paper",
+  "url": "https://example.com/paper",
+  "author": {
+    "@type": "EntityReference",
+    "entity": {"@id": "urn:mif:entity:person:jane-smith"}
+  }
+}]
 ```

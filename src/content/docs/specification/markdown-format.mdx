@@ -1,36 +1,29 @@
 ---
-title: Markdown Format
-description: The canonical .md format specification for human-readable concept files.
+title: "Markdown Format"
+description: "The canonical .md format specification for human-readable concept files."
 ---
 
-The `.md` file is the canonical representation of a MIF concept. Relationships are authoritative in frontmatter `relationships[]` and mirrored as OKF-legible markdown links in a `## Relationships` body section.
+{/* GENERATED from SPECIFICATION.md by scripts/build_spec_pages.py. Do not edit; edit SPECIFICATION.md and re-run the script. */}
 
 ### Structure
 
 ```markdown
 ---
 # YAML Frontmatter (required)
-id: 550e8400-e29b-41d4-a716-446655440000   # UUID
+id: uuid-here
 type: semantic
 created: 2026-01-15T10:30:00Z
-relationships:
-  - type: relates-to
-    target: /semantic/other-concept.md
-  - type: derived-from
-    target: /episodic/source-incident.md
 ---
 
 # Title (optional, first H1)
 
-Concept content in Markdown format.
+Memory content in Markdown format.
 
-## Relationships (optional section, mirrors frontmatter)
+## Relationships (optional section)
 
-- relates-to [Other Concept](/semantic/other-concept.md)
-- derived-from [Source Incident](/episodic/source-incident.md)
+- relates-to [Other Memory](/semantic/other-memory.md)
+- derived-from [Source Memory](/episodic/source-memory.md)
 ```
-
-Entity references are declared in the frontmatter `entities[]` array (see [Entity Types](/specification/entity-types/)).
 
 ### Frontmatter Schema
 
@@ -46,7 +39,7 @@ modified: 2026-01-20T14:22:00Z             # Last modification
 ontology:                                   # Applied ontology reference
   id: mif-base                             # Ontology identifier
   version: "1.0.0"                         # Ontology version
-  uri: https://mif-spec.dev/ontologies/mif-base  # Ontology URI
+  uri: https://mif-spec.dev/ontologies/mif-base  # Ontology identifier (not a resolvable URL)
 namespace: org/user/project                 # Hierarchical scope
 title: "Human-readable title"               # Display title
 tags:                                       # Classification
@@ -80,7 +73,7 @@ embedding:
   modelVersion: "2024-01"                   # Model version
   dimensions: 1536                          # Vector dimensions
   sourceText: "User prefers dark mode"      # Text that was embedded
-  # Note: Actual vectors stored externally via vectorUri
+  # Note: Actual vectors stored externally or in JSON-LD format
 
 # === OPTIONAL: Aliases ===
 aliases:
@@ -99,29 +92,17 @@ extensions:
 
 ### Relationship Syntax
 
-Typed relationships are authoritative in frontmatter and mirrored in the body as standard bundle-relative markdown links, so a generic OKF consumer sees every edge. The body form is `- <type> [Text](/path/target.md)`:
+Typed relationships are authoritative in the frontmatter `relationships[]` array and mirrored in the body as standard markdown links under a `## Relationships` section, one per line:
 
 ```markdown
 ## Relationships
 
-- relates-to [Other Concept](/semantic/other-concept.md)
+- relates-to [Other Memory](/semantic/other-memory.md)
 - derived-from [Source Incident](/episodic/source-incident.md)
 - supersedes [Old Policy](/semantic/old-policy.md)
 ```
 
-The corresponding frontmatter:
-
-```yaml
-relationships:
-  - type: relates-to
-    target: /semantic/other-concept.md
-  - type: derived-from
-    target: /episodic/source-incident.md
-  - type: supersedes
-    target: /semantic/old-policy.md
-```
-
-Every frontmatter `relationships` entry MUST have a corresponding body markdown link in the `## Relationships` section, and every such body link maps back to a frontmatter entry. Entity references are declared in the frontmatter `entities[]` array (see [Entity Types](/specification/entity-types/)).
+Each line is `- <type> [Text](<target>)`, where `<type>` is a kebab-case relationship type and `<target>` is a bundle-relative path to the target concept or a `urn:mif:` identifier (see [Relationship Types](/specification/relationship-types/)). Entity references are declared in the frontmatter `entities[]` array (see [Entity References in Memories](/specification/entity-types/#entity-references-in-memories)).
 
 ### Citations (Level 3)
 
@@ -147,12 +128,12 @@ citations:
 #### Citation Fields
 
 | Field | Required | Type | Description |
-|-------|----------|------|-------------|
+| --- | --- | --- | --- |
 | `@type` | REQUIRED | Const | Always `Citation` |
-| `citationType` | REQUIRED | Enum | Source category (see Citation Types) |
+| `citationType` | REQUIRED | Enum | Source category (see [Citation Types](#citation-types)) |
 | `title` | REQUIRED | String | Citation title |
 | `url` | REQUIRED | URI | Valid URL or URI |
-| `citationRole` | REQUIRED | Enum | Relationship to memory (see Citation Roles) |
+| `citationRole` | REQUIRED | Enum | Relationship to memory (see [Citation Roles](#citation-roles)) |
 | `author` | OPTIONAL | EntityReference, array of EntityReference, or String | One or more entity references, or plain text |
 | `date` | OPTIONAL | Date | Publication date (ISO 8601) |
 | `accessed` | OPTIONAL | Date | Access date (ISO 8601) |
@@ -162,7 +143,7 @@ citations:
 #### Citation Types
 
 | Type | Description | Example |
-|------|-------------|---------|
+| --- | --- | --- |
 | `article` | Journal article, blog post | arXiv paper, Medium article |
 | `book` | Published book | O'Reilly book, academic text |
 | `paper` | Conference/research paper | ACM paper, IEEE publication |
@@ -181,7 +162,7 @@ Custom types MAY use namespace prefixes: `acme:internal-memo`, `research:lab-not
 #### Citation Roles
 
 | Role | Description | Use Case |
-|------|-------------|----------|
+| --- | --- | --- |
 | `supports` | Provides supporting evidence | Confirming research, alignment |
 | `refutes` | Contradicts or disputes | Opposing viewpoint, correction |
 | `background` | General context/reference | Related reading, foundation |
@@ -218,7 +199,7 @@ An optional `## Citations` section MAY appear in the memory body for detailed an
 
 #### Author Entity References
 
-A citation `author` MAY be plain text or one or more `EntityReference` objects (see [Entity Types](/specification/entity-types/)):
+A citation `author` MAY be plain text or one or more `EntityReference` objects (see [Entity References in Memories](/specification/entity-types/#entity-references-in-memories)):
 
 ```yaml
 # Plain text
@@ -227,39 +208,51 @@ author: "Jane Smith et al."
 # Single author as an entity reference
 author:
   "@type": EntityReference
-  entity: { "@id": urn:mif:entity:person:jane-smith }
+  entity:
+    "@id": urn:mif:entity:person:jane-smith
   entityType: Person
   name: Jane Smith
+
+# Multiple authors
+author:
+  - "@type": EntityReference
+    entity: { "@id": urn:mif:entity:person:jane-smith }
+    entityType: Person
+    name: Jane Smith
+  - "@type": EntityReference
+    entity: { "@id": urn:mif:entity:organization:anthropic }
+    entityType: Organization
+    name: Anthropic
 ```
 
 #### Citation Validation
 
 Implementations SHOULD validate citations according to these rules:
 
-**Required Field Constraints:**
+##### Required Field Constraints
 
 | Field | Constraint |
-|-------|------------|
+| --- | --- |
 | `@type` | MUST be `Citation` |
-| `citationType` | MUST be a value from Citation Types or a custom namespaced type (e.g., `acme:memo`) |
+| `citationType` | MUST be a value from [Citation Types](#citation-types) or a custom namespaced type (e.g., `acme:memo`) |
 | `title` | MUST be a non-empty string |
 | `url` | MUST be a valid URI (http, https, or custom schemes) |
-| `citationRole` | MUST be a value from Citation Roles or a custom namespaced role (e.g., `legal:precedent`) |
+| `citationRole` | MUST be a value from [Citation Roles](#citation-roles) or a custom namespaced role (e.g., `legal:precedent`) |
 
-**Optional Field Constraints:**
+##### Optional Field Constraints
 
 | Field | Constraint |
-|-------|------------|
+| --- | --- |
 | `author` | SHOULD be an `EntityReference` (or array of them) or plain text |
 | `date` | MUST be ISO 8601 date format (`YYYY-MM-DD`) |
 | `accessed` | MUST be ISO 8601 date format (`YYYY-MM-DD`) |
 | `relevance` | MUST be decimal between 0.0 and 1.0 inclusive |
 | `note` | SHOULD be under 1000 characters; longer notes SHOULD use body section |
 
-**Validation Errors:**
+##### Validation Errors
 
 | Error | Severity | Action |
-|-------|----------|--------|
+| --- | --- | --- |
 | Missing required field | Error | Reject citation |
 | Invalid `type` value | Warning | Accept with `type: "other"` fallback |
 | Invalid `role` value | Warning | Accept with `role: "background"` fallback |
@@ -274,16 +267,16 @@ Compression allows large memories to be summarized while preserving the original
 #### Compression Fields
 
 | Field | Required | Type | Description |
-|-------|----------|------|-------------|
+| --- | --- | --- | --- |
 | `summary` | OPTIONAL | String | Concise 2-3 sentence summary (max 500 characters) |
-| `compressedAt` | OPTIONAL | DateTime | When compression was applied (ISO 8601) |
+| `compressed_at` | OPTIONAL | DateTime | When compression was applied (ISO 8601) |
 
-**Frontmatter Schema:**
+##### Frontmatter Schema
 
 ```yaml
 # === OPTIONAL: Compression (Level 3) ===
 summary: "User prefers dark mode for reduced eye strain during extended coding sessions. Applies to IDE, terminal, and web applications."
-compressedAt: 2026-01-24T10:00:00Z
+compressed_at: 2026-01-24T10:00:00Z
 ```
 
 #### Compression Criteria
@@ -291,21 +284,21 @@ compressedAt: 2026-01-24T10:00:00Z
 Implementations MAY apply compression when memories meet these criteria:
 
 | Condition | Threshold |
-|-----------|-----------|
+| --- | --- |
 | Age AND Size | Age > 30 days AND content > 100 lines |
-| Decay AND Size | Strength < 0.3 AND content > 100 lines |
+| Decay AND Size | Strength `< 0.3` AND content > 100 lines |
 
 #### Compression Behavior
 
 - The `content` field SHOULD be replaced with the compressed summary
 - The original `content` MAY be preserved in `extensions.original_content`
 - The `summary` field contains the generated summary text
-- The `compressedAt` timestamp indicates when compression occurred
+- The `compressed_at` timestamp indicates when compression occurred
 - Compressed memories retain all other metadata (relationships, entities, etc.)
 
 #### Compression Validation
 
 | Field | Constraint |
-|-------|------------|
+| --- | --- |
 | `summary` | MUST be 500 characters or fewer |
-| `compressedAt` | MUST be ISO 8601 datetime format |
+| `compressed_at` | MUST be ISO 8601 datetime format |
