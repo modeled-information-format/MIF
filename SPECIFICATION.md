@@ -1850,7 +1850,7 @@ new major version of the specification.
 {
   "@context": "https://mif-spec.dev/schema/context.jsonld",
   "@type": "Concept",
-  "@id": "urn:mif:550e8400",
+  "@id": "urn:mif:550e8400-e29b-41d4-a716-446655440000",
   "conceptType": "semantic",
   "title": "Dark Mode",
   "content": "# Dark Mode\n\nUser prefers dark mode\n\n## Relationships\n\n- relates-to [UI Preferences](/semantic/ui-prefs.md)",
@@ -1867,7 +1867,7 @@ The `content` field is written back verbatim as the body; `relationships[]` pass
 
 ```markdown
 ---
-id: 550e8400
+id: 550e8400-e29b-41d4-a716-446655440000
 type: semantic
 title: Dark Mode
 created: 2026-01-15T10:30:00Z
