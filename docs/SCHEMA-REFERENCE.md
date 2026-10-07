@@ -123,7 +123,7 @@ Ontologies can define extended types that map to these base types via namespace 
 "relationships": [
   {
     "type": "derived-from",
-    "target": "urn:mif:memory:source-id",
+    "target": "urn:mif:9b2d4c6e-1f3a-4b5c-8d7e-0a1b2c3d4e5f",
     "strength": 0.9,
     "metadata": { "reason": "Extracted insight" }
   }

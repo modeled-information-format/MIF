@@ -739,6 +739,16 @@ Implementations MAY apply compression when memories meet these criteria:
 }
 ```
 
+**Identifiers.** A concept's `@id` is `urn:mif:<uuid>`, where `<uuid>` is the
+concept's frontmatter `id` (§4.1). Any `urn:mif:` reference to a concept,
+including a relationship `target`, MUST use this form. The following
+sub-namespaces of `urn:mif:` are reserved and never identify a concept:
+`urn:mif:entity:…` (entities, §7), `urn:mif:agent:…` and `urn:mif:activity:…`
+(provenance, §12), `urn:mif:conversation:…` (provenance sources, §12), and
+`urn:mif:vector:…` (embedding vectors, §11). Because a UUID can never equal a
+sub-namespace name, a consumer distinguishes a concept URN by whether the
+remainder after `urn:mif:` parses as a UUID.
+
 ### 6.2 Full Example
 
 ```json
@@ -787,12 +797,12 @@ Implementations MAY apply compression when memories meet these criteria:
   "relationships": [
     {
       "type": "relates-to",
-      "target": "urn:mif:memory:ui-preferences",
+      "target": "urn:mif:7c9e6679-7425-40de-944b-e07fc1f90ae7",
       "strength": 0.85
     },
     {
       "type": "supersedes",
-      "target": "urn:mif:memory:old-theme-preference"
+      "target": "urn:mif:f47ac10b-58cc-4372-a567-0e02b2c3d479"
     }
   ],
 
@@ -1185,7 +1195,7 @@ Each line is `- <type> [Text](<target>)`. The type is a kebab-case token; the ta
 "relationships": [
   {
     "type": "derived-from",
-    "target": "urn:mif:memory:source-memory",
+    "target": "urn:mif:9b2d4c6e-1f3a-4b5c-8d7e-0a1b2c3d4e5f",
     "strength": 0.9,
     "metadata": {
       "reason": "Extracted key insight",
