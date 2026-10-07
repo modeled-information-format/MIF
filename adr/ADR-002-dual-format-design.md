@@ -10,7 +10,7 @@ tags:
   - interoperability
 status: accepted
 created: 2026-01-27
-updated: 2026-07-11
+updated: 2026-10-07
 author: MIF Maintainers
 project: MIF
 technologies:
@@ -206,17 +206,19 @@ Memory content in readable Markdown...
 ### JSON-LD Format
 
 > **Historical snapshot (original 2026-01-27 decision).** The JSON-LD object
-> below is the example exactly as the original ADR recorded it. It is **not**
-> the current emitted schema: the v1.0 converter emits `conceptType` (not
-> `memoryType`) and an `@id` of the form `urn:mif:{id}` (no `memory:` segment),
-> and the canonical source is now the Markdown file (ADR-011). It is retained
-> here as a record of the original decision, not as a current projection example.
+> below is the example as the original ADR recorded it, except that its `@id`
+> now uses the `urn:mif:<uuid>` concept URN form (SPECIFICATION.md
+> `### 6.1 Structure`); the original `urn:mif:memory:uuid` is a form no
+> concept `@id` takes. It is still **not** the current emitted schema: the
+> v1.0 converter emits `conceptType` (not `memoryType`), and the canonical
+> source is now the Markdown file (ADR-011). It is retained here as a record
+> of the original decision, not as a current projection example.
 
 ```json
 {
   "@context": "https://mif-spec.dev/schema/context.jsonld",
   "@type": "Memory",
-  "@id": "urn:mif:memory:uuid",
+  "@id": "urn:mif:550e8400-e29b-41d4-a716-446655440000",
   "memoryType": "semantic",
   "namespace": "_semantic/knowledge",
   "created": "2026-01-27T10:00:00Z",
@@ -431,5 +433,26 @@ derived, matching the Abstract and §6; the dual-representation and lossless-
 convertibility claims this ADR's Findings table cites are unchanged. Issue
 #251 closed for this ADR's portion of the work (SPECIFICATION.md §2.1 and
 ADR-005's stale references also fixed as part of the same issue).
+
+**Action Required:** None.
+
+### 2026-10-07
+
+**Audited revision:** `4a036dfb5d18ccf510c52e48a71aa41da95c3f5f`
+
+**Status:** Compliant
+
+**Findings:**
+
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
+| The JSON-LD snapshot's `@id` used `urn:mif:memory:uuid`, a URN form no concept `@id` takes; it now uses the `urn:mif:<uuid>` form SPECIFICATION.md defines for concepts | `adr/ADR-002-dual-format-design.md` | `### JSON-LD Format` snapshot block | compliant |
+
+**Summary:** SPECIFICATION.md now states normatively that a concept URN is
+`urn:mif:<uuid>` and reserves `urn:mif:entity:`, `agent:`, `activity:`,
+`conversation:` and `vector:` as sub-namespaces. The snapshot's `@id` is
+updated to match so the ADR no longer shows a non-conformant identifier;
+the snapshot's other historical fields (`@type: Memory`, `memoryType`) are
+unchanged and still flagged as historical by the note above it.
 
 **Action Required:** None.
