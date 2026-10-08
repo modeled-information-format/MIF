@@ -865,12 +865,12 @@ remainder after `urn:mif:` parses as a UUID.
   "relationships": [
     {
       "type": "relates-to",
-      "target": "urn:mif:7c9e6679-7425-40de-944b-e07fc1f90ae7",
+      "target": "/semantic/preferences/high-contrast-preference.md",
       "strength": 0.85
     },
     {
       "type": "supersedes",
-      "target": "urn:mif:f47ac10b-58cc-4372-a567-0e02b2c3d479"
+      "target": "/semantic/preferences/light-mode-preference.md"
     }
   ],
 
@@ -1327,11 +1327,15 @@ relationships:
 
 #### JSON-LD schema
 
+The JSON-LD projection carries each `target` unchanged from frontmatter. A
+same-bundle target stays a bundle-relative path; only an out-of-bundle target
+is a `urn:mif:<uuid>`:
+
 ```json
 "relationships": [
   {
     "type": "derived-from",
-    "target": "urn:mif:9b2d4c6e-1f3a-4b5c-8d7e-0a1b2c3d4e5f",
+    "target": "/episodic/source-concept.md",
     "strength": 0.9,
     "metadata": {
       "reason": "Extracted key insight",
