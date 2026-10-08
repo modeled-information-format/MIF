@@ -173,6 +173,22 @@ Each line is `- <type> [Text](<target>)`. The type is a kebab-case token derived
 
 Same-bundle targets SHOULD be bundle-relative paths, with `urn:mif:` targets reserved for out-of-bundle concepts ([Relationship Syntax](/specification/markdown-format/#relationship-syntax)).
 
+The matching frontmatter (one entry per body link):
+
+```yaml
+relationships:
+  - type: relates-to
+    target: /semantic/other-memory.md
+  - type: derived-from
+    target: /episodic/source-memory.md
+  - type: supersedes
+    target: /semantic/old-memory.md
+  - type: conflicts-with
+    target: /semantic/contradicting-memory.md
+  - type: part-of
+    target: /semantic/parent-memory.md
+```
+
 #### JSON-LD schema
 
 ```json
@@ -194,6 +210,6 @@ Same-bundle targets SHOULD be bundle-relative paths, with `urn:mif:` targets res
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
 | `type` | String | Yes | Type identifier (kebab-case; optional `ns:` prefix) |
-| `target` | URI Reference | Yes | Target memory or entity URI |
+| `target` | String | Yes | Bundle-relative path to the target concept, or a `urn:mif:` identifier |
 | `strength` | Decimal | No | Relationship strength (0.0-1.0) |
 | `metadata` | Object | No | Additional relationship metadata |

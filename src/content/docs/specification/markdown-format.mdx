@@ -10,16 +10,21 @@ description: "The canonical .md format specification for human-readable concept 
 ```markdown
 ---
 # YAML Frontmatter (required)
-id: uuid-here
+id: 550e8400-e29b-41d4-a716-446655440000   # UUID
 type: semantic
 created: 2026-01-15T10:30:00Z
+relationships:
+  - type: relates-to
+    target: /semantic/other-memory.md
+  - type: derived-from
+    target: /episodic/source-memory.md
 ---
 
 # Title (optional, first H1)
 
 Memory content in Markdown format.
 
-## Relationships (optional section)
+## Relationships (optional section, mirrors frontmatter)
 
 - relates-to [Other Memory](/semantic/other-memory.md)
 - derived-from [Source Memory](/episodic/source-memory.md)
@@ -73,7 +78,7 @@ embedding:
   modelVersion: "2024-01"                   # Model version
   dimensions: 1536                          # Vector dimensions
   sourceText: "User prefers dark mode"      # Text that was embedded
-  # Note: Actual vectors stored externally or in JSON-LD format
+  # Note: Actual vectors stored externally via vectorUri
 
 # === OPTIONAL: Aliases ===
 aliases:
@@ -102,7 +107,19 @@ Typed relationships are authoritative in the frontmatter `relationships[]` array
 - supersedes [Old Policy](/semantic/old-policy.md)
 ```
 
-Each line is `- <type> [Text](<target>)`, where `<type>` is a kebab-case relationship type and `<target>` is a bundle-relative path to the target concept or a `urn:mif:` identifier (see [Relationship Types](/specification/relationship-types/)). Entity references are declared in the frontmatter `entities[]` array (see [Entity References in Memories](/specification/entity-types/#entity-references-in-memories)).
+The corresponding frontmatter:
+
+```yaml
+relationships:
+  - type: relates-to
+    target: /semantic/other-memory.md
+  - type: derived-from
+    target: /episodic/source-incident.md
+  - type: supersedes
+    target: /semantic/old-policy.md
+```
+
+Each line is `- <type> [Text](<target>)`, where `<type>` is a kebab-case relationship type and `<target>` is a bundle-relative path to the target concept or a `urn:mif:` identifier (see [Relationship Types](/specification/relationship-types/)). Every frontmatter `relationships` entry MUST have a corresponding body markdown link in the `## Relationships` section, and every such body link maps back to a frontmatter entry. Entity references are declared in the frontmatter `entities[]` array (see [Entity References in Memories](/specification/entity-types/#entity-references-in-memories)).
 
 When the target is a concept in the same bundle, `target` SHOULD be its
 bundle-relative path, not its `urn:mif:<uuid>`. The body mirror then carries a
@@ -125,7 +142,7 @@ citations:
     title: "Memory Systems in AI Agents"   # REQUIRED: Citation title
     url: https://arxiv.org/abs/2024.12345  # REQUIRED: Valid URL
     citationRole: supports                 # REQUIRED: Relationship to memory
-    author: "Jane Smith"                   # OPTIONAL: string, EntityReference, or array
+    author: "Jane Smith"                   # OPTIONAL: string, EntityReference, or array of EntityReference
     date: 2024-06-15                       # OPTIONAL: Publication date
     accessed: 2026-01-20                   # OPTIONAL: Access date
     relevance: 0.95                        # OPTIONAL: Relevance score (0-1)

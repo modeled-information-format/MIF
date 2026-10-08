@@ -43,8 +43,8 @@ The `content` field is written back verbatim as the body; `relationships[]` pass
 ---
 id: 550e8400-e29b-41d4-a716-446655440000
 type: semantic
-title: Dark Mode
 created: 2026-01-15T10:30:00Z
+title: Dark Mode
 relationships:
   - type: relates-to
     target: /semantic/ui-prefs.md
@@ -77,6 +77,11 @@ User prefers dark mode
 1. Write the `citations` array back to frontmatter verbatim — each entry is already a `Citation` object (`@type: Citation`, `citationType`, `citationRole`, ...) with `author` as plain text or an `EntityReference`; the converter performs no rewriting.
 2. Any `## Citations` body section is authored content carried inside `content` and is preserved unchanged.
 
+Each entry is a `Citation` object: `@type`, `citationType`, `citationRole`,
+`title`, and `url` are required; `author`, `date`, `accessed`, `relevance`, and
+`note` are optional. The `author` value is plain text, an `EntityReference`, or
+an array of `EntityReference` (for multiple authors).
+
 #### Example
 
 ```yaml
@@ -94,18 +99,20 @@ citations:
       name: Jane Smith
 ```
 
-Converts to:
+Converts to (passed through verbatim, so the fields are identical):
 
 ```json
 "citations": [{
   "@type": "Citation",
   "citationType": "article",
-  "citationRole": "supports",
   "title": "Research Paper",
   "url": "https://example.com/paper",
+  "citationRole": "supports",
   "author": {
     "@type": "EntityReference",
-    "entity": {"@id": "urn:mif:entity:person:jane-smith"}
+    "entity": {"@id": "urn:mif:entity:person:jane-smith"},
+    "entityType": "Person",
+    "name": "Jane Smith"
   }
 }]
 ```

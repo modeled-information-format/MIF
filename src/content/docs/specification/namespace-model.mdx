@@ -196,7 +196,7 @@ Ontologies are defined in YAML files with optional JSON-LD export:
 
 #### Base Type Hierarchy
 
-The base ontology uses a three-tier hierarchy based on cognitive memory types.
+The base ontology uses a three-tier hierarchy based on the base knowledge types.
 Its three top-level roots are the base-type prefixes defined in [Reserved Namespace Prefixes](#reserved-namespace-prefixes):
 
 ```yaml
@@ -260,8 +260,9 @@ discovery:
 Ontologies are loaded from multiple sources with precedence:
 
 1. MIF base ontology (built-in)
-2. User ontology (`${MNEMONIC_ROOT}/ontology.yaml`)
-3. Project ontology (`./.claude/mnemonic/ontology.yaml`)
+2. User ontology (an implementation-defined per-user location, e.g.
+   `~/.mif/ontologies/`)
+3. Project ontology (`.mif/ontologies/` at the bundle root; see [Ontology Files](#ontology-files))
 
 Later sources can extend or override earlier definitions.
 

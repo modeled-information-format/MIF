@@ -24,9 +24,10 @@ semantics.
 > **MIF is the opinionated, OKF-compliant content model that fills OKF's
 > deliberately empty envelope.** OKF is the transport surface; MIF supplies the
 > concrete type system. AI memory is the first domain profile of MIF, not its
-> identity (see `profiles/ai-memory/`). Moving many memory units as one
-> wire artifact is a separate, transport-layer concern (see the
-> Container Profile, `docs/CONTAINER-PROFILE.md`), not a domain profile.
+> identity (see [`profiles/ai-memory/`](profiles/ai-memory/)). Moving many
+> memory units as one wire artifact is a separate, transport-layer concern
+> (see the [Container Profile](docs/CONTAINER-PROFILE.md)), not a domain
+> profile.
 
 OKF compliance is achieved as a **superset, not by subordination**: every MIF
 bundle MUST validate as a conformant OKF bundle, but MIF remains an independent
@@ -130,8 +131,8 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 - **Entity**: A named thing (person, organization, technology, concept, or file) that can participate in relationships.
 - **Relationship**: A typed, directed connection between two entities or between a memory and an entity.
 - **Namespace**: A hierarchical scope for organizing memories (e.g., `org/user/project/session`).
-- **Bundle**: A collection of MIF files organized as a unit.
-- **Provider**: An AI memory system that can import or export MIF format.
+- **Bundle**: A directory tree of `.md` concept files; a valid OKF bundle.
+- **Provider**: An implementation that can import or export MIF format.
 
 ---
 
@@ -186,14 +187,19 @@ MIF is designed for local-first storage:
 
 | Extension | Format | MIME Type |
 | --- | --- | --- |
-| `.md` | Markdown | `text/markdown; variant=mif` |
-| `.jsonld` | JSON-LD | `application/ld+json; profile="https://mif-spec.dev"` |
+| `.md` | Markdown (canonical) | `text/markdown; variant=mif` |
+| `.jsonld` | JSON-LD (derived projection) | `application/ld+json; profile="https://mif-spec.dev"` |
+
+Concept files use the `.md` extension only. The derived JSON-LD projection
+uses `.jsonld` (never `.md`), so OKF's `*.md` glob never ingests it.
 
 ### 3.2 File Naming
 
 A concept's OKF identity is its bundle-relative path minus the `.md`
 extension, so concept files SHOULD use human-readable, path-meaningful slugs.
-The stable UUID lives in the frontmatter `id` (§4.1), not in the filename:
+The stable UUID lives in the frontmatter `id` (§4.1), not in the filename, so
+identity survives the concept being moved or renamed; the `id` is MIF-only and
+invisible to OKF:
 
 ```text
 semantic/dark-mode-preference.md
@@ -260,7 +266,7 @@ A Memory Unit is the atomic element of MIF. It contains:
 
 | Property | Required | Type | Description |
 | --- | --- | --- | --- |
-| `id` | REQUIRED | UUID | Globally unique identifier |
+| `id` | REQUIRED | UUID | Globally unique identifier (stable across relocation) |
 | `content` | REQUIRED | String | The memory content (Markdown); see note below |
 | `type` | REQUIRED | Enum | Memory classification (see 4.2) |
 | `created` | REQUIRED | DateTime | When the memory was created |
@@ -283,23 +289,30 @@ appears as a named property only in the JSON-LD projection, where §15.1 maps
 the body to `content`. The other properties in this table are frontmatter
 keys in Markdown.
 
+The frontmatter `type` field holds the base knowledge classification; in the
+JSON-LD projection produced by `scripts/mif_convert.py`, this value is
+surfaced as `conceptType`.
+
 ### 4.2 Memory Types
 
-MIF uses three **base memory types**, reflecting how human memory systems organize information:
+MIF uses three **base memory types**, a general taxonomy of how knowledge is structured:
 
 | Type | Description | Namespace Hint |
 | --- | --- | --- |
-| `semantic` | Facts, concepts, relationships, and knowledge | `_semantic/*` |
-| `episodic` | Events, experiences, sessions, and timelines | `_episodic/*` |
-| `procedural` | Step-by-step processes, runbooks, and patterns | `_procedural/*` |
+| `semantic` | Declarative knowledge: facts, concepts, decisions, schemas | `_semantic/*` |
+| `episodic` | Time-bound records: events, incidents, changelog/deprecation | `_episodic/*` |
+| `procedural` | How-to knowledge: runbooks, processes, patterns, migrations | `_procedural/*` |
 
 #### Base Type Descriptions
 
-- **Semantic**: Declarative knowledge about the world—facts, concepts, decisions, preferences, and relationships between entities. Examples: architectural decisions, technology choices, user preferences, domain knowledge.
+- **Semantic**: Declarative knowledge about the world—facts, concepts, decisions, preferences, and relationships between entities. Examples: architectural decisions, technology choices, schemas, domain knowledge.
 
-- **Episodic**: Time-bound experiences and events—incidents, conversations, sessions, and blockers. These memories have strong temporal context and represent "what happened."
+- **Episodic**: Time-bound records of events—incidents, deprecations, changelog entries. These memories have strong temporal context and represent "what happened."
 
 - **Procedural**: How-to knowledge—runbooks, migration guides, code patterns, and step-by-step processes. These memories describe "how to do" something.
+
+The cognitive-memory origin of this triad, and its reinterpretation for agent
+memory, live in the AI Memory profile ([`profiles/ai-memory/`](profiles/ai-memory/)).
 
 #### 4.2.1 Ontology-Extended Types
 
@@ -431,16 +444,21 @@ the interoperability the base types provide.
 ```markdown
 ---
 # YAML Frontmatter (required)
-id: uuid-here
+id: 550e8400-e29b-41d4-a716-446655440000   # UUID
 type: semantic
 created: 2026-01-15T10:30:00Z
+relationships:
+  - type: relates-to
+    target: /semantic/other-memory.md
+  - type: derived-from
+    target: /episodic/source-memory.md
 ---
 
 # Title (optional, first H1)
 
 Memory content in Markdown format.
 
-## Relationships (optional section)
+## Relationships (optional section, mirrors frontmatter)
 
 - relates-to [Other Memory](/semantic/other-memory.md)
 - derived-from [Source Memory](/episodic/source-memory.md)
@@ -494,7 +512,7 @@ embedding:
   modelVersion: "2024-01"                   # Model version
   dimensions: 1536                          # Vector dimensions
   sourceText: "User prefers dark mode"      # Text that was embedded
-  # Note: Actual vectors stored externally or in JSON-LD format
+  # Note: Actual vectors stored externally via vectorUri
 
 # === OPTIONAL: Aliases ===
 aliases:
@@ -523,7 +541,19 @@ Typed relationships are authoritative in the frontmatter `relationships[]` array
 - supersedes [Old Policy](/semantic/old-policy.md)
 ```
 
-Each line is `- <type> [Text](<target>)`, where `<type>` is a kebab-case relationship type and `<target>` is a bundle-relative path to the target concept or a `urn:mif:` identifier (see 8). Entity references are declared in the frontmatter `entities[]` array (see 7.5).
+The corresponding frontmatter:
+
+```yaml
+relationships:
+  - type: relates-to
+    target: /semantic/other-memory.md
+  - type: derived-from
+    target: /episodic/source-incident.md
+  - type: supersedes
+    target: /semantic/old-policy.md
+```
+
+Each line is `- <type> [Text](<target>)`, where `<type>` is a kebab-case relationship type and `<target>` is a bundle-relative path to the target concept or a `urn:mif:` identifier (see 8). Every frontmatter `relationships` entry MUST have a corresponding body markdown link in the `## Relationships` section, and every such body link maps back to a frontmatter entry. Entity references are declared in the frontmatter `entities[]` array (see 7.5).
 
 When the target is a concept in the same bundle, `target` SHOULD be its
 bundle-relative path, not its `urn:mif:<uuid>`. The body mirror then carries a
@@ -546,7 +576,7 @@ citations:
     title: "Memory Systems in AI Agents"   # REQUIRED: Citation title
     url: https://arxiv.org/abs/2024.12345  # REQUIRED: Valid URL
     citationRole: supports                 # REQUIRED: Relationship to memory
-    author: "Jane Smith"                   # OPTIONAL: string, EntityReference, or array
+    author: "Jane Smith"                   # OPTIONAL: string, EntityReference, or array of EntityReference
     date: 2024-06-15                       # OPTIONAL: Publication date
     accessed: 2026-01-20                   # OPTIONAL: Access date
     relevance: 0.95                        # OPTIONAL: Relevance score (0-1)
@@ -737,7 +767,7 @@ Implementations MAY apply compression when memories meet these criteria:
 
 > **Markdown is canonical ([Invariant 2](#invariants)).** The JSON-LD form below is a *derived*
 > projection: regenerate it from the `.md` source with `scripts/mif_convert.py`.
-> It MUST NOT use the `.md` extension (so OKF's `*.md` glob never ingests it) and
+> It uses the `.jsonld` extension and MUST NOT use `.md` (so OKF's `*.md` glob never ingests it) and
 > MUST round-trip losslessly back to markdown. If the two disagree, markdown wins.
 
 ### 6.1 Structure
@@ -754,6 +784,7 @@ Implementations MAY apply compression when memories meet these criteria:
 
   "created": "2026-01-15T10:30:00Z",
   "modified": "2026-01-20T14:22:00Z",
+  "timestamp": "2026-01-20T14:22:00Z",
 
   "namespace": "_semantic/preferences",
   "tags": ["preference", "ui", "accessibility"],
@@ -766,6 +797,12 @@ Implementations MAY apply compression when memories meet these criteria:
   "extensions": {...}
 }
 ```
+
+The projection always includes the OKF-legible mirror field `timestamp` (the
+value of `modified`, or `created` when there is no `modified`). When the source
+has a `summary`, it also includes `description` (mapped from `summary`). These
+are derived mirrors of the canonical frontmatter; markdown remains
+authoritative.
 
 **Identifiers.** A concept's `@id` is `urn:mif:<uuid>`, where `<uuid>` is the
 concept's frontmatter `id` (§4.1). Any `urn:mif:` reference to a concept,
@@ -785,7 +822,6 @@ remainder after `urn:mif:` parses as a UUID.
     "https://mif-spec.dev/schema/context.jsonld",
     {
       "prov": "http://www.w3.org/ns/prov#",
-      "dc": "http://purl.org/dc/terms/",
       "subcog": "https://github.com/zircote/subcog/ns/"
     }
   ],
@@ -796,8 +832,9 @@ remainder after `urn:mif:` parses as a UUID.
   "conceptType": "semantic",
   "title": "Dark Mode Preference",
 
-  "dc:created": "2026-01-15T10:30:00Z",
-  "dc:modified": "2026-01-20T14:22:00Z",
+  "created": "2026-01-15T10:30:00Z",
+  "modified": "2026-01-20T14:22:00Z",
+  "timestamp": "2026-01-20T14:22:00Z",
 
   "ontology": {
     "@type": "OntologyReference",
@@ -1002,6 +1039,35 @@ entity_types:
   "farm:birth_date": "2025-03-15"
 }
 ```
+
+#### 7.3.1 Entity Subtyping (`subtype_of`)
+
+An entity type MAY declare `subtype_of`, naming one or more parent entity types it
+specializes. A subtype is **substitutable** for any of its supertypes wherever the
+supertype is admissible — most notably a relationship endpoint domain: an edge whose
+`from`/`to` names a parent type also admits any of its subtypes. `subtype_of` is
+declared on an entity type in an ontology file (§10.8.3):
+
+```yaml
+entity_types:
+  - name: incident-report
+    base: episodic
+  - name: security-incident
+    base: episodic
+    subtype_of: [incident-report]   # substitutable wherever incident-report is admissible
+```
+
+Rules (enforced by `scripts/validate-ontologies.py`):
+
+- Every parent MUST resolve to a declared entity type — in this ontology, or in
+  one it `extends` (resolved across the full extends chain).
+- A subtype's `required` set MUST include every `required` field of each parent
+  (substitutability). A subtype SHOULD add, not retype, parent fields (retyping is
+  not machine-checked).
+- The `subtype_of` graph MUST be acyclic, and a type cannot be its own subtype.
+
+`subtype_of` is optional and additive; ontologies that omit it are unaffected. It
+projects to JSON-LD as `mif:subtypeOf` (a set of entity-type `@id`s).
 
 ### 7.4 Entity Schema
 
@@ -1240,6 +1306,22 @@ Each line is `- <type> [Text](<target>)`. The type is a kebab-case token derived
 
 Same-bundle targets SHOULD be bundle-relative paths, with `urn:mif:` targets reserved for out-of-bundle concepts (§5.3).
 
+The matching frontmatter (one entry per body link):
+
+```yaml
+relationships:
+  - type: relates-to
+    target: /semantic/other-memory.md
+  - type: derived-from
+    target: /episodic/source-memory.md
+  - type: supersedes
+    target: /semantic/old-memory.md
+  - type: conflicts-with
+    target: /semantic/contradicting-memory.md
+  - type: part-of
+    target: /semantic/parent-memory.md
+```
+
 #### JSON-LD schema
 
 ```json
@@ -1261,7 +1343,7 @@ Same-bundle targets SHOULD be bundle-relative paths, with `urn:mif:` targets res
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
 | `type` | String | Yes | Type identifier (kebab-case; optional `ns:` prefix) |
-| `target` | URI Reference | Yes | Target memory or entity URI |
+| `target` | String | Yes | Bundle-relative path to the target concept, or a `urn:mif:` identifier |
 | `strength` | Decimal | No | Relationship strength (0.0-1.0) |
 | `metadata` | Object | No | Additional relationship metadata |
 
@@ -1544,7 +1626,7 @@ Ontologies are defined in YAML files with optional JSON-LD export:
 
 #### 10.8.2 Base Type Hierarchy
 
-The base ontology uses a three-tier hierarchy based on cognitive memory types.
+The base ontology uses a three-tier hierarchy based on the base knowledge types.
 Its three top-level roots are the base-type prefixes defined in 10.2:
 
 ```yaml
@@ -1608,8 +1690,9 @@ discovery:
 Ontologies are loaded from multiple sources with precedence:
 
 1. MIF base ontology (built-in)
-2. User ontology (`${MNEMONIC_ROOT}/ontology.yaml`)
-3. Project ontology (`./.claude/mnemonic/ontology.yaml`)
+2. User ontology (an implementation-defined per-user location, e.g.
+   `~/.mif/ontologies/`)
+3. Project ontology (`.mif/ontologies/` at the bundle root; see §10.8.1)
 
 Later sources can extend or override earlier definitions.
 
@@ -1700,7 +1783,6 @@ embedding:
   dimensions: 1536
   sourceText: "The text that was embedded"
   normalized: true
-  quantization: null  # or "float16", "int8"
 ```
 
 This allows:
@@ -1722,17 +1804,13 @@ embedding:
   vectorUri: "urn:mif:vector:550e8400-e29b-41d4-a716-446655440000"
 ```
 
-#### Inline (JSON-LD only)
+#### JSON-LD with external vector URI
 
 ```json
 "embedding": {
   "model": "text-embedding-3-small",
   "sourceText": "...",
-  "vector": {
-    "@type": "Vector",
-    "encoding": "base64-float32",
-    "data": "SGVsbG8gV29ybGQh..."
-  }
+  "vectorUri": "urn:mif:vector:550e8400-e29b-41d4-a716-446655440000"
 }
 ```
 
@@ -1818,10 +1896,10 @@ provenance:
 
 ### 13.1 Level 1: Core (REQUIRED for conformance)
 
-- `id`, `type`, `created` frontmatter fields and a non-empty Markdown body
+- `id` (UUID), `type`, `created` frontmatter fields and a non-empty Markdown body
   (projected as the `content` property in JSON-LD; see §4.1)
 - Valid Markdown or JSON-LD structure
-- Standard markdown-link relationship syntax
+- Markdown-link relationship edges in a `## Relationships` section
 
 ### 13.2 Level 2: Standard (RECOMMENDED)
 
@@ -1921,8 +1999,8 @@ The `content` field is written back verbatim as the body; `relationships[]` pass
 ---
 id: 550e8400-e29b-41d4-a716-446655440000
 type: semantic
-title: Dark Mode
 created: 2026-01-15T10:30:00Z
+title: Dark Mode
 relationships:
   - type: relates-to
     target: /semantic/ui-prefs.md
@@ -1955,6 +2033,11 @@ User prefers dark mode
 1. Write the `citations` array back to frontmatter verbatim — each entry is already a `Citation` object (`@type: Citation`, `citationType`, `citationRole`, ...) with `author` as plain text or an `EntityReference`; the converter performs no rewriting.
 2. Any `## Citations` body section is authored content carried inside `content` and is preserved unchanged.
 
+Each entry is a `Citation` object: `@type`, `citationType`, `citationRole`,
+`title`, and `url` are required; `author`, `date`, `accessed`, `relevance`, and
+`note` are optional. The `author` value is plain text, an `EntityReference`, or
+an array of `EntityReference` (for multiple authors).
+
 #### Example
 
 ```yaml
@@ -1972,18 +2055,20 @@ citations:
       name: Jane Smith
 ```
 
-Converts to:
+Converts to (passed through verbatim, so the fields are identical):
 
 ```json
 "citations": [{
   "@type": "Citation",
   "citationType": "article",
-  "citationRole": "supports",
   "title": "Research Paper",
   "url": "https://example.com/paper",
+  "citationRole": "supports",
   "author": {
     "@type": "EntityReference",
-    "entity": {"@id": "urn:mif:entity:person:jane-smith"}
+    "entity": {"@id": "urn:mif:entity:person:jane-smith"},
+    "entityType": "Person",
+    "name": "Jane Smith"
   }
 }]
 ```
@@ -2025,7 +2110,7 @@ User prefers dark mode for all applications.
 
 ```markdown
 ---
-id: decision-react-over-vue
+id: 3f2b8c1e-6d4a-4e9b-a7c5-1b2d3e4f5a6b
 type: semantic
 created: 2026-01-10T09:00:00Z
 modified: 2026-01-12T14:30:00Z
@@ -2163,6 +2248,26 @@ tags: [tag1, tag2]
 # Optional
 aliases: ["Alt Name 1", "Alt Name 2"]
 
+entities:
+  - "@type": EntityReference
+    entity: { "@id": urn:mif:entity:<type>:<slug> }
+    entityType: Person|Organization|Technology|Concept|File   # optional
+    name: string                 # optional
+    role: string                 # optional
+relationships:
+  - type: kebab-case-token       # optional ns: prefix (§8.5)
+    target: bundle-relative-path | urn:mif:<uuid>
+    strength: 0.0-1.0            # optional
+    metadata: {}                 # optional
+properties:
+  key: string|number|boolean|null   # scalar literals only
+documents:
+  - "@type": DocumentReference
+    documentType: string
+    url: uri
+    hash: { algorithm: sha256, value: hex-digest }
+    # also optional: id, contentType, byteLength, version, retrievedAt, title
+
 temporal:
   validFrom: ISO-8601-datetime
   validUntil: ISO-8601-datetime | null
@@ -2192,6 +2297,17 @@ embedding:
 extensions:
   provider_name:
     custom_field: value
+
+# Optional (Level 3)
+citations:
+  - "@type": Citation
+    citationType: string
+    citationRole: string
+    title: string
+    url: uri
+    # optional: author, date, accessed, relevance, note (Appendix D)
+summary: string                  # max 500 characters
+compressedAt: ISO-8601-datetime
 ---
 ```
 
@@ -2199,7 +2315,12 @@ extensions:
 
 ## Appendix B: Relationship Types Quick Reference
 
-| Markdown Syntax | JSON-LD `type` | Description |
+Relationships appear in a `## Relationships` body section as
+`- <type> [Text](<target>)`, mirroring the authoritative frontmatter
+`relationships[]`, where `<target>` is a bundle-relative path or a `urn:mif:`
+identifier (§5.3).
+
+| Body Markdown Syntax | JSON-LD `type` | Description |
 | --- | --- | --- |
 | `- relates-to [X](<target>)` | `relates-to` | General relationship |
 | `- derived-from [X](<target>)` | `derived-from` | Created from source |
@@ -2279,7 +2400,7 @@ citations:
     title: "Citation Title"    # REQUIRED
     url: https://example.com   # REQUIRED
     citationRole: supports     # REQUIRED
-    author: "Author Name"      # OPTIONAL (string, EntityReference, or array)
+    author: "Author Name"      # OPTIONAL (string, EntityReference, or array of EntityReference)
     date: 2024-06-15           # OPTIONAL
     accessed: 2026-01-20       # OPTIONAL
     relevance: 0.95            # OPTIONAL (0-1)
@@ -2308,7 +2429,6 @@ citations:
 - [W3C PROV-DM](https://www.w3.org/TR/prov-dm/)
 - [ISO 8601: Date and Time Format](https://www.iso.org/iso-8601-date-and-time-format.html)
 - [CommonMark Specification](https://spec.commonmark.org/)
-- [JSON Canvas Specification](https://jsoncanvas.org/)
 
 ---
 

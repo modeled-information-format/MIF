@@ -20,9 +20,10 @@ semantics.
 > **MIF is the opinionated, OKF-compliant content model that fills OKF's
 > deliberately empty envelope.** OKF is the transport surface; MIF supplies the
 > concrete type system. AI memory is the first domain profile of MIF, not its
-> identity (see `profiles/ai-memory/`). Moving many memory units as one
-> wire artifact is a separate, transport-layer concern (see the
-> Container Profile, `docs/CONTAINER-PROFILE.md`), not a domain profile.
+> identity (see [`profiles/ai-memory/`](https://github.com/modeled-information-format/MIF/blob/main/profiles/ai-memory/)). Moving many
+> memory units as one wire artifact is a separate, transport-layer concern
+> (see the [Container Profile](https://github.com/modeled-information-format/MIF/blob/main/docs/CONTAINER-PROFILE.md)), not a domain
+> profile.
 
 OKF compliance is achieved as a **superset, not by subordination**: every MIF
 bundle MUST validate as a conformant OKF bundle, but MIF remains an independent
@@ -101,8 +102,8 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 - **Entity**: A named thing (person, organization, technology, concept, or file) that can participate in relationships.
 - **Relationship**: A typed, directed connection between two entities or between a memory and an entity.
 - **Namespace**: A hierarchical scope for organizing memories (e.g., `org/user/project/session`).
-- **Bundle**: A collection of MIF files organized as a unit.
-- **Provider**: An AI memory system that can import or export MIF format.
+- **Bundle**: A directory tree of `.md` concept files; a valid OKF bundle.
+- **Provider**: An implementation that can import or export MIF format.
 
 ## Design Principles
 

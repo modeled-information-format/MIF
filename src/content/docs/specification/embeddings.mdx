@@ -16,7 +16,6 @@ embedding:
   dimensions: 1536
   sourceText: "The text that was embedded"
   normalized: true
-  quantization: null  # or "float16", "int8"
 ```
 
 This allows:
@@ -38,16 +37,12 @@ embedding:
   vectorUri: "urn:mif:vector:550e8400-e29b-41d4-a716-446655440000"
 ```
 
-#### Inline (JSON-LD only)
+#### JSON-LD with external vector URI
 
 ```json
 "embedding": {
   "model": "text-embedding-3-small",
   "sourceText": "...",
-  "vector": {
-    "@type": "Vector",
-    "encoding": "base64-float32",
-    "data": "SGVsbG8gV29ybGQh..."
-  }
+  "vectorUri": "urn:mif:vector:550e8400-e29b-41d4-a716-446655440000"
 }
 ```

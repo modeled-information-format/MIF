@@ -9,14 +9,19 @@ description: "File extensions, encoding requirements, and YAML frontmatter struc
 
 | Extension | Format | MIME Type |
 | --- | --- | --- |
-| `.md` | Markdown | `text/markdown; variant=mif` |
-| `.jsonld` | JSON-LD | `application/ld+json; profile="https://mif-spec.dev"` |
+| `.md` | Markdown (canonical) | `text/markdown; variant=mif` |
+| `.jsonld` | JSON-LD (derived projection) | `application/ld+json; profile="https://mif-spec.dev"` |
+
+Concept files use the `.md` extension only. The derived JSON-LD projection
+uses `.jsonld` (never `.md`), so OKF's `*.md` glob never ingests it.
 
 ### File Naming
 
 A concept's OKF identity is its bundle-relative path minus the `.md`
 extension, so concept files SHOULD use human-readable, path-meaningful slugs.
-The stable UUID lives in the frontmatter `id` ([Memory Unit](/specification/data-model/#memory-unit)), not in the filename:
+The stable UUID lives in the frontmatter `id` ([Memory Unit](/specification/data-model/#memory-unit)), not in the filename, so
+identity survives the concept being moved or renamed; the `id` is MIF-only and
+invisible to OKF:
 
 ```text
 semantic/dark-mode-preference.md
