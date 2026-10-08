@@ -42,11 +42,12 @@ relationships:
 properties:
   key: string|number|boolean|null   # scalar literals only
 documents:
-  - "@type": DocumentReference
-    documentType: string
-    url: uri
-    hash: { algorithm: sha256, value: hex-digest }
-    # also optional: id, contentType, byteLength, version, retrievedAt, title
+  - "@type": DocumentReference   # required
+    url: uri                     # url or id: at least one is required
+    id: string                   # stable identifier when no resolvable url
+    documentType: string         # optional
+    hash: { algorithm: sha256, value: hex-digest }   # optional
+    # also optional: contentType, byteLength, version, retrievedAt, title
 
 temporal:
   validFrom: ISO-8601-datetime

@@ -13,6 +13,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `docs/MIGRATION-GUIDE.md` say *Knowledge Types* / base knowledge types, not
   *Memory Types*, matching the 1.4.0 spec terminology (§4.2).
 
+### Fixed
+
+- **[Spec]**: §3.3 no longer shows a `README.md` at the bundle root; it is not
+  an OKF reserved filename, so a bundle laid out that way failed
+  `okf_validate.py` and `roundtrip`. Bundle documentation goes in `index.md`.
+- **[Spec]**: §2.1 requires Markdown support and makes JSON-LD optional,
+  matching §13.1 Level 1 (it still said either format was enough).
+- **[Spec]**: Appendix A's `documents` entry matches
+  `$defs/DocumentReference`: `@type` plus `url` or `id`, everything else
+  optional.
+- **[Spec]**: The §6.2 and §8.4 JSON-LD relationship examples, and
+  `docs/SCHEMA-REFERENCE.md`, use bundle-relative path targets, as the §5.3
+  SHOULD recommends for same-bundle concepts.
+
 ## [1.4.0] - 2026-10-08
 
 ### Added

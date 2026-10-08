@@ -114,7 +114,7 @@ MIF defines two representations, related as canonical and derived ([Invariant 2]
 1. **Markdown Format** (`.md`): Human-readable, plain CommonMark — **canonical**, the source of truth.
 2. **JSON-LD Format** (`.jsonld`): Machine-processable, semantically linked — **derived**, regenerated from the Markdown source ([JSON-LD Projection (derived)](/specification/json-ld-format/)).
 
-Both representations MUST be losslessly convertible to each other, and if the two ever disagree, the Markdown form wins. A conforming implementation MAY support either or both formats.
+Both representations MUST be losslessly convertible to each other, and if the two ever disagree, the Markdown form wins. A conforming implementation MUST support the Markdown form ([Level 1: Core (REQUIRED for conformance)](/specification/conformance/#level-1-core-required-for-conformance)) and MAY also support the JSON-LD projection.
 
 ### Markdown Conventions
 
