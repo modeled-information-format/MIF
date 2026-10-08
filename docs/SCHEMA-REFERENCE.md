@@ -39,9 +39,9 @@ All schemas use JSON Schema Draft 2020-12.
 > `memoryType` is a **deprecated** v0.1 alias for `conceptType`, retained for
 > backward compatibility. New documents MUST use `conceptType`.
 
-### Memory Types
+### Knowledge Types
 
-MIF uses three base memory types:
+MIF uses three base knowledge types:
 
 ```json
 "conceptType": {
@@ -430,7 +430,7 @@ discovery:
 | Field | Description |
 |-------|-------------|
 | `description` | Namespace description |
-| `type_hint` | Default memory type: `semantic`, `episodic`, `procedural` |
+| `type_hint` | Default base knowledge type: `semantic`, `episodic`, `procedural` |
 | `replaces` | Base namespace this replaces |
 | `children` | Child namespaces (recursive) |
 
