@@ -7,25 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed
+## [1.4.0] - 2026-10-08
 
-- **[Spec]**: §4.1 and §5.6 name the compression timestamp `compressedAt`,
-  matching `schema/mif.schema.json` (was `compressed_at`).
-- **[Spec]**: Concept relationship targets in §6.2 and §8.4 use
-  `urn:mif:<uuid>` (was `urn:mif:memory:<slug>`, a form no concept `@id`
-  can take); `docs/SCHEMA-REFERENCE.md` and ADR-002's JSON-LD snapshot
-  updated to match.
-- **[Spec]**: The §15.3 conversion example uses a full UUID (was the
-  truncated `urn:mif:550e8400`).
-- **[Spec]**: §8.3's custom-type example declares `BreedsWith`, matching
-  its JSON-LD `farm:breeds-with`; the old comment named the schema-invalid
-  token `farm:Contradicts`.
-- **[Spec]**: Appendix B and `docs/SCHEMA-REFERENCE.md` list the core type
-  `created` (the term `schema/context.jsonld` registers), not its inverse
-  `created-by`.
-- **[Schema]**: `$defs.Relationship.description` cites spec §5.3/§8 (was
-  §4.4, *Categorizing Memories*). Description-only; no `$id` or validation
-  change.
+### Added
+
+- **[Site]**: The mif-spec.dev specification pages are generated from
+  `SPECIFICATION.md` by `scripts/build_spec_pages.py`, so the spec is their
+  single source; `--check` fails the `okf-conformance` CI job when committed
+  pages drift. §16 Examples gets its own `specification/examples` page. (#305)
+- **[Schema]**: `context.jsonld` registers `timestamp`, `description`
+  (`dc:description`), `summary`, and `compressedAt`; without terms, a JSON-LD
+  processor dropped them on expand. The three new `mif:` properties are
+  published in `vocabulary.jsonld`. (#305)
+- **[Spec]**: §7.3.1 Entity Subtyping (`subtype_of`), previously documented
+  only on the site. (#307)
+- **[Spec]**: Appendix A lists `entities`, `relationships`, `properties`,
+  `documents`, `citations`, `summary`, and `compressedAt`. (#307)
 
 ### Changed
 
@@ -47,6 +44,50 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   configuration, camelCase in concept frontmatter.
 - **[Spec]**: §5.3 and §8.4 RECOMMEND bundle-relative path targets for
   same-bundle concepts, reserving `urn:mif:` targets for out-of-bundle ones.
+- **[Spec]**: §13.1 Level 1 conformance requires a valid OKF bundle shape (a
+  directory of `.md` concept files), replacing "valid Markdown or JSON-LD
+  structure". A JSON-LD-only artifact is no longer Level 1 conformant;
+  JSON-LD is derived output (Invariant 2, ADR-011/012). (#307)
+- **[Spec]**: §10.8.5 ontology resolution uses vendor-neutral paths
+  (`.mif/ontologies/`) instead of `${MNEMONIC_ROOT}`/`.claude/mnemonic`. (#307)
+- **[Spec]**: §4.2 type descriptions match the schema's `conceptType`
+  description, and point to the AI Memory profile for the triad's
+  cognitive-memory origin. (#307)
+- **[Deps]**: `package-lock.json` security updates (astro 7.3.7 and others)
+  clear the osv-scanner findings; `osv-scanner.toml` documents two remaining
+  exceptions (katex, braces) with no fix in range. (#305)
+
+### Fixed
+
+- **[Spec]**: §4.1 and §5.6 name the compression timestamp `compressedAt`,
+  matching `schema/mif.schema.json` (was `compressed_at`).
+- **[Spec]**: Concept relationship targets in §6.2 and §8.4 use
+  `urn:mif:<uuid>` (was `urn:mif:memory:<slug>`, a form no concept `@id`
+  can take); `docs/SCHEMA-REFERENCE.md` and ADR-002's JSON-LD snapshot
+  updated to match.
+- **[Spec]**: The §15.3 conversion example uses a full UUID (was the
+  truncated `urn:mif:550e8400`).
+- **[Spec]**: §8.3's custom-type example declares `BreedsWith`, matching
+  its JSON-LD `farm:breeds-with`; the old comment named the schema-invalid
+  token `farm:Contradicts`.
+- **[Spec]**: Appendix B and `docs/SCHEMA-REFERENCE.md` list the core type
+  `created` (the term `schema/context.jsonld` registers), not its inverse
+  `created-by`.
+- **[Schema]**: `$defs.Relationship.description` cites spec §5.3/§8 (was
+  §4.4, *Categorizing Memories*). Description-only; no `$id` or validation
+  change.
+- **[Spec]**: The §6.2 JSON-LD example validates against
+  `schema/mif.schema.json` (`created`/`modified`/`timestamp`, not
+  `dc:created`/`dc:modified`). (#307)
+- **[Spec]**: §5.1 and §5.3 examples carry the frontmatter `relationships`
+  their body links mirror, and §5.3 states the MUST that every frontmatter
+  relationship has a body link. (#307)
+- **[Spec]**: §11 embedding examples drop `quantization` and the inline
+  `vector` block, neither of which `EmbeddingReference` allows. (#307)
+- **[Spec]**: §15.4's converted citation keeps the author's `entityType` and
+  `name` (citations pass through verbatim); §16.2 uses a UUID `id`. (#307)
+- **[Schema]**: A document carrying only the deprecated `memoryType` now
+  satisfies the required type check. (#275)
 
 ## [1.3.0] - 2026-07-11
 
@@ -380,7 +421,8 @@ See [MIGRATION.md](MIGRATION.md) and run
 - MIF specification draft v0.1
 - Market research framework
 
-[Unreleased]: https://github.com/modeled-information-format/MIF/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/modeled-information-format/MIF/compare/v1.4.0...HEAD
+[1.4.0]: https://github.com/modeled-information-format/MIF/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/modeled-information-format/MIF/compare/v1.2.2...v1.3.0
 [1.2.2]: https://github.com/modeled-information-format/MIF/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/modeled-information-format/MIF/compare/v1.2.0...v1.2.1
