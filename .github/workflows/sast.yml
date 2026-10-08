@@ -37,3 +37,6 @@ jobs:
     uses: modeled-information-format/.github/.github/workflows/reusable-semgrep.yml@ff8adc6b1267c272beef916af851d9506160354f
     with:
       directory: .
+      # 1.139.0 (this pin's default) crashes on pydantic 2.14 via mcp==1.12.2;
+      # drop this override once the pin includes .github#90's new default.
+      semgrep-version: '1.180.0'
