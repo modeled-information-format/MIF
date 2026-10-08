@@ -19,7 +19,7 @@ uses `.jsonld` (never `.md`), so OKF's `*.md` glob never ingests it.
 
 A concept's OKF identity is its bundle-relative path minus the `.md`
 extension, so concept files SHOULD use human-readable, path-meaningful slugs.
-The stable UUID lives in the frontmatter `id` ([Memory Unit](/specification/data-model/#memory-unit)), not in the filename, so
+The stable UUID lives in the frontmatter `id` ([Concept](/specification/data-model/#concept)), not in the filename, so
 identity survives the concept being moved or renamed; the `id` is MIF-only and
 invisible to OKF:
 

@@ -5,16 +5,16 @@ description: "Required and optional fields, schema definitions, and core data st
 
 {/* GENERATED from SPECIFICATION.md by scripts/build_spec_pages.py. Do not edit; edit SPECIFICATION.md and re-run the script. */}
 
-### Memory Unit
+### Concept
 
-A Memory Unit is the atomic element of MIF. It contains:
+A concept is the atomic element of MIF. It contains:
 
 | Property | Required | Type | Description |
 | --- | --- | --- | --- |
 | `id` | REQUIRED | UUID | Globally unique identifier (stable across relocation) |
-| `content` | REQUIRED | String | The memory content (Markdown); see note below |
-| `type` | REQUIRED | Enum | Memory classification (see [Memory Types](#memory-types)) |
-| `created` | REQUIRED | DateTime | When the memory was created |
+| `content` | REQUIRED | String | The concept content (Markdown); see note below |
+| `type` | REQUIRED | Enum | Base knowledge classification (see [Knowledge Types](#knowledge-types)) |
+| `created` | REQUIRED | DateTime | When the concept was created |
 | `modified` | RECOMMENDED | DateTime | When last modified |
 | `ontology` | RECOMMENDED | Object | Reference to applied ontology (see [Ontology Reference](#ontology-reference)) |
 | `namespace` | RECOMMENDED | String | Hierarchical scope |
@@ -38,9 +38,9 @@ The frontmatter `type` field holds the base knowledge classification; in the
 JSON-LD projection produced by `scripts/mif_convert.py`, this value is
 surfaced as `conceptType`.
 
-### Memory Types
+### Knowledge Types
 
-MIF uses three **base memory types**, a general taxonomy of how knowledge is structured:
+MIF uses three **base knowledge types**, a general taxonomy of how knowledge is structured:
 
 | Type | Description | Namespace Hint |
 | --- | --- | --- |
@@ -52,9 +52,9 @@ MIF uses three **base memory types**, a general taxonomy of how knowledge is str
 
 - **Semantic**: Declarative knowledge about the world—facts, concepts, decisions, preferences, and relationships between entities. Examples: architectural decisions, technology choices, schemas, domain knowledge.
 
-- **Episodic**: Time-bound records of events—incidents, deprecations, changelog entries. These memories have strong temporal context and represent "what happened."
+- **Episodic**: Time-bound records of events—incidents, deprecations, changelog entries. These concepts have strong temporal context and represent "what happened."
 
-- **Procedural**: How-to knowledge—runbooks, migration guides, code patterns, and step-by-step processes. These memories describe "how to do" something.
+- **Procedural**: How-to knowledge—runbooks, migration guides, code patterns, and step-by-step processes. These concepts describe "how to do" something.
 
 The cognitive-memory origin of this triad, and its reinterpretation for agent
 memory, live in the AI Memory profile ([`profiles/ai-memory/`](https://github.com/modeled-information-format/MIF/blob/main/profiles/ai-memory/)).
@@ -92,7 +92,7 @@ This allows ontologies to define rich taxonomies while maintaining interoperabil
 
 ### Ontology Reference
 
-A Memory Unit MAY declare which ontology it conforms to using the `ontology` field:
+A concept MAY declare which ontology it conforms to using the `ontology` field:
 
 | Property | Required | Type | Description |
 | --- | --- | --- | --- |
@@ -115,19 +115,19 @@ The `ontology.id` MUST match the `ontology.id` field in the referenced ontology 
 - Discovery pattern matching for entity type suggestions
 - Schema validation for entity-specific fields
 
-### Categorizing Memories (Fact, Event, and Beyond)
+### Categorizing Concepts (Fact, Event, and Beyond)
 
 Common categories such as **Fact** and **Event** are already expressible with the
 fields defined above; MIF therefore does **not** define a separate flat
 `category` field. Domain categories are composed from two orthogonal axes that a
-memory unit can declare directly:
+concept can declare directly:
 
-1. **`type`** (REQUIRED, see [Memory Types](#memory-types)) — the cognitive memory type: `semantic`,
+1. **`type`** (REQUIRED, see [Knowledge Types](#knowledge-types)) — the base knowledge type: `semantic`,
    `episodic`, or `procedural`.
 2. **`namespace`** (RECOMMENDED, see [Namespace Model](/specification/namespace-model/)) — hierarchical scope that carries the
    finer-grained label (e.g. `_semantic/knowledge`, `_episodic/sessions`).
 
-A memory unit has no field to name an ontology-extended type directly. Instead,
+A concept has no field to name an ontology-extended type directly. Instead,
 **ontologies define extended types and their namespace mappings** (OPTIONAL, see
 [Ontology-Extended Types](#ontology-extended-types) and [Ontology Definition](/specification/namespace-model/#ontology-definition)): an ontology declares each extended type as an `entity_types`
 entry with a `base` type, and implementations express that extended type by
@@ -143,7 +143,7 @@ namespace axis, not a separate third axis the unit declares.
 > referenced, follow the namespace hierarchy it declares; the examples below
 > omit ontology binding for clarity.
 
-A **Fact** is a `semantic` memory — declarative knowledge that holds independently
+A **Fact** is a `semantic` concept — declarative knowledge that holds independently
 of any single moment:
 
 ```yaml
@@ -153,7 +153,7 @@ namespace: _semantic/knowledge
 ---
 ```
 
-An **Event** is an `episodic` memory — something that happened. Events MAY
+An **Event** is an `episodic` concept — something that happened. Events MAY
 carry `temporal` validity to bound when they hold (see [Temporal Model](/specification/temporal-model/)):
 
 ```yaml
@@ -177,5 +177,5 @@ would duplicate the `type` taxonomy, fork it across implementations, and break
 the interoperability the base types provide.
 
 > **Note.** The entity types in [Entity Types](/specification/entity-types/) (Person, Organization, …) classify the
-> entities a memory *references* via its `entities` array; they are a distinct
-> axis and do not categorize the memory itself.
+> entities a concept *references* via its `entities` array; they are a distinct
+> axis and do not categorize the concept itself.

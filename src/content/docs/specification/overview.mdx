@@ -21,7 +21,7 @@ semantics.
 > deliberately empty envelope.** OKF is the transport surface; MIF supplies the
 > concrete type system. AI memory is the first domain profile of MIF, not its
 > identity (see [`profiles/ai-memory/`](https://github.com/modeled-information-format/MIF/blob/main/profiles/ai-memory/)). Moving many
-> memory units as one wire artifact is a separate, transport-layer concern
+> concepts as one wire artifact is a separate, transport-layer concern
 > (see the [Container Profile](https://github.com/modeled-information-format/MIF/blob/main/docs/CONTAINER-PROFILE.md)), not a domain
 > profile.
 
@@ -97,11 +97,10 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 ### Definitions
 
-- **Memory**: A discrete unit of information captured from or about an AI interaction, including its content, metadata, relationships, and provenance.
-- **Memory Unit**: The atomic element of MIF; a single memory with its associated data.
+- **Concept**: A discrete unit of knowledge — a single `.md` file in a bundle, including its content, metadata, relationships, and provenance. The atomic element of MIF. Earlier drafts and the AI Memory profile call it a *memory* or *Memory Unit*; the terms are synonyms.
 - **Entity**: A named thing (person, organization, technology, concept, or file) that can participate in relationships.
-- **Relationship**: A typed, directed connection between two entities or between a memory and an entity.
-- **Namespace**: A hierarchical scope for organizing memories (e.g., `org/user/project/session`).
+- **Relationship**: A typed, directed connection between two concepts, or between a concept and an entity.
+- **Namespace**: A hierarchical scope for organizing concepts (e.g., `org/user/project/session`).
 - **Bundle**: A directory tree of `.md` concept files; a valid OKF bundle.
 - **Provider**: An implementation that can import or export MIF format.
 
@@ -125,7 +124,7 @@ The Markdown format is plain, vendor-neutral CommonMark — readable in any text
 
 - **Relationships**: Typed relationships are authoritative in frontmatter `relationships[]` and mirrored in the body as standard markdown links (see [Relationship Syntax](/specification/markdown-format/#relationship-syntax)).
 
-- **Aliases**: The `aliases` frontmatter property lets a memory be referred to by alternative names.
+- **Aliases**: The `aliases` frontmatter property lets a concept be referred to by alternative names.
 
 - **Tags**: Both inline `#tags` and frontmatter `tags: [a, b]` are supported, with hierarchical tags using forward slashes (`#category/subcategory`).
 

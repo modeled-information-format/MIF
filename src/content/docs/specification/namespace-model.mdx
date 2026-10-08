@@ -18,14 +18,14 @@ Where `{root}` is either:
 - **Organization name** - private to that organization
 - **Reserved prefix** - special namespace with defined semantics. Two kinds of
   reserved prefixes exist (both begin with `_`): **visibility prefixes** that
-  control sharing scope, and **base-type prefixes** that name the cognitive
-  memory type. Both are defined in [Reserved Namespace Prefixes](#reserved-namespace-prefixes).
+  control sharing scope, and **base-type prefixes** that name the base
+  knowledge type. Both are defined in [Reserved Namespace Prefixes](#reserved-namespace-prefixes).
 
 ### Reserved Namespace Prefixes
 
 Names beginning with underscore (`_`) are reserved for special namespaces. Two
 kinds exist: **visibility prefixes** that control sharing scope, and
-**base-type prefixes** that name the cognitive memory type.
+**base-type prefixes** that name the base knowledge type.
 
 #### Visibility Prefixes
 
@@ -41,8 +41,8 @@ kinds exist: **visibility prefixes** that control sharing scope, and
 Namespace paths use an underscore prefix (`_semantic`, `_episodic`,
 `_procedural`) to distinguish base-type namespaces from domain-specific
 namespaces. This convention ensures consistent namespace identification across
-implementations. Each base-type prefix corresponds to a base memory `type`
-(see [Memory Types](/specification/data-model/#memory-types)) and is the top-level root of the base ontology's namespace hierarchy
+implementations. Each base-type prefix corresponds to a base knowledge `type`
+(see [Knowledge Types](/specification/data-model/#knowledge-types)) and is the top-level root of the base ontology's namespace hierarchy
 (see [Base Type Hierarchy](#base-type-hierarchy)).
 
 | Prefix | Base type | Description |
@@ -135,13 +135,13 @@ Implementations MAY define additional reserved prefixes following the underscore
 # .mif/config.yaml
 reserved_prefixes:
   _archive:
-    description: Archived memories (read-only)
+    description: Archived concepts (read-only)
     access: read-only
   _experimental:
-    description: Experimental/unstable memories
+    description: Experimental/unstable concepts
     ttl: P30D
   _imported:
-    description: Memories imported from external systems
+    description: Concepts imported from external systems
     provenance_required: true
 ```
 
@@ -150,14 +150,14 @@ reserved_prefixes:
 Full URI form for cross-system references:
 
 ```text
-mif://{domain}/{namespace}/{memory-id}
+mif://{domain}/{namespace}/{concept-id}
 ```
 
 Examples:
 
 - `mif://github.com/modeled-information-format/acme-corp/project-x/550e8400...`
 - `mif://registry/_public/python/async-patterns/abc123...`
-- `mif://local/_local/scratch/memory-123`
+- `mif://local/_local/scratch/concept-123`
 
 ### Namespace Inheritance
 

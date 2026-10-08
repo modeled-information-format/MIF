@@ -20,15 +20,15 @@ relationship_types:
     symmetric: true
     icon: 🔗
   - name: DerivedFrom
-    description: Memory created based on source
+    description: Concept created based on source
     inverse: Derives
     icon: ⬅️
   - name: Supersedes
-    description: Replaces an older memory
+    description: Replaces an older concept
     inverse: SupersededBy
     icon: ⏫
   - name: ConflictsWith
-    description: Contradicts another memory
+    description: Contradicts another concept
     symmetric: true
     icon: ⚠️
   - name: PartOf
@@ -48,19 +48,19 @@ relationship_types:
     inverse: CreatedBy
     icon: ✍️
   - name: MentionedIn
-    description: Referenced within a memory
+    description: Referenced within a concept
     inverse: Mentions
     icon: 📎
 
   # Custom types (domain-specific)
   - name: Reinforces
     namespace: subcog
-    description: Strengthens confidence in another memory
+    description: Strengthens confidence in another concept
     inverse: ReinforcedBy
     icon: 💪
   - name: Contradicts
     namespace: subcog
-    description: Provides evidence against another memory
+    description: Provides evidence against another concept
     inverse: ContradictedBy
     icon: ❌
   - name: BreedsWith
@@ -105,13 +105,13 @@ For maximum interoperability, implementations SHOULD recognize these nine core t
 | --- | --- | --- | --- |
 | `RelatesTo` | General relationship | `RelatesTo` | Yes |
 | `DerivedFrom` | Created based on source | `Derives` | No |
-| `Supersedes` | Replaces older memory | `SupersededBy` | No |
-| `ConflictsWith` | Contradicts another memory | `ConflictsWith` | Yes |
+| `Supersedes` | Replaces older concept | `SupersededBy` | No |
+| `ConflictsWith` | Contradicts another concept | `ConflictsWith` | Yes |
 | `PartOf` | Component of larger whole | `Contains` | No |
 | `Implements` | Realizes a concept/pattern | `ImplementedBy` | No |
 | `Uses` | Utilizes a technology/tool | `UsedBy` | No |
 | `Created` | Authored by entity | `CreatedBy` | No |
-| `MentionedIn` | Referenced in memory | `Mentions` | No |
+| `MentionedIn` | Referenced in concept | `Mentions` | No |
 
 ### Custom Relationship Types
 
@@ -162,11 +162,11 @@ Relationships are mirrored in the body as standard markdown links under a `## Re
 ```markdown
 ## Relationships
 
-- relates-to [Other Memory](/semantic/other-memory.md)
-- derived-from [Source Memory](/episodic/source-memory.md)
-- supersedes [Old Memory](/semantic/old-memory.md)
-- conflicts-with [Contradicting Memory](/semantic/contradicting-memory.md)
-- part-of [Parent Memory](/semantic/parent-memory.md)
+- relates-to [Other Concept](/semantic/other-concept.md)
+- derived-from [Source Concept](/episodic/source-concept.md)
+- supersedes [Old Concept](/semantic/old-concept.md)
+- conflicts-with [Contradicting Concept](/semantic/contradicting-concept.md)
+- part-of [Parent Concept](/semantic/parent-concept.md)
 ```
 
 Each line is `- <type> [Text](<target>)`. The type is a kebab-case token derived from the configured type name ([Type Tokens](#type-tokens)); the target is a bundle-relative path to the target concept or a `urn:mif:` identifier. The frontmatter `relationships[]` array is authoritative; the body links are its OKF-legible mirror.
@@ -178,15 +178,15 @@ The matching frontmatter (one entry per body link):
 ```yaml
 relationships:
   - type: relates-to
-    target: /semantic/other-memory.md
+    target: /semantic/other-concept.md
   - type: derived-from
-    target: /episodic/source-memory.md
+    target: /episodic/source-concept.md
   - type: supersedes
-    target: /semantic/old-memory.md
+    target: /semantic/old-concept.md
   - type: conflicts-with
-    target: /semantic/contradicting-memory.md
+    target: /semantic/contradicting-concept.md
   - type: part-of
-    target: /semantic/parent-memory.md
+    target: /semantic/parent-concept.md
 ```
 
 #### JSON-LD schema
