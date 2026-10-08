@@ -5,16 +5,9 @@
 # fix path, and no production exposure. Revisit on each release.
 #
 # (The esbuild GHSA-g7r4-m6w7-qqqr exception was removed once Vite pulled
-# esbuild 0.28.2, past the 0.28.1 fix.)
-
-[[IgnoredVulns]]
-id = "GHSA-238p-pmpm-9mq7"
-# katex 0.16.47, CVSS 2.1 (low). Pulled in only by mermaid (via astro-mermaid),
-# which pins katex ^0.16; the fix is 0.18.2, outside that range. Exploiting it
-# requires prototype pollution that already exists in the page, and the site
-# currently has no mermaid diagrams and no KaTeX math at all.
-# Remove this entry once mermaid accepts katex >= 0.18.2.
-reason = "Low-severity katex advisory requiring pre-existing prototype pollution; only reachable through mermaid, which pins katex ^0.16 (fix is 0.18.2). No untrusted input reaches it. Revisit when mermaid bumps katex."
+# esbuild 0.28.2, past the 0.28.1 fix. The katex GHSA-238p-pmpm-9mq7 exception
+# was removed once package.json `overrides` forced katex ^0.18.2 past mermaid's
+# ^0.16 range.)
 
 [[IgnoredVulns]]
 id = "GHSA-vfj7-8cjw-p6xm"
