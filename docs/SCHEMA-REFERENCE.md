@@ -31,7 +31,7 @@ All schemas use JSON Schema Draft 2020-12.
 |-------|------|-------------|
 | `@context` | string/array/object | JSON-LD context |
 | `@type` | `"Concept"` (or array containing `"Concept"`; the deprecated alias `"Memory"` is also accepted) | Document type |
-| `@id` | string (pattern: `^urn:mif:`) | Unique identifier |
+| `@id` | string (pattern: `^urn:mif:<uuid>$`) | Concept URN; `<uuid>` is the frontmatter `id` (SPECIFICATION.md §6.1) |
 | `conceptType` | enum | Knowledge taxonomy classification |
 | `content` | string (minLength: 1) | Memory content |
 | `created` | string (date-time) | Creation timestamp |

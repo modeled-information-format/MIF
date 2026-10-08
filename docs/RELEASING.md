@@ -136,6 +136,31 @@ gh pr checks <PR-number>
 
 All four must be green before proceeding. Do not tag a failing tree.
 
+### 1f. Coordinate the downstream tools
+
+MIF releases are coordinated: each tool below pins one MIF release and checks
+its vendored schemas against that release's immutable mirror,
+`https://mif-spec.dev/schema/X.Y.Z/`. That mirror only exists once this
+release-prep PR is merged and `deploy.yml` has published it, so the order is:
+
+1. Merge the release-prep PR (snapshot, `VERSION.json`, CHANGELOG, spec header)
+   and confirm `deploy.yml` publishes `/schema/X.Y.Z/` (see section 7's `curl`
+   checks).
+2. In each downstream repo, open (or rebase) a PR that moves its pin to
+   `X.Y.Z`, re-vendoring files if the schemas changed, and adapts to any rule
+   change in this release's CHANGELOG:
+
+   | Repo | Pin | Drift check |
+   |---|---|---|
+   | `mif-rs` | `crates/mif-schema/src/schemas/VENDOR.json` + `mif_schema::MIF_SPEC_VERSION` | `schema-drift` job in `ci-checks.yml` (`just schema-drift`) |
+   | `mif-docs-plugin` | `MIF_SPEC_VERSION` in `scripts/hydrate-schema.mjs` (`schema/VENDOR.lock` records it) | CI hydrates from the pinned mirror |
+   | `structured-madr` | `.github/VENDOR.lock` `mifSpecVersion` + `.github/config.yml` `mifVersion` | `vendor-check` job |
+
+   Each drift check fails until step 1's mirror is live, which keeps a tool
+   from shipping against a MIF release that is not published yet.
+3. Merge the downstream PRs once green, then tag this release (section 3b) and
+   any downstream releases.
+
 ---
 
 ## 2. Dry-run
