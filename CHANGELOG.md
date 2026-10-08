@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.1] - 2026-10-08
+
+Coordinated release with the downstream MIF tools (mif-rs, mif-docs-plugin,
+structured-madr), which pin 1.4.1. No schema changes: the 1.4.1 schema mirror
+is byte-identical to 1.4.0's. 1.4.0 was tagged ahead of this coordination.
+
+### Added
+
+- **[Docs]**: `docs/RELEASING.md` §1f orders a coordinated release: dry-run,
+  publish the schema mirror, move each downstream tool's pin, then tag.
+
 ### Changed
 
 - **[Docs]**: `docs/GETTING-STARTED.md`, `docs/SCHEMA-REFERENCE.md` and
@@ -15,17 +26,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **[Docs]**: `docs/SCHEMA-REFERENCE.md` gives the concept `@id` pattern as the
+  schema's UUID regex (was `^urn:mif:`).
+- **[Docs]**: `docs/RELEASING.md` describes the current flow (a release-prep PR
+  to `main`, not a `develop/v*` branch); §1a bumps a `VERSION.json` schema entry
+  only when that schema changes; `public/schema/VERSIONING.md` lists versions via
+  `index.json` and snapshots before tagging.
+- **[Docs]**: the README spec-version badge reads 1.4.1 (was 1.0.0).
 - **[Spec]**: §3.3 no longer shows a `README.md` at the bundle root; it is not
   an OKF reserved filename, so a bundle laid out that way failed
-  `okf_validate.py` and `roundtrip`. Bundle documentation goes in `index.md`.
+  `okf_validate.py` and `roundtrip`. Bundle documentation goes in `index.md`. (#311)
 - **[Spec]**: §2.1 requires Markdown support and makes JSON-LD optional,
-  matching §13.1 Level 1 (it still said either format was enough).
+  matching §13.1 Level 1 (it still said either format was enough). (#311)
 - **[Spec]**: Appendix A's `documents` entry matches
   `$defs/DocumentReference`: `@type` plus `url` or `id`, everything else
-  optional.
+  optional. (#311)
 - **[Spec]**: The §6.2 and §8.4 JSON-LD relationship examples, and
   `docs/SCHEMA-REFERENCE.md`, use bundle-relative path targets, as the §5.3
-  SHOULD recommends for same-bundle concepts.
+  SHOULD recommends for same-bundle concepts. (#311)
 
 ## [1.4.0] - 2026-10-08
 
@@ -461,7 +479,8 @@ See [MIGRATION.md](MIGRATION.md) and run
 - MIF specification draft v0.1
 - Market research framework
 
-[Unreleased]: https://github.com/modeled-information-format/MIF/compare/v1.4.0...HEAD
+[Unreleased]: https://github.com/modeled-information-format/MIF/compare/v1.4.1...HEAD
+[1.4.1]: https://github.com/modeled-information-format/MIF/compare/v1.4.0...v1.4.1
 [1.4.0]: https://github.com/modeled-information-format/MIF/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/modeled-information-format/MIF/compare/v1.2.2...v1.3.0
 [1.2.2]: https://github.com/modeled-information-format/MIF/compare/v1.2.1...v1.2.2

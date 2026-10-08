@@ -39,25 +39,23 @@ re-verified in-run. If verification fails the job fails and nothing is uploaded.
 
 ---
 
-## 1. Pre-release checklist (on the develop/v\* branch)
+## 1. Pre-release checklist (release-prep PR to `main`)
 
-Work on `develop/v1.0.0` (or the appropriate `develop/vX.Y.Z` branch). Do not
-target `main` directly until the cutover step.
+Cut a `chore/release-X.Y.Z` branch from a freshly fetched `main` and do the
+steps below there; they land as one release-prep PR. (The v1.0.0 release used a
+`develop/v1.0.0` branch instead; see 3a.)
 
 ### 1a. Bump VERSION.json
 
-Edit `VERSION.json` at the repo root. Set `specification` and each schema version
-to the new release version string (bare semver, no leading `v`):
+Edit `VERSION.json` at the repo root. Set `specification` to the new release
+version string (bare semver, no leading `v`). The `schemas` entries version each
+schema on its own track: bump one only when that schema's content changes in
+this release.
 
 ```json
 {
   "specification": "X.Y.Z",
-  "schemas": {
-    "mif": "X.Y.Z",
-    "citation": "X.Y.Z",
-    "ontology": "X.Y.Z",
-    "entity-reference": "X.Y.Z"
-  }
+  "schemas": { "mif": "...", "citation": "...", "ontology": "...", "entity-reference": "..." }
 }
 ```
 
@@ -123,10 +121,10 @@ The following workflows must pass on your branch before tagging:
 
 | Workflow | File | Runs on |
 |---|---|---|
-| Validate MIF Bundles and Schemas | `validate.yml` | push + PR to main, develop/\* |
-| Schema Check | `schema-check.yml` | push + PR to main, develop/\*\* |
-| CI (supply-chain, secrets, IaC) | `ci.yml` | push + PR to main, develop/v\* |
-| SAST (CodeQL + Semgrep) | `sast.yml` | push + PR to main, develop/v\* |
+| Validate MIF Bundles and Schemas | `validate.yml` | push + PR to main |
+| Schema Check | `schema-check.yml` | push + PR to main |
+| CI (supply-chain, secrets, IaC) | `ci.yml` | push + PR to main |
+| SAST (CodeQL + Semgrep) | `sast.yml` | push + PR to main |
 
 Check branch status on GitHub or with:
 
@@ -136,6 +134,35 @@ gh pr checks <PR-number>
 
 All four must be green before proceeding. Do not tag a failing tree.
 
+### 1f. Coordinate the downstream tools
+
+MIF releases are coordinated: each tool below pins one MIF release and checks
+its vendored schemas against that release's immutable mirror,
+`https://mif-spec.dev/schema/X.Y.Z/`. That mirror only exists once the
+release-prep PR is merged and `deploy.yml` has published it. Merging also moves
+mif-spec.dev's `latest`/`vN` aliases to X.Y.Z before the tag exists, so do it
+only when the release is going ahead. The order is:
+
+1. Run the dry-run (section 2) on the release-prep branch, then merge the
+   release-prep PR and confirm `deploy.yml` publishes `/schema/X.Y.Z/` (the
+   `curl` checks in section 7 apply as soon as it deploys).
+2. In each downstream repo, open (or rebase) a PR that moves its pin to
+   `X.Y.Z`, re-vendoring files if the schemas changed, and adapts to any rule
+   change in this release's CHANGELOG:
+
+   | Repo | Pin | Drift check |
+   |---|---|---|
+   | `mif-rs` | `crates/mif-schema/src/schemas/VENDOR.json` + `mif_schema::MIF_SPEC_VERSION` | `schema-drift` job in `ci-checks.yml` (`just schema-drift`) |
+   | `mif-docs-plugin` | `MIF_SPEC_VERSION` in `scripts/hydrate-schema.mjs` (`schema/VENDOR.lock` records it) | CI hydrates from the pinned mirror |
+   | `structured-madr` | `.github/VENDOR.lock` `mifSpecVersion` + `.github/config.yml` `mifVersion` | `mif-vendor-check` job (`.github/bin/vendor-check.js`) |
+
+   Each check fetches the files from the pinned mirror, so it fails until step
+   1's mirror is live, which keeps a tool from shipping against a MIF release
+   that is not published yet. (The pins and checks were introduced by the
+   1.4.1 alignment: mif-rs#164, mif-docs-plugin#244, structured-madr#127.)
+3. Merge the downstream PRs once green, then tag this release (section 3b) and
+   any downstream releases.
+
 ---
 
 ## 2. Dry-run
@@ -144,7 +171,7 @@ Trigger `release.yml` via `workflow_dispatch` to verify the full build, attest,
 and in-run verify pipeline without uploading anything.
 
 ```bash
-gh workflow run release.yml --ref develop/vX.Y.Z
+gh workflow run release.yml --ref chore/release-X.Y.Z
 ```
 
 To test against an existing release tag (re-attestation smoke test):
@@ -325,8 +352,8 @@ gh workflow run dast.yml --field target-url=https://mif-spec.dev
 
 ## 7. Post-release checks
 
-After `release.yml` completes and `deploy.yml` finishes deploying the updated
-`main` branch, verify the schema mirrors resolve correctly:
+Run these mirror checks as soon as `deploy.yml` deploys the merged release-prep
+PR (1f step 1), and again after `release.yml` completes:
 
 ```bash
 # Exact version mirror (immutable)

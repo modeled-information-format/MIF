@@ -1,0 +1,76 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "mif": "https://mif-spec.dev/ns/",
+    "prov": "http://www.w3.org/ns/prov#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "MemoryCorpus": "mif:MemoryCorpus",
+    "containerProfileVersion": {
+      "@id": "mif:containerProfileVersion",
+      "@type": "xsd:string"
+    },
+    "records": {
+      "@id": "mif:records",
+      "@container": "@set"
+    },
+    "kind": {
+      "@id": "mif:recordKind",
+      "@type": "@vocab"
+    },
+    "memory": "mif:RecordKindMemory",
+    "document": "mif:RecordKindDocument",
+    "payload": {
+      "@id": "mif:payload",
+      "@context": [
+        "https://mif-spec.dev/schema/context.jsonld",
+        {
+          "hash": {
+            "@id": "mif:hash",
+            "@context": {
+              "algorithm": "mif:algorithm",
+              "value": "mif:value"
+            }
+          }
+        }
+      ]
+    },
+    "provenance": {
+      "@id": "mif:provenance",
+      "@context": {
+        "id": "@id",
+        "wasDerivedFrom": {
+          "@id": "prov:wasDerivedFrom",
+          "@type": "@id"
+        },
+        "wasGeneratedBy": {
+          "@id": "prov:wasGeneratedBy",
+          "@type": "@id"
+        },
+        "wasAttributedTo": {
+          "@id": "prov:wasAttributedTo",
+          "@type": "@id"
+        },
+        "wasAssociatedWith": {
+          "@id": "prov:wasAssociatedWith",
+          "@type": "@id"
+        }
+      }
+    },
+    "editChain": {
+      "@id": "mif:editChain",
+      "@container": "@set",
+      "@context": {
+        "transferId": "mif:transferId",
+        "supersedes": "mif:corpusSupersedes",
+        "createdAt": {
+          "@id": "mif:createdAt",
+          "@type": "xsd:dateTime"
+        }
+      }
+    },
+    "extensions": {
+      "@id": "mif:extensions",
+      "@type": "@json"
+    }
+  }
+}
