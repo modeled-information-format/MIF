@@ -33,6 +33,7 @@ Markdown is canonical; the JSON-LD projection is regenerated from it
   "title": "Dark Mode",
   "content": "# Dark Mode\n\nUser prefers dark mode\n\n## Relationships\n\n- relates-to [UI Preferences](/semantic/ui-prefs.md)",
   "created": "2026-01-15T10:30:00Z",
+  "timestamp": "2026-01-15T10:30:00Z",
   "relationships": [
     {"type": "relates-to", "target": "/semantic/ui-prefs.md"}
   ]
@@ -41,7 +42,7 @@ Markdown is canonical; the JSON-LD projection is regenerated from it
 
 #### Output (Markdown)
 
-The `content` field is written back verbatim as the body; `relationships[]` passes through to frontmatter. The round trip is lossless:
+The `content` field is written back verbatim as the body; `relationships[]` passes through to frontmatter; the derived `timestamp` mirror ([Structure](/specification/json-ld-format/#structure)) is dropped, since Markdown never stores it. The round trip is lossless:
 
 ```markdown
 ---

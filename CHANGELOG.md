@@ -53,6 +53,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **[Spec]**: §4.2 type descriptions match the schema's `conceptType`
   description, and point to the AI Memory profile for the triad's
   cognitive-memory origin. (#307)
+- **[Schema]**: A concept `@id` MUST be `urn:mif:<uuid>`; the
+  `mif.schema.json` pattern now enforces the UUID instead of accepting any
+  `urn:mif:` suffix (§6.1). Projections with slug ids, such as
+  `urn:mif:my-note`, no longer validate. The AI Memory profile's migration
+  mappings now show UUIDv5 ids, matching `scripts/migrate_0_1_to_1_0.py`.
+- **[Schema]**: `context.jsonld` no longer defines `Vector`, `vector`,
+  `encoding`, or `data`. They described an inline vector that no schema
+  property allows (§11 uses `vectorUri`). `vocabulary.jsonld` keeps the
+  IRIs, marked `owl:deprecated`.
+- **[CI]**: `ci.yml` pins `reusable-sca-osv.yml` to the `.github` commit that
+  runs osv-scanner from its `v2.6.0` release tag.
 - **[Deps]**: `package-lock.json` security updates (astro 7.3.7 and others)
   clear the osv-scanner findings; `osv-scanner.toml` documents two remaining
   exceptions (katex, braces) with no fix in range. (#305)
@@ -86,6 +97,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `vector` block, neither of which `EmbeddingReference` allows. (#307)
 - **[Spec]**: §15.4's converted citation keeps the author's `entityType` and
   `name` (citations pass through verbatim); §16.2 uses a UUID `id`. (#307)
+- **[Spec]**: The §15.3 conversion input includes the `timestamp` mirror
+  the converter emits, and the output notes that it is dropped on the way
+  back to Markdown.
 - **[Schema]**: A document carrying only the deprecated `memoryType` now
   satisfies the required type check. (#275)
 
