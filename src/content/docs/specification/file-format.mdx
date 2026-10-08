@@ -60,10 +60,14 @@ bundle/
 │   └── {slug}.md
 ├── episodic/
 │   └── {slug}.md
-├── procedural/
-│   └── {slug}.md
-└── README.md                       # Bundle documentation
+└── procedural/
+    └── {slug}.md
 ```
+
+Every `.md` file in the bundle other than the OKF reserved filenames
+`index.md` and `log.md` is a concept and needs concept frontmatter. Bundle
+documentation therefore belongs in `index.md`; a frontmatter-less `README.md`
+at the bundle root would be read as an invalid concept.
 
 Concepts MAY be nested in subdirectories below their type directory (for
 example `semantic/preferences/dark-mode-preference.md`). Directory placement is
