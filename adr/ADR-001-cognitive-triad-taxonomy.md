@@ -352,3 +352,25 @@ convention (`_semantic/*`, `_episodic/*`, `_procedural/*`). Corrected inline
 in this PR — a one-line, mechanical fix, not an editorial-scope decision.
 
 **Action Required:** None.
+
+### 2026-10-08
+
+**Audited revision:** `6d5415d4c5d1f7f03810036bd7d111a0e5879b81`
+
+**Status:** Compliant
+
+**Findings:**
+
+| Finding | Files | Reference | Assessment |
+|---------|-------|-----------|------------|
+| Three base knowledge types defined with descriptions and namespace hints | `SPECIFICATION.md` | headings `### 4.2 Knowledge Types` and `#### Base Type Descriptions` | compliant |
+| Ontology-extended types specialize a declared `base` (keeps base set fixed at three) | `SPECIFICATION.md` | heading `#### 4.2.1 Ontology-Extended Types` | compliant |
+
+**Summary:** Re-anchors the `SPECIFICATION.md` findings after the spec-wide
+Memory → Concept terminology change renamed `### 4.2 Memory Types` to
+`### 4.2 Knowledge Types` (the 2026-07-11 entry's heading anchor no longer
+exists). The triad itself, its descriptions and namespace hints are
+unchanged in substance; the schema and ontology findings of 2026-07-11 are
+unaffected.
+
+**Action Required:** None.

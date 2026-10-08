@@ -44,6 +44,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   configuration, camelCase in concept frontmatter.
 - **[Spec]**: §5.3 and §8.4 RECOMMEND bundle-relative path targets for
   same-bundle concepts, reserving `urn:mif:` targets for out-of-bundle ones.
+- **[Spec]**: The core spec calls its atomic element a **concept**, matching
+  the schema (`@type: Concept`, `conceptType`), Invariant 6 and ADR-010:
+  §4.1 *Concept* (was *Memory Unit*), §4.2 *Knowledge Types* (was *Memory
+  Types*), §4.4 *Categorizing Concepts*, §7.5 *Entity References in
+  Concepts*. §1 records *memory*/*Memory Unit* as synonyms. No schema or
+  wire-format change; the deprecated `memoryType`/`Memory` terms remain.
 - **[Spec]**: §13.1 Level 1 conformance requires a valid OKF bundle shape (a
   directory of `.md` concept files), replacing "valid Markdown or JSON-LD
   structure". A JSON-LD-only artifact is no longer Level 1 conformant;
