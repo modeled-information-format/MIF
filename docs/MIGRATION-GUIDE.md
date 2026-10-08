@@ -704,7 +704,7 @@ If validation fails for missing fields, ensure:
 - `@id` starts with `urn:mif:`
 - `created` is a valid ISO 8601 datetime
 
-### Invalid Memory Types
+### Invalid Knowledge Types
 
 Map provider-specific types to MIF base types:
 - `fact` -> `semantic`

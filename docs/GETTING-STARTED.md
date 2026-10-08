@@ -75,9 +75,9 @@ namespace: _semantic/livestock
 Herd of 85 Angus-cross beef cattle managed with adaptive multi-paddock grazing.
 ```
 
-## Memory Types
+## Knowledge Types
 
-MIF uses three base memory types reflecting how human cognition organizes information:
+MIF uses three base knowledge types, a general taxonomy of how knowledge is structured:
 
 | Type | Description | Use For |
 |------|-------------|---------|

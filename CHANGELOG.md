@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **[Docs]**: `docs/GETTING-STARTED.md`, `docs/SCHEMA-REFERENCE.md` and
+  `docs/MIGRATION-GUIDE.md` say *Knowledge Types* / base knowledge types, not
+  *Memory Types*, matching the 1.4.0 spec terminology (§4.2).
+
 ## [1.4.0] - 2026-10-08
 
 ### Added
