@@ -5,6 +5,10 @@ description: "Rules for converting between Markdown and JSON-LD formats."
 
 {/* GENERATED from SPECIFICATION.md by scripts/build_spec_pages.py. Do not edit; edit SPECIFICATION.md and re-run the script. */}
 
+Markdown is canonical; the JSON-LD projection is regenerated from it
+([Invariant 2](/specification/overview/#invariants)). The round trip MUST be lossless
+([Invariant 4](/specification/overview/#invariants)).
+
 ### Markdown to JSON-LD
 
 1. Parse the YAML frontmatter, including the authoritative `relationships[]` and `entities[]`, and map each property into the JSON-LD projection: `id` becomes `@id` (`urn:mif:<id>`), `type` becomes `conceptType`, and the remaining fields pass through under the context.

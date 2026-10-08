@@ -1351,7 +1351,9 @@ relationships:
 
 ## 9. Temporal Model
 
-MIF uses a bi-temporal model distinguishing between:
+MIF's temporal model answers OKF's open "live vs. stale" question with
+**validity windows and freshness**. It uses a bi-temporal model distinguishing
+between:
 
 1. **Transaction Time**: When the memory was recorded in the system
 2. **Valid Time**: When the fact represented by the memory is true
@@ -1898,7 +1900,7 @@ provenance:
 
 - `id` (UUID), `type`, `created` frontmatter fields and a non-empty Markdown body
   (projected as the `content` property in JSON-LD; see §4.1)
-- Valid Markdown or JSON-LD structure
+- Valid OKF bundle shape (a directory of `.md` concept files)
 - Markdown-link relationship edges in a `## Relationships` section
 
 ### 13.2 Level 2: Standard (RECOMMENDED)
@@ -1957,9 +1959,19 @@ MUST dereference the context URL rather than inlining a local copy. The context
 is versioned alongside the schema; breaking changes to term mappings require a
 new major version of the specification.
 
+Inside each `relationships[]` entry, `type` is scoped to `mif:relationshipType`,
+and its kebab-case values map to the published `mif:` IRIs (`relates-to` →
+`mif:RelatesTo`, `derived-from` → `mif:DerivedFrom`, …). The deprecated v0.1 terms
+`memoryType` and `Memory` remain defined (as their own `mif:` IRIs) for
+backward compatibility; new documents use `conceptType` and `Concept`.
+
 ---
 
 ## 15. Conversion Rules
+
+Markdown is canonical; the JSON-LD projection is regenerated from it
+([Invariant 2](#invariants)). The round trip MUST be lossless
+([Invariant 4](#invariants)).
 
 ### 15.1 Markdown to JSON-LD
 
