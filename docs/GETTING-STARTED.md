@@ -200,17 +200,16 @@ my-project/
 ├── .mif/
 │   ├── config.yaml           # Bundle configuration
 │   └── entities/             # Entity definitions
-├── memories/
-│   ├── semantic/             # Facts, concepts, knowledge
-│   │   ├── decisions/
-│   │   ├── knowledge/
-│   │   └── entities/
-│   ├── episodic/             # Events, experiences
-│   │   ├── incidents/
-│   │   └── sessions/
-│   └── procedural/           # Processes, how-to
-│       ├── runbooks/
-│       └── patterns/
+├── semantic/                 # Facts, concepts, knowledge
+│   ├── decisions/
+│   ├── knowledge/
+│   └── entities/
+├── episodic/                 # Events, experiences
+│   ├── incidents/
+│   └── sessions/
+├── procedural/               # Processes, how-to
+│   ├── runbooks/
+│   └── patterns/
 └── ontology.yaml             # Custom ontology (optional)
 ```
 

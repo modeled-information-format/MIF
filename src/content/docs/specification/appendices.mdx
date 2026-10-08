@@ -28,6 +28,26 @@ tags: [tag1, tag2]
 # Optional
 aliases: ["Alt Name 1", "Alt Name 2"]
 
+entities:
+  - "@type": EntityReference
+    entity: { "@id": urn:mif:entity:<type>:<slug> }
+    entityType: Person|Organization|Technology|Concept|File   # optional
+    name: string                 # optional
+    role: string                 # optional
+relationships:
+  - type: kebab-case-token       # optional ns: prefix (§8.5)
+    target: bundle-relative-path | urn:mif:<uuid>
+    strength: 0.0-1.0            # optional
+    metadata: {}                 # optional
+properties:
+  key: string|number|boolean|null   # scalar literals only
+documents:
+  - "@type": DocumentReference
+    documentType: string
+    url: uri
+    hash: { algorithm: sha256, value: hex-digest }
+    # also optional: id, contentType, byteLength, version, retrievedAt, title
+
 temporal:
   validFrom: ISO-8601-datetime
   validUntil: ISO-8601-datetime | null
@@ -57,13 +77,29 @@ embedding:
 extensions:
   provider_name:
     custom_field: value
+
+# Optional (Level 3)
+citations:
+  - "@type": Citation
+    citationType: string
+    citationRole: string
+    title: string
+    url: uri
+    # optional: author, date, accessed, relevance, note (Appendix D)
+summary: string                  # max 500 characters
+compressedAt: ISO-8601-datetime
 ---
 ```
 
 ## Appendix B: Relationship Types Quick Reference
 
 
-| Markdown Syntax | JSON-LD `type` | Description |
+Relationships appear in a `## Relationships` body section as
+`- <type> [Text](<target>)`, mirroring the authoritative frontmatter
+`relationships[]`, where `<target>` is a bundle-relative path or a `urn:mif:`
+identifier ([Relationship Syntax](/specification/markdown-format/#relationship-syntax)).
+
+| Body Markdown Syntax | JSON-LD `type` | Description |
 | --- | --- | --- |
 | `- relates-to [X](<target>)` | `relates-to` | General relationship |
 | `- derived-from [X](<target>)` | `derived-from` | Created from source |
@@ -72,7 +108,7 @@ extensions:
 | `- part-of [X](<target>)` | `part-of` | Component of |
 | `- implements [X](<target>)` | `implements` | Realizes |
 | `- uses [X](<target>)` | `uses` | Utilizes |
-| `- created-by [X](<target>)` | `created-by` | Authored by |
+| `- created [X](<target>)` | `created` | Authored by |
 | `- mentioned-in [X](<target>)` | `mentioned-in` | Referenced in |
 
 ## Appendix C: Entity Reference Syntax
@@ -86,7 +122,7 @@ Entity references are declared in the frontmatter `entities[]` array as `EntityR
 | `entity.@id` | REQUIRED | Entity URN (`urn:mif:entity:<type>:<slug>`) |
 | `entityType` | OPTIONAL | `Person`, `Organization`, `Technology`, `Concept`, `File`, or a custom ontology type |
 | `name` | OPTIONAL | Display name |
-| `role` | OPTIONAL | Role in the memory (e.g. `author`, `mentions`, `uses`) |
+| `role` | OPTIONAL | Role in the concept (e.g. `author`, `mentions`, `uses`) |
 
 ```yaml
 entities:
@@ -141,7 +177,7 @@ citations:
     title: "Citation Title"    # REQUIRED
     url: https://example.com   # REQUIRED
     citationRole: supports     # REQUIRED
-    author: "Author Name"      # OPTIONAL (string, EntityReference, or array)
+    author: "Author Name"      # OPTIONAL (string, EntityReference, or array of EntityReference)
     date: 2024-06-15           # OPTIONAL
     accessed: 2026-01-20       # OPTIONAL
     relevance: 0.95            # OPTIONAL (0-1)
@@ -169,4 +205,3 @@ citations:
 - [W3C PROV-DM](https://www.w3.org/TR/prov-dm/)
 - [ISO 8601: Date and Time Format](https://www.iso.org/iso-8601-date-and-time-format.html)
 - [CommonMark Specification](https://spec.commonmark.org/)
-- [JSON Canvas Specification](https://jsoncanvas.org/)

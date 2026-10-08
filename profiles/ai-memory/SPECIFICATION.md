@@ -235,7 +235,7 @@ Mem0 stores flat memories with a free-form `metadata.category`.
 # MIF mapping
 {
     "@context": "https://mif-spec.dev/schema/context.jsonld",
-    "@id": "urn:mif:mem0_123",                 # id -> @id
+    "@id": "urn:mif:fc22f3bc-9415-57af-966a-592a0e626acd",  # uuid5(id) -> @id; see MIGRATION.md
     "content": "User prefers dark mode",       # memory -> content
     "conceptType": "semantic",                  # a preference is a known fact
     "namespace": "_semantic/preferences",      # base type + category
@@ -265,7 +265,7 @@ the bi-temporal model, and its entity edges become relationships.
 
 # MIF mapping
 {
-    "@id": "urn:mif:zep_789",
+    "@id": "urn:mif:58d6ba56-9007-56b1-b5df-6d7ca81cafc0",  # uuid5(source id); see MIGRATION.md
     "content": "User prefers dark mode",
     "created": "2026-01-15T10:30:00Z",
     "temporal": {
@@ -296,13 +296,13 @@ memory per fact so decay and recall apply at the right granularity.
 
 # MIF mapping (one memory per fact)
 {
-    "@id": "urn:mif:letta-human-name",
+    "@id": "urn:mif:4fcdbace-50ec-5c08-ac96-7e81b52144b1",  # uuid5(source id); see MIGRATION.md
     "conceptType": "semantic",
     "content": "Name: Alice",
     "namespace": "_semantic/entities"
 },
 {
-    "@id": "urn:mif:letta-human-pref",
+    "@id": "urn:mif:a790cad4-87b7-5b08-9dd8-415bc71c04e1",  # uuid5(source id); see MIGRATION.md
     "conceptType": "semantic",
     "content": "Prefers dark mode",
     "namespace": "_semantic/preferences"
@@ -327,7 +327,7 @@ namespace with its triad base type.
 
 # MIF mapping
 {
-    "@id": "urn:mif:subcog_abc",
+    "@id": "urn:mif:68b30f6e-c272-5132-8996-3937dc319e9e",  # uuid5(source id); see MIGRATION.md
     "content": "Decision: Use React",
     "conceptType": "semantic",                  # a decision is known knowledge
     "namespace": "_semantic/decisions",        # base prefix + category
@@ -353,7 +353,7 @@ relationships.
 ```yaml
 # MIF mapping (frontmatter + body)
 ---
-id: urn:mif:basicmem-debugging-auth
+id: ed8fb99e-53dd-59b1-aa42-7a9255752824   # uuid5("basicmem-debugging-auth"); see MIGRATION.md
 type: episodic                       # a note about a specific debugging effort
 namespace: _episodic/sessions
 title: "Debugging the auth timeout"

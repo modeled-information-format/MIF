@@ -7,7 +7,7 @@ description: "The derived .jsonld projection for machine-processable concept doc
 
 > **Markdown is canonical ([Invariant 2](/specification/overview/#invariants)).** The JSON-LD form below is a *derived*
 > projection: regenerate it from the `.md` source with `scripts/mif_convert.py`.
-> It MUST NOT use the `.md` extension (so OKF's `*.md` glob never ingests it) and
+> It uses the `.jsonld` extension and MUST NOT use `.md` (so OKF's `*.md` glob never ingests it) and
 > MUST round-trip losslessly back to markdown. If the two disagree, markdown wins.
 
 ### Structure
@@ -24,6 +24,7 @@ description: "The derived .jsonld projection for machine-processable concept doc
 
   "created": "2026-01-15T10:30:00Z",
   "modified": "2026-01-20T14:22:00Z",
+  "timestamp": "2026-01-20T14:22:00Z",
 
   "namespace": "_semantic/preferences",
   "tags": ["preference", "ui", "accessibility"],
@@ -37,6 +38,22 @@ description: "The derived .jsonld projection for machine-processable concept doc
 }
 ```
 
+The projection always includes the OKF-legible mirror field `timestamp` (the
+value of `modified`, or `created` when there is no `modified`). When the source
+has a `summary`, it also includes `description` (mapped from `summary`). These
+are derived mirrors of the canonical frontmatter; markdown remains
+authoritative.
+
+**Identifiers.** A concept's `@id` is `urn:mif:<uuid>`, where `<uuid>` is the
+concept's frontmatter `id` ([Concept](/specification/data-model/#concept)). Any `urn:mif:` reference to a concept,
+including a relationship `target`, MUST use this form. The following
+sub-namespaces of `urn:mif:` are reserved and never identify a concept:
+`urn:mif:entity:…` (entities, [Entity Types](/specification/entity-types/)), `urn:mif:agent:…` and `urn:mif:activity:…`
+(provenance, [Provenance](/specification/provenance/)), `urn:mif:conversation:…` (provenance sources, [Provenance](/specification/provenance/)), and
+`urn:mif:vector:…` (embedding vectors, [Embedding References](/specification/embeddings/)). Because a UUID can never equal a
+sub-namespace name, a consumer distinguishes a concept URN by whether the
+remainder after `urn:mif:` parses as a UUID.
+
 ### Full Example
 
 ```json
@@ -45,7 +62,6 @@ description: "The derived .jsonld projection for machine-processable concept doc
     "https://mif-spec.dev/schema/context.jsonld",
     {
       "prov": "http://www.w3.org/ns/prov#",
-      "dc": "http://purl.org/dc/terms/",
       "subcog": "https://github.com/zircote/subcog/ns/"
     }
   ],
@@ -56,8 +72,9 @@ description: "The derived .jsonld projection for machine-processable concept doc
   "conceptType": "semantic",
   "title": "Dark Mode Preference",
 
-  "dc:created": "2026-01-15T10:30:00Z",
-  "dc:modified": "2026-01-20T14:22:00Z",
+  "created": "2026-01-15T10:30:00Z",
+  "modified": "2026-01-20T14:22:00Z",
+  "timestamp": "2026-01-20T14:22:00Z",
 
   "ontology": {
     "@type": "OntologyReference",
@@ -85,12 +102,12 @@ description: "The derived .jsonld projection for machine-processable concept doc
   "relationships": [
     {
       "type": "relates-to",
-      "target": "urn:mif:memory:ui-preferences",
+      "target": "urn:mif:7c9e6679-7425-40de-944b-e07fc1f90ae7",
       "strength": 0.85
     },
     {
       "type": "supersedes",
-      "target": "urn:mif:memory:old-theme-preference"
+      "target": "urn:mif:f47ac10b-58cc-4372-a567-0e02b2c3d479"
     }
   ],
 

@@ -20,15 +20,15 @@ relationship_types:
     symmetric: true
     icon: 🔗
   - name: DerivedFrom
-    description: Memory created based on source
+    description: Concept created based on source
     inverse: Derives
     icon: ⬅️
   - name: Supersedes
-    description: Replaces an older memory
+    description: Replaces an older concept
     inverse: SupersededBy
     icon: ⏫
   - name: ConflictsWith
-    description: Contradicts another memory
+    description: Contradicts another concept
     symmetric: true
     icon: ⚠️
   - name: PartOf
@@ -48,19 +48,19 @@ relationship_types:
     inverse: CreatedBy
     icon: ✍️
   - name: MentionedIn
-    description: Referenced within a memory
+    description: Referenced within a concept
     inverse: Mentions
     icon: 📎
 
   # Custom types (domain-specific)
   - name: Reinforces
     namespace: subcog
-    description: Strengthens confidence in another memory
+    description: Strengthens confidence in another concept
     inverse: ReinforcedBy
     icon: 💪
   - name: Contradicts
     namespace: subcog
-    description: Provides evidence against another memory
+    description: Provides evidence against another concept
     inverse: ContradictedBy
     icon: ❌
   - name: BreedsWith
@@ -74,6 +74,29 @@ relationship_types:
         type: boolean
 ```
 
+#### Type Tokens
+
+A declared `name` (and `inverse`) is a PascalCase display name, as
+`schema/relationship-types-config.schema.json` requires. The token that is
+stored in frontmatter `relationships[].type`, written in the body mirror
+([Relationship Syntax](/specification/markdown-format/#relationship-syntax)), and emitted in JSON-LD is derived from it mechanically:
+
+1. Insert a hyphen before every uppercase letter except the first character,
+   then lowercase the result: `DerivedFrom` → `derived-from`,
+   `ConflictsWith` → `conflicts-with`, `Uses` → `uses`.
+2. If the declaration has a `namespace`, prefix the token with
+   `<namespace>:`. For example, `name: BreedsWith` with `namespace: farm`
+   becomes `farm:breeds-with`. Core types have no namespace and no prefix.
+3. An `inverse` maps by the same rule, under the same namespace prefix as its
+   type: `Derives` (inverse of `DerivedFrom`) becomes `derives`, and
+   `ReinforcedBy` (inverse of `subcog`'s `Reinforces`) becomes
+   `subcog:reinforced-by`. A symmetric type is its own inverse.
+
+Every token produced this way matches the schema's `Relationship.type`
+pattern, `^[a-z0-9][a-z0-9-]*(:[a-z0-9][a-z0-9-]*)?$`. Rule 1 splits at every
+capital, so names SHOULD NOT contain consecutive capitals: write `HttpProxy`
+(→ `http-proxy`), not `HTTPProxy` (→ `h-t-t-p-proxy`).
+
 ### Core Relationship Types (Recommended)
 
 For maximum interoperability, implementations SHOULD recognize these nine core types:
@@ -82,13 +105,13 @@ For maximum interoperability, implementations SHOULD recognize these nine core t
 | --- | --- | --- | --- |
 | `RelatesTo` | General relationship | `RelatesTo` | Yes |
 | `DerivedFrom` | Created based on source | `Derives` | No |
-| `Supersedes` | Replaces older memory | `SupersededBy` | No |
-| `ConflictsWith` | Contradicts another memory | `ConflictsWith` | Yes |
+| `Supersedes` | Replaces older concept | `SupersededBy` | No |
+| `ConflictsWith` | Contradicts another concept | `ConflictsWith` | Yes |
 | `PartOf` | Component of larger whole | `Contains` | No |
 | `Implements` | Realizes a concept/pattern | `ImplementedBy` | No |
 | `Uses` | Utilizes a technology/tool | `UsedBy` | No |
 | `Created` | Authored by entity | `CreatedBy` | No |
-| `MentionedIn` | Referenced in memory | `Mentions` | No |
+| `MentionedIn` | Referenced in concept | `Mentions` | No |
 
 ### Custom Relationship Types
 
@@ -97,17 +120,15 @@ Providers MAY define additional relationship types using namespaced URIs:
 ```yaml
 # Custom relationship type definition
 relationship_types:
-  - name: Contradicts
-    namespace: farm           # Results in URI: farm:Contradicts
-    description: Provides conflicting evidence
-    inverse: ContradictedBy
+  - name: BreedsWith
+    namespace: farm           # Results in type token: farm:breeds-with (§8.1.1)
+    description: Animal breeding relationship
+    symmetric: false
     properties:
-      - name: contradiction_type
-        type: string
-        enum: [direct, indirect, partial]
-      - name: severity
-        type: decimal
-        range: [0.0, 1.0]
+      - name: breeding_date
+        type: date
+      - name: success
+        type: boolean
 ```
 
 #### JSON-LD representation of custom relationship types
@@ -141,14 +162,32 @@ Relationships are mirrored in the body as standard markdown links under a `## Re
 ```markdown
 ## Relationships
 
-- relates-to [Other Memory](/semantic/other-memory.md)
-- derived-from [Source Memory](/episodic/source-memory.md)
-- supersedes [Old Memory](/semantic/old-memory.md)
-- conflicts-with [Contradicting Memory](/semantic/contradicting-memory.md)
-- part-of [Parent Memory](/semantic/parent-memory.md)
+- relates-to [Other Concept](/semantic/other-concept.md)
+- derived-from [Source Concept](/episodic/source-concept.md)
+- supersedes [Old Concept](/semantic/old-concept.md)
+- conflicts-with [Contradicting Concept](/semantic/contradicting-concept.md)
+- part-of [Parent Concept](/semantic/parent-concept.md)
 ```
 
-Each line is `- <type> [Text](<target>)`. The type is a kebab-case token; the target is a bundle-relative path to the target concept or a `urn:mif:` identifier. The frontmatter `relationships[]` array is authoritative; the body links are its OKF-legible mirror.
+Each line is `- <type> [Text](<target>)`. The type is a kebab-case token derived from the configured type name ([Type Tokens](#type-tokens)); the target is a bundle-relative path to the target concept or a `urn:mif:` identifier. The frontmatter `relationships[]` array is authoritative; the body links are its OKF-legible mirror.
+
+Same-bundle targets SHOULD be bundle-relative paths, with `urn:mif:` targets reserved for out-of-bundle concepts ([Relationship Syntax](/specification/markdown-format/#relationship-syntax)).
+
+The matching frontmatter (one entry per body link):
+
+```yaml
+relationships:
+  - type: relates-to
+    target: /semantic/other-concept.md
+  - type: derived-from
+    target: /episodic/source-concept.md
+  - type: supersedes
+    target: /semantic/old-concept.md
+  - type: conflicts-with
+    target: /semantic/contradicting-concept.md
+  - type: part-of
+    target: /semantic/parent-concept.md
+```
 
 #### JSON-LD schema
 
@@ -156,7 +195,7 @@ Each line is `- <type> [Text](<target>)`. The type is a kebab-case token; the ta
 "relationships": [
   {
     "type": "derived-from",
-    "target": "urn:mif:memory:source-memory",
+    "target": "urn:mif:9b2d4c6e-1f3a-4b5c-8d7e-0a1b2c3d4e5f",
     "strength": 0.9,
     "metadata": {
       "reason": "Extracted key insight",
@@ -171,6 +210,6 @@ Each line is `- <type> [Text](<target>)`. The type is a kebab-case token; the ta
 | Property | Type | Required | Description |
 | --- | --- | --- | --- |
 | `type` | String | Yes | Type identifier (kebab-case; optional `ns:` prefix) |
-| `target` | URI Reference | Yes | Target memory or entity URI |
+| `target` | String | Yes | Bundle-relative path to the target concept, or a `urn:mif:` identifier |
 | `strength` | Decimal | No | Relationship strength (0.0-1.0) |
 | `metadata` | Object | No | Additional relationship metadata |

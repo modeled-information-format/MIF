@@ -15,7 +15,6 @@
     "EntityReference": "mif:EntityReference",
     "OntologyReference": "mif:OntologyReference",
     "EntityData": "mif:EntityData",
-    "Vector": "mif:Vector",
 
     "Person": "mif:Person",
     "Organization": "mif:Organization",
@@ -65,6 +64,19 @@
     },
     "modified": {
       "@id": "dc:modified",
+      "@type": "xsd:dateTime"
+    },
+    "timestamp": {
+      "@id": "mif:timestamp",
+      "@type": "xsd:dateTime"
+    },
+    "description": "dc:description",
+    "summary": {
+      "@id": "mif:summary",
+      "@type": "xsd:string"
+    },
+    "compressedAt": {
+      "@id": "mif:compressedAt",
       "@type": "xsd:dateTime"
     },
 
@@ -336,9 +348,6 @@
       "@id": "mif:vectorUri",
       "@type": "@id"
     },
-    "vector": "mif:vector",
-    "encoding": "mif:encoding",
-    "data": "mif:data",
 
     "extensions": {
       "@id": "mif:extensions",

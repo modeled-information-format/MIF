@@ -15,7 +15,6 @@
     "EntityReference": "mif:EntityReference",
     "OntologyReference": "mif:OntologyReference",
     "EntityData": "mif:EntityData",
-    "Vector": "mif:Vector",
 
     "Person": "mif:Person",
     "Organization": "mif:Organization",
@@ -349,9 +348,6 @@
       "@id": "mif:vectorUri",
       "@type": "@id"
     },
-    "vector": "mif:vector",
-    "encoding": "mif:encoding",
-    "data": "mif:data",
 
     "extensions": {
       "@id": "mif:extensions",

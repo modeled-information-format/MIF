@@ -9,30 +9,36 @@ description: "File extensions, encoding requirements, and YAML frontmatter struc
 
 | Extension | Format | MIME Type |
 | --- | --- | --- |
-| `.md` | Markdown | `text/markdown; variant=mif` |
-| `.jsonld` | JSON-LD | `application/ld+json; profile="https://mif-spec.dev"` |
+| `.md` | Markdown (canonical) | `text/markdown; variant=mif` |
+| `.jsonld` | JSON-LD (derived projection) | `application/ld+json; profile="https://mif-spec.dev"` |
+
+Concept files use the `.md` extension only. The derived JSON-LD projection
+uses `.jsonld` (never `.md`), so OKF's `*.md` glob never ingests it.
 
 ### File Naming
 
-Files SHOULD be named using the memory's identifier:
+A concept's OKF identity is its bundle-relative path minus the `.md`
+extension, so concept files SHOULD use human-readable, path-meaningful slugs.
+The stable UUID lives in the frontmatter `id` ([Concept](/specification/data-model/#concept)), not in the filename, so
+identity survives the concept being moved or renamed; the `id` is MIF-only and
+invisible to OKF:
 
 ```text
-{id}.md
-{id}.jsonld
+semantic/dark-mode-preference.md
 ```
 
-Example:
+A UUID filename (`550e8400-e29b-41d4-a716-446655440000.md`) MAY be used, but
+it adds nothing the frontmatter `id` does not already carry.
 
-```text
-550e8400-e29b-41d4-a716-446655440000.md
-550e8400-e29b-41d4-a716-446655440000.jsonld
+The JSON-LD projection is not stored beside its source. It is derived output
+([Invariant 2](/specification/overview/#invariants)), emitted on demand into a separate directory:
+
+```bash
+python scripts/mif_convert.py emit-jsonld <bundle> --out-dir dist/jsonld
 ```
 
-Human-readable names MAY be used when the `id` is specified in frontmatter:
-
-```text
-dark-mode-preference.md
-```
+which writes `dist/jsonld/<bundle>/<type>/<slug>.jsonld`, mirroring each
+source path. Emitted `.jsonld` files SHOULD NOT be committed to the bundle.
 
 ### Directory Structure
 
@@ -49,10 +55,25 @@ bundle/
 │       ├── technology/
 │       ├── concept/
 │       └── file/
-├── memories/                       # Memory files
-│   ├── {namespace}/               # Namespace directories
-│   │   ├── {id}.md
-│   │   └── {id}.jsonld
-│   └── ...
+├── index.md                        # OKF reserved filename (optional)
+├── semantic/                       # One directory per base type
+│   └── {slug}.md
+├── episodic/
+│   └── {slug}.md
+├── procedural/
+│   └── {slug}.md
 └── README.md                       # Bundle documentation
 ```
+
+Concepts MAY be nested in subdirectories below their type directory (for
+example `semantic/preferences/dark-mode-preference.md`). Directory placement is
+independent of the frontmatter `namespace`: `semantic/rate-limit-policy.md` may
+declare `namespace: _semantic/policies`. A bundle has no `memories/` root and
+contains no `.jsonld` concept files.
+
+Keys in `.mif/` configuration files (`config.yaml`, namespace and entity
+definition files) use snake_case, e.g. `relationship_types`, `default_ttl`,
+`conformance_level`. Concept frontmatter fields use camelCase, e.g.
+`validFrom`, `sourceType`, `compressedAt`. The keys inside the free-form
+`extensions` and relationship `metadata` objects are not constrained by
+either convention.

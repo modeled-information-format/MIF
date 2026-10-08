@@ -10,19 +10,24 @@ description: "The canonical .md format specification for human-readable concept 
 ```markdown
 ---
 # YAML Frontmatter (required)
-id: uuid-here
+id: 550e8400-e29b-41d4-a716-446655440000   # UUID
 type: semantic
 created: 2026-01-15T10:30:00Z
+relationships:
+  - type: relates-to
+    target: /semantic/other-concept.md
+  - type: derived-from
+    target: /episodic/source-concept.md
 ---
 
 # Title (optional, first H1)
 
-Memory content in Markdown format.
+Concept content in Markdown format.
 
-## Relationships (optional section)
+## Relationships (optional section, mirrors frontmatter)
 
-- relates-to [Other Memory](/semantic/other-memory.md)
-- derived-from [Source Memory](/episodic/source-memory.md)
+- relates-to [Other Concept](/semantic/other-concept.md)
+- derived-from [Source Concept](/episodic/source-concept.md)
 ```
 
 ### Frontmatter Schema
@@ -61,7 +66,7 @@ temporal:
 
 # === OPTIONAL: Provenance ===
 provenance:
-  sourceType: user_explicit                 # How memory was created
+  sourceType: user_explicit                 # How the concept was created
   sourceRef: conversation:conv_456          # Reference to source
   agent: claude-3-opus                      # Creating agent
   confidence: 0.95                          # Confidence score (0-1)
@@ -73,7 +78,7 @@ embedding:
   modelVersion: "2024-01"                   # Model version
   dimensions: 1536                          # Vector dimensions
   sourceText: "User prefers dark mode"      # Text that was embedded
-  # Note: Actual vectors stored externally or in JSON-LD format
+  # Note: Actual vectors stored externally via vectorUri
 
 # === OPTIONAL: Aliases ===
 aliases:
@@ -97,16 +102,35 @@ Typed relationships are authoritative in the frontmatter `relationships[]` array
 ```markdown
 ## Relationships
 
-- relates-to [Other Memory](/semantic/other-memory.md)
+- relates-to [Other Concept](/semantic/other-concept.md)
 - derived-from [Source Incident](/episodic/source-incident.md)
 - supersedes [Old Policy](/semantic/old-policy.md)
 ```
 
-Each line is `- <type> [Text](<target>)`, where `<type>` is a kebab-case relationship type and `<target>` is a bundle-relative path to the target concept or a `urn:mif:` identifier (see [Relationship Types](/specification/relationship-types/)). Entity references are declared in the frontmatter `entities[]` array (see [Entity References in Memories](/specification/entity-types/#entity-references-in-memories)).
+The corresponding frontmatter:
+
+```yaml
+relationships:
+  - type: relates-to
+    target: /semantic/other-concept.md
+  - type: derived-from
+    target: /episodic/source-incident.md
+  - type: supersedes
+    target: /semantic/old-policy.md
+```
+
+Each line is `- <type> [Text](<target>)`, where `<type>` is a kebab-case relationship type and `<target>` is a bundle-relative path to the target concept or a `urn:mif:` identifier (see [Relationship Types](/specification/relationship-types/)). Every frontmatter `relationships` entry MUST have a corresponding body markdown link in the `## Relationships` section, and every such body link maps back to a frontmatter entry. Entity references are declared in the frontmatter `entities[]` array (see [Entity References in Concepts](/specification/entity-types/#entity-references-in-concepts)).
+
+When the target is a concept in the same bundle, `target` SHOULD be its
+bundle-relative path, not its `urn:mif:<uuid>`. The body mirror then carries a
+link that OKF consumers and Markdown tools can follow
+([Invariant 3](/specification/overview/#invariants)). `urn:mif:` targets SHOULD be reserved for
+concepts outside the bundle. The frontmatter entry and its body line carry the
+same target, so this choice is made once, in frontmatter.
 
 ### Citations (Level 3)
 
-Citations provide structured references to external sources that inform, support, or relate to the memory content. Citations are a Level 3 (Full) optional feature.
+Citations provide structured references to external sources that inform, support, or relate to the concept content. Citations are a Level 3 (Full) optional feature.
 
 #### Frontmatter Schema
 
@@ -117,8 +141,8 @@ citations:
     citationType: article                  # REQUIRED: Source category
     title: "Memory Systems in AI Agents"   # REQUIRED: Citation title
     url: https://arxiv.org/abs/2024.12345  # REQUIRED: Valid URL
-    citationRole: supports                 # REQUIRED: Relationship to memory
-    author: "Jane Smith"                   # OPTIONAL: string, EntityReference, or array
+    citationRole: supports                 # REQUIRED: Relationship to the concept
+    author: "Jane Smith"                   # OPTIONAL: string, EntityReference, or array of EntityReference
     date: 2024-06-15                       # OPTIONAL: Publication date
     accessed: 2026-01-20                   # OPTIONAL: Access date
     relevance: 0.95                        # OPTIONAL: Relevance score (0-1)
@@ -133,7 +157,7 @@ citations:
 | `citationType` | REQUIRED | Enum | Source category (see [Citation Types](#citation-types)) |
 | `title` | REQUIRED | String | Citation title |
 | `url` | REQUIRED | URI | Valid URL or URI |
-| `citationRole` | REQUIRED | Enum | Relationship to memory (see [Citation Roles](#citation-roles)) |
+| `citationRole` | REQUIRED | Enum | Relationship to the concept (see [Citation Roles](#citation-roles)) |
 | `author` | OPTIONAL | EntityReference, array of EntityReference, or String | One or more entity references, or plain text |
 | `date` | OPTIONAL | Date | Publication date (ISO 8601) |
 | `accessed` | OPTIONAL | Date | Access date (ISO 8601) |
@@ -178,7 +202,7 @@ Custom roles MAY use namespace prefixes: `research:replicates`, `legal:cites-pre
 
 #### Body Section Syntax
 
-An optional `## Citations` section MAY appear in the memory body for detailed annotations. When present, corresponding entries MUST exist in frontmatter.
+An optional `## Citations` section MAY appear in the concept body for detailed annotations. When present, corresponding entries MUST exist in frontmatter.
 
 ```markdown
 ## Citations
@@ -199,7 +223,7 @@ An optional `## Citations` section MAY appear in the memory body for detailed an
 
 #### Author Entity References
 
-A citation `author` MAY be plain text or one or more `EntityReference` objects (see [Entity References in Memories](/specification/entity-types/#entity-references-in-memories)):
+A citation `author` MAY be plain text or one or more `EntityReference` objects (see [Entity References in Concepts](/specification/entity-types/#entity-references-in-concepts)):
 
 ```yaml
 # Plain text
@@ -262,26 +286,26 @@ Implementations SHOULD validate citations according to these rules:
 
 ### Compression (Level 3)
 
-Compression allows large memories to be summarized while preserving the original content. Compression is typically applied by garbage collection processes to reduce memory footprint while retaining semantic value.
+Compression allows large concepts to be summarized while preserving the original content. Compression is typically applied by garbage collection processes to reduce storage footprint while retaining semantic value.
 
 #### Compression Fields
 
 | Field | Required | Type | Description |
 | --- | --- | --- | --- |
 | `summary` | OPTIONAL | String | Concise 2-3 sentence summary (max 500 characters) |
-| `compressed_at` | OPTIONAL | DateTime | When compression was applied (ISO 8601) |
+| `compressedAt` | OPTIONAL | DateTime | When compression was applied (ISO 8601) |
 
 ##### Frontmatter Schema
 
 ```yaml
 # === OPTIONAL: Compression (Level 3) ===
 summary: "User prefers dark mode for reduced eye strain during extended coding sessions. Applies to IDE, terminal, and web applications."
-compressed_at: 2026-01-24T10:00:00Z
+compressedAt: 2026-01-24T10:00:00Z
 ```
 
 #### Compression Criteria
 
-Implementations MAY apply compression when memories meet these criteria:
+Implementations MAY apply compression when concepts meet these criteria:
 
 | Condition | Threshold |
 | --- | --- |
@@ -293,12 +317,12 @@ Implementations MAY apply compression when memories meet these criteria:
 - The `content` field SHOULD be replaced with the compressed summary
 - The original `content` MAY be preserved in `extensions.original_content`
 - The `summary` field contains the generated summary text
-- The `compressed_at` timestamp indicates when compression occurred
-- Compressed memories retain all other metadata (relationships, entities, etc.)
+- The `compressedAt` timestamp indicates when compression occurred
+- Compressed concepts retain all other metadata (relationships, entities, etc.)
 
 #### Compression Validation
 
 | Field | Constraint |
 | --- | --- |
 | `summary` | MUST be 500 characters or fewer |
-| `compressed_at` | MUST be ISO 8601 datetime format |
+| `compressedAt` | MUST be ISO 8601 datetime format |
