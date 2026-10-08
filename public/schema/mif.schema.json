@@ -28,8 +28,8 @@
     },
     "@id": {
       "type": "string",
-      "pattern": "^urn:mif:",
-      "description": "Unique identifier in URN format"
+      "pattern": "^urn:mif:[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "description": "Concept URN: urn:mif:<uuid>, where <uuid> is the frontmatter id (SPECIFICATION.md §6.1)"
     },
     "conceptType": {
       "type": "string",

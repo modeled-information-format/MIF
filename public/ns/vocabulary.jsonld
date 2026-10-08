@@ -244,7 +244,8 @@
       "@id": "mif:Vector",
       "@type": "rdfs:Class",
       "rdfs:label": "Vector",
-      "rdfs:comment": "An embedding vector."
+      "rdfs:comment": "An inline embedding vector. Deprecated: MIF stores embedding metadata and an external vectorUri, not inline vectors (SPECIFICATION.md §11).",
+      "owl:deprecated": true
     },
     {
       "@id": "mif:Verified",
@@ -373,7 +374,8 @@
       "@id": "mif:data",
       "@type": "rdf:Property",
       "rdfs:label": "data",
-      "rdfs:comment": "Raw vector data."
+      "rdfs:comment": "Raw inline vector data. Deprecated: MIF stores embedding metadata and an external vectorUri, not inline vectors (SPECIFICATION.md §11).",
+      "owl:deprecated": true
     },
     {
       "@id": "mif:decay",
@@ -412,7 +414,8 @@
       "@id": "mif:encoding",
       "@type": "rdf:Property",
       "rdfs:label": "encoding",
-      "rdfs:comment": "Vector encoding format."
+      "rdfs:comment": "Inline vector encoding format. Deprecated: MIF stores embedding metadata and an external vectorUri, not inline vectors (SPECIFICATION.md §11).",
+      "owl:deprecated": true
     },
     {
       "@id": "mif:entities",
@@ -707,7 +710,8 @@
       "@id": "mif:vector",
       "@type": "rdf:Property",
       "rdfs:label": "vector",
-      "rdfs:comment": "Vector data container."
+      "rdfs:comment": "Inline vector data container. Deprecated: MIF stores embedding metadata and an external vectorUri, not inline vectors (SPECIFICATION.md §11).",
+      "owl:deprecated": true
     },
     {
       "@id": "mif:vectorUri",
