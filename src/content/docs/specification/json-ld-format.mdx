@@ -37,6 +37,16 @@ description: "The derived .jsonld projection for machine-processable concept doc
 }
 ```
 
+**Identifiers.** A concept's `@id` is `urn:mif:<uuid>`, where `<uuid>` is the
+concept's frontmatter `id` ([Memory Unit](/specification/data-model/#memory-unit)). Any `urn:mif:` reference to a concept,
+including a relationship `target`, MUST use this form. The following
+sub-namespaces of `urn:mif:` are reserved and never identify a concept:
+`urn:mif:entity:…` (entities, [Entity Types](/specification/entity-types/)), `urn:mif:agent:…` and `urn:mif:activity:…`
+(provenance, [Provenance](/specification/provenance/)), `urn:mif:conversation:…` (provenance sources, [Provenance](/specification/provenance/)), and
+`urn:mif:vector:…` (embedding vectors, [Embedding References](/specification/embeddings/)). Because a UUID can never equal a
+sub-namespace name, a consumer distinguishes a concept URN by whether the
+remainder after `urn:mif:` parses as a UUID.
+
 ### Full Example
 
 ```json
@@ -85,12 +95,12 @@ description: "The derived .jsonld projection for machine-processable concept doc
   "relationships": [
     {
       "type": "relates-to",
-      "target": "urn:mif:memory:ui-preferences",
+      "target": "urn:mif:7c9e6679-7425-40de-944b-e07fc1f90ae7",
       "strength": 0.85
     },
     {
       "type": "supersedes",
-      "target": "urn:mif:memory:old-theme-preference"
+      "target": "urn:mif:f47ac10b-58cc-4372-a567-0e02b2c3d479"
     }
   ],
 

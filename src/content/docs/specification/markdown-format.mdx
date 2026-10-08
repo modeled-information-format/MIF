@@ -104,6 +104,13 @@ Typed relationships are authoritative in the frontmatter `relationships[]` array
 
 Each line is `- <type> [Text](<target>)`, where `<type>` is a kebab-case relationship type and `<target>` is a bundle-relative path to the target concept or a `urn:mif:` identifier (see [Relationship Types](/specification/relationship-types/)). Entity references are declared in the frontmatter `entities[]` array (see [Entity References in Memories](/specification/entity-types/#entity-references-in-memories)).
 
+When the target is a concept in the same bundle, `target` SHOULD be its
+bundle-relative path, not its `urn:mif:<uuid>`. The body mirror then carries a
+link that OKF consumers and Markdown tools can follow
+([Invariant 3](/specification/overview/#invariants)). `urn:mif:` targets SHOULD be reserved for
+concepts outside the bundle. The frontmatter entry and its body line carry the
+same target, so this choice is made once, in frontmatter.
+
 ### Citations (Level 3)
 
 Citations provide structured references to external sources that inform, support, or relate to the memory content. Citations are a Level 3 (Full) optional feature.
@@ -269,14 +276,14 @@ Compression allows large memories to be summarized while preserving the original
 | Field | Required | Type | Description |
 | --- | --- | --- | --- |
 | `summary` | OPTIONAL | String | Concise 2-3 sentence summary (max 500 characters) |
-| `compressed_at` | OPTIONAL | DateTime | When compression was applied (ISO 8601) |
+| `compressedAt` | OPTIONAL | DateTime | When compression was applied (ISO 8601) |
 
 ##### Frontmatter Schema
 
 ```yaml
 # === OPTIONAL: Compression (Level 3) ===
 summary: "User prefers dark mode for reduced eye strain during extended coding sessions. Applies to IDE, terminal, and web applications."
-compressed_at: 2026-01-24T10:00:00Z
+compressedAt: 2026-01-24T10:00:00Z
 ```
 
 #### Compression Criteria
@@ -293,7 +300,7 @@ Implementations MAY apply compression when memories meet these criteria:
 - The `content` field SHOULD be replaced with the compressed summary
 - The original `content` MAY be preserved in `extensions.original_content`
 - The `summary` field contains the generated summary text
-- The `compressed_at` timestamp indicates when compression occurred
+- The `compressedAt` timestamp indicates when compression occurred
 - Compressed memories retain all other metadata (relationships, entities, etc.)
 
 #### Compression Validation
@@ -301,4 +308,4 @@ Implementations MAY apply compression when memories meet these criteria:
 | Field | Constraint |
 | --- | --- |
 | `summary` | MUST be 500 characters or fewer |
-| `compressed_at` | MUST be ISO 8601 datetime format |
+| `compressedAt` | MUST be ISO 8601 datetime format |

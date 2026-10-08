@@ -12,7 +12,7 @@ A Memory Unit is the atomic element of MIF. It contains:
 | Property | Required | Type | Description |
 | --- | --- | --- | --- |
 | `id` | REQUIRED | UUID | Globally unique identifier |
-| `content` | REQUIRED | String | The memory content (Markdown) |
+| `content` | REQUIRED | String | The memory content (Markdown); see note below |
 | `type` | REQUIRED | Enum | Memory classification (see [Memory Types](#memory-types)) |
 | `created` | REQUIRED | DateTime | When the memory was created |
 | `modified` | RECOMMENDED | DateTime | When last modified |
@@ -26,8 +26,13 @@ A Memory Unit is the atomic element of MIF. It contains:
 | `embedding` | OPTIONAL | Object | Embedding reference |
 | `citations` | OPTIONAL | Array | Citation references (Level 3) |
 | `summary` | OPTIONAL | String | Compressed content summary (Level 3) |
-| `compressed_at` | OPTIONAL | DateTime | When compression was applied (Level 3) |
+| `compressedAt` | OPTIONAL | DateTime | When compression was applied (Level 3) |
 | `extensions` | OPTIONAL | Object | Provider-specific data |
+
+`content` is the Markdown body of the `.md` file, not a frontmatter key. It
+appears as a named property only in the JSON-LD projection, where [Markdown to JSON-LD](/specification/conversion/#markdown-to-json-ld) maps
+the body to `content`. The other properties in this table are frontmatter
+keys in Markdown.
 
 ### Memory Types
 
