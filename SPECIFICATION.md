@@ -2,9 +2,9 @@
 
 # MIF — Modeled Information Format
 
-**Version**: 1.0.0
+**Version**: 1.4.0
 **Status**: Released
-**Last Updated**: 2026-06-18
+**Last Updated**: 2026-10-08
 **Authors**: Robert Allen (zircote)
 **Repository**: <https://github.com/modeled-information-format/MIF>
 
