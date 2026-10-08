@@ -9,8 +9,8 @@ MIF's temporal model answers OKF's open "live vs. stale" question with
 **validity windows and freshness**. It uses a bi-temporal model distinguishing
 between:
 
-1. **Transaction Time**: When the memory was recorded in the system
-2. **Valid Time**: When the fact represented by the memory is true
+1. **Transaction Time**: When the concept was recorded in the system
+2. **Valid Time**: When the fact represented by the concept is true
 
 ### Temporal Properties
 
@@ -28,7 +28,7 @@ between:
 
 | Model | Formula | Use Case |
 | --- | --- | --- |
-| `none` | No decay | Permanent memories |
+| `none` | No decay | Permanent concepts |
 | `linear` | strength = 1 - (t / ttl) | Simple linear decay |
 | `exponential` | strength = e^(-t/halfLife) | Gradual freshness decay |
 | `step` | strength = 1 if t < ttl else 0 | Hard expiration |
