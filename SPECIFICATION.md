@@ -144,7 +144,7 @@ MIF defines two representations, related as canonical and derived ([Invariant 2]
 1. **Markdown Format** (`.md`): Human-readable, plain CommonMark — **canonical**, the source of truth.
 2. **JSON-LD Format** (`.jsonld`): Machine-processable, semantically linked — **derived**, regenerated from the Markdown source (§6).
 
-Both representations MUST be losslessly convertible to each other, and if the two ever disagree, the Markdown form wins. A conforming implementation MAY support either or both formats.
+Both representations MUST be losslessly convertible to each other, and if the two ever disagree, the Markdown form wins. A conforming implementation MUST support the Markdown form (§13.1) and MAY also support the JSON-LD projection.
 
 ### 2.2 Markdown Conventions
 
@@ -237,10 +237,14 @@ bundle/
 │   └── {slug}.md
 ├── episodic/
 │   └── {slug}.md
-├── procedural/
-│   └── {slug}.md
-└── README.md                       # Bundle documentation
+└── procedural/
+    └── {slug}.md
 ```
+
+Every `.md` file in the bundle other than the OKF reserved filenames
+`index.md` and `log.md` is a concept and needs concept frontmatter. Bundle
+documentation therefore belongs in `index.md`; a frontmatter-less `README.md`
+at the bundle root would be read as an invalid concept.
 
 Concepts MAY be nested in subdirectories below their type directory (for
 example `semantic/preferences/dark-mode-preference.md`). Directory placement is
@@ -861,12 +865,12 @@ remainder after `urn:mif:` parses as a UUID.
   "relationships": [
     {
       "type": "relates-to",
-      "target": "urn:mif:7c9e6679-7425-40de-944b-e07fc1f90ae7",
+      "target": "/semantic/preferences/high-contrast-preference.md",
       "strength": 0.85
     },
     {
       "type": "supersedes",
-      "target": "urn:mif:f47ac10b-58cc-4372-a567-0e02b2c3d479"
+      "target": "/semantic/preferences/light-mode-preference.md"
     }
   ],
 
@@ -1323,11 +1327,15 @@ relationships:
 
 #### JSON-LD schema
 
+The JSON-LD projection carries each `target` unchanged from frontmatter. A
+same-bundle target stays a bundle-relative path; only an out-of-bundle target
+is a `urn:mif:<uuid>`:
+
 ```json
 "relationships": [
   {
     "type": "derived-from",
-    "target": "urn:mif:9b2d4c6e-1f3a-4b5c-8d7e-0a1b2c3d4e5f",
+    "target": "/episodic/source-concept.md",
     "strength": 0.9,
     "metadata": {
       "reason": "Extracted key insight",
@@ -2274,11 +2282,12 @@ relationships:
 properties:
   key: string|number|boolean|null   # scalar literals only
 documents:
-  - "@type": DocumentReference
-    documentType: string
-    url: uri
-    hash: { algorithm: sha256, value: hex-digest }
-    # also optional: id, contentType, byteLength, version, retrievedAt, title
+  - "@type": DocumentReference   # required
+    url: uri                     # url or id: at least one is required
+    id: string                   # stable identifier when no resolvable url
+    documentType: string         # optional
+    hash: { algorithm: sha256, value: hex-digest }   # optional
+    # also optional: contentType, byteLength, version, retrievedAt, title
 
 temporal:
   validFrom: ISO-8601-datetime
