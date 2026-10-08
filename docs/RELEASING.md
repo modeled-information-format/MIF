@@ -215,24 +215,24 @@ branch is `main` -- `deploy.yml` publishes `mif-spec.dev` on every push to
 For subsequent releases (patch/minor on main), there is no separate cutover step;
 work directly from the release branch or main.
 
-### 3b. Publish the GitHub Release
+### 3b. Push the signed tag (the workflow publishes the release)
 
-Create the GitHub Release at the commit that carries the version bump. The release
-name must be `vX.Y.Z` (with the leading `v`):
+Pushing the tag is the release. `release.yml` triggers on `v*` tag pushes and
+itself creates a **draft** release, uploads the attested artifacts to it, and
+then publishes it. **Never run `gh release create` (or publish a release in the
+UI) for the tag:** releases here are immutable, so a release published by hand
+before the workflow reaches its publish step is frozen with no artifacts, and
+the workflow refuses to touch it. (This happened to v1.4.1, which was re-released
+as v1.4.2.)
 
 ```bash
-gh release create vX.Y.Z \
-  --title "vX.Y.Z" \
-  --notes-file <(sed -n '/^## \[X.Y.Z\]/,/^## \[/p' CHANGELOG.md | head -n -1) \
-  --target main
+git fetch origin
+git tag -s vX.Y.Z -m "vX.Y.Z" origin/main   # signed, annotated, on the merged release-prep commit
+git push origin vX.Y.Z
+gh run watch "$(gh run list --workflow release.yml --limit 1 --json databaseId -q '.[0].databaseId')"
 ```
 
-Or create it in the GitHub UI: go to Releases, click "Draft a new release", set
-the tag to `vX.Y.Z`, the target branch to `main`, fill the release notes from
-CHANGELOG.md, and click "Publish release" (not "Save draft" -- draft does not
-trigger the workflow).
-
-Publishing the release fires `release.yml`. The workflow:
+The tag push fires `release.yml`. The workflow:
 
 1. Resolves the version from the tag name.
 2. Checks out the repo at that tag.

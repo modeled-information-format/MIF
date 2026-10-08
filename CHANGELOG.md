@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.2] - 2026-10-08
+
+Re-release of 1.4.1 with its release artifacts. The v1.4.1 GitHub release was
+published by hand before `release.yml` could attach the attested source tarball,
+schema tarball and SBOM, and immutable releases cannot be amended. No
+specification or schema changes: the 1.4.2 schema mirror is byte-identical to
+1.4.1's.
+
+### Fixed
+
+- **[Docs]**: `docs/RELEASING.md` §3b says the signed tag push is what releases;
+  `release.yml` creates, fills and publishes the release itself, and a release
+  must never be created by hand for the tag.
+
 ## [1.4.1] - 2026-10-08
 
 Coordinated release with the downstream MIF tools (mif-rs, mif-docs-plugin,
@@ -486,7 +500,8 @@ See [MIGRATION.md](MIGRATION.md) and run
 - MIF specification draft v0.1
 - Market research framework
 
-[Unreleased]: https://github.com/modeled-information-format/MIF/compare/v1.4.1...HEAD
+[Unreleased]: https://github.com/modeled-information-format/MIF/compare/v1.4.2...HEAD
+[1.4.2]: https://github.com/modeled-information-format/MIF/compare/v1.4.1...v1.4.2
 [1.4.1]: https://github.com/modeled-information-format/MIF/compare/v1.4.0...v1.4.1
 [1.4.0]: https://github.com/modeled-information-format/MIF/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/modeled-information-format/MIF/compare/v1.2.2...v1.3.0

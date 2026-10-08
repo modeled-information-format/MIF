@@ -8,7 +8,7 @@
 # MIF — Modeled Information Format
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Spec Version](https://img.shields.io/badge/spec-v1.4.1-blue.svg)](./SPECIFICATION.md)
+[![Spec Version](https://img.shields.io/badge/spec-v1.4.2-blue.svg)](./SPECIFICATION.md)
 [![OKF Compliant](https://img.shields.io/badge/OKF-v0.1%20compliant-5c4a32.svg)](./docs/okf-conformance.md)
 [![Docs](https://img.shields.io/badge/docs-mif--spec.dev-5c4a32.svg)](https://mif-spec.dev)
 [![CI](https://github.com/modeled-information-format/MIF/actions/workflows/validate.yml/badge.svg)](https://github.com/modeled-information-format/MIF/actions/workflows/validate.yml)
