@@ -15,8 +15,8 @@ is byte-identical to 1.4.0's. 1.4.0 was tagged ahead of this coordination.
 
 ### Added
 
-- **[Docs]**: `docs/RELEASING.md` §1f orders a coordinated release: publish the
-  schema mirror, move each downstream tool's pin, then tag.
+- **[Docs]**: `docs/RELEASING.md` §1f orders a coordinated release: dry-run,
+  publish the schema mirror, move each downstream tool's pin, then tag.
 
 ### Changed
 
@@ -26,8 +26,12 @@ is byte-identical to 1.4.0's. 1.4.0 was tagged ahead of this coordination.
 
 ### Fixed
 
-- **[Docs]**: `docs/SCHEMA-REFERENCE.md` gives the concept `@id` pattern as
-  `^urn:mif:<uuid>$` (was `^urn:mif:`), matching the 1.4.0 schema.
+- **[Docs]**: `docs/SCHEMA-REFERENCE.md` gives the concept `@id` pattern as the
+  schema's UUID regex (was `^urn:mif:`).
+- **[Docs]**: `docs/RELEASING.md` describes the current flow (a release-prep PR
+  to `main`, not a `develop/v*` branch); §1a bumps a `VERSION.json` schema entry
+  only when that schema changes; `public/schema/VERSIONING.md` lists versions via
+  `index.json` and snapshots before tagging.
 - **[Docs]**: the README spec-version badge reads 1.4.1 (was 1.0.0).
 
 ## [1.4.0] - 2026-10-08

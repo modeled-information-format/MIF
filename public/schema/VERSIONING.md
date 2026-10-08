@@ -26,9 +26,10 @@ Here `<file>` is a schema's actual filename — e.g. `mif.schema.json`,
 | Moving alias | `/schema/latest/<file>` | tracks newest release |
 | Major alias | `/schema/v0/<file>` (newest 0.x), `/schema/v1/<file>` (newest 1.x) | `v2` reserved for 2.0.0 |
 
-Every published version mirror is an exact, immutable snapshot of that release's
-git tag (e.g. `/schema/0.1.0/` ← tag `v0.1.0`, `/schema/1.0.0/` ← tag `v1.0.0`).
-Released versions: `0.1.0`, `1.0.0`.
+Every published version mirror is an exact, immutable snapshot of that
+release's schema set, committed during release prep and carried unchanged by
+the release tag (e.g. `/schema/1.4.1/` ← tag `v1.4.1`). The published versions
+and aliases are listed in [`index.json`](./index.json).
 
 The internal `$id` of every mirrored copy remains the canonical unversioned URL;
 the version path is an additional access location, not a new schema identity.
@@ -50,8 +51,10 @@ hosts that can set it should serve `application/schema+json`.
 
 ## Cutting a new release
 
-1. Bump the repo-root `VERSION.json` and tag the release (`vMAJOR.MINOR.PATCH`).
-2. Snapshot that tag's schema set into `/schema/<version>/` (immutable; bytes
-   taken from the tag, `$id` unchanged).
-3. Refresh `/schema/latest/` and the matching major alias (`/schema/vN/`); update
+1. On the release-prep branch, bump the repo-root `VERSION.json` and run
+   `python3 scripts/snapshot-schema-version.py <version>`: it snapshots the
+   canonical schema set into `/schema/<version>/` (immutable; `$id` unchanged),
+   refreshes `/schema/latest/` and the major alias (`/schema/vN/`), and updates
    `aliases` + `versions` in `index.json`.
+2. Merge the release-prep PR, then tag the release (`vMAJOR.MINOR.PATCH`). The
+   full procedure is `docs/RELEASING.md`.
