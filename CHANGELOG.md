@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Security
+
+- **[Build]**: `package.json` `overrides` forces katex to `^0.18.2` (resolves
+  0.18.10), past mermaid's `^0.16` range, fixing GHSA-238p-pmpm-9mq7. Its
+  `osv-scanner.toml` waiver is removed; the braces GHSA-vfj7-8cjw-p6xm waiver
+  stays because no fixed braces release exists.
+
 ## [1.4.1] - 2026-10-08
 
 Coordinated release with the downstream MIF tools (mif-rs, mif-docs-plugin,
