@@ -28,7 +28,7 @@ Here `<file>` is a schema's actual filename — e.g. `mif.schema.json`,
 
 Every published version mirror is an exact, immutable snapshot of that
 release's schema set, committed during release prep and carried unchanged by
-the release tag (e.g. `/schema/1.4.1/` ← tag `v1.4.1`). The published versions
+the release tag (e.g. `/schema/1.4.2/` ← tag `v1.4.2`). The published versions
 and aliases are listed in [`index.json`](./index.json).
 
 The internal `$id` of every mirrored copy remains the canonical unversioned URL;

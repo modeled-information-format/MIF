@@ -9,11 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.4.2] - 2026-10-08
 
-Re-release of 1.4.1 with its release artifacts. The v1.4.1 GitHub release was
-published by hand before `release.yml` could attach the attested source tarball,
-schema tarball and SBOM, and immutable releases cannot be amended. No
-specification or schema changes: the 1.4.2 schema mirror is byte-identical to
-1.4.1's.
+The coordinated release of the 1.4.1 content below, with its attested release
+artifacts. 1.4.1 was withdrawn: its GitHub release was published by hand
+before `release.yml` could attach the source tarball, schema tarball and SBOM,
+so the release and its `v1.4.1` tag were deleted. No specification or schema
+changes: the 1.4.2 schema mirror is byte-identical to 1.4.1's.
 
 ### Fixed
 
@@ -21,7 +21,9 @@ specification or schema changes: the 1.4.2 schema mirror is byte-identical to
   `release.yml` creates, fills and publishes the release itself, and a release
   must never be created by hand for the tag.
 
-## [1.4.1] - 2026-10-08
+## [1.4.1] - 2026-10-08 [YANKED]
+
+Yanked: never published with artifacts, and its release and tag were deleted. Its content ships in 1.4.2.
 
 Coordinated release with the downstream MIF tools (mif-rs, mif-docs-plugin,
 structured-madr), which pin 1.4.1. No schema changes: the 1.4.1 schema mirror
@@ -501,8 +503,7 @@ See [MIGRATION.md](MIGRATION.md) and run
 - Market research framework
 
 [Unreleased]: https://github.com/modeled-information-format/MIF/compare/v1.4.2...HEAD
-[1.4.2]: https://github.com/modeled-information-format/MIF/compare/v1.4.1...v1.4.2
-[1.4.1]: https://github.com/modeled-information-format/MIF/compare/v1.4.0...v1.4.1
+[1.4.2]: https://github.com/modeled-information-format/MIF/compare/v1.4.0...v1.4.2
 [1.4.0]: https://github.com/modeled-information-format/MIF/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/modeled-information-format/MIF/compare/v1.2.2...v1.3.0
 [1.2.2]: https://github.com/modeled-information-format/MIF/compare/v1.2.1...v1.2.2
