@@ -222,8 +222,8 @@ itself creates a **draft** release, uploads the attested artifacts to it, and
 then publishes it. **Never run `gh release create` (or publish a release in the
 UI) for the tag:** releases here are immutable, so a release published by hand
 before the workflow reaches its publish step is frozen with no artifacts, and
-the workflow refuses to touch it. (This happened to v1.4.1, which was re-released
-as v1.4.2.)
+the workflow refuses to touch it. (This happened to v1.4.1, which was withdrawn and
+released as v1.4.2.)
 
 ```bash
 git fetch origin
