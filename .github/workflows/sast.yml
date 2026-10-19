@@ -34,7 +34,7 @@ jobs:
       contents: read
       security-events: write
       actions: read
-    uses: modeled-information-format/.github/.github/workflows/reusable-semgrep.yml@ff8adc6b1267c272beef916af851d9506160354f
+    uses: modeled-information-format/.github/.github/workflows/reusable-semgrep.yml@68c404307acbd9a47335ef41b57ff45002243826
     with:
       directory: .
       # 1.139.0 (this pin's default) crashes on pydantic 2.14 via mcp==1.12.2;
