@@ -14,7 +14,7 @@ import check_version_sync  # noqa: E402  (local module, path set above)
 FILES = {
     "VERSION.json": json.dumps({"specification": "2.1.0", "schemas": {"mif": "1.0.0"}}),
     "CHANGELOG.md": "## [Unreleased]\n\n## [2.1.0] - 2030-02-03\n\n## [2.0.1] - 2030-01-01 [YANKED]\n",
-    "SPECIFICATION.md": '**Version**: 2.1.0\n\n```yaml\nversion: "1.0.0"\n```\n',
+    "SPECIFICATION.md": '**Version**: 2.1.0\n**Last Updated**: 2030-02-03\n\n```yaml\nversion: "1.0.0"\n```\n',
     "README.md": (
         "[![Spec](https://img.shields.io/badge/spec-v2.1.0-blue.svg)](./SPECIFICATION.md)\n"
         "> **Brand note (v1.0.0):** historical.\n"
@@ -69,6 +69,8 @@ def test_samples_and_historical_mentions_are_ignored(repo: Path) -> None:
     [
         ("SPECIFICATION.md", "**Version**: 2.1.0", "**Version**: 2.0.0",
          "SPECIFICATION.md **Version** header"),
+        ("SPECIFICATION.md", "**Last Updated**: 2030-02-03", "**Last Updated**: 2026-06-18",
+         "SPECIFICATION.md **Last Updated** header"),
         ("README.md", "spec-v2.1.0-blue", "spec-v2.0.0-blue", "README.md spec badge"),
         ("README.md", "complete v2.1.0", "complete v1.0.0", "README.md specification link"),
         ("README.md", "= {2.1.0}", "= {1.0.0}", "README.md BibTeX version"),
@@ -100,4 +102,25 @@ def test_removed_field_fails_rather_than_passing_unchecked(repo: Path) -> None:
 
 def test_missing_changelog_entry_fails(repo: Path) -> None:
     (repo / "CHANGELOG.md").write_text("## [Unreleased]\n", encoding="utf-8")
-    assert "CHANGELOG.md has one dated [2.1.0] heading" in failures(repo)
+    assert failures(repo) == ["CHANGELOG.md has one dated [2.1.0] heading"]
+
+
+def test_undated_changelog_heading_does_not_blame_correct_dates(repo: Path) -> None:
+    (repo / "CHANGELOG.md").write_text("## [2.1.0]\n", encoding="utf-8")
+    assert failures(repo) == ["CHANGELOG.md has one dated [2.1.0] heading"]
+
+
+@pytest.mark.parametrize(
+    "extra",
+    ['version: "1.0.0"\n', 'date-released: "2026-06-18"\n'],
+)
+def test_duplicated_citation_key_fails(repo: Path, extra: str) -> None:
+    path = repo / "CITATION.cff"
+    path.write_text(extra + path.read_text(encoding="utf-8"), encoding="utf-8")
+    assert len(failures(repo)) == 1
+
+
+@pytest.mark.parametrize("content", ["", "preferred-citation:\n"])
+def test_empty_citation_fails_without_crashing(repo: Path, content: str) -> None:
+    (repo / "CITATION.cff").write_text(content, encoding="utf-8")
+    assert len(failures(repo)) == 4

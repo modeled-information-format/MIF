@@ -14,6 +14,11 @@ name: Validate MIF Bundles and Schemas
       - 'src/content/docs/**'
       - 'adr/**'
       - 'SPECIFICATION.md'
+      - 'VERSION.json'
+      - 'CITATION.cff'
+      - 'README.md'
+      - 'CHANGELOG.md'
+      - 'public/schema/index.json'
       - 'package.json'
       - 'astro.config.mjs'
     # No path filter on PRs: this is a required branch-protection gate, so it

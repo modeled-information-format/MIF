@@ -64,12 +64,14 @@ the same PR, using the release date from the CHANGELOG heading in 1b:
 
 | File | Fields |
 |---|---|
-| `SPECIFICATION.md` | `**Version**` header |
+| `SPECIFICATION.md` | `**Version**` and `**Last Updated**` headers |
 | `README.md` | Spec badge, "the complete vX.Y.Z specification", BibTeX `version` and `date` |
 | `CITATION.cff` | `version` and `date-released`, at the top level and under `preferred-citation` |
 
 The snapshot script in 1c writes one more copy, `specVersion` in
-`public/schema/index.json`. Step 1d checks all of them.
+`public/schema/index.json`. Step 1d checks all of them. If the tag lands on a
+later day than the CHANGELOG heading (see 1f), update the heading and these
+dates in a PR before tagging.
 
 ### 1b. Roll CHANGELOG.md
 
