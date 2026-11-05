@@ -59,6 +59,18 @@ this release.
 }
 ```
 
+`VERSION.json` is canonical, and these files restate it by hand. Bump them in
+the same PR, using the release date from the CHANGELOG heading in 1b:
+
+| File | Fields |
+|---|---|
+| `SPECIFICATION.md` | `**Version**` header |
+| `README.md` | Spec badge, "the complete vX.Y.Z specification", BibTeX `version` and `date` |
+| `CITATION.cff` | `version` and `date-released`, at the top level and under `preferred-citation` |
+
+The snapshot script in 1c writes one more copy, `specVersion` in
+`public/schema/index.json`. Step 1d checks all of them.
+
 ### 1b. Roll CHANGELOG.md
 
 Follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format. Insert a
@@ -99,7 +111,7 @@ The script copies the files listed in `MIRRORED_FILES` from `public/schema/` int
 `public/schema/index.json`. Review the diff, then commit everything:
 
 ```bash
-git add public/schema/ VERSION.json CHANGELOG.md
+git add public/schema/ VERSION.json CHANGELOG.md CITATION.cff README.md SPECIFICATION.md
 git commit -m "chore: release vX.Y.Z"
 ```
 
@@ -114,6 +126,15 @@ python3 scripts/snapshot-schema-version.py X.Y.Z --check
 Expected output: `schema mirror for X.Y.Z: present and current`
 
 If it reports drift, re-run the script without `--check` and recommit.
+
+Then confirm every restated version matches `VERSION.json`. The
+`okf-conformance` CI job runs the same check:
+
+```bash
+python3 scripts/check_version_sync.py
+```
+
+Expected final line: `All restated specification versions match VERSION.json.`
 
 ### 1e. Confirm CI gates are green
 

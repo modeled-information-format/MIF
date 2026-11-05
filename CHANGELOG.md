@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **[CI]**: `scripts/check_version_sync.py` fails the `okf-conformance` job when
+  the `SPECIFICATION.md` header, README badge, specification link or citation
+  block, `CITATION.cff`, or `public/schema/index.json` disagrees with
+  `VERSION.json`, or a citation date disagrees with the version's CHANGELOG
+  heading.
+
+### Fixed
+
+- **[Docs]**: `CITATION.cff` and the README citation block and specification
+  link still named 1.0.0, with a release date of 2026-06-18 that matched no
+  release. They now name 1.4.2, released 2026-10-08. `docs/RELEASING.md` lists
+  every file a release bumps.
+
 ## [1.4.2] - 2026-10-08
 
 The coordinated release of the 1.4.1 content below, with its attested release

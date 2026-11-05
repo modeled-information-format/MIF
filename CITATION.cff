@@ -8,8 +8,8 @@ abstract: >-
   relationships, provenance/trust, and validity/freshness semantics on top of the
   Open Knowledge Format transport surface. Markdown is canonical; JSON-LD is a
   derived projection. AI memory is the first domain profile of MIF.
-version: "1.0.0"
-date-released: "2026-06-18"
+version: "1.4.2"
+date-released: "2026-10-08"
 license: MIT
 url: "https://mif-spec.dev"
 repository-code: "https://github.com/modeled-information-format/MIF"
@@ -40,8 +40,8 @@ preferred-citation:
     AI memory representation. MIF defines a common data model with dual
     representations: human-readable Markdown files and machine-processable JSON-LD
     documents, enabling interoperability between AI memory providers.
-  version: "1.0.0"
-  date-released: "2026-06-18"
+  version: "1.4.2"
+  date-released: "2026-10-08"
   license: MIT
   url: "https://mif-spec.dev"
   repository-code: "https://github.com/modeled-information-format/MIF"

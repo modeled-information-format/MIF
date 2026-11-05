@@ -246,7 +246,7 @@ python scripts/migrate_0_1_to_1_0.py <old-bundle> <new-bundle>
 
 ## Specification
 
-See [SPECIFICATION.md](./SPECIFICATION.md) for the complete v1.0.0 specification,
+See [SPECIFICATION.md](./SPECIFICATION.md) for the complete v1.4.2 specification,
 and the [Schema Reference](./docs/SCHEMA-REFERENCE.md) for a per-field reference to
 the top-level properties. The authoritative, machine-checkable definition of every
 property is [`schema/mif.schema.json`](./schema/mif.schema.json).
@@ -272,8 +272,8 @@ If you use MIF in your research or projects, please cite it:
 @software{allen_mif_2026,
   author       = {Allen, Robert},
   title        = {{MIF: Modeled Information Format}},
-  version      = {1.0.0},
-  date         = {2026-06-18},
+  version      = {1.4.2},
+  date         = {2026-10-08},
   url          = {https://mif-spec.dev},
   license      = {MIT}
 }
