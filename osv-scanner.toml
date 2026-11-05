@@ -7,13 +7,6 @@
 # (The esbuild GHSA-g7r4-m6w7-qqqr exception was removed once Vite pulled
 # esbuild 0.28.2, past the 0.28.1 fix. The katex GHSA-238p-pmpm-9mq7 exception
 # was removed once package.json `overrides` forced katex ^0.18.2 past mermaid's
-# ^0.16 range.)
-
-[[IgnoredVulns]]
-id = "GHSA-vfj7-8cjw-p6xm"
-# braces 3.0.3: stack-exhaustion DoS on deeply nested brace patterns. No fixed
-# release exists (3.0.3 is the last affected and latest version). Dev/build-time
-# only, via starlight-llms-txt -> micromatch, where the patterns come from this
-# repo's own build config, never from user input; not part of the deployed
-# static site. Remove this entry once a fixed braces release ships.
-reason = "No fixed braces release exists; build-time-only transitive (starlight-llms-txt -> micromatch) matching repo-authored patterns, never untrusted input; no production exposure. Revisit when braces ships a fix."
+# ^0.16 range; mermaid 12 allows ^0.18.0, so the override now holds the fixed
+# floor. The braces GHSA-vfj7-8cjw-p6xm exception was removed once OSV withdrew
+# that advisory.)
