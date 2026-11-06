@@ -14,6 +14,11 @@ name: Validate MIF Bundles and Schemas
       - 'src/content/docs/**'
       - 'adr/**'
       - 'SPECIFICATION.md'
+      - 'VERSION.json'
+      - 'CITATION.cff'
+      - 'README.md'
+      - 'CHANGELOG.md'
+      - 'public/schema/index.json'
       - 'package.json'
       - 'astro.config.mjs'
     # No path filter on PRs: this is a required branch-protection gate, so it
@@ -81,6 +86,12 @@ jobs:
 
       - name: Spec page generator regression suite
         run: python -m pytest scripts/test_build_spec_pages.py -q
+
+      - name: Restated specification versions match VERSION.json (drift check)
+        run: python scripts/check_version_sync.py
+
+      - name: Version sync check regression suite
+        run: python -m pytest scripts/test_version_sync.py -q
 
       - name: Concept @id is urn:mif:<uuid> regression suite
         run: python -m pytest scripts/test_concept_id_pattern.py -q
