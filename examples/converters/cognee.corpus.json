@@ -1,0 +1,120 @@
+{
+  "@context": "https://mif-spec.dev/schema/container-context.jsonld",
+  "@type": "MemoryCorpus",
+  "containerProfileVersion": "0.1.0",
+  "records": [
+    {
+      "kind": "document",
+      "payload": {
+        "@type": "DocumentReference",
+        "id": "urn:mif:11111111-1111-4111-8111-111111111111",
+        "title": "quantum_computing_intro.pdf",
+        "url": "file:///data/quantum_computing_intro.pdf",
+        "hash": {
+          "algorithm": "sha256",
+          "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "contentType": "application/pdf"
+      }
+    },
+    {
+      "kind": "memory",
+      "payload": {
+        "@context": "https://mif-spec.dev/schema/context.jsonld",
+        "@type": "Memory",
+        "@id": "urn:mif:22222222-2222-4222-8222-222222222222",
+        "conceptType": "semantic",
+        "namespace": "_semantic/research_notes",
+        "content": "A qubit is the fundamental unit of quantum information, able to exist in a superposition of the |0> and |1> basis states.",
+        "created": "2026-05-01T09:16:00Z",
+        "tags": [
+          "cognee",
+          "document-chunk"
+        ],
+        "relationships": [
+          {
+            "type": "derived-from",
+            "target": "urn:mif:11111111-1111-4111-8111-111111111111"
+          }
+        ],
+        "extensions": {
+          "cognee": {
+            "datapoint_id": "22222222-2222-4222-8222-222222222222",
+            "node_type": "DocumentChunk",
+            "chunk_index": 0,
+            "chunk_size": 512,
+            "cut_type": "sentence_end",
+            "is_part_of": "11111111-1111-4111-8111-111111111111",
+            "version": 1,
+            "dataset_name": "research_notes",
+            "owner_id": "user-42"
+          }
+        }
+      }
+    },
+    {
+      "kind": "memory",
+      "payload": {
+        "@context": "https://mif-spec.dev/schema/context.jsonld",
+        "@type": "Memory",
+        "@id": "urn:mif:33333333-3333-4333-8333-333333333333",
+        "conceptType": "semantic",
+        "namespace": "_semantic/research_notes",
+        "content": "Qubit: The basic unit of quantum information in quantum computing.",
+        "created": "2026-05-01T09:17:00Z",
+        "title": "Qubit",
+        "tags": [
+          "cognee",
+          "cognee-entity"
+        ],
+        "extensions": {
+          "cognee": {
+            "datapoint_id": "33333333-3333-4333-8333-333333333333",
+            "node_type": "Entity",
+            "name": "Qubit",
+            "description": "The basic unit of quantum information in quantum computing.",
+            "is_a": "concept",
+            "dataset_name": "research_notes",
+            "owner_id": "user-42"
+          }
+        }
+      }
+    },
+    {
+      "kind": "memory",
+      "payload": {
+        "@context": "https://mif-spec.dev/schema/context.jsonld",
+        "@type": "Memory",
+        "@id": "urn:mif:44444444-4444-4444-8444-444444444444",
+        "conceptType": "semantic",
+        "namespace": "_semantic/PhysicsConcept",
+        "content": "PhysicsConcept: A category of concepts from physics.",
+        "created": "2026-05-01T09:18:00Z",
+        "title": "PhysicsConcept",
+        "tags": [
+          "cognee",
+          "cognee-entitytype"
+        ],
+        "extensions": {
+          "cognee": {
+            "datapoint_id": "44444444-4444-4444-8444-444444444444",
+            "node_type": "EntityType",
+            "name": "PhysicsConcept",
+            "description": "A category of concepts from physics.",
+            "dataset_name": "research_notes",
+            "owner_id": "user-42"
+          }
+        }
+      }
+    }
+  ],
+  "provenance": {
+    "@type": "prov:Entity",
+    "wasGeneratedBy": {
+      "@type": "prov:Activity",
+      "used": "cognee",
+      "generatedAtTime": "2026-07-08T17:35:02.088191+00:00"
+    },
+    "wasDerivedFrom": "cognee://synthetic-example"
+  }
+}
