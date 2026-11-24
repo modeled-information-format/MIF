@@ -1,0 +1,97 @@
+{
+  "@context": "https://mif-spec.dev/schema/container-context.jsonld",
+  "@type": "MemoryCorpus",
+  "containerProfileVersion": "0.1.0",
+  "records": [
+    {
+      "kind": "memory",
+      "payload": {
+        "@context": "https://mif-spec.dev/schema/context.jsonld",
+        "@type": "Memory",
+        "@id": "urn:mif:89ba6106-a0a5-5f64-81d8-b41145dd4c34",
+        "conceptType": "semantic",
+        "namespace": "_semantic/alice-support-bot-sess-42",
+        "content": "The user prefers dark mode and terse, technical replies.",
+        "created": "2026-02-01T09:15:00Z",
+        "tags": [
+          "mem0",
+          "preference"
+        ],
+        "extensions": {
+          "mem0": {
+            "source_id": "0f9c2a10-4b1e-4c3d-9a77-1e2f3a4b5c6d",
+            "memory_type": "preference",
+            "hash": "a1b2c3d4",
+            "user_id": "alice",
+            "agent_id": "support-bot",
+            "run_id": "sess-42",
+            "score": 0.87,
+            "updated": "2026-02-03T11:00:00Z",
+            "metadata": {
+              "topic": "ui-preferences"
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "memory",
+      "payload": {
+        "@context": "https://mif-spec.dev/schema/context.jsonld",
+        "@type": "Memory",
+        "@id": "urn:mif:cc36bbc3-e496-52d9-aa96-a577296c7acb",
+        "conceptType": "semantic",
+        "namespace": "_semantic/bob",
+        "content": "Project Nimbus ships its 2.0 release on 2026-05-01.",
+        "created": "2026-04-10T14:20:00Z",
+        "tags": [
+          "fact",
+          "mem0"
+        ],
+        "extensions": {
+          "mem0": {
+            "source_id": "77aa11bb-22cc-33dd-44ee-55ff66aa77bb",
+            "memory_type": "fact",
+            "user_id": "bob"
+          }
+        }
+      }
+    },
+    {
+      "kind": "memory",
+      "payload": {
+        "@context": "https://mif-spec.dev/schema/context.jsonld",
+        "@type": "Memory",
+        "@id": "urn:mif:e20eb901-0d51-535e-bbf2-fa991059f871",
+        "conceptType": "episodic",
+        "namespace": "_episodic/history/0f9c2a10-4b1e-4c3d-9a77-1e2f3a4b5c6d",
+        "content": "memory update: The user prefers dark mode and terse, technical replies.",
+        "created": "2026-02-03T11:00:00Z",
+        "tags": [
+          "history",
+          "mem0",
+          "update"
+        ],
+        "extensions": {
+          "mem0": {
+            "history_id": "hist-000123",
+            "memory_id": "0f9c2a10-4b1e-4c3d-9a77-1e2f3a4b5c6d",
+            "event": "update",
+            "old_memory": "The user prefers dark mode.",
+            "new_memory": "The user prefers dark mode and terse, technical replies.",
+            "is_deleted": 0
+          }
+        }
+      }
+    }
+  ],
+  "provenance": {
+    "@type": "prov:Entity",
+    "wasGeneratedBy": {
+      "@type": "prov:Activity",
+      "used": "mem0",
+      "generatedAtTime": "2026-07-08T00:00:00Z"
+    },
+    "wasDerivedFrom": "synthetic-mem0-example"
+  }
+}
