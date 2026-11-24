@@ -19,13 +19,13 @@ jobs:
     name: actionlint
     permissions:
       contents: read
-    uses: modeled-information-format/.github/.github/workflows/reusable-actionlint.yml@68c404307acbd9a47335ef41b57ff45002243826
+    uses: modeled-information-format/.github/.github/workflows/reusable-actionlint.yml@c72b3fae829318990ba3da9b9d5ea0671ac5151f
 
   pin-check:
     name: pin-check
     permissions:
       contents: read
-    uses: modeled-information-format/.github/.github/workflows/pin-check.yml@68c404307acbd9a47335ef41b57ff45002243826
+    uses: modeled-information-format/.github/.github/workflows/pin-check.yml@c72b3fae829318990ba3da9b9d5ea0671ac5151f
     with:
       scan-dir: .github
 
@@ -36,7 +36,7 @@ jobs:
       contents: read
       security-events: write
       pull-requests: write
-    uses: modeled-information-format/.github/.github/workflows/reusable-sca-osv.yml@68c404307acbd9a47335ef41b57ff45002243826
+    uses: modeled-information-format/.github/.github/workflows/reusable-sca-osv.yml@c72b3fae829318990ba3da9b9d5ea0671ac5151f
     with:
       fail-on-severity: high
 
@@ -47,7 +47,7 @@ jobs:
       security-events: write
       actions: read
       packages: read
-    uses: modeled-information-format/.github/.github/workflows/reusable-trivy.yml@68c404307acbd9a47335ef41b57ff45002243826
+    uses: modeled-information-format/.github/.github/workflows/reusable-trivy.yml@c72b3fae829318990ba3da9b9d5ea0671ac5151f
     with:
       scan-iac: true
 
@@ -57,7 +57,7 @@ jobs:
       contents: read
       security-events: write
       actions: read
-    uses: modeled-information-format/.github/.github/workflows/reusable-checkov.yml@68c404307acbd9a47335ef41b57ff45002243826
+    uses: modeled-information-format/.github/.github/workflows/reusable-checkov.yml@c72b3fae829318990ba3da9b9d5ea0671ac5151f
     with:
       directory: .
       framework: github_actions
@@ -68,7 +68,7 @@ jobs:
       contents: read
       security-events: write
       actions: read
-    uses: modeled-information-format/.github/.github/workflows/reusable-secrets.yml@68c404307acbd9a47335ef41b57ff45002243826
+    uses: modeled-information-format/.github/.github/workflows/reusable-secrets.yml@c72b3fae829318990ba3da9b9d5ea0671ac5151f
     with:
       fail-on-verified: true
 
@@ -77,6 +77,6 @@ jobs:
     permissions:
       contents: read
       security-events: write
-    uses: modeled-information-format/.github/.github/workflows/reusable-shellcheck.yml@68c404307acbd9a47335ef41b57ff45002243826
+    uses: modeled-information-format/.github/.github/workflows/reusable-shellcheck.yml@c72b3fae829318990ba3da9b9d5ea0671ac5151f
     with:
       strict-on-push: false
